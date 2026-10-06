@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700&family=Martian+Mono:wdth,wght@87.5,400;87.5,500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#15141C;font-family:Urbanist,sans-serif;color:#F1EEE8;-webkit-font-smoothing:antialiased}a{color:#FF7442;text-decoration:none}a:hover{color:#FB9E70}*{box-sizing:border-box}[style*="Martian"]{font-stretch:87.5%}</style>
+</helmet>
+<div style="{{ vars }}">
+<div style="background:var(--bg,#15141C);color:var(--ink,#F1EEE8);min-height:100vh;display:flex">
+  <nav style="width:232px;flex:none;background:var(--side,#1A1922);padding:18px 14px;display:flex;flex-direction:column;gap:16px;border-right:1px solid var(--line,#33313F)">
+    <span style="display:flex;align-items:center;gap:10px;font-size:19px;padding:6px 8px 6px"><img src="assets/kairos-mark.svg" style="height:26px">Kairos <b style="font-weight:700">Platform</b></span>
+    <sc-for list="{{ nav }}" as="g" hint-placeholder-count="5">
+      <div style="display:flex;flex-direction:column;gap:1px">
+        <span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8);padding:0 10px 6px">{{ g.t }}</span>
+        <sc-for list="{{ g.items }}" as="n" hint-placeholder-count="2">
+          <sc-if value="{{ n.active }}"><div style="display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;padding:8px 10px;border-radius:4px;background:var(--raised,#33313F)"><svg width="12" height="8" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="var(--accent,#FF7442)"></polygon></svg>{{ n.l }}</div></sc-if>
+          <sc-if value="{{ n.idle }}"><div style="font-size:15px;padding:8px 10px 8px 32px;color:var(--sub,#CBC8D6)">{{ n.l }}</div></sc-if>
+        </sc-for>
+      </div>
+    </sc-for>
+  </nav>
+
+  <main style="flex:1;min-width:0;padding:22px 28px 48px;display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="font-size:14px;color:var(--muted,#A9A6B8)"><span style="color:var(--link,#FF7442);font-weight:600">Fleet</span> / <span style="color:var(--link,#FF7442);font-weight:600">Nodes</span> / <span style="color:var(--link,#FF7442);font-weight:600">retail-eu</span> / edge-store-0143</span>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><h1 style="margin:0;font-family:'Martian Mono',monospace;font-size:30px;font-weight:500;letter-spacing:-.02em">edge-store-0143</h1><span style="display:flex;align-items:center;gap:7px;font-size:14px;font-weight:700;background:var(--surface,#1F1E28);padding:5px 10px;border-radius:2px"><svg width="10" height="10" viewBox="0 0 12 12"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="#2F8F57"></polygon></svg>Online</span></div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--sub,#CBC8D6)"><span style="font-family:'Martian Mono',monospace;font-size:12px">10.40.12.143</span><span>retail-eu</span><span>Image hadron-v0.5.2</span><span>Kairos v4.3.0</span></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span style="border:1.5px solid var(--ink,#F1EEE8);font-size:15px;font-weight:600;padding:8px 14px;border-radius:4px">Reboot</span>
+        <span style="border:1.5px solid var(--ink,#F1EEE8);font-size:15px;font-weight:600;padding:8px 14px;border-radius:4px">Upgrade</span>
+        <span style="background:var(--accent,#FF7442);color:#1C1B24;font-size:15px;font-weight:700;padding:9.5px 16px;border-radius:4px">Send command</span>
+        <span style="border:1.5px solid var(--line,#33313F);font-size:15px;font-weight:700;padding:8px 12px;border-radius:4px">···</span>
+      </div>
+    </div>
+
+    <sc-if value="{{ hot }}"><div style="display:grid;grid-template-columns:18px 1fr;gap:10px;background:var(--warnBg,#3A2A1A);border-radius:4px;padding:12px 16px;font-size:15px"><svg width="13" height="13" viewBox="0 0 12 12" style="margin-top:4px"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="#E9A23B"></polygon></svg><span><b>CPU above 85%</b> for the last 10 samples. Load {{ load1 }} on 8 vCPU.</span></div></sc-if>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px">
+      <sc-for list="{{ health }}" as="h" hint-placeholder-count="5">
+        <div style="background:var(--surface,#1F1E28);border-radius:4px;padding:16px;display:flex;flex-direction:column;gap:6px;box-shadow:inset 0 3px 0 {{ h.tone }}">
+          <span style="font-size:13px;color:var(--muted,#A9A6B8)">{{ h.k }}</span>
+          <span style="font-size:19px;font-weight:700;font-family:{{ h.font }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ h.v }}</span>
+          <span style="font-size:13px;color:var(--sub,#CBC8D6)">{{ h.sub }}</span>
+        </div>
+      </sc-for>
+    </section>
+
+    <section style="background:var(--surface,#1F1E28);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <span style="font-size:18px;font-weight:700">Resources</span>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--muted,#A9A6B8)">live · sampled {{ ago }}</span>
+          <span onClick="{{ toggleLoad }}" style="cursor:pointer;font-size:13px;font-weight:700;border:1px solid var(--line,#33313F);padding:5px 10px;border-radius:2px;white-space:nowrap">{{ loadLabel }}</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px">
+        <div style="background:var(--inner,#18171F);border-radius:4px;padding:16px;display:flex;flex-direction:column;gap:12px">
+          <span style="font-size:13px;font-weight:700;color:var(--muted,#A9A6B8)">CPU</span>
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:132px;height:132px;flex:none">{{ cpuGauge }}</div><div style="display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--sub,#CBC8D6)"><span>Load <b style="color:var(--ink,#F1EEE8);font-family:'Martian Mono',monospace;font-size:13px">{{ loadAll }}</b></span><span>8 vCPU · x86_64</span></div></div>
+          <div style="height:40px">{{ cpuSpark }}</div>
+        </div>
+        <div style="background:var(--inner,#18171F);border-radius:4px;padding:16px;display:flex;flex-direction:column;gap:12px">
+          <span style="font-size:13px;font-weight:700;color:var(--muted,#A9A6B8)">Memory</span>
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:132px;height:132px;flex:none">{{ memGauge }}</div><div style="display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--sub,#CBC8D6)"><span><b style="color:var(--ink,#F1EEE8)">{{ memUsed }}</b> used</span><span>{{ memFree }} available</span></div></div>
+          <div style="height:40px">{{ memSpark }}</div>
+        </div>
+        <div style="background:var(--inner,#18171F);border-radius:4px;padding:16px;display:flex;flex-direction:column;gap:14px">
+          <span style="font-size:13px;font-weight:700;color:var(--muted,#A9A6B8)">Disk</span>
+          <sc-for list="{{ disks }}" as="d" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;gap:10px;font-size:14px"><span style="font-weight:600">{{ d.label }}</span><span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8)">{{ d.used }} / {{ d.total }}</span></div>
+              <div style="display:flex;gap:2px">{{ d.bar }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background:var(--inner,#18171F);border-radius:4px;padding:16px;display:flex;flex-direction:column;gap:12px">
+          <span style="font-size:13px;font-weight:700;color:var(--muted,#A9A6B8)">System</span>
+          <div style="display:flex;align-items:center;gap:16px"><div style="width:132px;height:132px;flex:none">{{ tempGauge }}</div><div style="display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--sub,#CBC8D6)"><span>Uptime <b style="color:var(--ink,#F1EEE8)">{{ uptime }}</b></span><span>Load 1m <b style="color:var(--ink,#F1EEE8);font-family:'Martian Mono',monospace;font-size:13px">{{ load1 }}</b></span></div></div>
+          <div style="display:flex;gap:12px;font-size:12px;color:var(--muted,#A9A6B8);flex-wrap:wrap"><sc-for list="{{ legend }}" as="l" hint-placeholder-count="3"><span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:6px;background:{{ l.c }}"></span>{{ l.t }}</span></sc-for></div>
+        </div>
+      </div>
+    </section>
+
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start">
+      <section style="background:var(--surface,#1F1E28);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:18px;font-weight:700;padding-right:12px">Commands</span><span style="border:1.5px solid var(--line,#33313F);font-size:14px;font-weight:600;padding:5px 12px;border-radius:4px;white-space:nowrap">+ New</span></div>
+        <div style="display:flex;gap:4px;background:var(--raised,#33313F);padding:3px;border-radius:4px;width:max-content;font-size:14px;font-weight:600"><span style="background:var(--surface,#1F1E28);padding:5px 12px;border-radius:3px">All</span><span style="padding:5px 12px;color:var(--muted,#A9A6B8)">Running</span><span style="padding:5px 12px;color:var(--muted,#A9A6B8)">Failed</span></div>
+        <sc-for list="{{ commands }}" as="c" hint-placeholder-count="5">
+          <div style="display:grid;grid-template-columns:16px 1fr auto;gap:12px;align-items:start;padding:10px 0;border-top:1px solid var(--line,#33313F)">
+            <svg width="11" height="11" viewBox="0 0 12 12" style="margin-top:4px"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="{{ c.f }}" stroke="{{ c.s }}" stroke-width="1.5"></polygon></svg>
+            <div style="display:flex;flex-direction:column;gap:3px;min-width:0"><span style="font-size:15px;font-weight:700">{{ c.t }}</span><span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--sub,#CBC8D6);overflow-wrap:anywhere">{{ c.d }}</span></div>
+            <span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8)">{{ c.at }}</span>
+          </div>
+        </sc-for>
+      </section>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <section style="background:var(--surface,#1F1E28);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:4px">
+          <span style="font-size:18px;font-weight:700;padding-bottom:8px">Details</span>
+          <sc-for list="{{ details }}" as="d" hint-placeholder-count="6"><div style="display:grid;grid-template-columns:96px 1fr;gap:8px;padding:7px 0;border-top:1px solid var(--line,#33313F);font-size:14px"><span style="color:var(--muted,#A9A6B8)">{{ d.k }}</span><span style="font-family:{{ d.font }};font-size:{{ d.size }};overflow-wrap:anywhere">{{ d.v }}</span></div></sc-for>
+        </section>
+        <section style="background:var(--surface,#1F1E28);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:18px;font-weight:700">Installed extensions</span><span style="font-size:13px;font-weight:700;color:var(--link,#FF7442)">Install…</span></div>
+          <sc-for list="{{ exts }}" as="x" hint-placeholder-count="2"><div style="display:flex;align-items:center;gap:8px;font-size:14px"><span style="font-family:'Martian Mono',monospace;font-size:10px;background:var(--raised,#33313F);padding:2px 6px;border-radius:2px">{{ x.type }}</span><b>{{ x.name }}</b><span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8)">{{ x.v }}</span><span style="margin-left:auto;font-size:12px;color:var(--muted,#A9A6B8)">{{ x.boot }}</span></div></sc-for>
+        </section>
+        <section style="background:var(--surface,#1F1E28);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:18px;font-weight:700">Labels</span>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;font-family:'Martian Mono',monospace;font-size:12px"><sc-for list="{{ labels }}" as="l" hint-placeholder-count="4"><span style="border:1px solid var(--line,#33313F);padding:4px 8px;border-radius:2px">{{ l }}</span></sc-for><span style="padding:4px 8px;color:var(--link,#FF7442);font-family:Urbanist;font-size:13px;font-weight:700">+ Add</span></div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;dark&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;}}">
+class Component extends DCLogic {
+  state = { high: false, t: 0 };
+  componentDidMount() { this.iv = setInterval(() => this.setState(s => ({ t: s.t + 1 })), 2000); }
+  componentWillUnmount() { clearInterval(this.iv); }
+  gauge(v, label, sub, dark, unit = '%', max = 100) {
+    const e = React.createElement, N = 30, a0 = 135, span = 270, c = 66, r = 57;
+    const pct = Math.min(1, v / max);
+    const tone = pct >= 0.85 ? '#E04848' : pct >= 0.7 ? '#E9A23B' : null;
+    const O = ['#FB9E70', '#FF7442', '#EE5007'], kids = [];
+    for (let i = 0; i < N; i++) {
+      const a = (a0 + span * (i + 0.5) / N) * Math.PI / 180, w = span / N * 0.62 * Math.PI / 180;
+      const P = (ang, rr) => [c + rr * Math.cos(ang), c + rr * Math.sin(ang)];
+      const pts = [P(a - w / 2, r - 7), P(a + w / 2 + 0.02, r - 7), P(a + w / 2, r + 7), P(a - w / 2 - 0.02, r + 7)];
+      const on = i < Math.round(pct * N);
+      kids.push(e('polygon', { key: i, points: pts.map(p => p.join(',')).join(' '), fill: on ? (tone || O[Math.min(2, Math.floor(i / N * 3))]) : (dark ? '#33313F' : '#E8E3DB') }));
+    }
+    kids.push(e('text', { key: 'v', x: c, y: c + 6, textAnchor: 'middle', fontFamily: 'Urbanist', fontWeight: 700, fontSize: 24, fill: dark ? '#F1EEE8' : '#1C1B24' }, Math.round(v) + unit));
+    kids.push(e('text', { key: 's', x: c, y: c + 22, textAnchor: 'middle', fontFamily: 'Urbanist', fontWeight: 600, fontSize: 10, fill: dark ? '#A9A6B8' : '#5F5951' }, sub || label));
+    return e('svg', { viewBox: '0 0 132 132', width: '100%', height: '100%', role: 'img', 'aria-label': `${label} ${Math.round(v)}${unit}` }, kids);
+  }
+  spark(vals, dark, col) {
+    const e = React.createElement, w = 240, h = 40, mx = 100;
+    const pts = vals.map((v, i) => [i / (vals.length - 1) * w, h - v / mx * (h - 4) - 2]);
+    const d = 'M' + pts.map(p => p.join(' ')).join(' L');
+    return e('svg', { viewBox: `0 0 ${w} ${h}`, width: '100%', height: '100%', preserveAspectRatio: 'none' },
+      e('path', { d: d + ` L${w} ${h} L0 ${h} Z`, fill: col, opacity: 0.18 }),
+      e('path', { d, fill: 'none', stroke: col, strokeWidth: 1.5, vectorEffect: 'non-scaling-stroke' }));
+  }
+  tiles(pct, dark) {
+    const e = React.createElement, n = 24, out = [], O = ['#FB9E70', '#FF7442', '#EE5007'];
+    const tone = pct >= 85 ? '#E04848' : pct >= 70 ? '#E9A23B' : null;
+    for (let i = 0; i < n; i++) out.push(e('svg', { key: i, viewBox: '0 0 22 14', style: { flex: 1, height: 10 }, preserveAspectRatio: 'none' }, e('polygon', { points: '7,0 22,0 15,14 0,14', fill: i < Math.round(pct / 100 * n) ? (tone || O[i % 3]) : (dark ? '#33313F' : '#E8E3DB') })));
+    return out;
+  }
+  renderVals() {
+    const dark = (this.props.theme ?? 'dark') === 'dark';
+    const vars = dark
+      ? { '--bg': '#15141C', '--side': '#1A1922', '--surface': '#1F1E28', '--inner': '#18171F', '--raised': '#33313F', '--line': '#33313F', '--ink': '#F1EEE8', '--sub': '#CBC8D6', '--muted': '#A9A6B8', '--accent': '#FF7442', '--link': '#FF7442', '--warnBg': '#33291F' }
+      : { '--bg': '#F1EEE8', '--side': '#ECE8E1', '--surface': '#FFFFFF', '--inner': '#F7F4EF', '--raised': '#E8E3DB', '--line': '#E2DCD3', '--ink': '#1C1B24', '--sub': '#4E4943', '--muted': '#5F5951', '--accent': '#EE5007', '--link': '#B23F00', '--warnBg': '#FBEBD3' };
+    const hi = this.state.high, t = this.state.t;
+    const wob = (b, a, k) => b + Math.sin((t + k) * 1.3) * a;
+    const cpu = hi ? wob(91, 3, 0) : wob(38, 6, 0), mem = hi ? 88 : wob(61, 2, 3), temp = hi ? 81 : wob(54, 2, 5);
+    const cpuSeries = Array.from({ length: 30 }, (_, i) => hi ? (i < 20 ? 40 + Math.sin(i) * 8 : 88 + Math.sin(i) * 4) : 36 + Math.sin(i * 0.7 + t) * 9);
+    const memSeries = Array.from({ length: 30 }, (_, i) => hi ? Math.min(90, 60 + i) : 60 + Math.sin(i * 0.4) * 2);
+    const load1 = hi ? '7.6' : (2.9 + Math.sin(t) * 0.3).toFixed(1);
+    const muted = dark ? '#A9A6B8' : '#5F5951';
+    const disk = [{ label: 'Persistent', used: '182 GB', total: '420 GB', p: 43 }, { label: 'State (A/B)', used: '2.4 GB', total: '8 GB', p: 30 }, { label: 'Recovery', used: '1.1 GB', total: '4 GB', p: 28 }, { label: 'OEM', used: '42 MB', total: '64 MB', p: 66 }];
+    return {
+      vars, hot: hi, load1,
+      toggleLoad: () => this.setState({ high: !hi }),
+      loadLabel: hi ? 'Show normal load' : 'Show high load',
+      ago: (2 + (t % 5)) + 's ago',
+      nav: [
+        { t: 'Overview', items: ['Dashboard'] }, { t: 'Fleet', items: ['Nodes', 'Groups'] }, { t: 'Factory', items: ['Artifacts', 'Extensions'] },
+        { t: 'Deploy', items: ['BMC registration', 'Deployments', 'Import'] }, { t: 'Admin', items: ['Certificates', 'Settings'] }
+      ].map(g => ({ t: g.t, items: g.items.map(l => ({ l, active: l === 'Nodes', idle: l !== 'Nodes' })) })),
+      health: [
+        { k: 'Connection', v: 'Online', sub: 'Heartbeat 4s ago', tone: '#2F8F57', font: 'Urbanist' },
+        { k: 'Boot', v: 'Active', sub: 'Booted from the active image', tone: '#2F8F57', font: 'Urbanist' },
+        { k: 'Image version', v: 'hadron-v0.5.2', sub: 'k3s 1.36.4', tone: 'transparent', font: "'Martian Mono',monospace" },
+        { k: 'Kairos version', v: 'v4.3.0', sub: 'Hadron · standard', tone: 'transparent', font: "'Martian Mono',monospace" },
+        { k: 'Reset', v: 'Never', sub: 'No reset pending', tone: 'transparent', font: 'Urbanist' }
+      ],
+      cpuGauge: this.gauge(cpu, 'CPU', 'CPU', dark),
+      memGauge: this.gauge(mem, 'Memory', 'of 16 GiB', dark),
+      tempGauge: this.gauge(temp, 'Temperature', 'temperature', dark, '°', 100),
+      cpuSpark: this.spark(cpuSeries, dark, hi ? '#E04848' : '#FF7442'),
+      memSpark: this.spark(memSeries, dark, hi ? '#E9A23B' : '#FF7442'),
+      loadAll: `${load1} / ${hi ? '6.9' : '2.7'} / ${hi ? '4.1' : '2.4'}`,
+      memUsed: (16 * mem / 100).toFixed(1) + ' GiB', memFree: (16 - 16 * mem / 100).toFixed(1) + ' GiB',
+      uptime: '3d 14h',
+      disks: disk.map(d => ({ ...d, bar: this.tiles(d.p, dark) })),
+      legend: [{ t: 'under 70%', c: '#FF7442' }, { t: '70–85%', c: '#E9A23B' }, { t: 'over 85%', c: '#E04848' }],
+      commands: [
+        { t: 'Upgrade', d: 'image quay.io/kairos/hadron:v0.5.2-k3s · rollout r-0412', at: '20:44', f: '#2F8F57', s: '#2F8F57' },
+        { t: 'Reboot', d: 'after upgrade', at: '20:45', f: '#2F8F57', s: '#2F8F57' },
+        { t: 'Run command', d: 'kubectl get nodes -o wide', at: '20:51', f: 'none', s: dark ? '#FF7442' : '#EE5007' },
+        { t: 'Apply config', d: 'cloud-config · 12 lines', at: 'yesterday', f: '#C62B2B', s: '#C62B2B' },
+        { t: 'Upgrade recovery', d: 'hadron-v0.5.0', at: '3d', f: '#2F8F57', s: '#2F8F57' }
+      ],
+      details: [
+        { k: 'Machine ID', v: '7f3a1…c09e2', font: "'Martian Mono',monospace", size: '12px' },
+        { k: 'Seen from', v: '10.40.12.143 · remote IP', font: "'Martian Mono',monospace", size: '12px' },
+        { k: 'Reported', v: 'eth0 10.40.12.143 · wlan0 —', font: "'Martian Mono',monospace", size: '12px' },
+        { k: 'Group', v: 'retail-eu ▾', font: 'Urbanist', size: '14px' },
+        { k: 'Claimed', v: 'store-key-0143 · 3d', font: "'Martian Mono',monospace", size: '12px' },
+        { k: 'Registered', v: '3 Oct 2026', font: 'Urbanist', size: '14px' }
+      ],
+      exts: [{ type: 'sysext', name: 'tailscale', v: '1.84.0', boot: 'active' }, { type: 'confext', name: 'store-pos-config', v: '2026.10', boot: 'common' }],
+      labels: ['store=0143', 'region=eu-west', 'pos=v7', 'canary=false']
+    };
+  }
+}
+</script>
+</body>
+</html>

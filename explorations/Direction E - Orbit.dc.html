@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#D6D8D3;font-family:Lexend,sans-serif;color:#17181A;-webkit-font-smoothing:antialiased}a{color:#B23F00;text-decoration:none}a:hover{color:#EE5007}*{box-sizing:border-box}</style>
+</helmet>
+<div style="padding:64px;display:flex;flex-direction:column;gap:48px">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:32px;max-width:2624px">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:12px"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#17181A;color:#FF7442;padding:4px 10px;border-radius:12px">E</span><span style="font-family:'DM Mono',monospace;font-size:13px;color:#55585C">Kairos Platform design system · direction</span></div>
+      <h1 style="margin:0;font-size:64px;font-weight:400;letter-spacing:-.04em">Orbit</h1>
+      <p style="margin:0;font-size:18px;line-height:1.6;color:#3E4145;max-width:780px;text-wrap:pretty">Kairos means “the right moment”. The signature is the lifecycle ring: build, deploy, run, upgrade, recover, drawn as one loop in the logo’s oranges. Every project sits on the ring, and every node in Fleet shows where it is on it. Cool paper and soft 12px corners.</p>
+    </div>
+    <div style="display:flex;gap:24px;font-family:'DM Mono',monospace;font-size:13px;color:#55585C;white-space:nowrap"><span>Lexend + DM Mono</span><span>Radius 12px</span><span>Paper + ring</span></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1280px 1280px;gap:64px;align-items:start">
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <span style="font-family:'DM Mono',monospace;font-size:13px;color:#55585C">01 — foundations</span>
+    <div style="width:1280px;background:#F4F5F2;border-radius:20px;overflow:hidden;padding:44px;display:flex;flex-direction:column;gap:32px">
+      <div style="display:grid;grid-template-columns:420px minmax(0,1fr);gap:40px;align-items:center">
+        <div style="width:420px;height:420px">{{ ringSpec }}</div>
+        <div style="display:flex;flex-direction:column;gap:22px">
+          <div style="display:flex;gap:32px;align-items:center"><img src="../assets/kairos-horizontal-light.svg" style="height:44px"><img src="../assets/hadron-horizontal-light.svg" style="height:48px"></div>
+          <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">
+            <sc-for list="{{ stageList }}" as="s" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;gap:8px"><div style="height:72px;border-radius:12px;background:{{ s.c }}"></div><span style="font-size:15px;font-weight:500">{{ s.name }}</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#55585C">{{ s.c }}</span></div>
+            </sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;font-family:'DM Mono',monospace;font-size:11px">
+            <div style="height:48px;border-radius:10px;background:#FFFFFF;padding:8px;display:flex;align-items:flex-end">#FFFFFF</div>
+            <div style="height:48px;border-radius:10px;background:#E7E9E4;padding:8px;display:flex;align-items:flex-end">#E7E9E4</div>
+            <div style="height:48px;border-radius:10px;background:#55585C;color:#fff;padding:8px;display:flex;align-items:flex-end">#55585C</div>
+            <div style="height:48px;border-radius:10px;background:#17181A;color:#fff;padding:8px;display:flex;align-items:flex-end">#17181A</div>
+            <div style="height:48px;border-radius:10px;background:#0275E7;color:#fff;padding:8px;display:flex;align-items:flex-end">Hadron</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px">
+        <div style="background:#fff;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:14px">
+          <span style="font-family:'DM Mono',monospace;font-size:12px;color:#55585C">type</span>
+          <span style="font-size:56px;font-weight:300;letter-spacing:-.045em;line-height:1">The right moment, every time.</span>
+          <span style="font-size:26px;font-weight:400;letter-spacing:-.02em">Immutable by default</span>
+          <span style="font-size:16px;line-height:1.65;color:#3E4145">Kairos Platform builds, boots, upgrades and recovers machines, from the edge to the datacenter.</span>
+          <span style="font-family:'DM Mono',monospace;font-size:13px">kairos fleet rollout --group retail-eu</span>
+        </div>
+        <div style="background:#fff;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:18px">
+          <span style="font-family:'DM Mono',monospace;font-size:12px;color:#55585C">controls</span>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="background:#17181A;color:#fff;font-weight:500;font-size:15px;padding:13px 20px;border-radius:999px;display:flex;align-items:center;gap:10px"><span style="width:8px;height:8px;border-radius:50%;background:#FF7442"></span>Download ISO</span>
+            <span style="background:#E7E9E4;font-weight:500;font-size:15px;padding:13px 20px;border-radius:999px">Read the docs</span>
+            <span style="font-weight:500;font-size:15px;padding:13px 10px;color:#B23F00">GitHub →</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:500">Hostname</span><div style="background:#F4F5F2;border-radius:12px;padding:12px 16px;font-family:'DM Mono',monospace;font-size:14px">edge-store-0142</div></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:14px">
+            <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4"><span style="display:flex;align-items:center;gap:8px;background:#F4F5F2;padding:6px 12px 6px 6px;border-radius:999px"><span style="width:22px;height:22px">{{ c.ring }}</span>{{ c.label }}</span></sc-for>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+        <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
+          <div style="background:#fff;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:6px">
+            <span style="display:flex;align-items:center;gap:8px;font-size:18px"><img src="../assets/kairos-mark.svg" style="height:22px">Kairos <b style="font-weight:600">{{ p.name }}</b></span>
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:#55585C">{{ p.stage }} · {{ p.job }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <span style="font-family:'DM Mono',monospace;font-size:13px;color:#55585C">02 — kairos.io homepage · light</span>
+    <div style="width:1280px;background:#F4F5F2;border-radius:20px;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 44px">
+        <div style="display:flex;align-items:center;gap:44px"><img src="../assets/kairos-horizontal-light.svg" style="height:34px"><div style="display:flex;gap:28px;font-size:15px"><span>Platform</span><span>Start here</span><span>Docs</span><span>Blog</span><span>Community</span></div></div>
+        <span style="background:#17181A;color:#fff;font-size:15px;font-weight:500;padding:10px 18px;border-radius:999px">Quick start</span>
+      </div>
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) 560px;align-items:center;padding:40px 44px 56px;gap:24px">
+        <div style="display:flex;flex-direction:column;gap:26px">
+          <span style="display:flex;align-items:center;gap:10px;font-family:'DM Mono',monospace;font-size:13px;color:#55585C"><span style="width:8px;height:8px;border-radius:50%;background:#FF7442"></span>v4.3.0 · Kairos Platform · CNCF sandbox</span>
+          <h2 style="margin:0;font-size:72px;line-height:1;font-weight:300;letter-spacing:-.05em">Every machine, at the right moment of its life.</h2>
+          <p style="margin:0;font-size:19px;line-height:1.6;color:#3E4145;max-width:520px;text-wrap:pretty">Build an image from any Linux, deploy it, run it, upgrade it atomically and recover it. One platform for the whole loop.</p>
+          <div style="display:flex;gap:10px"><span style="background:#17181A;color:#fff;font-weight:500;font-size:16px;padding:15px 24px;border-radius:999px;display:flex;align-items:center;gap:10px"><span style="width:8px;height:8px;border-radius:50%;background:#FF7442"></span>Download with Hadron</span><span style="background:#E7E9E4;font-weight:500;font-size:16px;padding:15px 24px;border-radius:999px">Find your stage</span></div>
+        </div>
+        <div style="width:560px;height:560px">{{ ringHero }}</div>
+      </div>
+      <div style="background:#fff;padding:52px 44px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px">
+        <sc-for list="{{ stageList }}" as="s" hint-placeholder-count="5">
+          <div style="display:flex;flex-direction:column;gap:12px;padding:20px;border-radius:16px;background:#F4F5F2">
+            <div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:6px;border-radius:3px;background:{{ s.c }}"></span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#55585C">0{{ s.i }}</span></div>
+            <span style="font-size:22px;font-weight:500">{{ s.name }}</span>
+            <span style="font-size:14px;line-height:1.5;color:#3E4145">{{ s.who }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <span style="font-family:'DM Mono',monospace;font-size:13px;color:#55585C">03 — Kairos Fleet · dark · each node shows its place on the ring</span>
+    <div style="width:1280px;background:#17181A;color:#ECEDEA;border-radius:20px;overflow:hidden;padding:24px;display:flex;flex-direction:column;gap:16px;min-height:760px">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 8px">
+        <div style="display:flex;align-items:center;gap:32px"><span style="display:flex;align-items:center;gap:10px;font-size:18px"><img src="../assets/kairos-mark.svg" style="height:26px">Kairos <b style="font-weight:600">Fleet</b></span>
+          <div style="display:flex;gap:4px;background:#222326;border-radius:999px;padding:4px;font-size:14px">
+            <sc-for list="{{ fleetNav }}" as="n" hint-placeholder-count="5"><sc-if value="{{ n.active }}"><span style="background:#ECEDEA;color:#17181A;padding:7px 14px;border-radius:999px">{{ n.label }}</span></sc-if><sc-if value="{{ n.idle }}"><span style="padding:7px 14px;color:#A4A7AB">{{ n.label }}</span></sc-if></sc-for>
+          </div></div>
+        <span style="background:#FF7442;color:#17181A;font-size:14px;font-weight:600;padding:10px 18px;border-radius:999px">Roll out upgrade</span>
+      </div>
+      <div style="display:grid;grid-template-columns:340px minmax(0,1fr);gap:16px">
+        <div style="background:#222326;border-radius:16px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px">
+          <div style="width:280px;height:280px">{{ ringFleet }}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;font-size:13px">
+            <sc-for list="{{ dist }}" as="d" hint-placeholder-count="5"><div style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:{{ d.c }}"></span><span style="color:#A4A7AB;flex:1">{{ d.name }}</span><span style="font-family:'DM Mono',monospace">{{ d.n }}</span></div></sc-for>
+          </div>
+        </div>
+        <div style="background:#222326;border-radius:16px;overflow:hidden">
+          <div style="display:grid;grid-template-columns:40px 1.6fr 1fr 2.2fr 1fr .6fr;gap:12px;padding:14px 20px;font-size:13px;color:#A4A7AB"><span></span><span>Node</span><span>Stage</span><span>Image</span><span>Group</span><span>Seen</span></div>
+          <sc-for list="{{ nodes }}" as="n" hint-placeholder-count="7">
+            <div style="display:grid;grid-template-columns:40px 1.6fr 1fr 2.2fr 1fr .6fr;gap:12px;padding:12px 20px;font-size:14px;border-top:1px solid #2E3033;align-items:center" style-hover="background:#2A2B2E">
+              <span style="width:28px;height:28px">{{ n.ring }}</span>
+              <span style="font-family:'DM Mono',monospace;font-size:13px">{{ n.name }}</span>
+              <span>{{ n.stage }}</span>
+              <span style="font-family:'DM Mono',monospace;font-size:12px;color:#C9CBC6">{{ n.image }}</span>
+              <span style="color:#C9CBC6">{{ n.group }}</span>
+              <span style="font-family:'DM Mono',monospace;font-size:12px;color:#A4A7AB">{{ n.seen }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <span style="font-family:'DM Mono',monospace;font-size:13px;color:#55585C">04 — hadron-linux.io · same system, blue ring</span>
+    <div style="width:1280px;background:#F4F5F2;border-radius:20px;overflow:hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 44px">
+        <img src="../assets/hadron-horizontal-light.svg" style="height:44px">
+        <div style="display:flex;gap:28px;font-size:15px;align-items:center"><span>Components</span><span>Docs</span><span>Source</span><span style="background:#0275E7;color:#fff;font-weight:500;padding:10px 18px;border-radius:999px">Quick start</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) 500px;align-items:center;padding:32px 44px 52px;gap:24px">
+        <div style="display:flex;flex-direction:column;gap:26px">
+          <span style="font-family:'DM Mono',monospace;font-size:13px;color:#55585C">Hadron v0.5.1 · a project of Kairos Platform</span>
+          <h2 style="margin:0;font-size:68px;line-height:1.02;font-weight:300;letter-spacing:-.05em">The foundation for image-based systems.</h2>
+          <p style="margin:0;font-size:19px;line-height:1.6;color:#3E4145;max-width:520px;text-wrap:pretty">Minimal, upstream-aligned Linux built from scratch with musl, systemd and vanilla kernels. No package manager.</p>
+          <div style="display:flex;gap:10px"><span style="background:#0275E7;color:#fff;font-weight:500;font-size:16px;padding:15px 24px;border-radius:999px">Get Hadron</span><span style="background:#E7E9E4;font-weight:500;font-size:16px;padding:15px 24px;border-radius:999px">Component versions</span></div>
+        </div>
+        <div style="width:500px;height:500px">{{ ringHadron }}</div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  ring(size, stages, opts = {}) {
+    const e = React.createElement, c = size / 2, r = opts.r ?? size * (opts.labels ? 0.31 : 0.38), sw = opts.sw ?? size * 0.07, gap = opts.gap ?? 4;
+    const pt = (a, rr) => [c + rr * Math.cos((a - 90) * Math.PI / 180), c + rr * Math.sin((a - 90) * Math.PI / 180)];
+    const arc = (a0, a1, rr) => { const [x0, y0] = pt(a0, rr), [x1, y1] = pt(a1, rr); return `M${x0} ${y0} A${rr} ${rr} 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${x1} ${y1}`; };
+    const seg = 360 / stages.length, kids = [];
+    if (opts.track) kids.push(e('circle', { key: 't', cx: c, cy: c, r, fill: 'none', stroke: opts.track, strokeWidth: sw }));
+    stages.forEach((s, i) => {
+      const a0 = i * seg + gap / 2, a1 = (i + 1) * seg - gap / 2;
+      kids.push(e('path', { key: 'a' + i, d: arc(a0, a1, r), fill: 'none', stroke: s.on === false ? opts.dim : s.c, strokeWidth: sw }));
+      if (opts.labels) { const [x, y] = pt((a0 + a1) / 2, r + sw * 1.4); kids.push(e('text', { key: 'l' + i, x, y, textAnchor: 'middle', dominantBaseline: 'middle', fontFamily: 'Lexend', fontSize: opts.labels, fill: opts.ink })); kids[kids.length - 1] = e('text', { key: 'l' + i, x, y, textAnchor: 'middle', dominantBaseline: 'middle', fontFamily: 'Lexend', fontSize: opts.labels, fill: opts.ink }, s.name); }
+      if (opts.products && s.prods) s.prods.forEach((p, j) => { const [x, y] = pt(a0 + (a1 - a0) * (j + 1) / (s.prods.length + 1), r - sw * 1.7); kids.push(e('text', { key: 'p' + i + j, x, y, textAnchor: 'middle', dominantBaseline: 'middle', fontFamily: 'DM Mono', fontSize: opts.products, fill: opts.muted }, p)); });
+    });
+    if (opts.marker != null) { const [x, y] = pt(opts.marker, r); kids.push(e('circle', { key: 'm', cx: x, cy: y, r: sw * 0.5, fill: opts.markerFill, stroke: opts.markerStroke, strokeWidth: sw * 0.35 })); }
+    if (opts.center) kids.push(opts.center(e, c));
+    return e('svg', { viewBox: `0 0 ${size} ${size}`, width: '100%', height: '100%' }, kids);
+  }
+  renderVals() {
+    const S = [
+      { name: 'Build', c: '#FB9E70', who: 'Factory and Builder turn any base into images.', prods: ['Factory', 'Builder'] },
+      { name: 'Deploy', c: '#FF7442', who: 'Provision and Installer put images on hardware.', prods: ['Provision', 'Installer'] },
+      { name: 'Run', c: '#EE5007', who: 'Immutable root, Kubernetes if you want it.', prods: ['Agent'] },
+      { name: 'Upgrade', c: '#B23F00', who: 'Fleet and Operator roll out A/B upgrades.', prods: ['Fleet', 'Operator'] },
+      { name: 'Recover', c: '#17181A', who: 'Fall back, reset or recover any node.', prods: ['Recovery'] }
+    ];
+    const SB = S.map((s, i) => ({ ...s, c: ['#1BAAFF', '#0275E7', '#004CCE', '#0258B0', '#17181A'][i] }));
+    const mini = (stage, dark) => this.ring(28, S.map((s, i) => ({ ...s, on: i === stage })), { r: 10, sw: 4, gap: 10, dim: dark ? '#3A3C40' : '#D8DAD5' });
+    const stIdx = { Run: 2, Upgrade: 3, Recover: 4, Deploy: 1, Build: 0 };
+    const nodes = [
+      ['edge-store-0142', 'Run', 'hadron-v0.5.1 · k3s 1.36', 'retail-eu', '12s'],
+      ['edge-store-0143', 'Upgrade', 'hadron-v0.5.1 → v0.5.2', 'retail-eu', '4s'],
+      ['factory-line-07', 'Run', 'ubuntu-24.04 · k0s 1.33', 'plant-bcn', '31s'],
+      ['gpu-orin-0021', 'Recover', 'ubuntu-22.04 · jetpack 6', 'edge-ai', '2m'],
+      ['gpu-orin-0030', 'Deploy', 'ubuntu-22.04 · jetpack 6', 'edge-ai', '40s'],
+      ['dc-rack-a-11', 'Upgrade', 'hadron-v0.5.0 → v0.5.1', 'dc-ams', '1m'],
+      ['dc-rack-a-12', 'Run', 'hadron-v0.5.1 · k3s 1.36', 'dc-ams', '9s']
+    ].map(([name, stage, image, group, seen]) => ({ name, stage, image, group, seen, ring: mini(stIdx[stage], true) }));
+    const centerTxt = (top, bottom, ink, muted) => (e, c) => e('g', { key: 'c' }, e('text', { x: c, y: c - 6, textAnchor: 'middle', fontFamily: 'Lexend', fontWeight: 300, fontSize: c * 0.2, fill: ink, letterSpacing: '-0.04em' }, top), e('text', { x: c, y: c + c * 0.14, textAnchor: 'middle', fontFamily: 'DM Mono', fontSize: c * 0.065, fill: muted }, bottom));
+    return {
+      stageList: S.map((s, i) => ({ ...s, i: i + 1 })),
+      ringSpec: this.ring(420, S, { labels: 15, ink: '#17181A', products: 11, muted: '#55585C', center: (e, c) => e('image', { key: 'c', href: '../assets/kairos-mark.svg', x: c - 40, y: c - 40, width: 80, height: 80 }) }),
+      ringHero: this.ring(560, S, { labels: 17, ink: '#17181A', products: 13, muted: '#55585C', marker: 230, markerFill: '#F4F5F2', markerStroke: '#17181A', center: centerTxt('Kairos', 'platform · v4.3.0', '#17181A', '#55585C') }),
+      ringFleet: this.ring(280, S.map(s => s.name === 'Recover' ? { ...s, c: '#ECEDEA' } : s), { track: '#2E3033', labels: 0, center: centerTxt('1,284', 'nodes', '#ECEDEA', '#A4A7AB') }),
+      ringHadron: this.ring(500, SB, { labels: 16, ink: '#17181A', center: (e, c) => e('image', { key: 'c', href: '../assets/hadron-mark.svg', x: c - 50, y: c - 56, width: 100, height: 112 }) }),
+      chips: ['Run', 'Upgrade', 'Recover', 'Deploy'].map(l => ({ label: l === 'Run' ? 'Healthy · run' : l === 'Upgrade' ? 'Upgrading' : l === 'Recover' ? 'Recovery' : 'Deploying', ring: mini(stIdx[l], false) })),
+      products: [['Platform', 'all', 'The whole suite'], ['Factory', 'build', 'Any base → image'], ['Builder', 'build', 'ISO, UKI, raw'], ['Provision', 'deploy', 'Install at scale'], ['Installer', 'deploy', 'Live media'], ['Fleet', 'upgrade', 'Manage nodes'], ['Operator', 'upgrade', 'Day-2 via K8s'], ['Lab', 'learn', 'Local VMs']].map(([name, stage, job]) => ({ name, stage, job })),
+      fleetNav: ['Overview', 'Nodes', 'Groups', 'Artifacts', 'Keys'].map(label => ({ label, active: label === 'Nodes', idle: label !== 'Nodes' })),
+      dist: [{ name: 'Build', n: 0, c: '#FB9E70' }, { name: 'Deploy', n: 12, c: '#FF7442' }, { name: 'Run', n: 1231, c: '#EE5007' }, { name: 'Upgrade', n: 37, c: '#B23F00' }, { name: 'Recover', n: 4, c: '#ECEDEA' }],
+      nodes
+    };
+  }
+}
+</script>
+</body>
+</html>

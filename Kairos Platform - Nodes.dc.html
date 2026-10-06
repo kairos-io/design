@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700&family=Martian+Mono:wdth,wght@87.5,400;87.5,500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#15141C;font-family:Urbanist,sans-serif;color:#F1EEE8;-webkit-font-smoothing:antialiased}a{color:#FF7442;text-decoration:none}a:hover{color:#FB9E70}*{box-sizing:border-box}[style*="Martian"]{font-stretch:87.5%}</style>
+</helmet>
+<div style="{{ vars }}">
+<div style="background:var(--bg,#15141C);color:var(--ink,#F1EEE8);min-height:100vh;display:flex">
+  <nav style="width:232px;flex:none;background:var(--side,#1A1922);padding:18px 14px;display:flex;flex-direction:column;gap:2px;border-right:1px solid var(--line,#33313F)">
+    <span style="display:flex;align-items:center;gap:10px;font-size:19px;padding:6px 8px 18px"><img src="assets/kairos-mark.svg" style="height:26px">Kairos <b style="font-weight:700">Platform</b></span>
+    <sc-for list="{{ navGroups }}" as="g" hint-placeholder-count="5"><div style="display:flex;flex-direction:column;gap:1px;padding-bottom:12px"><span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8);padding:0 10px 6px">{{ g.t }}</span><sc-for list="{{ g.items }}" as="n" hint-placeholder-count="2">
+      <sc-if value="{{ n.active }}"><div style="display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:700;padding:9px 10px;border-radius:4px;background:var(--raised,#33313F)"><span style="display:flex;align-items:center;gap:10px"><svg width="12" height="8" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="var(--accent,#FF7442)"></polygon></svg>{{ n.label }}</span><span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--accentSoft,#FB9E70)">{{ n.count }}</span></div></sc-if>
+      <sc-if value="{{ n.idle }}"><div style="display:flex;justify-content:space-between;align-items:center;font-size:15px;padding:9px 10px 9px 32px;color:var(--sub,#CBC8D6)"><span>{{ n.label }}</span><span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8)">{{ n.count }}</span></div></sc-if>
+    </sc-for></div></sc-for>
+    <div style="margin-top:auto;display:flex;flex-direction:column;gap:6px;padding:12px 10px;font-size:13px;color:var(--muted,#A9A6B8)"><span style="font-family:'Martian Mono',monospace;font-size:11px">platform.local · v4.3.0</span><span style="font-family:'Martian Mono',monospace;font-size:11px">kairos-platform</span></div>
+  </nav>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 28px;border-bottom:1px solid var(--line,#33313F)">
+      <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8)">fleet / nodes</span><h1 style="margin:0;font-size:30px;font-weight:600;letter-spacing:-.03em">Nodes</h1></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div style="width:260px;background:var(--surface,#1F1E28);border:1.5px solid var(--line,#33313F);border-radius:4px;padding:8px 12px;font-family:'Martian Mono',monospace;font-size:12px;color:var(--muted,#A9A6B8)">search hostname, image, label</div>
+        <span style="border:1.5px solid var(--ink,#F1EEE8);font-size:15px;font-weight:600;padding:8px 14px;border-radius:4px;white-space:nowrap">Build artifact</span>
+        <span style="background:var(--accent,#FF7442);color:#1C1B24;font-size:15px;font-weight:700;padding:9.5px 16px;border-radius:4px;white-space:nowrap">Roll out upgrade</span>
+      </div>
+    </header>
+
+    <div style="display:flex;flex:1;min-height:0;flex-wrap:wrap">
+      <main style="flex:1;min-width:560px;padding:24px 28px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4"><div style="background:var(--surface,#1F1E28);border-radius:4px;padding:16px 18px;display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;color:var(--muted,#A9A6B8)">{{ s.k }}</span><span style="font-size:34px;font-weight:600;letter-spacing:-.03em;line-height:1">{{ s.v }}</span></div></sc-for>
+        </div>
+
+        <div style="background:var(--surface,#1F1E28);border-radius:4px;padding:16px 18px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:15px"><span><b>Rollout r-0412</b> <span style="color:var(--sub,#CBC8D6)">· retail-eu → hadron v0.5.2 · canary passed</span></span><span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--muted,#A9A6B8)">766 / 812 nodes</span></div>
+          <div style="display:flex;gap:2px;flex-wrap:wrap">{{ rollout }}</div>
+          <div style="display:flex;gap:16px;font-size:13px;color:var(--muted,#A9A6B8);flex-wrap:wrap"><span style="display:flex;align-items:center;gap:6px"><svg width="14" height="9" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="#EE5007"></polygon></svg>upgraded</span><span style="display:flex;align-items:center;gap:6px"><svg width="14" height="9" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="none" stroke="#FF7442" stroke-width="2"></polygon></svg>in progress</span><span style="display:flex;align-items:center;gap:6px"><svg width="14" height="9" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="var(--raised,#33313F)"></polygon></svg>waiting</span><span style="margin-left:auto;font-weight:700;color:var(--link,#FF7442)">Pause rollout</span></div>
+        </div>
+
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <sc-for list="{{ filters }}" as="f" hint-placeholder-count="5"><span onClick="{{ f.pick }}" style="cursor:pointer;display:flex;align-items:center;gap:7px;font-size:14px;font-weight:600;padding:7px 12px;border-radius:2px;background:{{ f.bg }};color:{{ f.fg }}"><svg width="10" height="10" viewBox="0 0 12 12"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="{{ f.fill }}" stroke="{{ f.stroke }}" stroke-width="1.5"></polygon></svg>{{ f.label }}<span style="font-family:'Martian Mono',monospace;font-size:11px;opacity:.75">{{ f.n }}</span></span></sc-for>
+        </div>
+
+        <div style="background:var(--surface,#1F1E28);border-radius:4px;overflow:hidden">
+          <div style="display:grid;grid-template-columns:2fr 1.1fr 2.4fr 1fr .6fr;gap:10px;padding:11px 18px;font-size:13px;font-weight:700;color:var(--muted,#A9A6B8);background:var(--head,#272632)"><span>Node</span><span>Status</span><span>Image</span><span>Group</span><span>Seen</span></div>
+          <sc-for list="{{ rows }}" as="n" hint-placeholder-count="8">
+            <div onClick="{{ n.pick }}" style="cursor:pointer;display:grid;grid-template-columns:2fr 1.1fr 2.4fr 1fr .6fr;gap:10px;padding:11px 18px;font-size:15px;border-top:1px solid var(--line,#33313F);align-items:center;background:{{ n.bg }};box-shadow:{{ n.bar }}" style-hover="background:var(--hover,#272632)">
+              <span style="font-family:'Martian Mono',monospace;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ n.name }}</span>
+              <span style="display:flex;align-items:center;gap:8px;font-size:14px"><svg width="10" height="10" viewBox="0 0 12 12"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="{{ n.fill }}" stroke="{{ n.stroke }}" stroke-width="1.5"></polygon></svg>{{ n.status }}</span>
+              <span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--sub,#CBC8D6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ n.image }}</span>
+              <span style="font-size:14px;color:var(--sub,#CBC8D6)">{{ n.group }}</span>
+              <span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8)">{{ n.seen }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </main>
+
+      <aside style="width:340px;flex:none;border-left:1px solid var(--line,#33313F);background:var(--side,#1A1922);padding:24px 22px;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8)">selected node</span>
+          <span style="font-family:'Martian Mono',monospace;font-size:17px">{{ sel.name }}</span>
+          <span style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600"><svg width="11" height="11" viewBox="0 0 12 12"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="{{ sel.fill }}" stroke="{{ sel.stroke }}" stroke-width="1.5"></polygon></svg>{{ sel.status }} · {{ sel.group }}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span style="font-size:13px;font-weight:700;color:var(--muted,#A9A6B8)">Partitions</span>
+          <sc-for list="{{ sel.parts }}" as="p" hint-placeholder-count="3"><div style="display:grid;grid-template-columns:72px 1fr auto;gap:10px;align-items:center;background:var(--surface,#1F1E28);border-radius:4px;padding:10px 12px;font-size:14px;box-shadow:{{ p.bar }}"><span style="font-weight:700">{{ p.k }}</span><span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--sub,#CBC8D6)">{{ p.v }}</span><span style="font-family:'Martian Mono',monospace;font-size:10px;color:var(--accentSoft,#FB9E70)">{{ p.tag }}</span></div></sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <span style="font-size:13px;font-weight:700;color:var(--muted,#A9A6B8);padding-bottom:6px">Activity</span>
+          <sc-for list="{{ sel.timeline }}" as="t" hint-placeholder-count="4"><div style="display:grid;grid-template-columns:14px 1fr auto;gap:10px;padding:7px 0;font-size:14px;align-items:center"><svg width="9" height="9" viewBox="0 0 12 12"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="{{ t.f }}" stroke="{{ t.s }}" stroke-width="1.5"></polygon></svg><span>{{ t.t }}</span><span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8)">{{ t.at }}</span></div></sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-family:'Martian Mono',monospace;font-size:12px;color:var(--sub,#CBC8D6);background:var(--surface,#1F1E28);border-radius:4px;padding:12px">
+          <span>cpu 8 × x86_64 · mem 16 GiB</span><span>tpm 2.0 sealed · secure boot on</span><span>k3s 1.36.4 · labels: store=0143</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto">
+          <span style="text-align:center;border:1.5px solid var(--ink,#F1EEE8);font-size:14px;font-weight:600;padding:9px;border-radius:4px">Reboot</span>
+          <span style="text-align:center;border:1.5px solid var(--ink,#F1EEE8);font-size:14px;font-weight:600;padding:9px;border-radius:4px">Roll back</span>
+          <span style="grid-column:span 2;text-align:center;background:#C62B2B;color:#fff;font-size:14px;font-weight:600;padding:10px;border-radius:4px">Reset to recovery</span>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;dark&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;}}">
+class Component extends DCLogic {
+  state = { filter: 'All', sel: 'edge-store-0143' };
+  renderVals() {
+    const dark = (this.props.theme ?? 'dark') === 'dark';
+    const vars = dark
+      ? { '--bg': '#15141C', '--side': '#1A1922', '--surface': '#1F1E28', '--head': '#272632', '--hover': '#272632', '--raised': '#33313F', '--line': '#33313F', '--ink': '#F1EEE8', '--sub': '#CBC8D6', '--muted': '#A9A6B8', '--accent': '#FF7442', '--accentSoft': '#FB9E70', '--link': '#FF7442' }
+      : { '--bg': '#F1EEE8', '--side': '#ECE8E1', '--surface': '#FFFFFF', '--head': '#E8E3DB', '--hover': '#F7F4EF', '--raised': '#E8E3DB', '--line': '#E2DCD3', '--ink': '#1C1B24', '--sub': '#4E4943', '--muted': '#5F5951', '--accent': '#EE5007', '--accentSoft': '#B23F00', '--link': '#B23F00' };
+    const accent = dark ? '#FF7442' : '#EE5007', muted = dark ? '#A9A6B8' : '#5F5951', ink = dark ? '#F1EEE8' : '#1C1B24', raised = dark ? '#33313F' : '#E8E3DB';
+    const ST = { Healthy: ['#2F8F57', '#2F8F57'], Upgrading: [accent, accent], Recovery: ['#C62B2B', '#C62B2B'], Installing: ['none', accent], Offline: ['none', muted] };
+    const N = [
+      ['edge-store-0142', 'Healthy', 'hadron-v0.5.2 · k3s 1.36', 'retail-eu', '12s'],
+      ['edge-store-0143', 'Upgrading', 'hadron-v0.5.1 → v0.5.2', 'retail-eu', '4s'],
+      ['edge-store-0144', 'Healthy', 'hadron-v0.5.2 · k3s 1.36', 'retail-eu', '7s'],
+      ['factory-line-07', 'Healthy', 'ubuntu-24.04 · k0s 1.33', 'plant-bcn', '31s'],
+      ['factory-line-08', 'Installing', 'ubuntu-24.04 · k0s 1.33', 'plant-bcn', '1m'],
+      ['gpu-orin-0021', 'Recovery', 'ubuntu-22.04 · jetpack 6', 'edge-ai', '2m'],
+      ['gpu-orin-0022', 'Healthy', 'ubuntu-22.04 · jetpack 6', 'edge-ai', '18s'],
+      ['dc-rack-a-11', 'Offline', 'hadron-v0.5.0 · k3s 1.35', 'dc-ams', '3h'],
+      ['dc-rack-a-12', 'Healthy', 'hadron-v0.5.1 · k3s 1.36', 'dc-ams', '9s']
+    ].map(([name, status, image, group, seen]) => ({ name, status, image, group, seen, fill: ST[status][0], stroke: ST[status][1] }));
+    const f = this.state.filter;
+    const rows = N.filter(n => f === 'All' || n.status === f).map(n => {
+      const on = n.name === this.state.sel;
+      return { ...n, bg: on ? (dark ? '#272632' : '#FFF4EE') : 'transparent', bar: on ? `inset 3px 0 0 ${accent}` : 'none', pick: () => this.setState({ sel: n.name }) };
+    });
+    const sel = N.find(n => n.name === this.state.sel) || N[0];
+    const up = sel.status === 'Upgrading';
+    const e = React.createElement, O = ['#FB9E70', '#FF7442', '#EE5007'], bar = [];
+    for (let i = 0; i < 120; i++) bar.push(e('svg', { key: i, width: 15, height: 10, viewBox: '0 0 22 14' }, e('polygon', { points: '7,0 22,0 15,14 0,14', fill: i < 104 ? O[i % 3] : i < 110 ? 'none' : raised, stroke: i >= 104 && i < 110 ? '#FF7442' : 'none', strokeWidth: 2 })));
+    const counts = s => N.filter(n => s === 'All' || n.status === s).length;
+    return {
+      vars,
+      navGroups: [{ t: 'Overview', items: [['Dashboard', '']] }, { t: 'Fleet', items: [['Nodes', '1,284'], ['Groups', '18']] }, { t: 'Factory', items: [['Artifacts', '42'], ['Extensions', '6']] }, { t: 'Deploy', items: [['BMC registration', ''], ['Deployments', '3'], ['Import', '']] }, { t: 'Admin', items: [['Certificates', ''], ['Settings', '']] }].map(g => ({ t: g.t, items: g.items.map(([label, count]) => ({ label, count, active: label === 'Nodes', idle: label !== 'Nodes' })) })),
+      stats: [{ k: 'Nodes', v: '1,284' }, { k: 'Healthy', v: '98.6%' }, { k: 'Upgrading', v: '37' }, { k: 'Image drift', v: '0' }],
+      rollout: bar,
+      filters: ['All', 'Healthy', 'Upgrading', 'Recovery', 'Installing', 'Offline'].map(s => ({ label: s, n: counts(s), fill: s === 'All' ? 'none' : ST[s][0], stroke: s === 'All' ? (s === f ? (dark ? '#1C1B24' : '#F1EEE8') : ink) : ST[s][1], bg: s === f ? ink : (dark ? '#1F1E28' : '#FFFFFF'), fg: s === f ? (dark ? '#1C1B24' : '#F1EEE8') : ink, pick: () => this.setState({ filter: s }) })),
+      rows,
+      sel: {
+        ...sel,
+        parts: [
+          { k: 'Active', v: up ? 'hadron-v0.5.1 · state A' : sel.image.split(' · ')[0] + ' · state A', tag: up ? '' : 'booted', bar: up ? 'none' : `inset 3px 0 0 ${accent}` },
+          { k: 'Passive', v: up ? 'hadron-v0.5.2 · state B' : 'previous · state B', tag: up ? 'next boot' : '', bar: up ? `inset 3px 0 0 ${accent}` : 'none' },
+          { k: 'Recovery', v: 'hadron-v0.5.0 · recovery', tag: '', bar: 'none' }
+        ],
+        timeline: up
+          ? [{ t: 'Rollout r-0412 started', at: '20:41', f: muted, s: muted }, { t: 'Image pulled · 412 MB', at: '20:42', f: muted, s: muted }, { t: 'Written to state B', at: '20:44', f: muted, s: muted }, { t: 'Rebooting into v0.5.2', at: 'now', f: accent, s: accent }, { t: 'Health check', at: '—', f: 'none', s: muted }]
+          : [{ t: 'Registered with Fleet', at: '3d', f: muted, s: muted }, { t: 'Last upgrade applied', at: '2d', f: muted, s: muted }, { t: 'Heartbeat', at: sel.seen, f: ST[sel.status][0], s: ST[sel.status][1] }]
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

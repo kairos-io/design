@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Fragment+Mono&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#DAD8D3;font-family:Outfit,sans-serif;color:#161514;-webkit-font-smoothing:antialiased}a{color:#B23F00;text-decoration:none}a:hover{color:#EE5007}*{box-sizing:border-box}</style>
+</helmet>
+<div style="padding:64px;display:flex;flex-direction:column;gap:48px">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:32px;max-width:2624px">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:12px"><span style="font-family:'Fragment Mono',monospace;font-size:13px;background:#EE5007;color:#161514;padding:4px 10px;clip-path:polygon(0 0,100% 0,calc(100% - 8px) 100%,0 100%)">F</span><span style="font-family:'Fragment Mono',monospace;font-size:13px;color:#57534E">Kairos Platform design system · direction</span></div>
+      <h1 style="margin:0;font-size:64px;font-weight:800;letter-spacing:-.04em">Block</h1>
+      <p style="margin:0;font-size:18px;line-height:1.6;color:#3F3B37;max-width:780px;text-wrap:pretty">Flat, poster-like colour blocks with heavy type. Every block has one corner cut at 30°, the same angle as the logo’s rhombus edges. Orange fills whole panels with dark ink type, so it never reads as an orange accent on white. No dark-terminal hero.</p>
+    </div>
+    <div style="display:flex;gap:24px;font-family:'Fragment Mono',monospace;font-size:13px;color:#57534E;white-space:nowrap"><span>Outfit + Fragment Mono</span><span>Radius 6px + 30° cut</span><span>Colour blocks</span></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1280px 1280px;gap:64px;align-items:start">
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <span style="font-family:'Fragment Mono',monospace;font-size:13px;color:#57534E">01 — foundations</span>
+    <div style="width:1280px;background:#F3F2EF;padding:40px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px">
+      <div style="grid-column:span 3;background:#EE5007;color:#161514;padding:28px;min-height:260px;display:flex;flex-direction:column;justify-content:space-between;clip-path:polygon(0 0,100% 0,100% calc(100% - 40px),calc(100% - 69px) 100%,0 100%)"><span style="font-family:'Fragment Mono',monospace;font-size:12px">never place the logo on orange</span><div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:34px;font-weight:800;letter-spacing:-.03em">Kairos orange</span><span style="font-family:'Fragment Mono',monospace;font-size:13px">#EE5007 · panels, ink type on top</span></div></div>
+      <div style="grid-column:span 1;background:#FF7442;padding:16px;display:flex;align-items:flex-end;font-family:'Fragment Mono',monospace;font-size:12px">#FF7442</div>
+      <div style="grid-column:span 1;background:#FB9E70;padding:16px;display:flex;align-items:flex-end;font-family:'Fragment Mono',monospace;font-size:12px">#FB9E70</div>
+      <div style="grid-column:span 1;background:#161514;color:#F3F2EF;padding:16px;display:flex;align-items:flex-end;font-family:'Fragment Mono',monospace;font-size:12px">#161514 ink</div>
+      <div style="grid-column:span 2;background:#0275E7;color:#fff;padding:24px;min-height:160px;display:flex;flex-direction:column;justify-content:space-between;clip-path:polygon(0 0,100% 0,100% calc(100% - 28px),calc(100% - 48px) 100%,0 100%)"><img src="../assets/hadron-mark-white.svg" style="height:40px;width:max-content"><span style="font-family:'Fragment Mono',monospace;font-size:12px">#0275E7 · Hadron panels</span></div>
+      <div style="grid-column:span 1;background:#004CCE;color:#fff;padding:16px;display:flex;align-items:flex-end;font-family:'Fragment Mono',monospace;font-size:12px">#004CCE</div>
+      <div style="grid-column:span 1;background:#1BAAFF;padding:16px;display:flex;align-items:flex-end;font-family:'Fragment Mono',monospace;font-size:12px">#1BAAFF</div>
+      <div style="grid-column:span 1;background:#FFFFFF;padding:16px;display:flex;align-items:flex-end;font-family:'Fragment Mono',monospace;font-size:12px">#FFFFFF</div>
+      <div style="grid-column:span 1;background:#E3E1DC;padding:16px;display:flex;align-items:flex-end;font-family:'Fragment Mono',monospace;font-size:12px">#E3E1DC</div>
+      <div style="grid-column:span 4;background:#fff;padding:28px;display:flex;flex-direction:column;gap:12px">
+        <span style="font-family:'Fragment Mono',monospace;font-size:12px;color:#57534E">type</span>
+        <span style="font-size:68px;font-weight:800;letter-spacing:-.05em;line-height:.95">Build it. Ship it. Keep it.</span>
+        <span style="font-size:28px;font-weight:600;letter-spacing:-.02em">Immutable by default</span>
+        <span style="font-size:17px;line-height:1.6;color:#3F3B37">Kairos Platform builds, boots, upgrades and recovers machines, from the edge to the datacenter.</span>
+        <span style="font-family:'Fragment Mono',monospace;font-size:14px">kairos fleet rollout --group retail-eu</span>
+      </div>
+      <div style="grid-column:span 2;background:#fff;padding:28px;display:flex;flex-direction:column;gap:14px">
+        <span style="font-family:'Fragment Mono',monospace;font-size:12px;color:#57534E">controls</span>
+        <span style="background:#EE5007;color:#161514;font-weight:700;font-size:16px;padding:14px 18px;border-radius:6px;display:flex;justify-content:space-between">Download ISO<span>↓</span></span>
+        <span style="background:#161514;color:#F3F2EF;font-weight:600;font-size:16px;padding:14px 18px;border-radius:6px;display:flex;justify-content:space-between">Read the docs<span>→</span></span>
+        <div style="border:2px solid #161514;border-radius:6px;padding:11px 14px;font-family:'Fragment Mono',monospace;font-size:14px">edge-store-0142</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;font-size:13px;font-weight:700">
+          <span style="background:#BFE3C9;padding:5px 10px;border-radius:6px">Healthy</span><span style="background:#FB9E70;padding:5px 10px;border-radius:6px">Upgrading</span><span style="background:#F3B3B3;padding:5px 10px;border-radius:6px">Recovery</span><span style="background:#E3E1DC;padding:5px 10px;border-radius:6px">Offline</span>
+        </div>
+      </div>
+      <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
+        <div style="grid-column:span 3;background:{{ p.bg }};color:{{ p.fg }};padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
+          <span style="display:flex;align-items:center;gap:10px;font-size:22px;font-weight:500"><img src="{{ p.mark }}" style="height:24px">Kairos <b style="font-weight:800">{{ p.name }}</b></span>
+          <span style="font-family:'Fragment Mono',monospace;font-size:12px">{{ p.job }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <span style="font-family:'Fragment Mono',monospace;font-size:13px;color:#57534E">02 — kairos.io homepage · light</span>
+    <div style="width:1280px;background:#F3F2EF">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 40px">
+        <div style="display:flex;align-items:center;gap:44px"><img src="../assets/kairos-horizontal-light.svg" style="height:34px"><div style="display:flex;gap:28px;font-size:16px;font-weight:600"><span>Platform</span><span>Start here</span><span>Docs</span><span>Blog</span><span>Community</span></div></div>
+        <span style="background:#161514;color:#F3F2EF;font-size:15px;font-weight:600;padding:10px 18px;border-radius:6px">Quick start</span>
+      </div>
+      <div style="padding:0 40px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px">
+        <div style="grid-column:span 4;background:#EE5007;color:#161514;padding:56px 48px;min-height:520px;display:flex;flex-direction:column;justify-content:space-between;clip-path:polygon(0 0,100% 0,100% calc(100% - 70px),calc(100% - 121px) 100%,0 100%)">
+          <span style="font-family:'Fragment Mono',monospace;font-size:13px">Kairos Platform · v4.3.0 · CNCF sandbox</span>
+          <h2 style="margin:0;font-size:92px;line-height:.92;font-weight:800;letter-spacing:-.055em">Any Linux.<br>Immutable.<br>Everywhere.</h2>
+          <div style="display:flex;gap:10px"><span style="background:#161514;color:#F3F2EF;font-weight:700;font-size:17px;padding:16px 24px;border-radius:6px">Download with Hadron ↓</span><span style="border:2px solid #161514;font-weight:700;font-size:17px;padding:14px 22px;border-radius:6px">Choose your base</span></div>
+        </div>
+        <div style="grid-column:span 2;display:grid;grid-template-rows:1fr 1fr;gap:12px">
+          <div style="background:#161514;color:#F3F2EF;padding:28px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Fragment Mono',monospace;font-size:12px;color:#B5B0A8">bring your own base</span><span style="font-size:22px;font-weight:600;line-height:1.3">Ubuntu · Fedora · Alpine · Rocky · openSUSE · Debian · Hadron</span></div>
+          <div style="background:#FB9E70;padding:28px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Fragment Mono',monospace;font-size:12px">one lifecycle</span><span style="font-size:22px;font-weight:600;line-height:1.3">Build, boot, upgrade A/B, recover. Same model on every node.</span></div>
+        </div>
+        <sc-for list="{{ productsMain }}" as="p" hint-placeholder-count="4">
+          <div style="grid-column:span 3;background:#fff;padding:26px 28px;display:flex;gap:20px;align-items:flex-start" style-hover="background:#FFE9DE">
+            <span style="font-family:'Fragment Mono',monospace;font-size:13px;color:#B23F00;padding-top:6px">{{ p.stage }}</span>
+            <div style="display:flex;flex-direction:column;gap:6px;flex:1"><span style="font-size:28px;font-weight:800;letter-spacing:-.03em">{{ p.name }}</span><span style="font-size:16px;line-height:1.5;color:#3F3B37">{{ p.long }}</span></div>
+            <span style="font-size:22px">→</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="height:40px"></div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <span style="font-family:'Fragment Mono',monospace;font-size:13px;color:#57534E">03 — Kairos Fleet · light, with dark variant on the nav</span>
+    <div style="width:1280px;background:#F3F2EF;display:grid;grid-template-columns:220px minmax(0,1fr);min-height:760px">
+      <div style="background:#161514;color:#F3F2EF;padding:20px 14px;display:flex;flex-direction:column;gap:2px">
+        <div style="display:flex;align-items:center;gap:10px;padding:6px 8px 24px"><img src="../assets/kairos-mark.svg" style="height:26px"><span style="font-size:19px">Kairos <b style="font-weight:800">Fleet</b></span></div>
+        <sc-for list="{{ fleetNav }}" as="n" hint-placeholder-count="6">
+          <sc-if value="{{ n.active }}"><div style="font-size:16px;font-weight:700;padding:10px 12px;background:#EE5007;color:#161514;border-radius:6px">{{ n.label }}</div></sc-if>
+          <sc-if value="{{ n.idle }}"><div style="font-size:16px;padding:10px 12px;color:#B5B0A8">{{ n.label }}</div></sc-if>
+        </sc-for>
+      </div>
+      <div style="padding:24px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-content:start">
+        <div style="grid-column:span 4;display:flex;justify-content:space-between;align-items:center;padding:4px 0 8px"><h2 style="margin:0;font-size:40px;font-weight:800;letter-spacing:-.04em">Nodes</h2><div style="display:flex;gap:8px"><span style="border:2px solid #161514;font-size:15px;font-weight:700;padding:9px 16px;border-radius:6px">Build artifact</span><span style="background:#EE5007;font-size:15px;font-weight:700;padding:11px 18px;border-radius:6px">Roll out upgrade</span></div></div>
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4"><div style="background:{{ s.bg }};color:{{ s.fg }};padding:20px;display:flex;flex-direction:column;gap:20px;min-height:130px"><span style="font-family:'Fragment Mono',monospace;font-size:12px">{{ s.k }}</span><span style="font-size:48px;font-weight:800;letter-spacing:-.05em;line-height:1">{{ s.v }}</span></div></sc-for>
+        <div style="grid-column:span 4;background:#fff">
+          <div style="display:grid;grid-template-columns:1.7fr 1fr 2.2fr 1fr .6fr;padding:14px 20px;font-size:13px;font-weight:700;background:#E3E1DC"><span>Node</span><span>Status</span><span>Image</span><span>Group</span><span>Seen</span></div>
+          <sc-for list="{{ nodes }}" as="n" hint-placeholder-count="6">
+            <div style="display:grid;grid-template-columns:1.7fr 1fr 2.2fr 1fr .6fr;padding:12px 20px;font-size:15px;border-top:1px solid #ECEAE6;align-items:center" style-hover="background:#FFF4EE">
+              <span style="font-family:'Fragment Mono',monospace;font-size:13px">{{ n.name }}</span>
+              <span><span style="background:{{ n.bg }};font-size:13px;font-weight:700;padding:4px 9px;border-radius:6px">{{ n.status }}</span></span>
+              <span style="font-family:'Fragment Mono',monospace;font-size:12px;color:#57534E">{{ n.image }}</span>
+              <span>{{ n.group }}</span>
+              <span style="font-family:'Fragment Mono',monospace;font-size:12px;color:#57534E">{{ n.seen }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <span style="font-family:'Fragment Mono',monospace;font-size:13px;color:#57534E">04 — hadron-linux.io · same system, blue blocks</span>
+    <div style="width:1280px;background:#F3F2EF;padding-bottom:40px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 40px">
+        <img src="../assets/hadron-horizontal-light.svg" style="height:44px">
+        <div style="display:flex;gap:28px;font-size:16px;font-weight:600;align-items:center"><span>Components</span><span>Docs</span><span>Source</span><span style="background:#161514;color:#F3F2EF;padding:10px 18px;border-radius:6px">Quick start</span></div>
+      </div>
+      <div style="padding:0 40px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px">
+        <div style="grid-column:span 4;background:#0275E7;color:#fff;padding:56px 48px;min-height:500px;display:flex;flex-direction:column;justify-content:space-between;clip-path:polygon(0 0,100% 0,100% calc(100% - 70px),calc(100% - 121px) 100%,0 100%)">
+          <span style="font-family:'Fragment Mono',monospace;font-size:13px">Hadron v0.5.1 · a project of Kairos Platform</span>
+          <h2 style="margin:0;font-size:80px;line-height:.95;font-weight:800;letter-spacing:-.05em">The foundation for image-based systems.</h2>
+          <div style="display:flex;gap:10px"><span style="background:#fff;color:#161514;font-weight:700;font-size:17px;padding:16px 24px;border-radius:6px">Get Hadron ↓</span><span style="border:2px solid #fff;font-weight:700;font-size:17px;padding:14px 22px;border-radius:6px">Source code</span></div>
+        </div>
+        <div style="grid-column:span 2;display:grid;grid-template-rows:1fr 1fr 1fr;gap:12px">
+          <div style="background:#161514;color:#F3F2EF;padding:22px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Fragment Mono',monospace;font-size:12px;color:#B5B0A8">core</span><span style="font-size:22px;font-weight:700">musl · systemd · vanilla kernel</span></div>
+          <div style="background:#1BAAFF;color:#161514;padding:22px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Fragment Mono',monospace;font-size:12px">independent</span><span style="font-size:22px;font-weight:700">No package manager</span></div>
+          <div style="background:#fff;padding:22px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'Fragment Mono',monospace;font-size:12px;color:#57534E">with Kairos</span><span style="font-size:22px;font-weight:700">A/B upgrades, edge to cloud</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const sb = s => ({ Healthy: '#BFE3C9', Upgrading: '#FB9E70', Recovery: '#F3B3B3', Offline: '#E3E1DC' })[s];
+    const nodes = [
+      ['edge-store-0142', 'Healthy', 'hadron-v0.5.1 · k3s 1.36', 'retail-eu', '12s'],
+      ['edge-store-0143', 'Upgrading', 'hadron-v0.5.1 → v0.5.2', 'retail-eu', '4s'],
+      ['factory-line-07', 'Healthy', 'ubuntu-24.04 · k0s 1.33', 'plant-bcn', '31s'],
+      ['gpu-orin-0021', 'Recovery', 'ubuntu-22.04 · jetpack 6', 'edge-ai', '2m'],
+      ['dc-rack-a-11', 'Offline', 'hadron-v0.5.0 · k3s 1.35', 'dc-ams', '3h'],
+      ['dc-rack-a-12', 'Healthy', 'hadron-v0.5.1 · k3s 1.36', 'dc-ams', '9s']
+    ].map(([name, status, image, group, seen]) => ({ name, status, image, group, seen, bg: sb(status) }));
+    const P = [['Platform', 'the whole suite'], ['Factory', 'any base → image'], ['Builder', 'ISO · UKI · raw'], ['Provision', 'install at scale'], ['Installer', 'live media :8080'], ['Fleet', 'manage nodes'], ['Operator', 'day-2 via k8s'], ['Lab', 'local VMs']];
+    return {
+      products: P.map(([name, job], i) => ({ name, job, bg: i === 0 ? '#161514' : '#fff', fg: i === 0 ? '#F3F2EF' : '#161514', mark: 'assets/kairos-mark.svg' })),
+      productsMain: [
+        { stage: 'build', name: 'Factory', long: 'Turn any container base into a Kairos OCI image, right in your Dockerfile.' },
+        { stage: 'build', name: 'Builder', long: 'Produce ISO, UKI, raw and cloud images from that OCI image.' },
+        { stage: 'deploy', name: 'Provision', long: 'Install hundreds of machines over the network or USB without touching each one.' },
+        { stage: 'operate', name: 'Fleet', long: 'Register, group and upgrade every node from one dashboard and API.' }
+      ],
+      fleetNav: ['Overview', 'Nodes', 'Groups', 'Artifacts', 'Rollouts', 'Keys'].map(label => ({ label, active: label === 'Nodes', idle: label !== 'Nodes' })),
+      stats: [{ k: 'nodes', v: '1,284', bg: '#161514', fg: '#F3F2EF' }, { k: 'healthy', v: '98.6%', bg: '#fff', fg: '#161514' }, { k: 'upgrading', v: '37', bg: '#EE5007', fg: '#161514' }, { k: 'image drift', v: '0', bg: '#fff', fg: '#161514' }],
+      nodes
+    };
+  }
+}
+</script>
+</body>
+</html>

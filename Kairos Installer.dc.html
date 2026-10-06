@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700&family=Martian+Mono:wdth,wght@87.5,400;87.5,500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F1EEE8;font-family:Urbanist,sans-serif;color:#1C1B24;-webkit-font-smoothing:antialiased}a{color:#B23F00;text-decoration:none}a:hover{color:#EE5007}*{box-sizing:border-box}[style*="Martian"]{font-stretch:87.5%}</style>
+</helmet>
+<div style="{{ vars }}">
+<div style="background:var(--bg,#F1EEE8);color:var(--ink,#1C1B24);min-height:100vh;display:flex;flex-direction:column">
+  <header style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px 28px;border-bottom:1px solid var(--line,#DDD7CD)">
+    <span style="display:flex;align-items:center;gap:10px;font-size:20px"><img src="assets/kairos-mark.svg" style="height:28px">Kairos <b style="font-weight:700">Installer</b></span>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;font-family:'Martian Mono',monospace;font-size:12px">
+      <span style="background:var(--surface,#fff);padding:6px 10px;border-radius:2px">192.168.1.42:8080</span>
+      <span style="display:flex;align-items:center;gap:6px;background:var(--surface,#fff);padding:6px 10px;border-radius:2px"><img src="assets/hadron-mark.svg" style="height:13px">hadron v0.5.1 · k3s 1.36</span>
+      <span style="display:flex;align-items:center;gap:6px;background:var(--surface,#fff);padding:6px 10px;border-radius:2px"><svg width="9" height="9" viewBox="0 0 12 12"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="#2F8F57"></polygon></svg>live media</span>
+    </div>
+  </header>
+
+  <div style="display:flex;flex:1;flex-wrap:wrap">
+    <aside style="width:300px;flex:none;padding:28px 20px;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--line,#DDD7CD)">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+        <div onClick="{{ s.go }}" style="cursor:pointer;display:grid;grid-template-columns:34px 1fr;gap:12px;padding:12px;border-radius:4px;background:{{ s.bg }}">
+          <span style="width:30px;height:20px;display:flex;align-items:center;justify-content:center;font-family:'Martian Mono',monospace;font-size:11px;color:{{ s.numFg }};clip-path:polygon(30% 0,100% 0,70% 100%,0 100%);background:{{ s.tile }}">{{ s.n }}</span>
+          <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:700;color:{{ s.fg }}">{{ s.t }}</span><span style="font-size:14px;color:var(--muted,#5F5951)">{{ s.d }}</span></div>
+        </div>
+      </sc-for>
+      <div style="margin-top:auto;padding-top:20px;display:flex;flex-direction:column;gap:6px">
+        <span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#5F5951);padding-bottom:4px">This machine</span>
+        <sc-for list="{{ device }}" as="d" hint-placeholder-count="5"><div style="display:flex;justify-content:space-between;font-size:14px;gap:12px"><span style="color:var(--muted,#5F5951)">{{ d.k }}</span><span style="font-family:'Martian Mono',monospace;font-size:12px">{{ d.v }}</span></div></sc-for>
+      </div>
+    </aside>
+
+    <main style="flex:1;min-width:320px;padding:36px clamp(24px,4vw,56px);display:flex;flex-direction:column;gap:24px;max-width:960px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:6px"><span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--link,#B23F00)">Step {{ cur.n }} of 4</span><h1 style="margin:0;font-size:clamp(32px,4vw,44px);font-weight:600;letter-spacing:-.035em">{{ cur.h }}</h1><span style="font-size:17px;color:var(--sub,#4E4943)">{{ cur.sub }}</span></div>
+        <sc-if value="{{ isConfig }}"><div style="display:flex;gap:4px;background:var(--raised,#E8E3DB);padding:4px;border-radius:4px;font-size:15px;font-weight:600"><sc-for list="{{ modes }}" as="m" hint-placeholder-count="2"><span onClick="{{ m.pick }}" style="cursor:pointer;padding:7px 14px;border-radius:3px;background:{{ m.bg }};color:{{ m.fg }}">{{ m.l }}</span></sc-for></div></sc-if>
+      </div>
+
+      <sc-if value="{{ isDevice }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+          <sc-for list="{{ checks }}" as="c" hint-placeholder-count="4"><div style="background:var(--surface,#fff);border-radius:4px;padding:18px;display:flex;flex-direction:column;gap:8px"><span style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700"><svg width="11" height="11" viewBox="0 0 12 12"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="#2F8F57"></polygon></svg>{{ c.t }}</span><span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--sub,#4E4943)">{{ c.v }}</span></div></sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isYaml }}">
+        <div style="background:var(--code,#1C1B24);border-radius:4px;display:grid;grid-template-columns:44px minmax(0,1fr);font-family:'Martian Mono',monospace;font-size:14px;line-height:1.85;overflow:hidden">
+          <div style="color:#6A6879;text-align:right;padding:16px 10px;background:var(--codeBar,#272632)">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div>
+          <div style="padding:16px 18px;color:#F1EEE8;white-space:nowrap;overflow-x:auto"><div><span style="color:#8B889A">#cloud-config</span></div><div><span style="color:#FB9E70">hostname</span>: edge-store-0142</div><div><span style="color:#FB9E70">users</span>:</div><div>&nbsp;&nbsp;- <span style="color:#FB9E70">name</span>: kairos</div><div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#FB9E70">ssh_authorized_keys</span>:</div><div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- github:mauromorales</div><div><span style="color:#FB9E70">k3s</span>:</div><div>&nbsp;&nbsp;<span style="color:#FB9E70">enabled</span>: true</div><div><span style="color:#FB9E70">install</span>:</div><div>&nbsp;&nbsp;<span style="color:#FB9E70">reboot</span>: true</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-family:'Martian Mono',monospace;font-size:13px;color:#2F8F57"><svg width="10" height="10" viewBox="0 0 12 12"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="#2F8F57"></polygon></svg>valid cloud-config · 10 lines</div>
+      </sc-if>
+
+      <sc-if value="{{ isForm }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+          <sc-for list="{{ fields }}" as="f" hint-placeholder-count="4"><div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">{{ f.l }}</span><div style="background:var(--surface,#fff);border:1.5px solid var(--line,#DDD7CD);border-radius:4px;padding:11px 14px;font-family:'Martian Mono',monospace;font-size:13px">{{ f.v }}</div></div></sc-for>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <sc-for list="{{ toggles }}" as="t" hint-placeholder-count="3"><span style="display:flex;align-items:center;gap:10px;background:var(--surface,#fff);padding:10px 14px;border-radius:4px;font-size:15px;font-weight:600"><span style="width:34px;height:20px;border-radius:2px;background:{{ t.track }};display:flex;align-items:center;padding:2px;justify-content:{{ t.pos }}"><span style="width:16px;height:16px;border-radius:2px;background:#fff"></span></span>{{ t.l }}</span></sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDisk }}">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ disks }}" as="d" hint-placeholder-count="2">
+            <div onClick="{{ d.pick }}" style="cursor:pointer;background:var(--surface,#fff);border:1.5px solid {{ d.bd }};border-radius:4px;padding:18px;display:grid;grid-template-columns:22px 1fr auto;gap:14px;align-items:center">
+              <svg width="16" height="16" viewBox="0 0 12 12"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="{{ d.dot }}" stroke="var(--ink,#1C1B24)" stroke-width="1.2"></polygon></svg>
+              <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:18px;font-weight:700">{{ d.name }}</span><span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--muted,#5F5951)">{{ d.dev }}</span></div>
+              <span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--muted,#5F5951)">{{ d.parts }}</span>
+            </div>
+          </sc-for>
+          <div style="display:flex;flex-direction:column;gap:8px;padding-top:6px">
+            <span style="font-size:14px;font-weight:600">Partition layout</span>
+            <div style="display:flex;height:40px;border-radius:4px;overflow:hidden;font-family:'Martian Mono',monospace;font-size:11px">
+              <span style="flex:1;background:#1C1B24;color:#F1EEE8;display:flex;align-items:center;padding:0 8px">efi</span><span style="flex:3;background:#FB9E70;display:flex;align-items:center;padding:0 8px">state · A/B</span><span style="flex:2;background:#FF7442;display:flex;align-items:center;padding:0 8px">recovery</span><span style="flex:6;background:#EE5007;display:flex;align-items:center;padding:0 8px">persistent</span>
+            </div>
+          </div>
+          <div style="background:var(--surface,#fff);border-radius:4px;padding:14px 16px;display:grid;grid-template-columns:18px 1fr;gap:10px;font-size:15px"><svg width="13" height="13" viewBox="0 0 12 12" style="margin-top:4px"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="#C62B2B"></polygon></svg><span>Everything on <b style="font-family:'Martian Mono',monospace;font-size:13px">{{ diskDev }}</b> will be erased.</span></div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isInstall }}">
+        <div style="background:var(--surface,#fff);border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700"><span>Writing image to {{ diskDev }}</span><span style="font-family:'Martian Mono',monospace;font-size:13px">68%</span></div>
+          <div style="display:flex;gap:3px;flex-wrap:wrap">{{ progress }}</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-family:'Martian Mono',monospace;font-size:12px;line-height:1.6;color:var(--sub,#4E4943)">
+            <sc-for list="{{ log }}" as="l" hint-placeholder-count="5"><span style="color:{{ l.c }}">{{ l.t }}</span></sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="display:flex;justify-content:space-between;gap:12px;margin-top:auto;padding-top:16px">
+        <span onClick="{{ back }}" style="cursor:pointer;border:1.5px solid var(--ink,#1C1B24);font-size:16px;font-weight:600;padding:11.5px 20px;border-radius:4px">Back</span>
+        <span onClick="{{ next }}" style="cursor:pointer;background:{{ cur.btnBg }};color:#1C1B24;font-size:16px;font-weight:700;padding:13px 22px;border-radius:4px">{{ cur.cta }}</span>
+      </div>
+    </main>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;dark&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;}}">
+class Component extends DCLogic {
+  state = { step: 1, mode: 0, disk: 0 };
+  renderVals() {
+    const dark = (this.props.theme ?? 'dark') === 'dark';
+    const vars = dark
+      ? { '--bg': '#15141C', '--surface': '#1F1E28', '--raised': '#33313F', '--line': '#33313F', '--ink': '#F1EEE8', '--sub': '#CBC8D6', '--muted': '#A9A6B8', '--accent': '#FF7442', '--link': '#FF7442', '--code': '#0F0E15', '--codeBar': '#1E1B18' }
+      : { '--bg': '#F1EEE8', '--surface': '#FFFFFF', '--raised': '#E8E3DB', '--line': '#DDD7CD', '--ink': '#1C1B24', '--sub': '#4E4943', '--muted': '#5F5951', '--accent': '#EE5007', '--link': '#B23F00', '--code': '#1C1B24', '--codeBar': '#272632' };
+    const accent = dark ? '#FF7442' : '#EE5007', ink = dark ? '#F1EEE8' : '#1C1B24', surf = dark ? '#1F1E28' : '#FFFFFF', raised = dark ? '#33313F' : '#E8E3DB', muted = dark ? '#A9A6B8' : '#5F5951';
+    const st = this.state.step;
+    const S = [
+      { t: 'Device', d: 'Hardware checks', h: 'This machine is ready', sub: 'Kairos checked the hardware this live image booted on.', cta: 'Continue' },
+      { t: 'Configure', d: 'Cloud-config', h: 'Configure the node', sub: 'Applied on first boot. Paste YAML or fill the essentials.', cta: 'Continue to disk' },
+      { t: 'Disk', d: 'Target and layout', h: 'Choose the target disk', sub: 'Kairos creates an A/B layout with a recovery partition.', cta: 'Install Kairos' },
+      { t: 'Install', d: 'Write and reboot', h: 'Installing', sub: 'The machine reboots into Hadron when this finishes.', cta: 'Reboot now' }
+    ];
+    const D = [{ name: 'NVMe · 512 GB', dev: '/dev/nvme0n1', parts: '2 partitions' }, { name: 'SATA SSD · 256 GB', dev: '/dev/sda', parts: 'empty' }];
+    const e = React.createElement, O = ['#FB9E70', '#FF7442', '#EE5007'], bar = [];
+    for (let i = 0; i < 60; i++) bar.push(e('svg', { key: i, width: 18, height: 12, viewBox: '0 0 22 14' }, e('polygon', { points: '7,0 22,0 15,14 0,14', fill: i < 41 ? O[i % 3] : raised })));
+    return {
+      vars,
+      steps: S.map((s, i) => ({ ...s, n: i < st ? '✓' : '0' + (i + 1), bg: i === st ? surf : 'transparent', fg: i > st ? muted : ink, tile: i < st ? ink : i === st ? accent : raised, numFg: i < st ? (dark ? '#1C1B24' : '#F1EEE8') : i === st ? '#1C1B24' : muted, go: () => this.setState({ step: i }) })),
+      cur: { ...S[st], n: st + 1, btnBg: st === 2 ? accent : accent },
+      isDevice: st === 0, isConfig: st === 1, isYaml: st === 1 && this.state.mode === 0, isForm: st === 1 && this.state.mode === 1, isDisk: st === 2, isInstall: st === 3,
+      modes: ['YAML', 'Form'].map((l, i) => ({ l, bg: i === this.state.mode ? surf : 'transparent', fg: i === this.state.mode ? ink : muted, pick: () => this.setState({ mode: i }) })),
+      device: [{ k: 'CPU', v: '8 × x86_64' }, { k: 'Memory', v: '16 GiB' }, { k: 'TPM', v: '2.0' }, { k: 'Boot', v: 'UEFI · SB on' }, { k: 'Network', v: 'eth0 · DHCP' }],
+      checks: [{ t: 'UEFI boot', v: 'secure boot enabled' }, { t: 'TPM 2.0', v: 'available for encryption' }, { t: 'Network', v: 'eth0 · 192.168.1.42' }, { t: 'Disk', v: '2 candidates found' }],
+      fields: [{ l: 'Hostname', v: 'edge-store-0142' }, { l: 'User', v: 'kairos' }, { l: 'SSH keys from', v: 'github:mauromorales' }, { l: 'Register with', v: 'Kairos Platform · platform.local' }],
+      toggles: [{ l: 'Enable k3s', on: true }, { l: 'Encrypt persistent', on: true }, { l: 'Reboot when done', on: false }].map(t => ({ l: t.l, track: t.on ? accent : raised, pos: t.on ? 'flex-end' : 'flex-start' })),
+      disks: D.map((d, i) => ({ ...d, bd: i === this.state.disk ? ink : (dark ? '#33313F' : '#DDD7CD'), dot: i === this.state.disk ? accent : 'transparent', pick: () => this.setState({ disk: i }) })),
+      diskDev: D[this.state.disk].dev,
+      progress: bar,
+      log: [{ t: '✓ partitioned ' + D[this.state.disk].dev, c: muted }, { t: '✓ efi and recovery written', c: muted }, { t: '✓ cloud-config validated', c: muted }, { t: '→ writing state A · 412 / 604 MB', c: ink }, { t: '  sealing persistent with TPM', c: muted }],
+      next: () => this.setState({ step: Math.min(3, st + 1) }),
+      back: () => this.setState({ step: Math.max(0, st - 1) })
+    };
+  }
+}
+</script>
+</body>
+</html>

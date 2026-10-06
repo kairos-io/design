@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#E4E0D9;font-family:Urbanist,sans-serif;color:#221F1C;-webkit-font-smoothing:antialiased}a{color:#B23F00;text-decoration:none}a:hover{color:#EE5007}*{box-sizing:border-box}</style>
+</helmet>
+<div style="padding:64px;display:grid;grid-template-columns:1280px 1280px;gap:64px;align-items:start">
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <span style="font-family:'Martian Mono',monospace;font-size:12px;color:#6A645C">01 — competitive landscape · visual territory to stay out of</span>
+    <div style="background:#fff;border-radius:6px;padding:48px;display:flex;flex-direction:column;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px"><h1 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Where the others already live</h1><p style="margin:0;font-size:17px;line-height:1.6;color:#4E4943;max-width:820px;text-wrap:pretty">Most immutable-OS brands cluster into four looks. Directions A–C each landed too close to one of them. The new directions D–F were built to stay out of all four.</p></div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
+        <sc-for list="{{ clusters }}" as="c" hint-placeholder-count="4">
+          <div style="border:1px solid #DDD7CD;border-radius:6px;overflow:hidden;display:flex;flex-direction:column">
+            <div style="height:72px;display:flex"><span style="flex:3;background:{{ c.a }}"></span><span style="flex:1;background:{{ c.b }}"></span></div>
+            <div style="padding:16px;display:flex;flex-direction:column;gap:8px">
+              <span style="font-size:18px;font-weight:700">{{ c.name }}</span>
+              <span style="font-size:14px;line-height:1.5;color:#4E4943">{{ c.look }}</span>
+              <span style="font-family:'Martian Mono',monospace;font-size:11px;line-height:1.6;color:#6A645C">{{ c.who }}</span>
+              <span style="font-size:13px;color:#B23F00;font-weight:600">{{ c.hit }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px">
+        <div style="background:#F1EEE8;border-radius:6px;padding:24px;display:flex;flex-direction:column;gap:12px">
+          <span style="font-size:18px;font-weight:700">Rules for every Kairos direction</span>
+          <sc-for list="{{ rules }}" as="r" hint-placeholder-count="5"><div style="display:grid;grid-template-columns:20px minmax(0,1fr);font-size:15px;line-height:1.5"><span style="color:#B23F00">✕</span><span>{{ r }}</span></div></sc-for>
+        </div>
+        <div style="background:#221F1C;color:#F1EEE8;border-radius:6px;padding:24px;display:flex;flex-direction:column;gap:12px">
+          <span style="font-size:18px;font-weight:700">What only Kairos can own</span>
+          <sc-for list="{{ owns }}" as="r" hint-placeholder-count="4"><div style="display:grid;grid-template-columns:20px minmax(0,1fr);font-size:15px;line-height:1.5"><span style="color:#FF7442">●</span><span>{{ r }}</span></div></sc-for>
+        </div>
+      </div>
+      <span style="font-size:13px;font-style:italic;color:#6A645C">Based on each project's public site and logo colours as generally known. Worth a quick team check before you finalise.</span>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <span style="font-family:'Martian Mono',monospace;font-size:12px;color:#6A645C">02 — naming · Kairos Platform as the umbrella</span>
+    <div style="background:#fff;border-radius:6px;padding:48px;display:flex;flex-direction:column;gap:28px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:16px"><img src="../assets/kairos-mark.svg" style="height:56px"><div style="display:flex;flex-direction:column"><span style="font-size:40px;font-weight:400;letter-spacing:-.02em;line-height:1">Kairos <b style="font-weight:700">Platform</b></span><span style="font-size:16px;color:#4E4943;padding-top:6px">The whole suite. Not a framework, not a distro.</span></div></div>
+        <span style="font-family:'Martian Mono',monospace;font-size:12px;color:#6A645C;text-align:right">CNCF project + umbrella brand<br>repo names stay internal</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
+        <sc-for list="{{ stages }}" as="s" hint-placeholder-count="4">
+          <div style="background:#F1EEE8;border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:12px">
+            <span style="font-family:'Martian Mono',monospace;font-size:12px;color:#B23F00">{{ s.stage }}</span>
+            <sc-for list="{{ s.items }}" as="p" hint-placeholder-count="2">
+              <div style="background:#fff;border-radius:4px;padding:12px 14px;display:flex;flex-direction:column;gap:4px">
+                <span style="display:flex;align-items:center;gap:8px;font-size:17px"><img src="../assets/kairos-mark.svg" style="height:18px">Kairos <b style="font-weight:700">{{ p.name }}</b></span>
+                <span style="font-size:14px;line-height:1.45;color:#4E4943">{{ p.job }}</span>
+                <span style="font-family:'Martian Mono',monospace;font-size:11px;color:#6A645C">was {{ p.was }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:12px">
+        <div style="border:1px solid #DDD7CD;border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:14px">
+          <span style="font-family:'Martian Mono',monospace;font-size:12px;color:#6A645C">runs on · the base you choose</span>
+          <div style="display:flex;align-items:center;gap:16px"><img src="../assets/hadron-horizontal-light.svg" style="height:40px"><span style="font-size:15px;line-height:1.5;color:#4E4943">Hadron by Kairos: the default minimal base. A project inside the platform, not a second platform.</span></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:14px"><span style="background:#F1EEE8;border-radius:4px;padding:6px 10px">Kairos on Ubuntu</span><span style="background:#F1EEE8;border-radius:4px;padding:6px 10px">Kairos on Fedora</span><span style="background:#F1EEE8;border-radius:4px;padding:6px 10px">Kairos on Alpine</span><span style="background:#F1EEE8;border-radius:4px;padding:6px 10px">Kairos on Rocky</span><span style="background:#F1EEE8;border-radius:4px;padding:6px 10px">…</span></div>
+        </div>
+        <div style="border:1px solid #DDD7CD;border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:10px">
+          <span style="font-family:'Martian Mono',monospace;font-size:12px;color:#6A645C">on-node · docs only</span>
+          <sc-for list="{{ onnode }}" as="o" hint-placeholder-count="4"><div style="display:flex;justify-content:space-between;font-size:15px"><span style="font-weight:600">{{ o.name }}</span><span style="font-family:'Martian Mono',monospace;font-size:12px;color:#6A645C">{{ o.repo }}</span></div></sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-family:'Martian Mono',monospace;font-size:12px;color:#6A645C">how names are written</span>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;font-size:15px;line-height:1.5">
+          <div style="background:#F1EEE8;border-radius:6px;padding:16px"><b>First mention</b><br>Kairos Fleet, part of Kairos Platform</div>
+          <div style="background:#F1EEE8;border-radius:6px;padding:16px"><b>After that</b><br>Fleet · inside Kairos UIs, the product name alone</div>
+          <div style="background:#F1EEE8;border-radius:6px;padding:16px"><b>CLI</b><br><span style="font-family:'Martian Mono',monospace;font-size:13px">kairos fleet · kairos build</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      clusters: [
+        { name: 'Blue on navy', look: 'Cool blue accents on dark navy, corporate cloud feel.', who: 'Flatcar · Fedora CoreOS · Container-Optimized OS · Azure Container Linux · EVE-OS', a: '#0B1E3F', b: '#2F7FE0', hit: 'Risk: Hadron, and A’s navy base' },
+        { name: 'Orange on ink', look: 'Hot orange accent on near-black navy, cloud-vendor heritage.', who: 'Bottlerocket', a: '#232F3E', b: '#FF9900', hit: 'Risk: A (navy + orange), C' },
+        { name: 'Orange on white', look: 'Orange accents on a white, warm canvas, friendly corporate.', who: 'Ubuntu Core', a: '#FFFFFF', b: '#E95420', hit: 'Risk: B (warm, orange-forward)' },
+        { name: 'Dark terminal', look: 'Black canvas, terminal-first hero, mono everywhere, glow accents.', who: 'Talos Linux · Unikraft · bootc docs · Amutable', a: '#0A0A0C', b: '#7C5CFF', hit: 'Risk: C (graphite, CLI hero)' }
+      ],
+      rules: ['No navy as the main canvas: Kairos ink is warm charcoal', 'No blue-on-navy, even for Hadron: blue only on Kairos neutrals', 'No white-text-on-orange hero: orange carries ink text', 'No terminal-as-hero or glowing dark gradients', 'No generic container cubes, rockets, padlocks or shields'],
+      owns: ['The 18-rhombus logo geometry, used flat as tiles, never as 3D containers', 'Any Linux base: Ubuntu, Fedora, Alpine, Hadron. Others ship one OS.', 'The whole lifecycle in one platform: build, boot, run, upgrade, recover', 'Kairos means “the right moment”: timing and lifecycle as a story'],
+      stages: [
+        { stage: 'Build', items: [{ name: 'Factory', job: 'Any base → Kairos OCI image', was: 'kairos-init' }, { name: 'Builder', job: 'ISO, UKI, raw, cloud images', was: 'auroraboot build-*' }] },
+        { stage: 'Deploy', items: [{ name: 'Provision', job: 'Install machines at scale', was: 'auroraboot netboot' }, { name: 'Installer', job: 'Install from live media', was: 'WebUI :8080' }] },
+        { stage: 'Operate', items: [{ name: 'Fleet', job: 'Register and manage nodes', was: 'auroraboot fleet UI' }, { name: 'Operator', job: 'Day-2 via Kubernetes CRDs', was: 'kairos-operator' }] },
+        { stage: 'Learn', items: [{ name: 'Lab', job: 'Local VMs for PoCs', was: 'kairos-lab' }] }
+      ],
+      onnode: [{ name: 'Kairos Agent', repo: 'kairos-agent' }, { name: 'Kairos Encrypt', repo: 'kcrypt' }, { name: 'Boot (cmdline docs)', repo: 'immucore' }, { name: 'kairos network', repo: 'kairosctl' }]
+    };
+  }
+}
+</script>
+</body>
+</html>

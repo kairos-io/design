@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700&family=Martian+Mono:wdth,wght@87.5,400;87.5,500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F1EEE8;font-family:Urbanist,sans-serif;color:#1C1B24;-webkit-font-smoothing:antialiased}a{color:#B23F00;text-decoration:none}a:hover{color:#EE5007}*{box-sizing:border-box}[style*="Martian"]{font-stretch:87.5%}</style>
+</helmet>
+<div style="{{ vars }}">
+<div style="background:var(--bg,#F1EEE8);color:var(--ink,#1C1B24);min-height:100vh">
+
+  <div style="background:var(--ink,#1C1B24);color:var(--bg,#F1EEE8);font-size:14px;padding:9px 24px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;text-align:center"><span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--accentSoft,#FB9E70)">v4.3.0</span><span>Kairos Platform is here: Factory, Deploy and Fleet in one console.</span><span style="font-weight:700">Read the release →</span></div>
+
+  <div style="max-width:1280px;margin:0 auto;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+    <div style="display:flex;align-items:center;gap:40px;flex-wrap:wrap">
+      <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><img src="assets/kairos-horizontal-light.svg" style="height:34px"></sc-if>
+      <sc-if value="{{ isDark }}"><img src="assets/kairos-horizontal-dark.svg" style="height:34px"></sc-if>
+      <div style="display:flex;gap:26px;font-size:16px;font-weight:600;flex-wrap:wrap"><span>Products ▾</span><span>Start here</span><span>Docs</span><span>Blog</span><span>Community</span></div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--muted,#5F5951);border:1px solid var(--line,#DDD7CD);padding:7px 10px;border-radius:4px;white-space:nowrap">★ GitHub</span>
+      <span style="background:var(--ink,#1C1B24);color:var(--bg,#F1EEE8);font-size:15px;font-weight:600;padding:10px 18px;border-radius:4px;white-space:nowrap">Quick start</span>
+    </div>
+  </div>
+
+  <section style="position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;bottom:0;right:0;width:min(52%,720px)">{{ heroTiles }}</div>
+    <div style="position:relative;max-width:1280px;margin:0 auto;padding:clamp(56px,9vw,120px) 32px clamp(56px,8vw,104px);display:flex;flex-direction:column;gap:26px">
+      <span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--muted,#5F5951)">Kairos · CNCF sandbox project</span>
+      <h1 style="margin:0;font-size:clamp(48px,7.4vw,96px);line-height:.96;font-weight:600;letter-spacing:-.05em;max-width:760px">Bring any Linux.<br>Run it immutable.</h1>
+      <p style="margin:0;font-size:clamp(17px,1.6vw,20px);line-height:1.6;color:var(--sub,#4E4943);max-width:560px;text-wrap:pretty">Kairos turns Ubuntu, Fedora, Alpine or Hadron into images you build, boot, upgrade and recover the same way on every machine, from the edge to the datacenter.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:560px">
+        <span style="font-size:14px;font-weight:600">Download Kairos with Hadron and k3s</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <sc-for list="{{ archs }}" as="a" hint-placeholder-count="2">
+            <div onClick="{{ a.pick }}" style="cursor:pointer;display:flex;flex-direction:column;gap:2px;padding:10px 16px;border-radius:4px;background:{{ a.bg }};color:{{ a.fg }};border:1.5px solid {{ a.bd }};min-width:150px"><span style="font-size:16px;font-weight:700">{{ a.name }}</span><span style="font-size:13px">{{ a.sub }}</span></div>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;padding-top:6px">
+          <span style="background:var(--accent,#EE5007);color:#1C1B24;font-weight:700;font-size:16px;padding:15px 22px;border-radius:4px;white-space:nowrap">Download ISO · {{ arch }}</span>
+          <span style="border:1.5px solid var(--ink,#1C1B24);font-weight:600;font-size:16px;padding:13.5px 20.5px;border-radius:4px;white-space:nowrap">Choose your path</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="border-top:1px solid var(--line,#DDD7CD);border-bottom:1px solid var(--line,#DDD7CD)">
+    <div style="max-width:1280px;margin:0 auto;padding:20px 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+      <span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--muted,#5F5951)">Bring your own base</span>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <sc-for list="{{ bases }}" as="b" hint-placeholder-count="7"><span style="font-size:16px;font-weight:600;padding:6px 12px;border-radius:4px;background:{{ b.bg }};color:{{ b.fg }}">{{ b.name }}</span></sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:0 auto;padding:clamp(64px,8vw,104px) 32px;display:flex;flex-direction:column;gap:36px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:12px;max-width:640px"><h2 style="margin:0;font-size:clamp(34px,4vw,48px);font-weight:600;letter-spacing:-.035em;line-height:1.05">A project for every stage. One platform to run them.</h2><p style="margin:0;font-size:18px;line-height:1.6;color:var(--sub,#4E4943);text-wrap:pretty">Each project works on its own. Kairos Platform brings them together in one console.</p></div>
+      <a href="#" style="font-size:16px;font-weight:700;color:var(--link,#B23F00)">What happened to AuroraBoot? →</a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line,#DDD7CD);border:1px solid var(--line,#DDD7CD)">
+      <sc-for list="{{ stages }}" as="s" hint-placeholder-count="4">
+        <div style="background:var(--surface,#fff);padding:24px;display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;gap:10px"><svg width="24" height="15" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="{{ s.c }}"></polygon></svg><span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--muted,#5F5951)">{{ s.stage }}</span></div>
+          <sc-for list="{{ s.items }}" as="p" hint-placeholder-count="2">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="display:flex;align-items:center;gap:8px;font-size:22px"><img src="assets/kairos-mark.svg" style="height:22px">Kairos <b style="font-weight:700">{{ p.name }}</b></span>
+              <span style="font-size:16px;line-height:1.5;color:var(--sub,#4E4943)">{{ p.job }}</span>
+              <span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--muted,#5F5951)">{{ p.cmd }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+    <div style="background:var(--deep,#1C1B24);color:#F1EEE8;border-radius:4px;padding:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;align-items:stretch">
+      <div style="display:flex;flex-direction:column;gap:10px;justify-content:center"><span style="display:flex;align-items:center;gap:10px;font-size:26px"><img src="assets/kairos-mark.svg" style="height:28px">Kairos <b style="font-weight:700">Platform</b></span><span style="font-size:16px;line-height:1.5;color:#CBC8D6">One console for the whole lifecycle. Formerly AuroraBoot.</span><span style="font-family:'Martian Mono',monospace;font-size:12px;color:#FB9E70">docker run quay.io/kairos/kairos-platform</span></div>
+      <sc-for list="{{ platformSections }}" as="s" hint-placeholder-count="3">
+        <div style="background:#272632;border-radius:4px;padding:18px;display:flex;flex-direction:column;gap:8px"><span style="display:flex;align-items:center;gap:8px;font-size:19px;font-weight:700"><svg width="20" height="13" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="{{ s.c }}"></polygon></svg>{{ s.t }}</span><span style="font-size:15px;line-height:1.5;color:#CBC8D6">{{ s.d }}</span></div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="background:var(--deep,#1C1B24);color:#F1EEE8">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(64px,8vw,104px) 32px;display:flex;flex-direction:column;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:12px;max-width:640px"><span style="font-family:'Martian Mono',monospace;font-size:12px;color:#FB9E70">Start here</span><h2 style="margin:0;font-size:clamp(34px,4vw,48px);font-weight:600;letter-spacing:-.035em;line-height:1.05">Pick your path. Go as deep as you need.</h2></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+        <sc-for list="{{ personas }}" as="p" hint-placeholder-count="5">
+          <div style="background:#272632;border-radius:4px;padding:22px;display:flex;flex-direction:column;gap:14px;min-height:250px" style-hover="background:#33313F">
+            <span style="font-size:21px;font-weight:700;line-height:1.2">{{ p.name }}</span>
+            <span style="font-size:15px;line-height:1.5;color:#CBC8D6;flex:1">{{ p.need }}</span>
+            <span style="font-family:'Martian Mono',monospace;font-size:11px;line-height:1.7;color:#FB9E70">{{ p.flow }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:15px">
+        <span style="display:flex;align-items:center;gap:10px;border:1px solid #3C3A49;border-radius:4px;padding:10px 14px"><b style="font-family:'Martian Mono',monospace;font-size:12px;color:#FB9E70">L1</b>Guided · GUI first</span>
+        <span style="display:flex;align-items:center;gap:10px;border:1px solid #3C3A49;border-radius:4px;padding:10px 14px"><b style="font-family:'Martian Mono',monospace;font-size:12px;color:#FF7442">L2</b>Automate · CLI and pipelines</span>
+        <span style="display:flex;align-items:center;gap:10px;border:1px solid #3C3A49;border-radius:4px;padding:10px 14px"><b style="font-family:'Martian Mono',monospace;font-size:12px;color:#EE5007">L3</b>Extend · internals and hardware</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:0 auto;padding:clamp(64px,8vw,104px) 32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:48px">
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <h2 style="margin:0;font-size:clamp(30px,3.4vw,40px);font-weight:600;letter-spacing:-.03em;line-height:1.1">What’s inside every Kairos image</h2>
+      <p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub,#4E4943);text-wrap:pretty">OCI image-based deployments, an immutable root and atomic upgrades through any registry, without locking you to one Linux or one Kubernetes.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:8px">
+        <sc-for list="{{ inside }}" as="i" hint-placeholder-count="9"><span style="font-size:15px;font-weight:600;background:var(--surface,#fff);padding:8px 12px;border-radius:2px">{{ i }}</span></sc-for>
+      </div>
+    </div>
+    <div style="background:var(--surface,#fff);border-radius:4px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;padding:14px 18px;font-size:13px;font-weight:700;background:var(--raised,#E8E3DB);gap:8px"><span>Capability</span><span>Kairos</span><span>Config mgmt</span><span>Special-purpose OS</span></div>
+      <sc-for list="{{ compare }}" as="c" hint-placeholder-count="6">
+        <div style="display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;padding:12px 18px;font-size:15px;border-top:1px solid var(--line,#DDD7CD);gap:8px;align-items:center"><span>{{ c.k }}</span><span style="font-weight:700">{{ c.a }}</span><span style="color:var(--sub,#4E4943)">{{ c.b }}</span><span style="color:var(--sub,#4E4943)">{{ c.c }}</span></div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:0 auto;padding:0 32px clamp(64px,8vw,104px)">
+    <div style="background:var(--surface,#fff);border-radius:4px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));overflow:hidden">
+      <div style="padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;gap:18px">
+        <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><img src="assets/hadron-horizontal-light.svg" style="height:46px;width:max-content"></sc-if>
+        <sc-if value="{{ isDark }}"><img src="assets/hadron-horizontal-dark.svg" style="height:46px;width:max-content"></sc-if>
+        <h3 style="margin:0;font-size:clamp(26px,3vw,34px);font-weight:600;letter-spacing:-.025em;line-height:1.15">Smaller footprint, stronger baseline, the default base.</h3>
+        <p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub,#4E4943);text-wrap:pretty">Hadron is a minimal Linux built from scratch with musl, systemd and vanilla kernels, made for immutable images. It ships with every Kairos release.</p>
+        <span style="font-size:16px;font-weight:700;color:#0275E7">Visit hadron-linux.io →</span>
+      </div>
+      <div style="position:relative;min-height:280px">{{ hadronTiles }}</div>
+    </div>
+  </section>
+
+  <section style="border-top:1px solid var(--line,#DDD7CD)">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(56px,7vw,88px) 32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:48px">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><h3 style="margin:0;font-size:28px;font-weight:600;letter-spacing:-.02em">Hot off the press</h3><a href="#" style="font-size:15px;font-weight:700;color:var(--link,#B23F00)">All press →</a></div>
+        <sc-for list="{{ press }}" as="p" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;gap:4px;padding:14px 0;border-top:1px solid var(--line,#DDD7CD)"><span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#5F5951)">CNCF blog · {{ p.d }}</span><span style="font-size:18px;font-weight:600;line-height:1.35">{{ p.t }}</span></div></sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><h3 style="margin:0;font-size:28px;font-weight:600;letter-spacing:-.02em">On the road</h3><a href="#" style="font-size:15px;font-weight:700;color:var(--link,#B23F00)">All events →</a></div>
+        <sc-for list="{{ events }}" as="e" hint-placeholder-count="3"><div style="display:grid;grid-template-columns:76px 1fr;gap:16px;padding:14px 0;border-top:1px solid var(--line,#DDD7CD)"><span style="font-family:'Martian Mono',monospace;font-size:13px;line-height:1.4">{{ e.d }}</span><div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:18px;font-weight:600;line-height:1.35">{{ e.t }}</span><span style="font-size:14px;color:var(--muted,#5F5951)">{{ e.w }}</span></div></div></sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:var(--raised,#E8E3DB)">
+    <div style="max-width:1280px;margin:0 auto;padding:48px 32px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:22px;font-weight:700">Organizations using Kairos</span><span style="font-size:15px;color:var(--sub,#4E4943)">Bare metal, edge and distributed infrastructure, as we pursue CNCF incubation.</span></div>
+      <div style="display:flex;gap:28px;flex-wrap:wrap;font-size:20px;font-weight:700;color:var(--sub,#4E4943)"><span>CLASTIX</span><span>DeEEP Network</span><span>imec</span><span>Spectro Cloud</span></div>
+    </div>
+  </section>
+
+  <footer style="background:#15141C;color:#CBC8D6">
+    <div style="max-width:1280px;margin:0 auto;padding:56px 32px 32px;display:flex;flex-direction:column;gap:40px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px">
+        <div style="display:flex;flex-direction:column;gap:14px"><img src="assets/kairos-horizontal-dark.svg" style="height:32px;width:max-content"><span style="font-size:14px;line-height:1.5">A Cloud Native Computing Foundation sandbox project.</span></div>
+        <sc-for list="{{ footer }}" as="f" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;gap:10px;font-size:15px"><span style="font-weight:700;color:#F1EEE8">{{ f.t }}</span><sc-for list="{{ f.items }}" as="i" hint-placeholder-count="4"><span>{{ i }}</span></sc-for></div></sc-for>
+      </div>
+      <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13px;color:#A9A6B8;padding-top:20px;border-top:1px solid #33313F"><span>Copyright © 2026 Kairos a Series of LF Projects, LLC</span><span>Project supported by Spectro Cloud</span></div>
+    </div>
+  </footer>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;},&quot;tileDensity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:0.4,&quot;max&quot;:1.4,&quot;step&quot;:0.1,&quot;default&quot;:1,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  state = { arch: 0 };
+  field(w, h, r, cols, bias, line, seed) {
+    const e = React.createElement, s3 = Math.sqrt(3), out = [];
+    let x = seed;
+    const rnd = () => { x = (x * 9301 + 49297) % 233280; return x / 233280; };
+    for (let row = -1; row * 1.5 * r < h + r; row++) for (let col = -1; col * s3 * r < w + r; col++) {
+      const cx = col * s3 * r + (row % 2 ? s3 * r / 2 : 0), cy = row * 1.5 * r;
+      const P = a => [cx + r * Math.cos(a * Math.PI / 180), cy + r * Math.sin(a * Math.PI / 180)];
+      const p0 = P(-90), p1 = P(-30), p2 = P(30), p3 = P(90), p4 = P(150), p5 = P(210), C = [cx, cy];
+      const t = bias(cx / w, cy / h);
+      [[p5, p0, p1, C], [p5, C, p3, p4], [C, p1, p2, p3]].forEach((f, i) => {
+        const fill = rnd() < t ? cols[i] : 'none';
+        out.push(e('polygon', { key: out.length, points: f.map(p => p.join(',')).join(' '), fill, stroke: fill === 'none' ? line : fill, strokeWidth: 1 }));
+      });
+    }
+    return e('svg', { viewBox: `0 0 ${w} ${h}`, style: { position: 'absolute', inset: 0, width: '100%', height: '100%' }, preserveAspectRatio: 'xMaxYMid slice' }, out);
+  }
+  renderVals() {
+    const dark = (this.props.theme ?? 'light') === 'dark';
+    const density = this.props.tileDensity ?? 1;
+    const O = ['#FB9E70', '#FF7442', '#EE5007'], B = ['#1BAAFF', '#0275E7', '#004CCE'];
+    const line = dark ? '#33313F' : '#DDD7CD';
+    const vars = dark
+      ? { '--bg': '#15141C', '--surface': '#1F1E28', '--raised': '#272632', '--line': '#33313F', '--ink': '#F1EEE8', '--sub': '#CBC8D6', '--muted': '#A9A6B8', '--accent': '#FF7442', '--accentSoft': '#FB9E70', '--link': '#FF7442', '--deep': '#0F0E15' }
+      : { '--bg': '#F1EEE8', '--surface': '#FFFFFF', '--raised': '#E8E3DB', '--line': '#DDD7CD', '--ink': '#1C1B24', '--sub': '#4E4943', '--muted': '#5F5951', '--accent': '#EE5007', '--accentSoft': '#FB9E70', '--link': '#B23F00', '--deep': '#1C1B24' };
+    const A = [{ name: 'x86_64', sub: 'Intel / AMD' }, { name: 'ARM64', sub: 'Apple Silicon, Ampere' }];
+    const ink = dark ? '#F1EEE8' : '#1C1B24', bg = dark ? '#1F1E28' : '#FFFFFF';
+    return {
+      vars, isLight: !dark, isDark: dark,
+      heroTiles: this.field(720, 620, 40, O, (u, v) => Math.max(0, density * (1.05 - Math.hypot(u - 1, v - 0.45) * 1.35)), line, 3),
+      hadronTiles: this.field(600, 340, 34, B, (u, v) => Math.max(0, 1 - Math.hypot(u - 1, v - 0.5) * 1.2), line, 11),
+      archs: A.map((a, i) => { const on = i === this.state.arch; return { ...a, bg: on ? ink : bg, fg: on ? (dark ? '#1C1B24' : '#F1EEE8') : ink, bd: on ? ink : line, pick: () => this.setState({ arch: i }) }; }),
+      arch: A[this.state.arch].name,
+      bases: ['Hadron', 'Ubuntu', 'Fedora', 'Debian', 'Alpine', 'Rocky', 'openSUSE'].map((name, i) => ({ name, bg: i === 0 ? '#0275E7' : 'transparent', fg: i === 0 ? '#fff' : ink })),
+      stages: [
+        { stage: 'Build', c: '#FB9E70', items: [{ name: 'Factory', job: 'Kairosify any image: add kairos-init to your Dockerfile and build with Docker or Podman.', cmd: 'RUN /kairos-init' }] },
+        { stage: 'Deploy', c: '#FF7442', items: [{ name: 'Installer', job: 'Configure and install from live media in a browser.', cmd: 'http://node:8080' }] },
+        { stage: 'Operate', c: '#EE5007', items: [{ name: 'Operator', job: 'Day-2 upgrades as Kubernetes resources.', cmd: 'kubectl apply -f nodeop.yaml' }] },
+        { stage: 'Learn', c: dark ? '#F1EEE8' : '#1C1B24', items: [{ name: 'Lab', job: 'Spin up local VMs for demos and proofs of concept.', cmd: 'kairos lab up' }] }
+      ],
+      platformSections: [{ t: 'Factory', d: 'Kairosify images, then build ISO, UKI, disk and cloud artifacts and extensions.', c: '#FB9E70' }, { t: 'Deploy', d: 'Netboot, BMC virtual media and import to install at scale.', c: '#FF7442' }, { t: 'Fleet', d: 'Register nodes, group them and roll out upgrades.', c: '#EE5007' }],
+      personas: [
+        { name: 'Edge AI fleet operator', need: 'Remote GPU devices, decade-long lifecycles, flaky networks.', flow: 'Factory → Platform · Deploy → Operator' },
+        { name: 'Regulated platform team', need: 'Approved enterprise base, audit trail, GitOps everything.', flow: 'Factory → Operator' },
+        { name: 'Greenfield evaluator', need: 'Try immutable Kubernetes in an afternoon.', flow: 'Lab → Installer → Platform' },
+        { name: 'Factory and OEM shipper', need: 'Pre-flash identical devices before they leave the warehouse.', flow: 'Platform · Factory → Deploy → Fleet' },
+        { name: 'Trusted hardware gateway', need: 'Only signed, attested images may boot on your hardware.', flow: 'Factory · UKI → Platform · Deploy → Fleet' }
+      ],
+      inside: ['A/B atomic upgrades', 'Immutable root', 'OCI upgrades via registries', 'Cloud-init based', 'Dockerfile definition', 'Recovery', 'Reset', 'Kubernetes · optional', 'P2P network · optional'],
+      compare: [['Immutable root filesystem', 'Yes', 'No', 'Yes'], ['Atomic upgrades and rollback', 'Yes', 'No', 'Yes'], ['Reuse existing Linux images', 'Yes', 'Yes', 'No'], ['Config layering after install', 'Yes', 'Yes', 'Varies'], ['Kubernetes-native OS lifecycle', 'Yes', 'No', 'Partial'], ['Choice of Kubernetes distro', 'Yes', 'Yes', 'No']].map(([k, a, b, c]) => ({ k, a, b, c })),
+      press: [{ d: 'Aug 2026', t: 'Eleven minutes, zero humans: building a self-healing Kubernetes upgrade pipeline on Kairos' }, { d: 'May 2026', t: 'Building a cloud-native platform from the ground up with Kairos, k0rdent and Bindy' }, { d: 'Dec 2025', t: 'How to integrate Kairos architecturally into an edge AI platform' }],
+      events: [{ d: 'Oct 20', t: 'What should a cloud-native OS look like?', w: 'KCD UK · Edinburgh' }, { d: 'Oct 28', t: 'Your GPU node is a snowflake', w: 'Codemotion · Milan' }, { d: 'Nov 10', t: 'Project Pavilion kiosk · P-15B', w: 'KubeCon NA · Salt Lake City' }],
+      footer: [{ t: 'Products', items: ['Platform', 'Factory', 'Installer', 'Operator', 'Lab', 'Hadron'] }, { t: 'Docs', items: ['Quick start', 'Start here', 'Reference', 'Glossary'] }, { t: 'Community', items: ['Slack', 'GitHub discussions', 'LinkedIn', 'Adopters'] }]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700&family=Martian+Mono:wdth,wght@87.5,400&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F1EEE8;font-family:Urbanist,sans-serif;color:#1C1B24;-webkit-font-smoothing:antialiased}a{color:#1C1B24;text-decoration:none}a:hover{color:#B23F00}*{box-sizing:border-box}[style*="Martian"]{font-stretch:87.5%}</style>
+</helmet>
+<div style="max-width:1080px;margin:0 auto;padding:64px 32px 96px;display:flex;flex-direction:column;gap:36px">
+  <div style="display:flex;flex-direction:column;gap:14px"><img src="assets/kairos-horizontal-light.svg" style="height:36px;width:max-content"><h1 style="margin:0;font-size:clamp(36px,5vw,56px);font-weight:600;letter-spacing:-.04em;line-height:1">Kairos design system</h1><p style="margin:0;font-size:18px;line-height:1.6;color:#4E4943;max-width:640px;text-wrap:pretty">Direction: Tessellate. Each screen has a light/dark theme tweak.</p></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px">
+    <sc-for list="{{ files }}" as="f" hint-placeholder-count="6">
+      <a href="{{ f.href }}" style="background:#fff;border-radius:4px;padding:22px;display:flex;flex-direction:column;gap:8px" style-hover="background:#FFF4EE">
+        <span style="font-family:'Martian Mono',monospace;font-size:12px;color:#B23F00">{{ f.n }}</span>
+        <span style="font-size:22px;font-weight:700">{{ f.t }}</span>
+        <span style="font-size:15px;line-height:1.5;color:#4E4943">{{ f.d }}</span>
+      </a>
+    </sc-for>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:15px;font-weight:700">Exploration history</span><div style="display:flex;gap:16px;flex-wrap:wrap;font-size:15px"><a href="explorations/Landscape and Naming.dc.html" style="color:#B23F00">Competitive landscape</a><a href="explorations/Direction D - Tessellate.dc.html" style="color:#B23F00">D Tessellate</a><a href="explorations/Direction E - Orbit.dc.html" style="color:#B23F00">E Orbit</a><a href="explorations/Direction F - Block.dc.html" style="color:#B23F00">F Block</a></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return { files: [
+      ['01', 'Foundations', 'Logos, color, type, tiles, components, naming and voice.', 'Kairos - Foundations.dc.html'],
+      ['02', 'kairos.io', 'Homepage for Kairos Platform.', 'kairos.io Homepage.dc.html'],
+      ['03', 'Docs', 'Product page with L1/L2/L3 maturity tracks.', 'Kairos Docs - Product Page.dc.html'],
+      ['04', 'Kairos Installer', 'On-node install UI at :8080.', 'Kairos Installer.dc.html'],
+      ['05', 'Kairos Platform · Fleet › Nodes', 'Node list, rollout progress and node side panel.', 'Kairos Platform - Nodes.dc.html'],
+      ['05b', 'Kairos Platform · Fleet › Node detail', 'Health strip, live gauges for CPU, memory and temperature, disks, commands.', 'Kairos Platform - Node Detail.dc.html'],
+      ['05c', 'Kairos Platform · Factory › Build artifact', 'Six-step build wizard with live summary and equivalent CLI.', 'Kairos Platform - Build Artifact.dc.html'],
+      ['06', 'hadron-linux.io', 'Same system, Hadron blue.', 'hadron-linux.io Homepage.dc.html']
+    ].map(([n, t, d, href]) => ({ n, t, d, href })) };
+  }
+}
+</script>
+</body>
+</html>
