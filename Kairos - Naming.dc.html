@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="assets/fonts/fonts.css" rel="stylesheet">
+<style>body{margin:0;background:#F2F1F5;font-family:Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif;color:#1C1B24;-webkit-font-smoothing:antialiased}a{color:#A33600;text-decoration:none}a:hover{color:#EE5007}*{box-sizing:border-box}</style>
+</helmet>
+<div style="{{ vars }}">
+<div style="min-height:100vh;background:var(--bg,#F2F1F5);color:var(--ink,#1C1B24)">
+  <div style="position:sticky;top:0;z-index:5;background:var(--bg,#F2F1F5);border-bottom:1px solid var(--line,#D8D5E0)">
+    <div style="max-width:1240px;margin:0 auto;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:16px"><sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><img src="assets/kairos-horizontal-light.svg" style="height:30px"></sc-if><sc-if value="{{ isDark }}"><img src="assets/kairos-horizontal-dark.svg" style="height:30px"></sc-if><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#5C596A)">Design system · Naming</span></div>
+      <div style="display:flex;gap:20px;font-size:15px;font-weight:600;flex-wrap:wrap"><a href="#changed" style="color:var(--ink,#1C1B24)">What changed</a><a href="#products" style="color:var(--ink,#1C1B24)">Products</a><a href="#hadron" style="color:var(--ink,#1C1B24)">Hadron</a><a href="#bases" style="color:var(--ink,#1C1B24)">Base distros</a><a href="#levels" style="color:var(--ink,#1C1B24)">Levels</a><a href="#cli" style="color:var(--ink,#1C1B24)">CLI</a><a href="#writing" style="color:var(--ink,#1C1B24)">Writing</a><a href="#unchanged" style="color:var(--ink,#1C1B24)">Unchanged</a></div>
+    </div>
+  </div>
+
+  <div style="position:relative;overflow:hidden;border-bottom:1px solid var(--line,#D8D5E0)">
+    <div style="position:absolute;top:0;right:0;bottom:0;left:max(45%,520px)">{{ heroTiles }}</div>
+    <div style="position:relative;max-width:1240px;margin:0 auto;padding:88px 32px 96px;display:flex;flex-direction:column;gap:22px">
+      <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#5C596A)">01 · Naming</span>
+      <h1 style="margin:0;font-size:clamp(48px,7vw,84px);line-height:.98;font-weight:600;letter-spacing:-.045em;max-width:760px">AuroraBoot is now part of Kairos.</h1>
+      <p style="margin:0;font-size:19px;line-height:1.6;color:var(--sub,#494656);max-width:600px;text-wrap:pretty">{{ lede }}</p>
+    </div>
+  </div>
+
+  <div style="max-width:1240px;margin:0 auto;padding:0 32px;display:flex;flex-direction:column">
+
+    <!-- BEFORE / AFTER -->
+    <section id="changed" style="padding:80px 0;display:flex;flex-direction:column;gap:28px">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--link,#A33600)">02</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Before → after</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub,#494656);max-width:640px;text-wrap:pretty">If you used the old name, use the new one. Everything AuroraBoot did now lives in the Kairos console.</p></div>
+      <div style="background:var(--surface,#fff);border-radius:4px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;padding:12px 20px;font-size:13px;font-weight:700;background:var(--raised,#E6E4EC)"><span>Before</span><span>After</span></div>
+        <sc-for list="{{ changes }}" as="c" hint-placeholder-count="9">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;padding:12px 20px;font-size:15px;line-height:1.5;border-top:1px solid var(--line,#D8D5E0);align-items:center;overflow-wrap:anywhere"><span style="color:var(--sub,#494656)">{{ c.before }}</span><span style="font-weight:600">{{ c.after }}</span></div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- PRODUCTS VS FUNCTIONALITY -->
+    <section id="products" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line,#D8D5E0)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--link,#A33600)">03</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Products and functionality</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub,#494656);max-width:680px;text-wrap:pretty">A product has its own name, repo and binary. In UI chrome it shows the mark plus its bold name. Functionality is part of Kairos and has no product name.</p></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px;align-items:start">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:15px;font-weight:700">Products</span>
+          <sc-for list="{{ products }}" as="p" hint-placeholder-count="6">
+            <div style="background:var(--surface,#fff);border-radius:4px;padding:16px 18px;display:flex;flex-direction:column;gap:6px">
+              <span style="display:flex;align-items:center;gap:8px;font-size:19px">{{ p.lockup }}</span>
+              <span style="font-size:15px;line-height:1.5;color:var(--sub,#494656)">{{ p.job }}</span>
+              <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#5C596A);overflow-wrap:anywhere">{{ p.meta }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:15px;font-weight:700">Functionality</span>
+          <div style="background:var(--code,#1C1B24);color:#F2F1F5;border-radius:4px;padding:22px;display:flex;flex-direction:column;gap:16px">
+            <span style="display:flex;align-items:center;gap:10px;font-size:24px;letter-spacing:-.02em"><img src="assets/kairos-mark.svg" style="height:26px"><b style="font-weight:700">Kairos</b> console</span>
+            <span style="font-size:15px;line-height:1.5;color:#CBC8D6">The web UI, started with <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:14px;color:#FB9E70">kairos ui</span>. Write “the Kairos console”, then “the console”.</span>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <sc-for list="{{ sections }}" as="s" hint-placeholder-count="3"><span style="display:flex;align-items:center;gap:10px;background:var(--codeBar,#272632);padding:10px 12px;border-radius:2px;font-size:15px;font-weight:700"><svg width="16" height="10" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="{{ s.c }}"></polygon></svg>{{ s.t }}<span style="font-weight:400;color:#CBC8D6;font-size:14px">{{ s.d }}</span></span></sc-for>
+            </div>
+          </div>
+          <div style="background:var(--raised,#E6E4EC);border-radius:4px;padding:18px;display:flex;flex-direction:column;gap:6px"><span style="font-size:15px;font-weight:700">Factory ≠ Kairos Factory</span><span style="font-size:15px;line-height:1.5;color:var(--sub,#494656)">{{ factoryNote }}</span></div>
+          <div style="background:var(--surface,#fff);border-radius:4px;padding:18px;display:flex;flex-direction:column;gap:12px"><span style="font-size:15px;font-weight:700">In-product chrome</span><span style="display:flex;align-items:center;gap:8px;font-size:19px"><img src="assets/kairos-mark.svg" style="height:20px">Kairos <b style="font-weight:700">Installer</b></span><span style="font-size:15px;line-height:1.5;color:var(--sub,#494656)">Products: mark, regular “Kairos”, bold product name. The console shows the mark and a bold “Kairos” alone; its sections are page titles, not names in the chrome.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HADRON -->
+    <section id="hadron" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line,#D8D5E0)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--link,#A33600)">04</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Hadron</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub,#494656);max-width:640px;text-wrap:pretty">Hadron is a separate Linux distribution. It keeps its own name and its own logo. It ships with every Kairos release.</p></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px">
+        <div style="background:var(--surface,#fff);border-radius:4px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:20px;min-height:180px"><sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><img src="assets/hadron-horizontal-light.svg" style="height:52px;width:max-content;max-width:100%"></sc-if><sc-if value="{{ isDark }}"><img src="assets/hadron-horizontal-dark.svg" style="height:52px;width:max-content;max-width:100%"></sc-if><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#5C596A)">Hadron · own logo, Hadron blue</span></div>
+        <div style="background:var(--surface,#fff);border-radius:4px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:20px;min-height:180px"><sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><img src="assets/kairos-horizontal-light.svg" style="height:48px;width:max-content;max-width:100%"></sc-if><sc-if value="{{ isDark }}"><img src="assets/kairos-horizontal-dark.svg" style="height:48px;width:max-content;max-width:100%"></sc-if><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#5C596A)">Kairos · the release Hadron ships with</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px">
+        <sc-for list="{{ hadronRules }}" as="r" hint-placeholder-count="3"><div style="background:var(--surface,#fff);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:{{ r.c }}">{{ r.mark }}</span><span style="font-size:19px;font-weight:700">{{ r.t }}</span><span style="font-size:15px;line-height:1.5;color:var(--sub,#494656)">{{ r.d }}</span></div></sc-for>
+      </div>
+    </section>
+
+    <!-- BASE DISTROS -->
+    <section id="bases" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line,#D8D5E0)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--link,#A33600)">05</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em;display:flex;align-items:center;gap:14px;flex-wrap:wrap">Base distros<span style="font-size:13px;font-weight:700;letter-spacing:0;background:var(--raised,#E6E4EC);color:var(--ink,#1C1B24);padding:5px 9px;border-radius:2px">Proposal</span></h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub,#494656);max-width:680px;text-wrap:pretty">{{ basesLede }}</p></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px">
+        <sc-for list="{{ baseTerms }}" as="t" hint-placeholder-count="2"><div style="background:var(--surface,#fff);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:8px"><span style="font-size:19px;font-weight:700">{{ t.t }}</span><span style="font-size:15px;line-height:1.5;color:var(--sub,#494656)">{{ t.d }}</span><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#5C596A);overflow-wrap:anywhere">{{ t.eg }}</span></div></sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:8px">
+        <sc-for list="{{ bases }}" as="b" hint-placeholder-count="5"><div style="background:var(--surface,#fff);border-radius:4px;padding:16px 18px;display:flex;flex-direction:column;gap:4px"><span style="font-size:17px;font-weight:700">{{ b.name }}</span><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#5C596A);overflow-wrap:anywhere">{{ b.image }}</span></div></sc-for>
+      </div>
+    </section>
+
+    <!-- LEVELS -->
+    <section id="levels" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line,#D8D5E0)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--link,#A33600)">06</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em;display:flex;align-items:center;gap:14px;flex-wrap:wrap">Names by docs level</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub,#494656);max-width:680px;text-wrap:pretty">The docs teach Kairos in three levels. Each level brings in only the names that reader needs.</p></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px">
+        <sc-for list="{{ levels }}" as="l" hint-placeholder-count="3">
+          <div style="background:var(--surface,#fff);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--link,#A33600)">{{ l.k }}</span><span style="font-size:22px;font-weight:700">{{ l.t }}</span><span style="font-size:14px;color:var(--muted,#5C596A)">{{ l.who }}</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><sc-for list="{{ l.names }}" as="n" hint-placeholder-count="3"><span style="background:var(--bg,#F2F1F5);border-radius:2px;padding:8px 10px;font-size:15px;font-weight:600">{{ n.t }}</span></sc-for></div>
+            <span style="font-size:14px;line-height:1.5;color:var(--sub,#494656)">{{ l.note }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- CLI -->
+    <section id="cli" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line,#D8D5E0)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--link,#A33600)">07</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">CLI · git-style</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub,#494656);max-width:640px;text-wrap:pretty">{{ cliLede }}</p></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:12px;align-items:start">
+        <div style="background:var(--code,#1C1B24);border-radius:4px;overflow:hidden">
+          <div style="display:flex;justify-content:space-between;padding:8px 14px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A9A6B8;background:var(--codeBar,#272632)"><span>terminal</span><span>copy</span></div>
+          <div style="padding:16px;display:flex;flex-direction:column;gap:14px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px;line-height:1.7;color:#F2F1F5;overflow-wrap:anywhere">
+            <sc-for list="{{ commands }}" as="c" hint-placeholder-count="4"><div style="display:flex;flex-direction:column"><span style="color:#A9A6B8"># {{ c.note }}</span><span><span style="color:#FB9E70">$</span> {{ c.cmd }}</span></div></sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ binaries }}" as="b" hint-placeholder-count="3"><div style="background:var(--surface,#fff);border-radius:4px;padding:16px 18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:16px;align-items:baseline"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:14px;font-weight:600;overflow-wrap:anywhere">{{ b.bin }}</span><span style="font-size:15px;line-height:1.5;color:var(--sub,#494656)">{{ b.d }}</span></div></sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- WRITING -->
+    <section id="writing" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line,#D8D5E0)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--link,#A33600)">08</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Do and don’t</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub,#494656);max-width:640px;text-wrap:pretty">Name the thing people use. Show commands in mono.</p></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px">
+        <sc-for list="{{ writing }}" as="w" hint-placeholder-count="6">
+          <div style="background:var(--surface,#fff);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:grid;grid-template-columns:18px 1fr;gap:8px;font-size:16px;line-height:1.5"><span style="font-weight:700;color:var(--ok,#2F7A4C)">✓</span><span>{{ w.yes }}</span></div>
+            <div style="display:grid;grid-template-columns:18px 1fr;gap:8px;font-size:16px;line-height:1.5;color:var(--sub,#494656)"><span style="font-weight:700;color:var(--link,#A33600)">✕</span><span>{{ w.no }}</span></div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- UNCHANGED -->
+    <section id="unchanged" style="padding:80px 0 120px;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line,#D8D5E0)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--link,#A33600)">09</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">What doesn’t change</h2></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:8px">
+        <sc-for list="{{ unchanged }}" as="u" hint-placeholder-count="6"><div style="background:var(--surface,#fff);border-radius:4px;padding:16px 18px;display:grid;grid-template-columns:16px 1fr;gap:10px;font-size:15px;line-height:1.5"><svg width="14" height="14" viewBox="0 0 12 12" style="margin-top:4px"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="var(--accent,#EE5007)"></polygon></svg><span>{{ u.t }}</span></div></sc-for>
+      </div>
+    </section>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;theme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;light&quot;,&quot;tsType&quot;:&quot;'light'|'dark'&quot;}}">
+class Component extends DCLogic {
+  field(w, h, r, cols, bias, line, seed) {
+    const e = React.createElement, s3 = Math.sqrt(3), out = [];
+    let x = seed;
+    const rnd = () => { x = (x * 9301 + 49297) % 233280; return x / 233280; };
+    for (let row = -1; row * 1.5 * r < h + r; row++) for (let col = -1; col * s3 * r < w + r; col++) {
+      const cx = col * s3 * r + (row % 2 ? s3 * r / 2 : 0), cy = row * 1.5 * r;
+      const P = a => [cx + r * Math.cos(a * Math.PI / 180), cy + r * Math.sin(a * Math.PI / 180)];
+      const p0 = P(-90), p1 = P(-30), p2 = P(30), p3 = P(90), p4 = P(150), p5 = P(210), C = [cx, cy];
+      const t = bias(cx / w, cy / h);
+      [[p5, p0, p1, C], [p5, C, p3, p4], [C, p1, p2, p3]].forEach((f, i) => {
+        const fill = rnd() < t ? cols[i] : 'none';
+        out.push(e('polygon', { key: out.length, points: f.map(p => p.join(',')).join(' '), fill, stroke: fill === 'none' ? line : fill, strokeWidth: 1 }));
+      });
+    }
+    return e('svg', { viewBox: `0 0 ${w} ${h}`, style: { position: 'absolute', inset: 0, width: '100%', height: '100%' }, preserveAspectRatio: 'xMidYMid slice' }, out);
+  }
+  // `backticks` become inline mono; everything else stays text.
+  rich(s, size = '0.9em') {
+    const e = React.createElement;
+    const mono = "'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace";
+    return s.split('`').map((t, i) => i % 2 ? e('span', { key: i, style: { fontFamily: mono, fontSize: size, fontWeight: 500 } }, t) : t);
+  }
+  renderVals() {
+    const dark = (this.props.theme ?? 'light') === 'dark';
+    const vars = dark
+      ? { '--bg': '#15141C', '--surface': '#1F1E28', '--raised': '#33313F', '--line': '#33313F', '--ink': '#F2F1F5', '--sub': '#CBC8D6', '--muted': '#A9A6B8', '--accent': '#FF7442', '--link': '#FF7442', '--ok': '#3FAF6E', '--code': '#0F0E15', '--codeBar': '#1F1E28' }
+      : { '--bg': '#F2F1F5', '--surface': '#FFFFFF', '--raised': '#E6E4EC', '--line': '#D8D5E0', '--ink': '#1C1B24', '--sub': '#494656', '--muted': '#5C596A', '--accent': '#EE5007', '--link': '#A33600', '--ok': '#2F7A4C', '--code': '#1C1B24', '--codeBar': '#272632' };
+    const O = ['#FB9E70', '#FF7442', '#EE5007'];
+    const e = React.createElement;
+    const mark = src => e('img', { key: 'm', src, style: { height: '20px' } });
+    const lockup = (name, sub, src) => [mark(src || 'assets/kairos-mark.svg'), sub ? e('span', { key: 'n' }, 'Kairos ', e('b', { style: { fontWeight: 700 } }, sub)) : e('b', { key: 'n', style: { fontWeight: 700 } }, name)];
+    return {
+      vars, isLight: !dark, isDark: dark,
+      heroTiles: this.field(700, 460, 38, O, (u, v) => Math.max(0, 0.95 - Math.hypot(u - 0.9, v - 0.5) * 1.25), dark ? '#33313F' : '#D8D5E0', 5),
+      lede: this.rich('AuroraBoot is merged into the kairos repo (`kairos-io/kairos`). It no longer has its own name. You download the `kairos` CLI. The web UI is “the Kairos console”, started with `kairos ui`. “Console” is a lowercase description, not a product name: write “the Kairos console”, never “Kairos Console” as a brand, and not “Kairos Platform”.'),
+      changes: [
+        ['AuroraBoot', 'Kairos (the `kairos` CLI)'],
+        ['AuroraBoot web UI', 'the Kairos console (`kairos ui`)'],
+        ['`auroraboot build-*` · artifacts', 'console › Factory'],
+        ['`auroraboot netboot` · BMC', 'console › Deploy'],
+        ['`auroraboot nodes` · groups', 'console › Fleet'],
+        ['`kairos-agent` web UI on `:8080`', 'Kairos Installer (unchanged name, on-node install UI)'],
+        ['`kairos-agent`', 'Kairos Agent (named in docs at Level 3 only)'],
+        ['flavors (`ubuntu`, `alpine`, …)', 'base distros: “Kairos on Ubuntu” (proposed)'],
+        ['“Kairos Platform” (earlier proposal)', 'Not adopted for now. Don’t use it.']
+      ].map(([b, a]) => ({ before: this.rich(b), after: this.rich(a) })),
+      products: [
+        { lockup: lockup('Kairos'), job: 'The project, the suite and the kairos CLI. Describe it as “an immutable Linux platform”, lowercase.', meta: 'all stages · kairos-io/kairos · kairos' },
+        { lockup: lockup(null, 'Factory'), job: 'Turns any container image into a Kairos image.', meta: 'Build · kairos-io/kairos-init · binary stays kairos-init' },
+        { lockup: lockup(null, 'Installer'), job: 'On-node install UI.', meta: 'Deploy · kairos-io/kairos-agent · :8080' },
+        { lockup: lockup(null, 'Operator'), job: 'Day-2 operations on Kubernetes.', meta: 'Operate · kairos-io/kairos-operator' },
+        { lockup: lockup(null, 'Lab'), job: 'Local VMs for demos and proofs of concept.', meta: 'Learn · kairos-io/kairos-lab' },
+        { lockup: lockup('Hadron', null, 'assets/hadron-mark.svg'), job: 'A separate Linux distribution. Ships with every Kairos release, never alone.', meta: 'hadron-linux.io' }
+      ],
+      sections: [{ t: 'Factory', d: 'artifacts, extensions', c: '#FB9E70' }, { t: 'Deploy', d: 'BMC, netboot, import', c: '#FF7442' }, { t: 'Fleet', d: 'nodes, groups', c: '#EE5007' }],
+      factoryNote: this.rich('Factory, the console section, and Kairos Factory (`kairos-init`) are related but not the same. The section uses `kairos-init` under the hood.'),
+      hadronRules: [
+        { mark: '✓ write', c: 'var(--ok,#2F7A4C)', t: 'Hadron by Kairos', d: 'The short pairing, for lockups and titles.' },
+        { mark: '✓ write', c: 'var(--ok,#2F7A4C)', t: 'Ships with every Kairos release', d: 'The sentence form, for body copy.' },
+        { mark: '✕ never', c: 'var(--link,#A33600)', t: 'Kairos Hadron', d: 'Hadron is not a Kairos sub-product. Never prefix it, never swap its logo for the Kairos mark.' }
+      ],
+      basesLede: this.rich('Kairos runs on more than one Linux. The docs call these “flavors”, but nobody says that when they talk about it. We propose base distro, a word the console and the docs already lean on (“Base image”, “Bring your own base”).'),
+      baseTerms: [
+        { t: 'base distro', d: this.rich('The Linux distribution Kairos runs on. Say “Kairos on Ubuntu”; in lists, “base distro: Ubuntu 24.04”.'), eg: 'Hadron · Ubuntu · Fedora · Alpine · Rocky' },
+        { t: 'base image', d: this.rich('The exact container image you start from. Factory turns it into a Kairos image with `kairos-init`. The console already labels this field “Base image”.'), eg: 'ubuntu:24.04 · quay.io/kairos/hadron:v0.5.1' }
+      ],
+      bases: [['Hadron by Kairos', 'quay.io/kairos/hadron:v0.5.1'], ['Kairos on Ubuntu', 'ubuntu:24.04'], ['Kairos on Fedora', 'fedora:42'], ['Kairos on Alpine', 'alpine:3.22'], ['Kairos on Rocky', 'rockylinux:9']].map(([name, image]) => ({ name, image })),
+      levels: [
+        { k: 'L1', t: 'Guided', who: 'First touch, proof of concept', names: ['the Kairos console', 'Kairos Installer', 'Hadron'], note: 'No CLI, no internals. Click through the console and install a node.' },
+        { k: 'L2', t: 'Automate', who: 'Platform engineers', names: ['the `kairos` CLI', 'Kairos Factory (`kairos-init`)', 'Kairos Operator'], note: 'Every console action as a command, in CI and on Kubernetes.' },
+        { k: 'L3', t: 'Extend', who: 'Contributors, OEMs', names: ['Kairos Agent (`kairos-agent`)', 'keys and hooks'], note: 'The only level that names Kairos Agent. Before L3, the on-node UI is Kairos Installer.' }
+      ].map(l => ({ ...l, names: l.names.map(t => ({ t: this.rich(t) })) })),
+      cliLede: this.rich('Every tool keeps its own binary. `kairos <command>` is the entry point.'),
+      commands: [
+        { note: 'start the Kairos console', cmd: 'kairos ui' },
+        { note: 'build an ISO (console › Factory)', cmd: 'kairos artifacts create --iso --image quay.io/kairos/hadron:v0.5.1' },
+        { note: 'roll out to a group (console › Fleet)', cmd: 'kairos fleet rollout --group retail-eu' },
+        { note: 'Kairos Factory keeps its own binary', cmd: 'kairos-init' }
+      ],
+      binaries: [
+        { bin: 'kairos', d: 'The Kairos CLI. Entry point for everything, including the console.' },
+        { bin: 'kairos-init', d: 'Kairos Factory. Run it in your Dockerfile.' },
+        { bin: 'kairos-agent', d: 'Runs on the node. Serves Kairos Installer on :8080.' }
+      ],
+      writing: [
+        ['Start the Kairos console with `kairos ui`', 'Launch Kairos Console'],
+        ['Open Fleet in the Kairos console', 'Open Kairos Fleet'],
+        ['Build an ISO in the console’s Factory section', 'Use AuroraBoot to build'],
+        ['Hadron by Kairos', 'Kairos Hadron'],
+        ['Kairos on Ubuntu', 'the Ubuntu flavor'],
+        ['Kairos Installer', 'the AuroraBoot installer']
+      ].map(([y, n]) => ({ yes: this.rich(y), no: this.rich(n) })),
+      unchanged: ['Logos', 'Colors', 'Hadron: name and logo', 'The `kairos-init` binary name', 'The Kairos Installer name', 'Repo URLs, except AuroraBoot (now `kairos-io/kairos`)'].map(t => ({ t: this.rich(t) }))
+    };
+  }
+}
+</script>
+</body>
+</html>
