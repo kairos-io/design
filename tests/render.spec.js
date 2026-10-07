@@ -10,8 +10,10 @@ for (const file of pages) {
     test(`${file} · ${fonts}`, async ({ page, isMobile }, info) => {
       const errors = [], blocked = new Set();
       page.on('pageerror', e => errors.push(e.message));
-      // Requests we abort below are logged by Chromium as console errors; those are expected.
-      page.on('console', m => m.type() === 'error' && !blocked.has(m.location().url) && errors.push(m.text()));
+      // Requests we abort below are logged as console errors; those are expected. Chromium tags them
+      // with the request URL, Firefox names it in the message ("downloadable font: download failed").
+      const expected = m => blocked.has(m.location().url) || [...blocked].some(u => m.text().includes(u));
+      page.on('console', m => m.type() === 'error' && !expected(m) && errors.push(m.text()));
       // Simulate users who block remote/document fonts (common on Linux setups).
       if (fonts === 'system-fonts') await page.route(/\.(woff2?|ttf|otf)(\?.*)?$|fonts\.css$/, r => (blocked.add(r.request().url()), r.abort()));
 

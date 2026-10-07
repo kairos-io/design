@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<!-- Inline, not fonts.css: deck-stage copies page CSS into thumbnail shadow roots, where fonts.css-relative url()s 404. -->
+<style>@font-face{font-family:'Martian Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/MartianMono-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Martian Mono';font-style:normal;font-weight:400 500;font-display:swap;src:url(assets/fonts/MartianMono-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Urbanist';font-style:normal;font-weight:300 700;font-display:swap;src:url(assets/fonts/Urbanist-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF}
+@font-face{font-family:'Urbanist';font-style:normal;font-weight:300 700;font-display:swap;src:url(assets/fonts/Urbanist-latin.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}</style>
+<script src="./image-slot.js"></script>
+<style>body{margin:0;background:#15141C;font-family:Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif;color:#1C1B24;-webkit-font-smoothing:antialiased}a{color:#A33600}a:hover{color:#7A2800}</style>
+</helmet>
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%">
+
+<section data-label="Title" data-speaker-notes="Title slide. Talk title, your name, event and date. Keep the title under ~8 words." style="color:#1C1B24;background:#F2F1F5;overflow:hidden">
+  <div style="position:absolute;inset:0 0 0 46%">{{ titleTiles }}</div>
+  <div style="position:absolute;inset:0;padding:110px 120px;display:flex;flex-direction:column;justify-content:space-between">
+    <img src="assets/kairos-horizontal-light.svg" style="height:64px;align-self:flex-start">
+    <div style="display:flex;flex-direction:column;gap:36px;max-width:1000px">
+      <span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:26px;color:#5C596A">Event name 2026 · Track</span>
+      <h1 style="margin:0;font-size:124px;line-height:.98;font-weight:600;letter-spacing:-.04em;text-wrap:balance">Immutable Linux for the edge, one image at a time</h1>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:38px;font-weight:700">Speaker name</span>
+      <span style="font-size:30px;color:#494656">Role, Organization · @handle</span>
+    </div>
+  </div>
+</section>
+
+<section data-label="Title · Hadron" data-speaker-notes="Use this title instead when the talk is about Hadron. Hadron is its own distro, by Kairos. Never write Kairos Hadron." style="color:#1C1B24;background:#F2F1F5;overflow:hidden">
+  <div style="position:absolute;inset:0 0 0 46%">{{ hadronTiles }}</div>
+  <div style="position:absolute;inset:0;padding:110px 120px;display:flex;flex-direction:column;justify-content:space-between">
+    <img src="assets/hadron-horizontal-light.svg" style="height:64px;align-self:flex-start">
+    <div style="display:flex;flex-direction:column;gap:36px;max-width:1000px">
+      <span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:26px;color:#5C596A">Event name 2026 · Track</span>
+      <h1 style="margin:0;font-size:124px;line-height:.98;font-weight:600;letter-spacing:-.04em;text-wrap:balance">A minimal distro built for Kairos</h1>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <span style="font-size:38px;font-weight:700">Speaker name</span>
+      <span style="font-size:30px;color:#494656">Role, Organization · @handle</span>
+    </div>
+  </div>
+</section>
+
+<section data-label="Speaker" data-speaker-notes="Optional. Thirty seconds on who you are and why you're giving this talk." style="color:#1C1B24;background:#F2F1F5">
+  <div style="position:absolute;inset:0;padding:120px;display:grid;grid-template-columns:560px 1fr;gap:120px;align-items:center">
+    <div style="width:560px;height:560px"><image-slot id="talk-speaker" shape="rounded" radius="4" placeholder="Speaker photo, square" style="width:560px;height:560px"></image-slot></div>
+    <div style="display:flex;flex-direction:column;gap:40px">
+      <span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:26px;color:#5C596A">About me</span>
+      <h2 style="margin:0;font-size:96px;line-height:1;font-weight:600;letter-spacing:-.035em">Speaker name</h2>
+      <div style="display:flex;flex-direction:column;gap:20px;font-size:36px;line-height:1.4;color:#494656">
+        <span>Role at Organization</span>
+        <span>Kairos maintainer since 2023</span>
+        <span>Runs clusters in places with bad Wi-Fi</span>
+      </div>
+      <span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:28px;color:#A33600">@handle · github.com/handle</span>
+    </div>
+  </div>
+</section>
+
+<section data-label="Agenda" data-speaker-notes="Agenda. Three to five items. These should match your section divider titles exactly." style="color:#1C1B24;background:#F2F1F5">
+  <div style="position:absolute;inset:0;padding:110px 120px 100px;display:flex;flex-direction:column;gap:72px">
+    <h2 style="margin:0;font-size:80px;line-height:1;font-weight:600;letter-spacing:-.035em">Agenda</h2>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;flex:1">
+      <div style="background:#fff;border-radius:4px;padding:48px 40px;display:flex;flex-direction:column;justify-content:space-between">
+        <svg width="66" height="42" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="#FB9E70"></polygon></svg>
+        <div style="display:flex;flex-direction:column;gap:16px"><span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:26px;color:#5C596A">01</span><span style="font-size:48px;font-weight:600;line-height:1.05;letter-spacing:-.02em">Why immutable</span></div>
+      </div>
+      <div style="background:#fff;border-radius:4px;padding:48px 40px;display:flex;flex-direction:column;justify-content:space-between">
+        <svg width="66" height="42" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="#FF7442"></polygon></svg>
+        <div style="display:flex;flex-direction:column;gap:16px"><span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:26px;color:#5C596A">02</span><span style="font-size:48px;font-weight:600;line-height:1.05;letter-spacing:-.02em">Build an image</span></div>
+      </div>
+      <div style="background:#fff;border-radius:4px;padding:48px 40px;display:flex;flex-direction:column;justify-content:space-between">
+        <svg width="66" height="42" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="#EE5007"></polygon></svg>
+        <div style="display:flex;flex-direction:column;gap:16px"><span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:26px;color:#5C596A">03</span><span style="font-size:48px;font-weight:600;line-height:1.05;letter-spacing:-.02em">Deploy to the fleet</span></div>
+      </div>
+      <div style="background:#fff;border-radius:4px;padding:48px 40px;display:flex;flex-direction:column;justify-content:space-between">
+        <svg width="66" height="42" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="#1C1B24"></polygon></svg>
+        <div style="display:flex;flex-direction:column;gap:16px"><span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:26px;color:#5C596A">04</span><span style="font-size:48px;font-weight:600;line-height:1.05;letter-spacing:-.02em">Day-2 operations</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-label="Section divider" data-speaker-notes="Section divider. Duplicate for each agenda item; change the number and title only." style="color:#1C1B24;background:#EE5007;overflow:hidden">
+  <div style="position:absolute;inset:0 0 0 52%">{{ dividerTiles }}</div>
+  <div style="position:absolute;inset:0;padding:110px 120px;display:flex;flex-direction:column;justify-content:flex-end;gap:32px">
+    <span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:34px;color:#1C1B24">01</span>
+    <h2 style="margin:0;font-size:144px;line-height:.95;font-weight:600;letter-spacing:-.045em;color:#1C1B24;max-width:960px">Why immutable</h2>
+  </div>
+</section>
+
+<section data-label="Statement" data-speaker-notes="One idea, said plainly. Use sparingly: once or twice per talk." style="color:#1C1B24;background:#F2F1F5">
+  <div style="position:absolute;inset:0;padding:120px;display:flex;flex-direction:column;justify-content:center;gap:48px">
+    <h2 style="margin:0;font-size:104px;line-height:1.04;font-weight:600;letter-spacing:-.04em;max-width:1500px;text-wrap:balance">Every node boots the same image. Drift has nowhere to live.</h2>
+    <span style="font-size:36px;color:#494656;max-width:1100px;line-height:1.4">Updates replace the whole OS atomically, and a failed upgrade boots back into the previous one.</span>
+  </div>
+  <div style="position:absolute;left:120px;right:120px;bottom:56px;display:flex;align-items:center;gap:20px;font-size:24px;color:#5C596A"><img src="assets/kairos-mark.svg" style="height:36px"><span>Talk title · Event name 2026</span></div>
+</section>
+
+<section data-label="Content · list" data-speaker-notes="Standard content slide. Three to four points, one line each where possible." style="color:#1C1B24;background:#F2F1F5">
+  <div style="position:absolute;inset:0;padding:110px 120px 140px;display:grid;grid-template-columns:1fr 1.25fr;gap:120px">
+    <h2 style="margin:0;font-size:80px;line-height:1.02;font-weight:600;letter-spacing:-.035em">What Kairos gives you</h2>
+    <div style="display:flex;flex-direction:column;gap:48px;padding-top:12px">
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:28px;align-items:start"><svg width="48" height="31" viewBox="0 0 22 14" style="margin-top:8px"><polygon points="7,0 22,0 15,14 0,14" fill="#FB9E70"></polygon></svg><div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:40px;font-weight:700;line-height:1.15">Bring any Linux</span><span style="font-size:32px;line-height:1.4;color:#494656">Ubuntu, Fedora, Alpine, openSUSE and more, turned into an immutable system.</span></div></div>
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:28px;align-items:start"><svg width="48" height="31" viewBox="0 0 22 14" style="margin-top:8px"><polygon points="7,0 22,0 15,14 0,14" fill="#FF7442"></polygon></svg><div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:40px;font-weight:700;line-height:1.15">A/B upgrades</span><span style="font-size:32px;line-height:1.4;color:#494656">The whole OS updates as one image, with automatic rollback.</span></div></div>
+      <div style="display:grid;grid-template-columns:48px 1fr;gap:28px;align-items:start"><svg width="48" height="31" viewBox="0 0 22 14" style="margin-top:8px"><polygon points="7,0 22,0 15,14 0,14" fill="#EE5007"></polygon></svg><div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:40px;font-weight:700;line-height:1.15">Kubernetes optional</span><span style="font-size:32px;line-height:1.4;color:#494656">Ship k3s or k0s in the image, or run without a cluster.</span></div></div>
+    </div>
+  </div>
+  <div style="position:absolute;left:120px;right:120px;bottom:56px;display:flex;align-items:center;gap:20px;font-size:24px;color:#5C596A"><img src="assets/kairos-mark.svg" style="height:36px"><span>Talk title · Event name 2026</span></div>
+</section>
+
+<section data-label="Terminal" data-speaker-notes="Light terminal for CLI walkthroughs. Keep it to 6–10 lines so the back row can read it. Prompt is orange, output is grey, comments are muted." style="color:#1C1B24;background:#F2F1F5">
+  <div style="position:absolute;inset:0;padding:110px 120px 140px;display:flex;flex-direction:column;gap:56px">
+    <h2 style="margin:0;font-size:80px;line-height:1;font-weight:600;letter-spacing:-.035em">One CLI for the whole lifecycle</h2>
+    <div style="flex:1;background:#fff;border-radius:4px;border:2px solid #D8D5E0;display:flex;flex-direction:column;overflow:hidden">
+      <div style="height:64px;background:#E6E4EC;display:flex;align-items:center;justify-content:space-between;padding:0 32px;font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:24px;color:#494656"><span>~/edge-demo</span><span>kairos</span></div>
+      <div style="padding:40px 48px;display:flex;flex-direction:column;gap:14px;font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:32px;line-height:1.45">
+        <span style="color:#5C596A"># start the console locally</span>
+        <span><span style="color:#A33600">$ </span><span>kairos ui</span></span>
+        <span style="color:#494656">  Kairos console running at http://localhost:8080</span>
+        <span style="color:#5C596A"># or work entirely from the terminal</span>
+        <span><span style="color:#A33600">$ </span><span>kairos --help</span></span>
+        <span style="color:#2F8F57">  ✓ ready</span>
+      </div>
+    </div>
+  </div>
+  <div style="position:absolute;left:120px;right:120px;bottom:56px;display:flex;align-items:center;gap:20px;font-size:24px;color:#5C596A"><img src="assets/kairos-mark.svg" style="height:36px"><span>Talk title · Event name 2026</span></div>
+</section>
+
+<section data-label="Code + explanation" data-speaker-notes="Config on the left, what it does on the right. Highlight at most three keys." style="color:#1C1B24;background:#F2F1F5">
+  <div style="position:absolute;inset:0;padding:110px 120px 140px;display:grid;grid-template-columns:1.15fr 1fr;gap:96px">
+    <div style="background:#fff;border-radius:4px;border:2px solid #D8D5E0;display:flex;flex-direction:column;overflow:hidden">
+      <div style="height:64px;background:#E6E4EC;display:flex;align-items:center;padding:0 32px;font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:24px;color:#494656">cloud-config.yaml</div>
+      <div style="padding:40px 48px;display:flex;flex-direction:column;gap:6px;font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:30px;line-height:1.5;white-space:pre">
+        <span style="color:#5C596A">#cloud-config</span>
+        <span><span style="color:#A33600">hostname</span>: edge-01</span>
+        <span><span style="color:#A33600">users</span>:</span>
+        <span>  - <span style="color:#A33600">name</span>: kairos</span>
+        <span>    <span style="color:#A33600">groups</span>: [admin]</span>
+        <span><span style="color:#A33600">k3s</span>:</span>
+        <span>  <span style="color:#A33600">enabled</span>: true</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;justify-content:center;gap:56px">
+      <h2 style="margin:0;font-size:72px;line-height:1.02;font-weight:600;letter-spacing:-.035em">Configure the node, not the image</h2>
+      <div style="display:flex;flex-direction:column;gap:32px;font-size:32px;line-height:1.4;color:#494656">
+        <span><span style="color:#1C1B24;font-weight:700">hostname</span> is templated per device at first boot.</span>
+        <span><span style="color:#1C1B24;font-weight:700">k3s</span> starts the cluster that ships in the image.</span>
+      </div>
+    </div>
+  </div>
+  <div style="position:absolute;left:120px;right:120px;bottom:56px;display:flex;align-items:center;gap:20px;font-size:24px;color:#5C596A"><img src="assets/kairos-mark.svg" style="height:36px"><span>Talk title · Event name 2026</span></div>
+</section>
+
+<section data-label="Lifecycle diagram" data-speaker-notes="The Kairos lifecycle. Factory, Installer, Operator and Lab are products; Build, Deploy, Operate and Learn are what you do with them." style="color:#1C1B24;background:#F2F1F5">
+  <div style="position:absolute;inset:0;padding:110px 120px 140px;display:flex;flex-direction:column;gap:80px">
+    <h2 style="margin:0;font-size:80px;line-height:1;font-weight:600;letter-spacing:-.035em">From image to fleet</h2>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;flex:1">
+      <div style="display:flex;flex-direction:column;gap:28px"><svg viewBox="0 0 110 40" style="width:100%;height:56px" preserveAspectRatio="none"><polygon points="20,0 110,0 90,40 0,40" fill="#FB9E70"></polygon></svg><span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:26px;color:#5C596A">Build</span><span style="font-size:52px;font-weight:600;letter-spacing:-.02em">Kairos Factory</span><span style="font-size:30px;line-height:1.4;color:#494656">Turn any Linux image into a Kairos image.</span></div>
+      <div style="display:flex;flex-direction:column;gap:28px"><svg viewBox="0 0 110 40" style="width:100%;height:56px" preserveAspectRatio="none"><polygon points="20,0 110,0 90,40 0,40" fill="#FF7442"></polygon></svg><span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:26px;color:#5C596A">Deploy</span><span style="font-size:52px;font-weight:600;letter-spacing:-.02em">Kairos Installer</span><span style="font-size:30px;line-height:1.4;color:#494656">Configure and install from live media.</span></div>
+      <div style="display:flex;flex-direction:column;gap:28px"><svg viewBox="0 0 110 40" style="width:100%;height:56px" preserveAspectRatio="none"><polygon points="20,0 110,0 90,40 0,40" fill="#EE5007"></polygon></svg><span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:26px;color:#5C596A">Operate</span><span style="font-size:52px;font-weight:600;letter-spacing:-.02em">Kairos Operator</span><span style="font-size:30px;line-height:1.4;color:#494656">Day-2 upgrades through Kubernetes CRDs.</span></div>
+      <div style="display:flex;flex-direction:column;gap:28px"><svg viewBox="0 0 110 40" style="width:100%;height:56px" preserveAspectRatio="none"><polygon points="20,0 110,0 90,40 0,40" fill="#1C1B24"></polygon></svg><span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:26px;color:#5C596A">Learn</span><span style="font-size:52px;font-weight:600;letter-spacing:-.02em">Kairos Lab</span><span style="font-size:30px;line-height:1.4;color:#494656">Local VMs for demos and proofs of concept.</span></div>
+    </div>
+  </div>
+  <div style="position:absolute;left:120px;right:120px;bottom:56px;display:flex;align-items:center;gap:20px;font-size:24px;color:#5C596A"><img src="assets/kairos-mark.svg" style="height:36px"><span>Talk title · Event name 2026</span></div>
+</section>
+
+<section data-label="Comparison table" data-speaker-notes="Comparison table. Three to five rows; the Kairos column is the one to read." style="color:#1C1B24;background:#F2F1F5">
+  <div style="position:absolute;inset:0;padding:110px 120px 140px;display:flex;flex-direction:column;gap:64px">
+    <h2 style="margin:0;font-size:80px;line-height:1;font-weight:600;letter-spacing:-.035em">Mutable vs. immutable nodes</h2>
+    <div style="background:#fff;border-radius:4px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="display:grid;grid-template-columns:1fr 1.3fr 1.3fr;padding:28px 48px;background:#E6E4EC;font-size:30px;font-weight:700"><span></span><span>Package-managed</span><span style="color:#A33600">Kairos</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1.3fr 1.3fr;padding:32px 48px;font-size:32px;border-top:2px solid #EEEDF2"><span style="font-weight:700">Updates</span><span style="color:#494656">Package by package</span><span>Whole image, A/B</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1.3fr 1.3fr;padding:32px 48px;font-size:32px;border-top:2px solid #EEEDF2"><span style="font-weight:700">Rollback</span><span style="color:#494656">Manual, if at all</span><span>Boot the previous image</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1.3fr 1.3fr;padding:32px 48px;font-size:32px;border-top:2px solid #EEEDF2"><span style="font-weight:700">Drift</span><span style="color:#494656">Accumulates over time</span><span>Read-only root, none</span></div>
+    </div>
+  </div>
+  <div style="position:absolute;left:120px;right:120px;bottom:56px;display:flex;align-items:center;gap:20px;font-size:24px;color:#5C596A"><img src="assets/kairos-mark.svg" style="height:36px"><span>Talk title · Event name 2026</span></div>
+</section>
+
+<section data-label="Big number" data-speaker-notes="One figure with a source. Only use numbers you can back up." style="color:#1C1B24;background:#F2F1F5;overflow:hidden">
+  <div style="position:absolute;inset:0 0 0 58%">{{ statTiles }}</div>
+  <div style="position:absolute;inset:0;padding:120px;display:flex;flex-direction:column;justify-content:center;gap:24px">
+    <span style="font-size:340px;line-height:.85;font-weight:600;letter-spacing:-.06em;color:#EE5007">1</span>
+    <span style="font-size:64px;font-weight:600;letter-spacing:-.025em;max-width:900px;line-height:1.05">image for every node in the fleet</span>
+    <span style="font-size:26px;font-style:italic;color:#5C596A">Source or context line</span>
+  </div>
+  <div style="position:absolute;left:120px;right:120px;bottom:56px;display:flex;align-items:center;gap:20px;font-size:24px;color:#5C596A"><img src="assets/kairos-mark.svg" style="height:36px"><span>Talk title · Event name 2026</span></div>
+</section>
+
+<section data-label="Image + text" data-speaker-notes="Photo or diagram on the right, short context on the left." style="color:#1C1B24;background:#F2F1F5">
+  <div style="position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr">
+    <div style="padding:110px 96px 140px 120px;display:flex;flex-direction:column;justify-content:center;gap:40px">
+      <span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:26px;color:#5C596A">Case study</span>
+      <h2 style="margin:0;font-size:80px;line-height:1.02;font-weight:600;letter-spacing:-.035em">Running in the field</h2>
+      <span style="font-size:34px;line-height:1.45;color:#494656">Describe the environment, constraints and what changed. Two or three sentences.</span>
+    </div>
+    <div style="position:relative"><image-slot id="talk-image-right" shape="rect" placeholder="Photo or diagram" style="position:absolute;inset:0"></image-slot></div>
+  </div>
+  <div style="position:absolute;left:120px;bottom:56px;display:flex;align-items:center;gap:20px;font-size:24px;color:#5C596A"><img src="assets/kairos-mark.svg" style="height:36px"><span>Talk title · Event name 2026</span></div>
+</section>
+
+<section data-label="Screenshot" data-speaker-notes="Console or docs screenshot. Crop to the part you're talking about; don't shrink a full page." style="color:#1C1B24;background:#F2F1F5">
+  <div style="position:absolute;inset:0;padding:110px 120px 140px;display:flex;flex-direction:column;gap:48px">
+    <h2 style="margin:0;font-size:80px;line-height:1;font-weight:600;letter-spacing:-.035em">The Kairos console</h2>
+    <div style="flex:1;background:#fff;border-radius:4px;border:2px solid #D8D5E0;display:flex;flex-direction:column;overflow:hidden">
+      <div style="height:56px;background:#E6E4EC;display:flex;align-items:center;padding:0 28px;font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:24px;color:#494656">localhost:8080 · kairos ui</div>
+      <div style="flex:1;position:relative"><image-slot id="talk-screenshot" shape="rect" fit="contain" placeholder="Console screenshot" style="position:absolute;inset:0"></image-slot></div>
+    </div>
+  </div>
+  <div style="position:absolute;left:120px;right:120px;bottom:56px;display:flex;align-items:center;gap:20px;font-size:24px;color:#5C596A"><img src="assets/kairos-mark.svg" style="height:36px"><span>Talk title · Event name 2026</span></div>
+</section>
+
+<section data-label="Quote" data-speaker-notes="A user or community quote. Get permission and attribute it." style="color:#1C1B24;background:#fff">
+  <div style="position:absolute;inset:0;padding:140px 120px;display:flex;flex-direction:column;justify-content:center;gap:56px">
+    <svg width="120" height="76" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="#EE5007"></polygon></svg>
+    <span style="font-size:76px;line-height:1.12;font-weight:500;letter-spacing:-.025em;max-width:1500px;text-wrap:balance">Quote from a user about what changed once their nodes stopped drifting.</span>
+    <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:34px;font-weight:700">Name</span><span style="font-size:28px;color:#494656">Role, Organization</span></div>
+  </div>
+</section>
+
+<section data-label="Live demo" data-speaker-notes="Demo divider. Switch to your terminal after this slide. Bump terminal font to at least 24pt." style="color:#1C1B24;background:#fff;overflow:hidden">
+  <div style="position:absolute;inset:0 0 0 52%">{{ demoTiles }}</div>
+  <div style="position:absolute;inset:0;padding:110px 120px;display:flex;flex-direction:column;justify-content:flex-end;gap:40px">
+    <span style="font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:40px"><span style="color:#A33600">$ </span><span>kairos ui</span></span>
+    <h2 style="margin:0;font-size:144px;line-height:.95;font-weight:600;letter-spacing:-.045em">Live demo</h2>
+  </div>
+</section>
+
+<section data-label="Thank you" data-speaker-notes="Closing. Leave this up during Q&amp;A so people can photograph the links." style="color:#1C1B24;background:#F2F1F5;overflow:hidden">
+  <div style="position:absolute;inset:0 0 0 52%">{{ titleTiles }}</div>
+  <div style="position:absolute;inset:0;padding:110px 120px;display:flex;flex-direction:column;justify-content:space-between">
+    <img src="assets/kairos-horizontal-light.svg" style="height:64px;align-self:flex-start">
+    <h2 style="margin:0;font-size:144px;line-height:.95;font-weight:600;letter-spacing:-.045em">Thank you</h2>
+    <div style="display:flex;flex-direction:column;gap:18px;font-family:'Martian Mono',ui-monospace,Menlo,Consolas,'DejaVu Sans Mono',monospace;font-size:32px">
+      <span>kairos.io</span>
+      <span>github.com/kairos-io/kairos</span>
+      <span style="color:#494656">#kairos on CNCF Slack · @handle</span>
+    </div>
+  </div>
+</section>
+
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showTiles&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  field(w, h, r, cols, bias, line, seed) {
+    const e = React.createElement, s3 = Math.sqrt(3), out = [];
+    let x = seed;
+    const rnd = () => { x = (x * 9301 + 49297) % 233280; return x / 233280; };
+    for (let row = -1; row * 1.5 * r < h + r; row++) for (let col = -1; col * s3 * r < w + r; col++) {
+      const cx = col * s3 * r + (row % 2 ? s3 * r / 2 : 0), cy = row * 1.5 * r;
+      const P = a => [cx + r * Math.cos(a * Math.PI / 180), cy + r * Math.sin(a * Math.PI / 180)];
+      const p0 = P(-90), p1 = P(-30), p2 = P(30), p3 = P(90), p4 = P(150), p5 = P(210), C = [cx, cy];
+      const t = bias(cx / w, cy / h);
+      [[p5, p0, p1, C], [p5, C, p3, p4], [C, p1, p2, p3]].forEach((f, i) => {
+        const fill = rnd() < t ? cols[i] : 'none';
+        out.push(e('polygon', { key: out.length, points: f.map(p => p.join(',')).join(' '), fill, stroke: fill === 'none' ? line : fill, strokeWidth: 1.5 }));
+      });
+    }
+    return e('svg', { viewBox: `0 0 ${w} ${h}`, style: { position: 'absolute', inset: 0, width: '100%', height: '100%' }, preserveAspectRatio: 'xMidYMid slice' }, out);
+  }
+  renderVals() {
+    const O = ['#FB9E70', '#FF7442', '#EE5007'], H = ['#1BAAFF', '#0275E7', '#004CCE'];
+    const fade = (cx, cy, k) => (u, v) => Math.max(0, 0.95 - Math.hypot(u - cx, v - cy) * k);
+    const tiles = this.props.showTiles ?? true;
+    const none = null;
+    return {
+      titleTiles: tiles ? this.field(1040, 1080, 64, O, fade(0.95, 0.5, 1.2), '#D8D5E0', 5) : none,
+      hadronTiles: tiles ? this.field(1040, 1080, 64, H, fade(0.95, 0.5, 1.2), '#D8D5E0', 7) : none,
+      dividerTiles: tiles ? this.field(920, 1080, 72, ['#FB9E70', '#FF7442', '#C94300'], fade(1, 0.3, 1.1), '#F26A2A', 11) : none,
+      statTiles: tiles ? this.field(810, 1080, 60, O, fade(1, 0.6, 1.3), '#D8D5E0', 3) : none,
+      demoTiles: tiles ? this.field(920, 1080, 72, O, fade(1, 0.2, 1.1), '#E6E4EC', 9) : none
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -16,6 +16,8 @@ Locally: `python3 -m http.server` in this folder, then open http://localhost:800
 - `Kairos Console - Nodes / Node Detail / Build Artifact`: grounded in the AuroraBoot ui/src (now merged into kairos-io/kairos)
 - `hadron-linux.io Homepage.dc.html`
 - `Kairos - Naming.dc.html`: what stays a product, what became functionality, and what changed (AuroraBoot → the Kairos console)
+- `Kairos - Talk Deck.dc.html`: conference slide template (1920×1080, light mode)
+- `Kairos - Presentations.dc.html`: how to present, download (`npm run pdf`) and build a talk from the deck
 - `assets/`: logos (unchanged)
 - `explorations/`: competitive landscape and directions D–F
 
