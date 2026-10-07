@@ -8,16 +8,16 @@
 <body>
 <x-dc>
 <helmet>
-<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700&family=Martian+Mono:wdth,wght@87.5,400;87.5,500&display=swap" rel="stylesheet">
-<style>body{margin:0;background:#15141C;font-family:Urbanist,sans-serif;color:#F1EEE8;-webkit-font-smoothing:antialiased}a{color:#FF7442;text-decoration:none}a:hover{color:#FB9E70}*{box-sizing:border-box}[style*="Martian"]{font-stretch:87.5%}</style>
+<link href="assets/fonts/fonts.css" rel="stylesheet">
+<style>body{margin:0;letter-spacing:.012em;text-rendering:optimizeLegibility;background:#15141C;font-family:Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif;color:#F2F1F5}a{color:#FF7442;text-decoration:none}a:hover{color:#FB9E70}*{box-sizing:border-box}</style>
 </helmet>
 <div style="{{ vars }}">
-<div style="background:var(--bg,#15141C);color:var(--ink,#F1EEE8);min-height:100vh;display:flex">
+<div style="background:var(--bg,#15141C);color:var(--ink,#F2F1F5);min-height:100vh;display:flex">
   <nav style="width:232px;flex:none;background:var(--side,#1A1922);padding:18px 14px;display:flex;flex-direction:column;gap:16px;border-right:1px solid var(--line,#33313F)">
-    <span style="display:flex;align-items:center;gap:10px;font-size:19px;padding:6px 8px 6px"><img src="assets/kairos-mark.svg" style="height:26px">Kairos <b style="font-weight:700">Platform</b></span>
+    <span style="display:flex;align-items:center;gap:10px;font-size:19px;padding:6px 8px 6px"><img src="assets/kairos-mark.svg" style="height:26px"><b style="font-weight:700">Kairos</b></span>
     <sc-for list="{{ nav }}" as="g" hint-placeholder-count="5">
       <div style="display:flex;flex-direction:column;gap:1px">
-        <span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8);padding:0 10px 6px">{{ g.t }}</span>
+        <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#A9A6B8);padding:0 10px 6px">{{ g.t }}</span>
         <sc-for list="{{ g.items }}" as="n" hint-placeholder-count="2">
           <sc-if value="{{ n.active }}"><div style="display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;padding:8px 10px;border-radius:4px;background:var(--raised,#33313F)"><svg width="12" height="8" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="var(--accent,#FF7442)"></polygon></svg>{{ n.l }}</div></sc-if>
           <sc-if value="{{ n.idle }}"><div style="font-size:15px;padding:8px 10px 8px 32px;color:var(--sub,#CBC8D6)">{{ n.l }}</div></sc-if>
@@ -36,7 +36,7 @@
         <sc-for list="{{ steps }}" as="s" hint-placeholder-count="6">
           <div onClick="{{ s.go }}" style="cursor:pointer;flex:1;min-width:120px;display:flex;flex-direction:column;gap:8px;padding:10px 4px">
             <svg viewBox="0 0 220 10" preserveAspectRatio="none" style="width:100%;height:8px"><polygon points="6,0 220,0 214,10 0,10" fill="{{ s.bar }}"></polygon></svg>
-            <span style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:{{ s.w }};color:{{ s.fg }}"><span style="font-family:'Martian Mono',monospace;font-size:11px">{{ s.n }}</span>{{ s.t }}</span>
+            <span style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:{{ s.w }};color:{{ s.fg }}"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px">{{ s.n }}</span>{{ s.t }}</span>
           </div>
         </sc-for>
       </div>
@@ -50,12 +50,12 @@
             <span style="font-size:18px;font-weight:700">Image source</span>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px">
               <sc-for list="{{ sources }}" as="o" hint-placeholder-count="3">
-                <div onClick="{{ o.pick }}" style="cursor:pointer;border:1.5px solid {{ o.bd }};background:{{ o.bg }};border-radius:4px;padding:14px;display:flex;flex-direction:column;gap:4px"><span style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700"><svg width="11" height="11" viewBox="0 0 12 12"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="{{ o.dot }}" stroke="var(--ink,#F1EEE8)" stroke-width="1.2"></polygon></svg>{{ o.l }}</span><span style="font-size:14px;color:var(--sub,#CBC8D6)">{{ o.d }}</span></div>
+                <div onClick="{{ o.pick }}" style="cursor:pointer;border:1.5px solid {{ o.bd }};background:{{ o.bg }};border-radius:4px;padding:14px;display:flex;flex-direction:column;gap:4px"><span style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700"><svg width="11" height="11" viewBox="0 0 12 12"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="{{ o.dot }}" stroke="var(--ink,#F2F1F5)" stroke-width="1.2"></polygon></svg>{{ o.l }}</span><span style="font-size:14px;color:var(--sub,#CBC8D6)">{{ o.d }}</span></div>
               </sc-for>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">Name</span><div style="background:var(--inner,#18171F);border:1.5px solid var(--line,#33313F);border-radius:4px;padding:10px 12px;font-family:'Martian Mono',monospace;font-size:13px">retail-eu-hadron</div></div>
-              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">Base image</span><div style="background:var(--inner,#18171F);border:1.5px solid var(--ink,#F1EEE8);border-radius:4px;padding:10px 12px;font-family:'Martian Mono',monospace;font-size:13px;overflow-wrap:anywhere">{{ baseImage }}</div></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">Name</span><div style="background:var(--inner,#18171F);border:1.5px solid var(--line,#33313F);border-radius:4px;padding:10px 12px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px">retail-eu-hadron</div></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">Base image</span><div style="background:var(--inner,#18171F);border:1.5px solid var(--ink,#F2F1F5);border-radius:4px;padding:10px 12px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px;overflow-wrap:anywhere">{{ baseImage }}</div></div>
             </div>
             <div style="display:flex;gap:6px;flex-wrap:wrap">
               <sc-for list="{{ bases }}" as="b" hint-placeholder-count="5"><span onClick="{{ b.pick }}" style="cursor:pointer;display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;padding:6px 10px;border-radius:2px;background:{{ b.bg }};color:{{ b.fg }}">{{ b.l }}</span></sc-for>
@@ -75,7 +75,7 @@
           <section style="background:var(--surface,#1F1E28);border-radius:4px;padding:22px;display:flex;flex-direction:column;gap:14px">
             <span style="font-size:18px;font-weight:700">Variant and Kubernetes</span>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><sc-for list="{{ variants }}" as="o" hint-placeholder-count="2"><div onClick="{{ o.pick }}" style="cursor:pointer;border:1.5px solid {{ o.bd }};background:{{ o.bg }};border-radius:4px;padding:14px;display:flex;flex-direction:column;gap:2px"><span style="font-size:17px;font-weight:700">{{ o.l }}</span><span style="font-size:14px;color:var(--sub,#CBC8D6)">{{ o.d }}</span></div></sc-for></div>
-            <sc-if value="{{ isStandard }}"><div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ k8s }}" as="k" hint-placeholder-count="2"><span onClick="{{ k.pick }}" style="cursor:pointer;font-size:14px;font-weight:600;padding:7px 12px;border-radius:2px;background:{{ k.bg }};color:{{ k.fg }}">{{ k.l }}</span></sc-for><span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--muted,#A9A6B8);padding:8px 4px">v1.36.4</span></div></sc-if>
+            <sc-if value="{{ isStandard }}"><div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ k8s }}" as="k" hint-placeholder-count="2"><span onClick="{{ k.pick }}" style="cursor:pointer;font-size:14px;font-weight:600;padding:7px 12px;border-radius:2px;background:{{ k.bg }};color:{{ k.fg }}">{{ k.l }}</span></sc-for><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#A9A6B8);padding:8px 4px">v1.36.4</span></div></sc-if>
           </section>
         </sc-if>
 
@@ -85,9 +85,9 @@
             <span style="font-size:15px;color:var(--sub,#CBC8D6)">Bake into the image, or install after first boot.</span>
             <sc-for list="{{ extList }}" as="x" hint-placeholder-count="4">
               <div onClick="{{ x.pick }}" style="cursor:pointer;display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:center;padding:12px;border-radius:4px;background:var(--inner,#18171F)">
-                <span style="width:18px;height:18px;border-radius:2px;border:1.5px solid var(--ink,#F1EEE8);background:{{ x.box }};display:flex;align-items:center;justify-content:center;color:#1C1B24;font-size:12px;font-weight:700">{{ x.mark }}</span>
-                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:700">{{ x.name }} <span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8);font-weight:400">{{ x.v }}</span></span><span style="font-size:13px;color:var(--sub,#CBC8D6)">{{ x.d }}</span></div>
-                <span style="font-family:'Martian Mono',monospace;font-size:10px;background:var(--raised,#33313F);padding:2px 6px;border-radius:2px">{{ x.type }}</span>
+                <span style="width:18px;height:18px;border-radius:2px;border:1.5px solid var(--ink,#F2F1F5);background:{{ x.box }};display:flex;align-items:center;justify-content:center;color:#1C1B24;font-size:12px;font-weight:700">{{ x.mark }}</span>
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:700">{{ x.name }} <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#A9A6B8);font-weight:400">{{ x.v }}</span></span><span style="font-size:13px;color:var(--sub,#CBC8D6)">{{ x.d }}</span></div>
+                <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;background:var(--raised,#33313F);padding:2px 6px;border-radius:2px">{{ x.type }}</span>
               </div>
             </sc-for>
           </section>
@@ -98,8 +98,8 @@
             <span style="font-size:18px;font-weight:700">Access</span>
             <div style="display:flex;gap:4px;background:var(--raised,#33313F);padding:4px;border-radius:4px;width:max-content;font-size:14px;font-weight:600"><span style="padding:6px 12px;color:var(--muted,#A9A6B8)">Default user</span><span style="background:var(--surface,#1F1E28);padding:6px 12px;border-radius:3px">Custom user</span><span style="padding:6px 12px;color:var(--muted,#A9A6B8)">No user</span></div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">Username</span><div style="background:var(--inner,#18171F);border:1.5px solid var(--line,#33313F);border-radius:4px;padding:10px 12px;font-family:'Martian Mono',monospace;font-size:13px">ops</div></div>
-              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">SSH keys</span><div style="background:var(--inner,#18171F);border:1.5px solid var(--line,#33313F);border-radius:4px;padding:10px 12px;font-family:'Martian Mono',monospace;font-size:13px">2 keys · github:retail-ops</div></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">Username</span><div style="background:var(--inner,#18171F);border:1.5px solid var(--line,#33313F);border-radius:4px;padding:10px 12px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px">ops</div></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">SSH keys</span><div style="background:var(--inner,#18171F);border:1.5px solid var(--line,#33313F);border-radius:4px;padding:10px 12px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px">2 keys · github:retail-ops</div></div>
             </div>
           </section>
           <section style="background:var(--surface,#1F1E28);border-radius:4px;padding:22px;display:flex;flex-direction:column;gap:14px">
@@ -131,24 +131,24 @@
 
         <sc-if value="{{ is.review }}">
           <section style="background:var(--surface,#1F1E28);border-radius:4px;padding:22px;display:flex;flex-direction:column;gap:14px">
-            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:18px;font-weight:700">Review</span><span style="font-family:'Martian Mono',monospace;font-size:12px;color:var(--muted,#A9A6B8)">≈ 9 min · {{ outCount }} outputs</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:18px;font-weight:700">Review</span><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#A9A6B8)">≈ 9 min · {{ outCount }} outputs</span></div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
               <sc-for list="{{ summary }}" as="s" hint-placeholder-count="6">
                 <div style="display:flex;flex-direction:column;gap:4px">
-                  <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8)">{{ s.t }}</span><span onClick="{{ s.edit }}" style="cursor:pointer;font-size:13px;font-weight:700;color:var(--link,#FF7442)">Edit</span></div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#A9A6B8)">{{ s.t }}</span><span onClick="{{ s.edit }}" style="cursor:pointer;font-size:13px;font-weight:700;color:var(--link,#FF7442)">Edit</span></div>
                   <sc-for list="{{ s.rows }}" as="r" hint-placeholder-count="2"><div style="display:grid;grid-template-columns:120px 1fr;gap:8px;font-size:14px;padding:3px 0"><span style="color:var(--muted,#A9A6B8)">{{ r.k }}</span><span style="display:flex;flex-direction:column;gap:2px"><span style="font-family:{{ r.font }};font-size:{{ r.size }};overflow-wrap:anywhere">{{ r.v }}</span><sc-if value="{{ r.warn }}"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:#E9A23B"><svg width="8" height="8" viewBox="0 0 12 12"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="#E9A23B"></polygon></svg>{{ r.warn }}</span></sc-if></span></div></sc-for>
                 </div>
               </sc-for>
             </div>
           </section>
           <section style="background:var(--code,#0F0E15);border-radius:4px;overflow:hidden">
-            <div style="display:flex;justify-content:space-between;padding:9px 16px;background:var(--codeBar,#1F1E28);font-family:'Martian Mono',monospace;font-size:12px;color:#A9A6B8"><span>Equivalent CLI</span><span>copy</span></div>
-            <pre style="margin:0;padding:16px;font-family:'Martian Mono',monospace;font-size:13px;line-height:1.8;color:#F1EEE8;white-space:pre-wrap">{{ cli }}</pre>
+            <div style="display:flex;justify-content:space-between;padding:9px 16px;background:var(--codeBar,#1F1E28);font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A9A6B8"><span>Equivalent CLI</span><span>copy</span></div>
+            <pre style="margin:0;padding:16px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px;line-height:1.8;color:#F2F1F5;white-space:pre-wrap">{{ cli }}</pre>
           </section>
         </sc-if>
 
         <div style="display:flex;justify-content:space-between;gap:12px;padding-top:6px">
-          <span onClick="{{ back }}" style="cursor:pointer;border:1.5px solid var(--ink,#F1EEE8);font-size:15px;font-weight:600;padding:10px 18px;border-radius:4px">Back</span>
+          <span onClick="{{ back }}" style="cursor:pointer;border:1.5px solid var(--ink,#F2F1F5);font-size:15px;font-weight:600;padding:10px 18px;border-radius:4px">Back</span>
           <span onClick="{{ next }}" style="cursor:pointer;background:var(--accent,#FF7442);color:#1C1B24;font-size:15px;font-weight:700;padding:11.5px 20px;border-radius:4px">{{ nextLabel }}</span>
         </div>
       </main>
@@ -158,7 +158,7 @@
           <span style="font-size:16px;font-weight:700">Build summary</span>
           <sc-for list="{{ summary }}" as="s" hint-placeholder-count="6">
             <div style="display:flex;flex-direction:column;gap:3px">
-              <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Martian Mono',monospace;font-size:11px;color:var(--muted,#A9A6B8)">{{ s.t }}</span><span onClick="{{ s.edit }}" style="cursor:pointer;font-size:12px;font-weight:700;color:var(--link,#FF7442)">Edit</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#A9A6B8)">{{ s.t }}</span><span onClick="{{ s.edit }}" style="cursor:pointer;font-size:12px;font-weight:700;color:var(--link,#FF7442)">Edit</span></div>
               <sc-for list="{{ s.rows }}" as="r" hint-placeholder-count="2"><div style="display:grid;grid-template-columns:100px 1fr;gap:6px;font-size:13px"><span style="color:var(--muted,#A9A6B8)">{{ r.k }}</span><span style="font-family:{{ r.font }};font-size:{{ r.small }};overflow-wrap:anywhere">{{ r.v }}</span></div></sc-for>
             </div>
           </sc-for>
@@ -175,12 +175,12 @@ class Component extends DCLogic {
   renderVals() {
     const dark = (this.props.theme ?? 'dark') === 'dark';
     const vars = dark
-      ? { '--bg': '#15141C', '--side': '#1A1922', '--surface': '#1F1E28', '--inner': '#18171F', '--raised': '#33313F', '--line': '#33313F', '--ink': '#F1EEE8', '--sub': '#CBC8D6', '--muted': '#A9A6B8', '--accent': '#FF7442', '--link': '#FF7442', '--code': '#0F0E15', '--codeBar': '#1F1E28' }
-      : { '--bg': '#F1EEE8', '--side': '#ECE8E1', '--surface': '#FFFFFF', '--inner': '#F7F4EF', '--raised': '#E8E3DB', '--line': '#E2DCD3', '--ink': '#1C1B24', '--sub': '#4E4943', '--muted': '#5F5951', '--accent': '#EE5007', '--link': '#B23F00', '--code': '#1C1B24', '--codeBar': '#272632' };
+      ? { '--bg': '#15141C', '--side': '#1A1922', '--surface': '#1F1E28', '--inner': '#18171F', '--raised': '#33313F', '--line': '#33313F', '--ink': '#F2F1F5', '--sub': '#CBC8D6', '--muted': '#A9A6B8', '--accent': '#FF7442', '--link': '#FF7442', '--code': '#0F0E15', '--codeBar': '#1F1E28' }
+      : { '--bg': '#F2F1F5', '--side': '#ECEBF0', '--surface': '#FFFFFF', '--inner': '#F8F7FA', '--raised': '#E6E4EC', '--line': '#DFDCE6', '--ink': '#1C1B24', '--sub': '#494656', '--muted': '#5C596A', '--accent': '#EE5007', '--link': '#A33600', '--code': '#1C1B24', '--codeBar': '#272632' };
     const S = this.state, set = o => this.setState(o);
-    const accent = dark ? '#FF7442' : '#EE5007', ink = dark ? '#F1EEE8' : '#1C1B24', line = dark ? '#33313F' : '#E2DCD3', raised = dark ? '#33313F' : '#E8E3DB', muted = dark ? '#A9A6B8' : '#5F5951', surf = dark ? '#1F1E28' : '#FFFFFF', sel = dark ? '#272632' : '#FFF4EE';
+    const accent = dark ? '#FF7442' : '#EE5007', ink = dark ? '#F2F1F5' : '#1C1B24', line = dark ? '#33313F' : '#DFDCE6', raised = dark ? '#33313F' : '#E6E4EC', muted = dark ? '#A9A6B8' : '#5C596A', surf = dark ? '#1F1E28' : '#FFFFFF', sel = dark ? '#272632' : '#FFF0E8';
     const card = (on, pick) => ({ bd: on ? ink : line, bg: on ? sel : 'transparent', dot: on ? accent : 'transparent', pick });
-    const chip = (on, pick) => ({ bg: on ? ink : raised, fg: on ? (dark ? '#1C1B24' : '#F1EEE8') : ink, pick });
+    const chip = (on, pick) => ({ bg: on ? ink : raised, fg: on ? (dark ? '#1C1B24' : '#F2F1F5') : ink, pick });
     const tog = (on, pick) => ({ track: on ? accent : raised, pos: on ? 'flex-end' : 'flex-start', pick });
     const STEPS = ['Base', 'System', 'Extensions', 'Access', 'Output', 'Review'];
     const keys = ['base', 'system', 'extensions', 'access', 'output', 'review'];
@@ -197,8 +197,8 @@ class Component extends DCLogic {
     ];
     const outLabels = OUT.flatMap(g => g.items).filter(([k]) => S.out[k]).map(([, l]) => l);
     const PRESETS = [['Safe', 'Upgrade, reboot, unregister'], ['Full', 'Adds exec, reset, cloud-config'], ['Custom', 'Pick each command']];
-    const mono = "'Martian Mono',monospace";
-    const R = (k, v, m, warn) => ({ k, v, font: m ? mono : 'Urbanist', size: m ? '12px' : '14px', small: m ? '11px' : '13px', warn: warn || '' });
+    const mono = "'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace";
+    const R = (k, v, m, warn) => ({ k, v, font: m ? mono : "Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif", size: m ? '12px' : '14px', small: m ? '12px' : '13px', warn: warn || '' });
     const go = i => () => set({ step: i });
     const summary = [
       { t: 'Base', i: 0, rows: [R('Name', 'retail-eu-hadron'), R('Image', BASES[S.base][1], true)] },
@@ -230,7 +230,7 @@ class Component extends DCLogic {
       outputGroups: OUT.map(g => ({ t: g.t, items: g.items.map(([k, l, d]) => ({ l, d, bd: S.out[k] ? ink : line, bg: S.out[k] ? sel : 'transparent', tile: S.out[k] ? accent : 'none', tileStroke: S.out[k] ? accent : muted, pick: () => set({ out: { ...S.out, [k]: !S.out[k] } }) })) })),
       outCount: outLabels.length,
       summary,
-      cli: `kairos-platform artifacts create \\\n  --image ${BASES[S.base][1]} \\\n  --arch ${ARCH[S.arch][0].toLowerCase()} --model ${MODELS[S.model].toLowerCase().replace(/ /g, '-')} \\\n  --variant ${VAR[S.variant][0].toLowerCase()}${S.variant ? ' --k8s ' + K8S[S.k8s] : ''} \\\n  ${flags.join(' ')}${S.trusted ? ' --trusted-boot' : ''}${S.fips ? ' --fips' : ''}`,
+      cli: `kairos artifacts create \\\n  --image ${BASES[S.base][1]} \\\n  --arch ${ARCH[S.arch][0].toLowerCase()} --model ${MODELS[S.model].toLowerCase().replace(/ /g, '-')} \\\n  --variant ${VAR[S.variant][0].toLowerCase()}${S.variant ? ' --k8s ' + K8S[S.k8s] : ''} \\\n  ${flags.join(' ')}${S.trusted ? ' --trusted-boot' : ''}${S.fips ? ' --fips' : ''}`,
       nextLabel: S.step === 5 ? 'Start build' : S.step === 4 ? 'Review' : 'Next: ' + STEPS[S.step + 1],
       next: () => set({ step: Math.min(5, S.step + 1) }),
       back: () => set({ step: Math.max(0, S.step - 1) })
