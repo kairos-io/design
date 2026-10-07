@@ -9,12 +9,13 @@ One-time setup: repo **Settings → Pages → Build and deployment → Source: G
 Locally: `python3 -m http.server` in this folder, then open http://localhost:8000. Each screen has a light/dark theme prop.
 
 ## Contents
-- `Kairos - Foundations.dc.html`: logos, color, type, tiles, components, naming, voice
+- `Kairos - Foundations.dc.html`: logos, color, type, tiles, components, voice
 - `kairos.io Homepage.dc.html`
 - `Kairos Docs - Product Page.dc.html`: L1 / L2 / L3 maturity tracks
 - `Kairos Installer.dc.html`: on-node UI at :8080
 - `Kairos Console - Nodes / Node Detail / Build Artifact`: grounded in the AuroraBoot ui/src (now merged into kairos-io/kairos)
 - `hadron-linux.io Homepage.dc.html`
+- `Kairos - Naming.dc.html`: what stays a product, what became functionality, and what changed (AuroraBoot → the Kairos console)
 - `assets/`: logos (unchanged)
 - `explorations/`: competitive landscape and directions D–F
 
@@ -29,11 +30,6 @@ Locally: `python3 -m http.server` in this folder, then open http://localhost:800
 - Independent of any vendor brand: no third-party design-system fonts, colors or components.
 
 ## Naming
-- **Kairos**: the project, the suite and the `kairos` CLI. AuroraBoot is merged into the kairos repo and has no separate name.
-- **The Kairos console**: the web UI, started with `kairos ui`. A lowercase description, not a product name. Sections: Factory, Deploy, Fleet.
-- **Kairos Factory**: kairos-init (name stays)
-- **Kairos Installer**, **Kairos Operator**, **Kairos Lab**
-- **Hadron**: ships inside every Kairos release ("Hadron by Kairos")
-- CLI: `kairos <command>`; separate tools keep their own binaries
+One source of truth: `Kairos - Naming.dc.html` (products vs functionality, before → after, Hadron, base distros, docs levels, CLI, writing rules).
 
 Node names, metrics and some versions in the screens are illustrative.

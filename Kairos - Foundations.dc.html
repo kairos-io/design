@@ -191,39 +191,7 @@
 
     <!-- NAMING -->
     <section id="naming" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid #D8D5E0">
-      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A33600">06</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Naming and lockups</h2><p style="margin:0;font-size:17px;line-height:1.6;color:#494656;max-width:700px;text-wrap:pretty"><b>Kairos</b> is the project and the suite. The console, formerly AuroraBoot, is part of Kairos itself: download <b>kairos</b>, run <b>kairos ui</b>. It has no product name of its own. Its sections are actions, not products: Factory, Deploy and Fleet. Every other project keeps its own name, set as the Kairos mark plus the name, with one shared accent.</p></div>
-      <div style="background:#1C1B24;color:#F2F1F5;border-radius:4px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
-        <span style="display:flex;align-items:center;gap:14px;font-size:clamp(28px,4vw,44px);letter-spacing:-.02em"><img src="assets/kairos-mark.svg" style="height:48px"><b style="font-weight:700">Kairos</b> console</span>
-        <div style="display:flex;flex-direction:column;gap:10px;max-width:520px"><span style="font-size:16px;line-height:1.5;color:#CBC8D6">The console you run. Ships as <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:14px;color:#FB9E70">kairos</span>.</span><div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ platformSections }}" as="s" hint-placeholder-count="3"><span style="display:flex;align-items:center;gap:8px;background:#272632;padding:8px 12px;border-radius:2px;font-size:15px;font-weight:700"><svg width="16" height="10" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="{{ s.c }}"></polygon></svg>{{ s.t }}<span style="font-weight:400;color:#CBC8D6;font-size:13px">{{ s.d }}</span></span></sc-for></div></div>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
-        <sc-for list="{{ stages }}" as="s" hint-placeholder-count="4">
-          <div style="background:#fff;border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:14px">
-            <div style="display:flex;align-items:center;gap:10px"><svg width="22" height="14" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="{{ s.c }}"></polygon></svg><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#5C596A">{{ s.stage }}</span></div>
-            <sc-for list="{{ s.items }}" as="p" hint-placeholder-count="2">
-              <div style="display:flex;flex-direction:column;gap:4px;background:#F2F1F5;border-radius:4px;padding:14px">
-                <span style="display:flex;align-items:center;gap:8px;font-size:19px"><img src="assets/kairos-mark.svg" style="height:20px">Kairos <b style="font-weight:700">{{ p.name }}</b></span>
-                <span style="font-size:15px;line-height:1.45;color:#494656">{{ p.job }}</span>
-                <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#5C596A">was {{ p.was }}</span>
-              </div>
-            </sc-for>
-          </div>
-        </sc-for>
-      </div>
-      <div style="background:#fff;border-radius:4px;overflow-x:auto">
-        <div style="min-width:720px">
-          <div style="display:grid;grid-template-columns:1.2fr 1.2fr 2fr;padding:12px 20px;font-size:13px;font-weight:700;background:#E6E4EC"><span>Today (repo / codename)</span><span>Write it as</span><span>Note</span></div>
-          <sc-for list="{{ glossary }}" as="g" hint-placeholder-count="10">
-            <div style="display:grid;grid-template-columns:1.2fr 1.2fr 2fr;padding:11px 20px;font-size:15px;border-top:1px solid #EEEDF2;align-items:center"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#494656">{{ g.repo }}</span><span style="font-weight:700">{{ g.name }}</span><span style="color:#494656">{{ g.note }}</span></div>
-          </sc-for>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px">
-        <div style="background:#fff;border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:12px"><span style="font-size:15px;font-weight:700">Hadron lockup</span><img src="assets/hadron-horizontal-light.svg" style="height:40px;width:max-content"><span style="font-size:14px;line-height:1.5;color:#494656">Ships inside every Kairos release, never alone. Own logo, always “Hadron by Kairos”.</span></div>
-        <div style="background:#fff;border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:8px"><span style="font-size:15px;font-weight:700">First mention</span><span style="font-size:15px;line-height:1.5;color:#494656">“The Kairos console”, then “the console”. Lowercase: it describes, it doesn’t name. Factory, Deploy and Fleet are sections inside it.</span></div>
-        <div style="background:#fff;border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:8px"><span style="font-size:15px;font-weight:700">CLI · git-style</span><span style="font-size:15px;line-height:1.5;color:#494656">One binary per project: <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px">kairos</span>, <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px">kairos-init</span>, <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px">kairos-agent</span>. An optional <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px">kairos &lt;tool&gt;</span> forwards to them.</span></div>
-        <div style="background:#fff;border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:8px"><span style="font-size:15px;font-weight:700">In-product chrome</span><span style="font-size:15px;line-height:1.5;color:#494656">Mark + “Kairos <b>Installer</b>”: regular “Kairos”, bold tool name. The console shows the bold Kairos mark alone.</span></div>
-      </div>
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A33600">06</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Naming and lockups</h2><p style="margin:0;font-size:17px;line-height:1.6;color:#494656;max-width:700px;text-wrap:pretty">Names, lockups and writing rules live on one page: <a href="Kairos - Naming.dc.html" style="font-weight:700">Naming</a>.</p></div>
     </section>
 
     <!-- VOICE -->
@@ -294,27 +262,6 @@ class Component extends DCLogic {
         { name: 'dark', vars: dark, isLight: false, isDark: true, bar: this.bar(36, 28, O, '#33313F') }
       ],
       statuses: [{ label: 'Healthy', fill: '#2F8F57', stroke: '#2F8F57' }, { label: 'Upgrading', fill: 'var(--accent)', stroke: 'var(--accent)' }, { label: 'Recovery', fill: '#C62B2B', stroke: '#C62B2B' }, { label: 'Installing', fill: 'none', stroke: 'var(--accent)' }, { label: 'Offline', fill: 'none', stroke: 'var(--muted)' }],
-      stages: [
-        { stage: 'Build', c: '#FB9E70', items: [{ name: 'Factory', job: 'Kairosify any image: kairos-init in your Dockerfile', was: 'kairos-init (name stays)' }] },
-        { stage: 'Deploy', c: '#FF7442', items: [{ name: 'Installer', job: 'Configure and install from live media', was: 'WebUI :8080' }] },
-        { stage: 'Operate', c: '#EE5007', items: [{ name: 'Operator', job: 'Day-2 operations via Kubernetes CRDs', was: 'kairos-operator' }] },
-        { stage: 'Learn', c: '#1C1B24', items: [{ name: 'Lab', job: 'Local VMs for demos and proofs of concept', was: 'kairos-lab' }] }
-      ],
-      platformSections: [{ t: 'Factory', d: 'artifacts, extensions', c: '#FB9E70' }, { t: 'Deploy', d: 'BMC, netboot, import', c: '#FF7442' }, { t: 'Fleet', d: 'nodes, groups', c: '#EE5007' }],
-      glossary: [
-        ['kairos (repo)', 'Kairos', 'The project and suite. “An immutable Linux platform”, lowercase.'],
-        ['AuroraBoot', 'Kairos (console)', 'Merged into the kairos repo. Run: kairos ui.'],
-        ['auroraboot build-* · artifacts', 'Console › Factory', 'Artifacts and extensions.'],
-        ['auroraboot netboot · BMC', 'Console › Deploy', 'BMC registration, deployments, import.'],
-        ['auroraboot nodes · groups', 'Console › Fleet', 'Nodes and groups.'],
-        ['kairos-init', 'Kairos Factory', 'Binary name stays kairos-init.'],
-        ['hadron', 'Hadron', 'Ships inside Kairos, never alone. “Hadron by Kairos”.'],
-        ['kairos-agent webui :8080', 'Kairos Installer', 'On-node install UI.'],
-        ['kairos-operator', 'Kairos Operator', 'Day-2 via Kubernetes.'],
-        ['kairos-lab', 'Kairos Lab', 'Local VMs.'],
-        ['kairos-agent', 'Kairos Agent', 'Docs only, Level 3.'],
-        ['ubuntu / alpine flavors', 'Kairos on Ubuntu …', 'Retire “flavor” in intro content.']
-      ].map(([repo, name, note]) => ({ repo, name, note })),
       voice: [
         { t: 'Name the job', d: 'Lead with what the reader is trying to do, then the product.', yes: 'Install machines at scale', no: 'Leverage AuroraBoot' },
         { t: 'Show the command', d: 'If it can be typed, show it in mono. Commands are the proof.', yes: 'kairos artifacts create', no: 'Easily build images!' },
