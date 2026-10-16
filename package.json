@@ -1,6 +1,7 @@
 {
   "name": "kairos-design",
   "private": true,
+  "license": "Apache-2.0",
   "scripts": {
     "test": "playwright test",
     "serve": "node tests/serve.js",
