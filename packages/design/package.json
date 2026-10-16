@@ -8,6 +8,7 @@
     "url": "git+https://github.com/kairos-io/design.git",
     "directory": "packages/design"
   },
+  "license": "Apache-2.0",
   "homepage": "https://kairos-io.github.io/design/",
   "files": ["tokens.json", "tokens.css", "tailwind.css", "README.md"],
   "exports": {
