@@ -2,7 +2,7 @@
 
 Design direction **Tessellate** for the Kairos suite: kairos.io, the docs, Kairos Installer, the Kairos console (formerly AuroraBoot) and hadron-linux.io.
 
-**Live:** https://kairos-io.github.io/design-system/ (published by `.github/workflows/pages.yml` on every push to `main`).
+**Live:** https://kairos-io.github.io/design/ (published by `.github/workflows/pages.yml` on every push to `main`).
 
 One-time setup: repo **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
@@ -13,11 +13,12 @@ Locally: `python3 -m http.server` in this folder, then open http://localhost:800
 - `kairos.io Homepage.dc.html`
 - `Kairos Docs - Product Page.dc.html`: L1 / L2 / L3 maturity tracks
 - `Kairos Installer.dc.html`: on-node UI at :8080
-- `Kairos Console - Nodes / Node Detail / Build Artifact`: grounded in the AuroraBoot ui/src (now merged into kairos-io/kairos)
+- `Kairos Console - Nodes / Node Detail / Build Artifact`: grounded in the AuroraBoot UI, which lives today in `ui/` of kairos-io/AuroraBoot and is planned to move
 - `hadron-linux.io Homepage.dc.html`
 - `Kairos - Naming.dc.html`: what stays a product, what became functionality, and what changed (AuroraBoot → the Kairos console)
 - `Kairos - Talk Deck.dc.html`: conference slide template (1920×1080, light mode)
 - `Kairos - Presentations.dc.html`: how to present, download (`npm run pdf`) and build a talk from the deck
+- `packages/design/`: `@kairos-io/design`, the design tokens as CSS custom properties and a Tailwind 4 theme (see its README). `npm run build` regenerates it, `npm run check:tokens` fails when the decks and the package differ
 - `assets/`: logos (unchanged)
 - `explorations/`: competitive landscape and directions D–F
 

@@ -1,0 +1,25 @@
+name: Token check
+
+# Fails when the decks and packages/design differ. No dependencies to install.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tokens-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tokens:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: npm run check:tokens
