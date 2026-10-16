@@ -7,7 +7,8 @@ name: Release
 #   1. published the first version from a terminal (a trusted publisher can be set only
 #      for a package that already exists on npm), and
 #   2. added a trusted publisher on the package's npm settings page: organisation
-#      kairos-io, repository design, workflow file release.yml.
+#      kairos-io, repository design, workflow file release.yml. Under "Allowed actions", also select
+#      `npm publish` (this workflow runs `npm publish`, not `npm stage publish`).
 # Until then the publish job fails at `npm publish`. That is expected.
 #
 # A run started by hand (workflow_dispatch) is a dry run. It builds, checks and packs, and
