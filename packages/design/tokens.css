@@ -89,7 +89,7 @@
   --raised: #E6E4EC;
 }
 
-/* variant: hadron. hadron-linux.io: Hadron blue instead of Kairos orange. */
+/* variant: hadron. hadron-linux.io: Hadron blue accent, white text on it, and the Hadron link colors. accentLine, accentSoft and codeKey are not set here, so they stay Kairos orange; no deck defines Hadron values for them. */
 [data-variant="hadron"] {
   --accent: #0275E7;
   --onAccent: #FFFFFF;

@@ -30,9 +30,29 @@ for (const mode of ['light', 'dark']) {
 }
 for (const v of Object.values(t.variants)) for (const mode of ['light', 'dark']) Object.keys(v[mode]).forEach(n => names.add(n));
 
-function allowed(mode, name) {
+// Which variants each deck is allowed to use, read from the decks' own theme maps.
+// A deck is checked against the base theme plus the variants listed here, and no others.
+// A deck with a theme map that is not listed fails, so a new deck must be added on purpose.
+const DECK_VARIANTS = {
+  'Kairos - Foundations.dc.html': ['foundations'],
+  'Kairos - Naming.dc.html': [],
+  'Kairos - Presentations.dc.html': [],
+  'Kairos Console - Build Artifact.dc.html': ['console'],
+  'Kairos Console - Node Detail.dc.html': ['console'],
+  'Kairos Console - Nodes.dc.html': ['console'],
+  'Kairos Docs - Product Page.dc.html': [],
+  'Kairos Installer.dc.html': ['installer'],
+  'hadron-linux.io Homepage.dc.html': ['site', 'hadron'],
+  'kairos.io Homepage.dc.html': ['site']
+};
+
+function allowed(mode, name, deck) {
   const s = new Set([t.themes[mode][name]]);
-  for (const v of Object.values(t.variants)) if (v[mode][name]) s.add(v[mode][name]);
+  for (const vn of DECK_VARIANTS[deck] || []) {
+    const v = t.variants[vn];
+    if (!v) errors.push(`check.js lists variant ${vn} for ${deck}, which tokens.json does not have`);
+    else if (v[mode][name]) s.add(v[mode][name]);
+  }
   return [...s].filter(Boolean).map(norm);
 }
 
@@ -50,11 +70,12 @@ for (const deck of decks) {
   }
   for (const map of src.matchAll(/\{[^{}]*'--bg'[^{}]*\}/g)) {
     const pairs = [...map[0].matchAll(/'--([A-Za-z0-9-]+)'\s*:\s*'(#[0-9a-fA-F]{3,8})'/g)];
+    if (!(deck in DECK_VARIANTS)) { errors.push(`${deck}: has a theme map but is not listed in DECK_VARIANTS in check.js`); continue; }
     const bg = pairs.find(p => p[1] === 'bg');
     const mode = bg && norm(bg[2]) === norm(t.themes.dark.bg) ? 'dark' : 'light';
     for (const [, n, v] of pairs) {
       if (!names.has(n)) errors.push(`${deck}: theme variable --${n} is not a token name`);
-      else if (!allowed(mode, n).includes(norm(v))) errors.push(`${deck}: ${mode} --${n} is ${v}, tokens.json has ${allowed(mode, n).join(' or ')}`);
+      else if (!allowed(mode, n, deck).includes(norm(v))) errors.push(`${deck}: ${mode} --${n} is ${v}, tokens.json has ${allowed(mode, n, deck).join(' or ')}`);
     }
   }
 }

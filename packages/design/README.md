@@ -21,7 +21,7 @@ a { color: var(--link); }
 
 Light is the default. To pick a theme, set `data-theme="light"` or `data-theme="dark"` on `<html>` (or on any element, to theme a part of the page). When `data-theme` is not set, the system setting decides.
 
-The colors that differ between a few screens are variants. Set `data-variant="console"`, `"site"`, `"hadron"`, `"installer"` or `"foundations"` on an element to get them. Most projects need only `hadron`, for Hadron blue instead of Kairos orange with white text on it (`--onAccent`). Put `data-variant` on the element that carries `data-theme`, or below it. One limit: a `data-theme="light"` section nested inside a dark section applies the dark variant values to a `data-variant` element that sits below that light section; put `data-variant` on the light section itself in that case. The `description` of each variant in `tokens.json` says which decks use it.
+The colors that differ between a few screens are variants. Set `data-variant="console"`, `"site"`, `"hadron"`, `"installer"` or `"foundations"` on an element to get them. Most projects need only `hadron`, for the Hadron blue accent with white text on it (`--onAccent`) and the Hadron link colors. `hadron` does not change `--accentLine`, `--accentSoft` or `--codeKey`: they stay Kairos orange, because no deck defines Hadron values for them. Put `data-variant` on the element that carries `data-theme`, or below it. One limit: a `data-theme="light"` section nested inside a dark section applies the dark variant values to a `data-variant` element that sits below that light section; put `data-variant` on the light section itself in that case. The `description` of each variant in `tokens.json` says which decks use it.
 
 The variable names are the ones the decks already use (`--ink`, `--sub`, `--line`, `--surface`, `--link`, `--ok`). They have no prefix, so check for a clash before you add the file to a page that has its own `--bg` or `--line`.
 
@@ -46,6 +46,7 @@ The variable names are the ones the decks already use (`--ink`, `--sub`, `--line
 - The type scale is `text-display`, `text-h1`, `text-h2`, `text-h3`, `text-body-lg`, `text-body`, `text-label`, `text-mono`. Each sets size, weight and letter spacing.
 - The spacing scale 4, 8, 12, 16, 24, 32, 48 and 80 px is `1`, `2`, `3`, `4`, `6`, `8`, `12` and `20` (Tailwind's step is set to 4px).
 - There is one radius, `rounded-base` (4px). The shadow utilities are removed, because the design has no shadows.
+- Contrast on Hadron: white on `hadron-blue` `#0275E7` is 4.47:1, just under the WCAG AA 4.5:1 for normal-size text (the Foundations deck says 4.6:1). `bg-accent text-on-accent` under the `hadron` variant is therefore fine for large or bold text but not for small buttons; use `bg-hadron-deep text-white` (`#004CCE`, 7.18:1) there. Ink on Kairos orange is 4.70:1.
 - The default Tailwind colors are still there. Add `--color-*: initial;` in your own `@theme` if you want only the Kairos colors.
 
 ## Tokens
