@@ -1,10 +1,12 @@
 {
-  "name": "kairos-design-system",
+  "name": "kairos-design",
   "private": true,
   "scripts": {
     "test": "playwright test",
     "serve": "node tests/serve.js",
-    "pdf": "node scripts/deck-pdf.js"
+    "pdf": "node scripts/deck-pdf.js",
+    "build": "node packages/design/scripts/build.js",
+    "check:tokens": "node packages/design/scripts/check.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.0"
