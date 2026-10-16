@@ -107,7 +107,7 @@ The package follows semantic versioning. This mapping is a proposal for the main
 
 ## Who may publish
 
-Members of the `kairos-io` organisation on npm, and teams that have write access to the package, can publish. Owners manage the members and teams on the organisation's page on npmjs.com. Through the workflow, anyone who can push a `v*` tag to this repository can start a release, so see the hardening below.
+Organisation owners and admins, and members of a team that has read-write access to the package, can publish. Owners manage the members and teams on the organisation's page on npmjs.com. Through the workflow, anyone who can push a `v*` tag to this repository can start a release, so see the hardening below.
 
 ## Make a release
 
@@ -121,7 +121,7 @@ A run started by hand from the Actions tab is a dry run. It builds, checks and p
 
 ### One-time setup (first release)
 
-A member of the npm organisation who can publish does this once:
+A person who can publish does this. Steps 1 and 2 happen once. Step 3 happens when a release tag is ready.
 
 1. On a clean, up-to-date `main`, run `npm run build` and `npm run check:tokens` in the repository root. Both must pass and leave no change.
 2. Publish the first version from a terminal. A trusted publisher can be set only for a package that already exists. `publishConfig` asks for provenance, which a terminal cannot give, so turn it off for this one command. npm asks for your two-factor confirmation (a browser prompt or a code):
@@ -130,13 +130,13 @@ A member of the npm organisation who can publish does this once:
    npm login
    npm publish --access public --provenance=false
    ```
-3. On the package's settings page on npmjs.com, add a trusted publisher: GitHub Actions, organisation `kairos-io`, repository `design`, workflow file `release.yml`.
-4. On the same settings page, set the publishing access to "Require two-factor authentication and disallow tokens".
+3. When the next release is ready (its version is merged, and you can push its `v*` tag now), add the trusted publisher on the package's settings page on npmjs.com: GitHub Actions, organisation `kairos-io`, repository `design`, workflow file `release.yml`. Then push the tag at once. The npm documentation (https://docs.npmjs.com/trusted-publishers) says: "A newly created trusted publisher configuration must complete its first successful publish within 2 days." and "If the configuration is not validated within 2 days, it expires and can no longer be used or edited." If it expired, delete it on the settings page and create it again.
+4. After the first successful publish by the workflow, set the package's publishing access to "Require two-factor authentication and disallow tokens" on the same settings page.
 5. From then on, release by tag as described above.
 
 ### Recommended hardening (optional)
 
-Anyone with write access to the repository can push a `v*` tag on any commit, and the tag starts a release. Two optional steps reduce that:
+Anyone with write access to the repository can push a `v*` tag on any commit, and the tag starts a release. Two optional steps reduce that. The GitHub menu paths below were written without clicking through them, so the menu names may differ.
 
 - Restrict who can create `v*` tags. On GitHub: repository Settings, Rules, Rulesets, New ruleset, New tag ruleset. Target the tag pattern `v*` and restrict creations.
-- Require a reviewer before each publish. On GitHub: repository Settings, Environments, New environment (for example `npm`), then Required reviewers. If you add an environment, add `environment: npm` (the same name) to the `publish` job in `release.yml`, and enter the same name in the "Environment" field of the trusted publisher on npm. The names must match, or the publish fails.
+- Require a reviewer before each publish. On GitHub: repository Settings, Environments, New environment (for example `npm`), then Required reviewers. If you add an environment, add `environment: npm` (the same name) to the `publish` job in `release.yml`, and enter the same name in the "Environment" field of the trusted publisher on npm. The names must match, or the publish fails. The npm documentation says the fields of a trusted publisher are fixed once it is created, so adding an environment later means deleting the trusted publisher and creating it again (and the 2-day window above starts again).
