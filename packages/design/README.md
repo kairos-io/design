@@ -2,9 +2,15 @@
 
 The Kairos design tokens as CSS custom properties and as a Tailwind 4 theme. The values come from the decks in this repository (kairos-io/design). Version 0.1.0.
 
-Publishing to npm is a later step for the maintainers. `package.json` has `"private": true` so that `npm publish` cannot run by accident; the maintainers remove it when they publish. Until then, use the files from a checkout of this repository.
+## Install
 
-The examples below use the package name, which works once the package is installed from npm. From a checkout of this repository, use the relative path instead, for example `@import "./packages/design/tokens.css";` from the repository root (the root has no npm workspaces, so the package name does not resolve there).
+```sh
+npm install @kairos-io/design
+```
+
+The package is published on the public npm registry under the `@kairos-io` organisation. It has no dependencies and no JavaScript to run: it ships `tokens.css`, `tailwind.css` and `tokens.json`.
+
+The examples below use the package name, which works once the package is installed. From a checkout of this repository, use the relative path instead, for example `@import "./packages/design/tokens.css";` from the repository root (the root has no npm workspaces, so the package name does not resolve there).
 
 ## Use the CSS variables
 
@@ -77,3 +83,51 @@ Colors that the decks use but that are not a clear token yet are listed in `unto
 4. Commit the three files together.
 
 If a deck changes a color, the check fails until `tokens.json` has the same value. The check also fails when a deck uses a hex color or a `var(--name)` that `tokens.json` does not know, and when the generated files are not what the build would write now. It runs in CI (`.github/workflows/tokens.yml`). It needs only Node, no install.
+
+## Use it without a build step
+
+A page that has no bundler (the web installer, for example) cannot resolve `@import "@kairos-io/design/tokens.css"`. Copy the file from a release instead:
+
+```sh
+npm pack @kairos-io/design@0.1.0
+tar -xzf kairos-io-design-0.1.0.tgz package/tokens.css
+cp package/tokens.css path/to/your/project/tokens.css
+```
+
+Replace `0.1.0` with the version you want, and commit the copied file with a note of that version. To update, repeat with the new version. The same file is in `node_modules/@kairos-io/design/tokens.css` after `npm install @kairos-io/design`.
+
+## Versions
+
+The package follows semantic versioning. This mapping is a proposal for the maintainers to confirm:
+
+- A token value changes (a color, a size, a spacing step): minor version.
+- A token is renamed or removed, or a `data-theme` or `data-variant` rule changes meaning: major version. Before 1.0.0, a breaking change may go in a minor version, but the release notes must say so.
+- A new token: minor version.
+- A README change, or a generator-only change that leaves the generated files the same: patch version.
+
+## Who may publish
+
+Only the owners of the `kairos-io` organisation on npm can publish. The list is on the organisation's members page on npmjs.com.
+
+## Make a release
+
+1. Open a pull request that sets `version` in `packages/design/package.json` (and changes the tokens, if the release has token changes). Run `npm run build` and `npm run check:tokens` first. Merge it.
+2. Tag the merge commit with the same version, with a `v` in front, and push the tag: `git tag vX.Y.Z && git push origin vX.Y.Z`.
+3. The workflow `.github/workflows/release.yml` runs on the tag. It runs the build and the token check, fails if the tag does not match the `version` in `package.json`, and publishes with npm provenance.
+
+The workflow uses npm trusted publishing (OIDC). It stores no npm token. This works only after the one-time setup below.
+
+A run started by hand from the Actions tab is a dry run. It builds, checks and packs, and never publishes.
+
+### One-time setup (first release)
+
+An owner of the npm organisation does this once:
+
+1. Publish the first version from a terminal. A trusted publisher can be set only for a package that already exists. `publishConfig` asks for provenance, which a terminal cannot give, so turn it off for this one command:
+   ```sh
+   cd packages/design
+   npm login
+   npm publish --access public --provenance=false
+   ```
+2. On the package's settings page on npmjs.com, add a trusted publisher: GitHub Actions, organisation `kairos-io`, repository `design`, workflow file `release.yml`.
+3. From then on, release by tag as described above.
