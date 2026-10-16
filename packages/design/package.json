@@ -1,15 +1,27 @@
 {
   "name": "@kairos-io/design",
   "version": "0.1.0",
-  "private": true,
   "description": "Kairos design tokens as CSS custom properties and a Tailwind 4 theme.",
+  "keywords": [
+    "kairos",
+    "design-tokens",
+    "design-system",
+    "css",
+    "css-custom-properties",
+    "tailwindcss",
+    "tailwind"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kairos-io/design.git",
     "directory": "packages/design"
   },
   "homepage": "https://kairos-io.github.io/design/",
-  "files": ["tokens.json", "tokens.css", "tailwind.css", "README.md"],
+  "files": [
+    "tokens.json",
+    "tokens.css",
+    "tailwind.css"
+  ],
   "exports": {
     "./tokens.css": "./tokens.css",
     "./tailwind.css": "./tailwind.css",
@@ -18,5 +30,12 @@
   "scripts": {
     "build": "node scripts/build.js",
     "check:tokens": "node scripts/check.js"
+  },
+  "bugs": {
+    "url": "https://github.com/kairos-io/design/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }
