@@ -2,7 +2,8 @@
 // Fails when the decks and the package differ.
 //  1. Every hex color in a deck exists in tokens.json.
 //  2. Every var(--name) in a deck is a token name.
-//  3. Every '--name': '#hex' pair in a deck theme map matches the base theme or a variant.
+//  3. Every '--name': '#hex' pair in a deck theme map matches the base theme or a variant listed for that deck in DECK_VARIANTS.
+//     The base value is always allowed for every deck; that is intended, most decks use it.
 //  4. tokens.css and tailwind.css equal what scripts/build.js writes now.
 'use strict';
 const fs = require('fs');
@@ -57,6 +58,8 @@ function allowed(mode, name, deck) {
 }
 
 const decks = fs.readdirSync(repo).filter(f => f.endsWith('.dc.html')).sort();
+for (const k of Object.keys(DECK_VARIANTS)) if (!decks.includes(k)) errors.push(`DECK_VARIANTS in check.js lists ${k}, but there is no such deck; renamed or deleted?`);
+const reportedUnlisted = new Set();
 const usedHex = new Set();
 for (const deck of decks) {
   const src = fs.readFileSync(path.join(repo, deck), 'utf8');
@@ -70,7 +73,10 @@ for (const deck of decks) {
   }
   for (const map of src.matchAll(/\{[^{}]*'--bg'[^{}]*\}/g)) {
     const pairs = [...map[0].matchAll(/'--([A-Za-z0-9-]+)'\s*:\s*'(#[0-9a-fA-F]{3,8})'/g)];
-    if (!(deck in DECK_VARIANTS)) { errors.push(`${deck}: has a theme map but is not listed in DECK_VARIANTS in check.js`); continue; }
+    if (!(deck in DECK_VARIANTS)) {
+      if (!reportedUnlisted.has(deck)) { reportedUnlisted.add(deck); errors.push(`${deck}: has a theme map but is not listed in DECK_VARIANTS in check.js`); }
+      continue;
+    }
     const bg = pairs.find(p => p[1] === 'bg');
     const mode = bg && norm(bg[2]) === norm(t.themes.dark.bg) ? 'dark' : 'light';
     for (const [, n, v] of pairs) {

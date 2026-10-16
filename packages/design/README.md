@@ -46,7 +46,7 @@ The variable names are the ones the decks already use (`--ink`, `--sub`, `--line
 - The type scale is `text-display`, `text-h1`, `text-h2`, `text-h3`, `text-body-lg`, `text-body`, `text-label`, `text-mono`. Each sets size, weight and letter spacing.
 - The spacing scale 4, 8, 12, 16, 24, 32, 48 and 80 px is `1`, `2`, `3`, `4`, `6`, `8`, `12` and `20` (Tailwind's step is set to 4px).
 - There is one radius, `rounded-base` (4px). The shadow utilities are removed, because the design has no shadows.
-- Contrast on Hadron: white on `hadron-blue` `#0275E7` is 4.47:1, just under the WCAG AA 4.5:1 for normal-size text (the Foundations deck says 4.6:1). `bg-accent text-on-accent` under the `hadron` variant is therefore fine for large or bold text but not for small buttons; use `bg-hadron-deep text-white` (`#004CCE`, 7.18:1) there. Ink on Kairos orange is 4.70:1.
+- Contrast on Hadron: white on `hadron-blue` `#0275E7` is 4.47:1, just under the WCAG AA 4.5:1 for normal-size text (the Foundations deck says 4.6:1). `bg-accent text-on-accent` under the `hadron` variant is therefore fine for large or bold text but not for small buttons; use `bg-hadron-deep text-white` (`#004CCE`, 7.18:1) there. Ink on Kairos orange is 4.70:1 (the Foundations deck says 5.3:1).
 - The default Tailwind colors are still there. Add `--color-*: initial;` in your own `@theme` if you want only the Kairos colors.
 
 ## Tokens
