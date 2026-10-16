@@ -8,7 +8,7 @@ The Kairos design tokens as CSS custom properties and as a Tailwind 4 theme. The
 npm install @kairos-io/design
 ```
 
-The package is published on the public npm registry under the `@kairos-io` organisation. It has no dependencies and no JavaScript to run: it ships `tokens.css`, `tailwind.css` and `tokens.json`.
+Once the first release is published, the package is on the public npm registry under the `@kairos-io` organisation. It has no dependencies and no JavaScript to run: it ships `tokens.css`, `tailwind.css` and `tokens.json`.
 
 The examples below use the package name, which works once the package is installed. From a checkout of this repository, use the relative path instead, for example `@import "./packages/design/tokens.css";` from the repository root (the root has no npm workspaces, so the package name does not resolve there).
 
@@ -107,7 +107,7 @@ The package follows semantic versioning. This mapping is a proposal for the main
 
 ## Who may publish
 
-Only the owners of the `kairos-io` organisation on npm can publish. The list is on the organisation's members page on npmjs.com.
+Members of the `kairos-io` organisation on npm, and teams that have write access to the package, can publish. Owners manage the members and teams on the organisation's page on npmjs.com. Through the workflow, anyone who can push a `v*` tag to this repository can start a release, so see the hardening below.
 
 ## Make a release
 
@@ -121,13 +121,22 @@ A run started by hand from the Actions tab is a dry run. It builds, checks and p
 
 ### One-time setup (first release)
 
-An owner of the npm organisation does this once:
+A member of the npm organisation who can publish does this once:
 
-1. Publish the first version from a terminal. A trusted publisher can be set only for a package that already exists. `publishConfig` asks for provenance, which a terminal cannot give, so turn it off for this one command:
+1. On a clean, up-to-date `main`, run `npm run build` and `npm run check:tokens` in the repository root. Both must pass and leave no change.
+2. Publish the first version from a terminal. A trusted publisher can be set only for a package that already exists. `publishConfig` asks for provenance, which a terminal cannot give, so turn it off for this one command. npm asks for your two-factor confirmation (a browser prompt or a code):
    ```sh
    cd packages/design
    npm login
    npm publish --access public --provenance=false
    ```
-2. On the package's settings page on npmjs.com, add a trusted publisher: GitHub Actions, organisation `kairos-io`, repository `design`, workflow file `release.yml`.
-3. From then on, release by tag as described above.
+3. On the package's settings page on npmjs.com, add a trusted publisher: GitHub Actions, organisation `kairos-io`, repository `design`, workflow file `release.yml`.
+4. On the same settings page, set the publishing access to "Require two-factor authentication and disallow tokens".
+5. From then on, release by tag as described above.
+
+### Recommended hardening (optional)
+
+Anyone with write access to the repository can push a `v*` tag on any commit, and the tag starts a release. Two optional steps reduce that:
+
+- Restrict who can create `v*` tags. On GitHub: repository Settings, Rules, Rulesets, New ruleset, New tag ruleset. Target the tag pattern `v*` and restrict creations.
+- Require a reviewer before each publish. On GitHub: repository Settings, Environments, New environment (for example `npm`), then Required reviewers. If you add an environment, add `environment: npm` (the same name) to the `publish` job in `release.yml`, and enter the same name in the "Environment" field of the trusted publisher on npm. The names must match, or the publish fails.

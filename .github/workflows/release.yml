@@ -55,7 +55,8 @@ jobs:
   publish:
     name: Publish to npm
     needs: verify
-    if: github.ref_type == 'tag'
+    # A manual run can pick a tag as its ref, so check the event, not only the ref.
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       contents: read
