@@ -92,6 +92,7 @@
 /* variant: hadron. hadron-linux.io: Hadron blue instead of Kairos orange. */
 [data-variant="hadron"] {
   --accent: #0275E7;
+  --onAccent: #FFFFFF;
   --link: #0258B0;
 }
 
@@ -132,29 +133,30 @@
 }
 
 [data-theme="dark"][data-variant="console"],
-[data-theme="dark"] [data-variant="console"] {
+[data-theme="dark"] [data-variant="console"]:not([data-theme="light"]) {
   --line: #33313F;
   --accentSoft: #FB9E70;
 }
 
 [data-theme="dark"][data-variant="site"],
-[data-theme="dark"] [data-variant="site"] {
+[data-theme="dark"] [data-variant="site"]:not([data-theme="light"]) {
   --raised: #272632;
 }
 
 [data-theme="dark"][data-variant="hadron"],
-[data-theme="dark"] [data-variant="hadron"] {
+[data-theme="dark"] [data-variant="hadron"]:not([data-theme="light"]) {
   --accent: #0275E7;
+  --onAccent: #FFFFFF;
   --link: #1BAAFF;
 }
 
 [data-theme="dark"][data-variant="installer"],
-[data-theme="dark"] [data-variant="installer"] {
+[data-theme="dark"] [data-variant="installer"]:not([data-theme="light"]) {
   --codeBar: #1C1B24;
 }
 
 [data-theme="dark"][data-variant="foundations"],
-[data-theme="dark"] [data-variant="foundations"] {
+[data-theme="dark"] [data-variant="foundations"]:not([data-theme="light"]) {
   --line: #3C3A49;
 }
 
@@ -185,25 +187,26 @@
     color-scheme: dark;
   }
   :root:not([data-theme="light"])[data-variant="console"],
-  :root:not([data-theme="light"]) [data-variant="console"] {
+  :root:not([data-theme="light"]) [data-variant="console"]:not([data-theme="light"]) {
     --line: #33313F;
     --accentSoft: #FB9E70;
   }
   :root:not([data-theme="light"])[data-variant="site"],
-  :root:not([data-theme="light"]) [data-variant="site"] {
+  :root:not([data-theme="light"]) [data-variant="site"]:not([data-theme="light"]) {
     --raised: #272632;
   }
   :root:not([data-theme="light"])[data-variant="hadron"],
-  :root:not([data-theme="light"]) [data-variant="hadron"] {
+  :root:not([data-theme="light"]) [data-variant="hadron"]:not([data-theme="light"]) {
     --accent: #0275E7;
+    --onAccent: #FFFFFF;
     --link: #1BAAFF;
   }
   :root:not([data-theme="light"])[data-variant="installer"],
-  :root:not([data-theme="light"]) [data-variant="installer"] {
+  :root:not([data-theme="light"]) [data-variant="installer"]:not([data-theme="light"]) {
     --codeBar: #1C1B24;
   }
   :root:not([data-theme="light"])[data-variant="foundations"],
-  :root:not([data-theme="light"]) [data-variant="foundations"] {
+  :root:not([data-theme="light"]) [data-variant="foundations"]:not([data-theme="light"]) {
     --line: #3C3A49;
   }
 }

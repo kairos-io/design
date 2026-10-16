@@ -2,7 +2,9 @@
 
 The Kairos design tokens as CSS custom properties and as a Tailwind 4 theme. The values come from the decks in this repository (kairos-io/design). Version 0.1.0.
 
-Publishing to npm is a later step for the maintainers. Until then, use the files from a checkout of this repository.
+Publishing to npm is a later step for the maintainers. `package.json` has `"private": true` so that `npm publish` cannot run by accident; the maintainers remove it when they publish. Until then, use the files from a checkout of this repository.
+
+The examples below use the package name, which works once the package is installed from npm. From a checkout of this repository, use the relative path instead, for example `@import "./packages/design/tokens.css";` from the repository root (the root has no npm workspaces, so the package name does not resolve there).
 
 ## Use the CSS variables
 
@@ -19,7 +21,7 @@ a { color: var(--link); }
 
 Light is the default. To pick a theme, set `data-theme="light"` or `data-theme="dark"` on `<html>` (or on any element, to theme a part of the page). When `data-theme` is not set, the system setting decides.
 
-The colors that differ between a few screens are variants. Set `data-variant="console"`, `"site"`, `"hadron"`, `"installer"` or `"foundations"` on an element to get them. Most projects need only `hadron`, for Hadron blue instead of Kairos orange. The `description` of each variant in `tokens.json` says which decks use it.
+The colors that differ between a few screens are variants. Set `data-variant="console"`, `"site"`, `"hadron"`, `"installer"` or `"foundations"` on an element to get them. Most projects need only `hadron`, for Hadron blue instead of Kairos orange with white text on it (`--onAccent`). Put `data-variant` on the element that carries `data-theme`, or below it. One limit: a `data-theme="light"` section nested inside a dark section applies the dark variant values to a `data-variant` element that sits below that light section; put `data-variant` on the light section itself in that case. The `description` of each variant in `tokens.json` says which decks use it.
 
 The variable names are the ones the decks already use (`--ink`, `--sub`, `--line`, `--surface`, `--link`, `--ok`). They have no prefix, so check for a clash before you add the file to a page that has its own `--bg` or `--line`.
 

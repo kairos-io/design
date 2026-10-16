@@ -1,6 +1,7 @@
 {
   "name": "@kairos-io/design",
   "version": "0.1.0",
+  "private": true,
   "description": "Kairos design tokens as CSS custom properties and a Tailwind 4 theme.",
   "repository": {
     "type": "git",

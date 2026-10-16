@@ -52,7 +52,7 @@ function tokensCss(t) {
   out.push('[data-theme="dark"] {', decls(dark, '  '), '  color-scheme: dark;', '}', '');
   for (const name of Object.keys(t.variants)) {
     if (!vnames[name].length) continue;
-    out.push(`[data-theme="dark"][data-variant="${name}"],\n[data-theme="dark"] [data-variant="${name}"] {`, decls(vvals(name, 'dark'), '  '), '}', '');
+    out.push(`[data-theme="dark"][data-variant="${name}"],\n[data-theme="dark"] [data-variant="${name}"]:not([data-theme="light"]) {`, decls(vvals(name, 'dark'), '  '), '}', '');
   }
 
   const ind = '    ';
@@ -60,7 +60,7 @@ function tokensCss(t) {
   out.push('  :root:not([data-theme="light"]) {', decls(dark, ind), `${ind}color-scheme: dark;`, '  }');
   for (const name of Object.keys(t.variants)) {
     if (!vnames[name].length) continue;
-    out.push(`  :root:not([data-theme="light"])[data-variant="${name}"],\n  :root:not([data-theme="light"]) [data-variant="${name}"] {`, decls(vvals(name, 'dark'), ind), '  }');
+    out.push(`  :root:not([data-theme="light"])[data-variant="${name}"],\n  :root:not([data-theme="light"]) [data-variant="${name}"]:not([data-theme="light"]) {`, decls(vvals(name, 'dark'), ind), '  }');
   }
   out.push('}', '');
   return out.join('\n');
