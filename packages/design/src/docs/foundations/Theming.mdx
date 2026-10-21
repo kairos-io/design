@@ -7,15 +7,17 @@ import { Meta } from "@storybook/addon-docs/blocks";
 ## The pieces
 
 ```
-packages/design/tokens.json     the source: brand, status, themes (light, dark), variants, type, space, radius, motion
+packages/design/tokens.json     the source, in the W3C Design Tokens format: brand, status, themes (light, dark),
+        │                       variants, type, space, radius, motion; {aliases} say where a colour comes from
         │  scripts/build.cjs
         ├── tokens.css          :root (light), [data-theme="dark"], the OS-preference block, the variants
-        └── tailwind.css        @theme inline { --color-ink: var(--ink); ... } for Tailwind v4, no shadows, one radius
+        ├── tailwind.css        @theme inline { --color-ink: var(--ink); ... } for Tailwind v4, no shadows, one radius
+        └── src/tokens/resolved.json   the plain view behind @kairos-io/design/tokens
         │  scripts/check.cjs
-        └── fails when a deck uses a colour or a name tokens.json does not have, or when the two files are stale
+        └── fails when a deck does not read tokens.css, names a variable that does not exist, or when the files are stale
 ```
 
-The same file feeds the design decks in this repository. Components never read a token directly: they use Tailwind utilities (`bg-surface`, `text-sub`), which `tailwind.css` maps onto the custom properties that `tokens.css` sets. So:
+The design decks in this repository link `tokens.css` and paint with the same variables, so a swatch here, a colour in a deck and a component are one value. Components never read a token directly: they use Tailwind utilities (`bg-surface`, `text-sub`), which `tailwind.css` maps onto the custom properties that `tokens.css` sets. So:
 
 - Changing a value is an edit to `tokens.json`, a run of `npm run build`, and a diff on two generated files that CI checks are in step with the decks.
 - Switching theme at runtime is an attribute on `<html>`. No rebuild, no JavaScript needed for the colours themselves.

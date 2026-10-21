@@ -19,6 +19,7 @@ Locally: `python3 -m http.server` in this folder, then open http://localhost:800
 - `Kairos - Talk Deck.dc.html`: conference slide template (1920×1080, light mode)
 - `Kairos - Presentations.dc.html`: how to present, download (`npm run pdf`) and build a talk from the deck
 - `packages/design/`: `@kairos-io/design`, the design system as code: the tokens (`tokens.json`, the one source the decks and the package share, generated into CSS custom properties and a Tailwind 4 theme), the React components, the framework-free `components.css`, and the Storybook that documents all of it with the screens above as live pages (see its README). `npm run build` regenerates the tokens, `npm run check:tokens` fails when the decks and the package differ, `npm run storybook` runs the Storybook
+- Every deck links `packages/design/tokens.css` and paints with `var(--token)`; `data-theme` on its root picks light or dark, `data-variant` the few screen-specific values. To change a colour, edit `packages/design/tokens.json` (W3C Design Tokens format) and run `npm run build`; `npm run check:tokens` fails a deck that paints with a value of its own
 - `assets/`: logos (unchanged)
 - `explorations/`: competitive landscape and directions D–F
 

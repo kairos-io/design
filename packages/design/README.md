@@ -101,7 +101,9 @@ The React components are React only. Every other framework, and every page witho
 
 ## The tokens
 
-The variable names are the ones the decks use, with no prefix: `--bg`, `--surface`, `--raised`, `--line`, `--ink`, `--sub`, `--muted`, `--accent`, `--on-accent`, `--link`, `--ok`, `--code`. Check for a clash before you add `tokens.css` to a page that has its own `--bg` or `--line`.
+`tokens.json` is in the [W3C Design Tokens](https://tr.designtokens.org/format/) (DTCG) format: a token is `{ "$value": "#EE5007", "$type": "color" }`, a group holds tokens and may carry the `$type` they inherit, and a `"{color.brand.kairos-orange}"` value is an alias. So `themes.light.accent` says it is the Kairos orange, and the Hadron variant's `on-accent` says it is white. Style Dictionary, Terrazzo and Tokens Studio read the format; `scripts/build.cjs` reads it with no dependencies and writes `tokens.css`, `tailwind.css` and `src/tokens/resolved.json`, the plain view that `@kairos-io/design/tokens` exports.
+
+The decks in this repository read `tokens.css` directly: each links `packages/design/tokens.css`, paints with `var(--token)` and switches theme with `data-theme`. The variable names are the ones the decks use, with no prefix: `--bg`, `--surface`, `--raised`, `--line`, `--ink`, `--sub`, `--muted`, `--accent`, `--on-accent`, `--link`, `--ok`, `--code`. Check for a clash before you add `tokens.css` to a page that has its own `--bg` or `--line`.
 
 | Group         | Tokens                                                                                                                                                                                                                                                            |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -126,12 +128,12 @@ The variable names are the ones the decks use, with no prefix: `--bg`, `--surfac
 
 ### Change a token
 
-1. Edit `tokens.json`.
-2. Run `npm run build` here (or at the repository root). It rewrites `tokens.css` and `tailwind.css`.
+1. Edit `tokens.json`: the `$value` of the token, or a new token in its group (a theme colour needs a value under both `themes.light` and `themes.dark`; a variant lists only the names it changes).
+2. Run `npm run build` here (or at the repository root). It rewrites `tokens.css`, `tailwind.css` and `src/tokens/resolved.json`.
 3. Run `npm run check:tokens`.
-4. Commit the three files together.
+4. Commit the four files together.
 
-If a deck changes a color, the check fails until `tokens.json` has the same value. The check also fails when a deck uses a hex color or a `var(--name)` that `tokens.json` does not know, and when the generated files are not what the build would write now. It runs in CI (`.github/workflows/tokens.yml` and `ci.yml`). The deck check needs only Node, no install. Colors that the decks use but that are not a clear token yet are listed in `untokenised` in `tokens.json`; they are not written to the CSS.
+The decks pick the new value up through `tokens.css`; nothing in a deck is edited. The check fails when a deck uses a hex colour that is not a token, a `var(--name)` that `tokens.css` does not define, a theme map of its own, a missing link to `tokens.css`, or a `data-variant` it is not listed for in `scripts/check.cjs`; and when the generated files are not what the build would write now. It runs in CI (`.github/workflows/tokens.yml` and `ci.yml`) and needs only Node, no install. The few colours the decks use that are not a clear token yet are listed under `$extensions` → `untokenised` in `tokens.json`; they are not written to the CSS, and each is a decision for the designers.
 
 ## Develop
 

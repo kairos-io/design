@@ -19,12 +19,12 @@ The decks in this repository are the design. A value or a component in the packa
 
 ## Adding or changing a token
 
-1. Edit `tokens.json`. A theme colour needs a value for light and for dark; a variant lists only the names it changes.
-2. `npm run build` in this directory (or `npm run build` at the repository root) regenerates `tokens.css` and `tailwind.css`. Commit them with `tokens.json`; CI checks they match and that every deck agrees.
+1. Edit `tokens.json` (W3C Design Tokens format: `$value`, `$type`, `{aliases}`). A theme colour needs a value under `themes.light` and `themes.dark`; a variant lists only the names it changes.
+2. `npm run build` in this directory (or `npm run build` at the repository root) regenerates `tokens.css`, `tailwind.css` and `src/tokens/resolved.json`. Commit them with `tokens.json`; CI checks they match and that every deck reads them.
 3. `npm test`. The token tests check both themes, the OS-preference block, the variants and the tone mapping; the contrast tests check the pairs the components put together.
 4. If the token is a colour, look at the Foundations/Color page: the contrast table is computed from the values.
 
-If a deck uses a colour that `tokens.json` does not have, `npm run check:tokens` fails until it does. Add it as a token, or under `untokenised` with a note, in the same pull request as the deck.
+The decks link `tokens.css` and paint with `var(--token)`. If a deck needs a colour that `tokens.json` does not have, `npm run check:tokens` fails until it does. Add it as a token, or under `$extensions.io.kairos.design.untokenised` with a note, in the same pull request as the deck.
 
 ## Adding a component
 
