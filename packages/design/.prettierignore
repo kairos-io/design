@@ -10,3 +10,5 @@ examples/react-vite/node_modules
 src/assets/patterns
 scripts/*.cjs
 src/assets/fonts/
+src/tokens/resolved.json
+tokens.json

@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 // Fails when the decks and the package differ.
-//  1. Every hex color in a deck exists in tokens.json.
-//  2. Every var(--name) in a deck is a token name.
-//  3. Every '--name': '#hex' pair in a deck theme map matches the base theme or a variant listed for that deck in DECK_VARIANTS.
-//     The base value is always allowed for every deck; that is intended, most decks use it.
-//  4. tokens.css and tailwind.css equal what scripts/build.js writes now.
+//  1. Every hex color in a deck exists in tokens.json (or is listed under untokenised).
+//  2. Every var(--name) in a deck is a name tokens.css defines.
+//  3. A deck links packages/design/tokens.css and carries no theme map of its own: it reads the tokens.
+//  4. A deck's data-variant values are the ones DECK_VARIANTS allows for it.
+//  5. tokens.css, tailwind.css and src/tokens/resolved.json equal what scripts/build.cjs writes now.
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { generate, loadTokens, root } = require('./build.cjs');
+const { generate, loadTokens, tokenNames, root } = require('./build.cjs');
 
 const repo = path.join(root, '..', '..');
 const t = loadTokens();
@@ -21,19 +21,18 @@ const norm = h => {
 // Known hex values and variable names.
 const known = new Set();
 const addHex = h => known.add(norm(h));
+Object.values(t.color.base).forEach(addHex);
 Object.values(t.color.brand).forEach(addHex);
 Object.values(t.color.status).forEach(addHex);
 Object.keys(t.untokenised.colors).forEach(addHex);
-const names = new Set(Object.keys(t.themes.light));
 for (const mode of ['light', 'dark']) {
   Object.values(t.themes[mode]).forEach(addHex);
   for (const v of Object.values(t.variants)) Object.values(v[mode]).forEach(addHex);
 }
-for (const v of Object.values(t.variants)) for (const mode of ['light', 'dark']) Object.keys(v[mode]).forEach(n => names.add(n));
+const names = tokenNames(t);
 
-// Which variants each deck is allowed to use, read from the decks' own theme maps.
-// A deck is checked against the base theme plus the variants listed here, and no others.
-// A deck with a theme map that is not listed fails, so a new deck must be added on purpose.
+// Which variants each deck may set with data-variant. A deck not listed here may set none.
+// A new deck that needs a variant is added on purpose.
 const DECK_VARIANTS = {
   'Kairos - Foundations.dc.html': ['foundations'],
   'Kairos - Naming.dc.html': [],
@@ -47,19 +46,9 @@ const DECK_VARIANTS = {
   'kairos.io Homepage.dc.html': ['site']
 };
 
-function allowed(mode, name, deck) {
-  const s = new Set([t.themes[mode][name]]);
-  for (const vn of DECK_VARIANTS[deck] || []) {
-    const v = t.variants[vn];
-    if (!v) errors.push(`check.js lists variant ${vn} for ${deck}, which tokens.json does not have`);
-    else if (v[mode][name]) s.add(v[mode][name]);
-  }
-  return [...s].filter(Boolean).map(norm);
-}
-
 const decks = fs.readdirSync(repo).filter(f => f.endsWith('.dc.html')).sort();
-for (const k of Object.keys(DECK_VARIANTS)) if (!decks.includes(k)) errors.push(`DECK_VARIANTS in check.js lists ${k}, but there is no such deck; renamed or deleted?`);
-const reportedUnlisted = new Set();
+for (const k of Object.keys(DECK_VARIANTS)) if (!decks.includes(k)) errors.push(`DECK_VARIANTS in check.cjs lists ${k}, but there is no such deck; renamed or deleted?`);
+for (const vs of Object.values(DECK_VARIANTS)) for (const vn of vs) if (!t.variants[vn]) errors.push(`check.cjs lists variant ${vn}, which tokens.json does not have`);
 const usedHex = new Set();
 for (const deck of decks) {
   const src = fs.readFileSync(path.join(repo, deck), 'utf8');
@@ -71,17 +60,13 @@ for (const deck of decks) {
   for (const m of new Set([...src.matchAll(/var\(\s*--([A-Za-z0-9_-]+)/g)].map(x => x[1]))) {
     if (!names.has(m)) errors.push(`${deck}: var(--${m}) is not a token name`);
   }
-  for (const map of src.matchAll(/\{[^{}]*'--bg'[^{}]*\}/g)) {
-    const pairs = [...map[0].matchAll(/'--([A-Za-z0-9-]+)'\s*:\s*'(#[0-9a-fA-F]{3,8})'/g)];
-    if (!(deck in DECK_VARIANTS)) {
-      if (!reportedUnlisted.has(deck)) { reportedUnlisted.add(deck); errors.push(`${deck}: has a theme map but is not listed in DECK_VARIANTS in check.js`); }
-      continue;
-    }
-    const bg = pairs.find(p => p[1] === 'bg');
-    const mode = bg && norm(bg[2]) === norm(t.themes.dark.bg) ? 'dark' : 'light';
-    for (const [, n, v] of pairs) {
-      if (!names.has(n)) errors.push(`${deck}: theme variable --${n} is not a token name`);
-      else if (!allowed(mode, n, deck).includes(norm(v))) errors.push(`${deck}: ${mode} --${n} is ${v}, tokens.json has ${allowed(mode, n, deck).join(' or ')}`);
+  if (!/<link[^>]+href="packages\/design\/tokens\.css"/.test(src)) errors.push(`${deck}: does not link packages/design/tokens.css`);
+  if (/\{[^{}]*'--bg'[^{}]*\}/.test(src)) errors.push(`${deck}: carries a theme map of its own; use data-theme and the tokens`);
+  const allowed = DECK_VARIANTS[deck] || [];
+  for (const m of new Set([...src.matchAll(/data-variant="([^"]*)"/g)].map(x => x[1]))) {
+    for (const vn of m.split(/\s+/).filter(Boolean)) {
+      if (!t.variants[vn]) errors.push(`${deck}: data-variant="${vn}" is not a variant in tokens.json`);
+      else if (!allowed.includes(vn)) errors.push(`${deck}: data-variant="${vn}" is not listed for this deck in DECK_VARIANTS in check.cjs`);
     }
   }
 }

@@ -48,17 +48,17 @@ const groups: { title: string; note: string; names: ThemeToken[] }[] = [
   {
     title: "Accent and links",
     note: "The one action that matters on a view and the active state. Ink on the accent is dark on Kairos orange and white on Hadron blue.",
-    names: ["accent", "accentSoft", "accentLine", "onAccent", "link"],
+    names: ["accent", "accent-soft", "accent-line", "on-accent", "link"],
   },
   {
     title: "Lines and status",
     note: "Hairlines and input borders, the healthy green for text, the warning tint, and the dialog scrim.",
-    names: ["line", "ok", "warnBg", "overlay"],
+    names: ["line", "ok", "warn-bg", "overlay"],
   },
   {
     title: "Code and the deep surface",
     note: "The terminal and code blocks keep a dark ground in both themes, with their own ink.",
-    names: ["deep", "code", "codeBar", "codeKey", "codeInk", "codeMuted"],
+    names: ["deep", "code", "code-bar", "code-key", "code-ink", "code-muted"],
   },
 ];
 
@@ -217,12 +217,12 @@ const pairs: Pair[] = [
   { label: "Labels and metadata on a surface", ink: "muted", surface: "surface" },
   { label: "Links on the page", ink: "link", surface: "bg" },
   { label: "Links on a surface", ink: "link", surface: "surface" },
-  { label: "Primary button label", ink: "onAccent", surface: "accent" },
+  { label: "Primary button label", ink: "on-accent", surface: "accent" },
   { label: "Accent as a line or large text on the page", ink: "accent", surface: "bg", large: true },
   { label: "Dark button label (bg on ink)", ink: "bg", surface: "ink" },
   { label: "Healthy text on the page", ink: "ok", surface: "bg" },
-  { label: "Terminal text", ink: "codeInk", surface: "code" },
-  { label: "Terminal bar text", ink: "codeMuted", surface: "codeBar" },
+  { label: "Terminal text", ink: "code-ink", surface: "code" },
+  { label: "Terminal bar text", ink: "code-muted", surface: "code-bar" },
 ];
 
 type Column = { label: string; mode: "light" | "dark"; variant?: Variant };

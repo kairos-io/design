@@ -264,7 +264,7 @@ export function SlideDivider({ number, title, brand = "kairos", ...props }: Slid
       notes="Section divider. Duplicate for each agenda item; change the number and title only."
       {...props}
     >
-      <SlideTiles brand={brand} left="52%" seed={11} radius={72} line="var(--accentSoft)" />
+      <SlideTiles brand={brand} left="52%" seed={11} radius={72} line="var(--accent-soft)" />
       <div className="absolute inset-0 flex flex-col justify-end gap-8 p-[110px_120px] text-on-accent">
         <span className="font-mono text-[34px]">{number}</span>
         <h2 className="m-0 max-w-[960px] text-[144px] font-semibold leading-[0.95] tracking-[-0.045em]">

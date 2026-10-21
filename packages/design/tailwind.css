@@ -15,23 +15,24 @@
   --color-sub: var(--sub);
   --color-muted: var(--muted);
   --color-accent: var(--accent);
-  --color-accent-soft: var(--accentSoft);
-  --color-accent-line: var(--accentLine);
-  --color-on-accent: var(--onAccent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+  --color-on-accent: var(--on-accent);
   --color-link: var(--link);
   --color-ok: var(--ok);
-  --color-warn-bg: var(--warnBg);
+  --color-warn-bg: var(--warn-bg);
   --color-deep: var(--deep);
   --color-code: var(--code);
-  --color-code-bar: var(--codeBar);
-  --color-code-key: var(--codeKey);
-  --color-code-ink: var(--codeInk);
-  --color-code-muted: var(--codeMuted);
+  --color-code-bar: var(--code-bar);
+  --color-code-key: var(--code-key);
+  --color-code-ink: var(--code-ink);
+  --color-code-muted: var(--code-muted);
   --color-overlay: var(--overlay);
 }
 
 @theme {
   /* Brand and status colors do not change with the theme. */
+  --color-white: #FFFFFF;
   --color-kairos-light: #FB9E70;
   --color-kairos-mid: #FF7442;
   --color-kairos-orange: #EE5007;

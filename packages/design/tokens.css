@@ -3,6 +3,7 @@
 /* Light is the default. Dark follows [data-theme="dark"], or the system setting when [data-theme] is not "light". */
 :root,
 [data-theme="light"] {
+  --white: #FFFFFF;
   --kairos-light: #FB9E70;
   --kairos-mid: #FF7442;
   --kairos-orange: #EE5007;
@@ -74,26 +75,26 @@
   --sub: #494656;
   --muted: #5C596A;
   --accent: #EE5007;
-  --accentSoft: #FB9E70;
-  --accentLine: #EE5007;
-  --onAccent: #1C1B24;
+  --accent-soft: #FB9E70;
+  --accent-line: #EE5007;
+  --on-accent: #1C1B24;
   --link: #A33600;
   --ok: #2F7A4C;
-  --warnBg: #FBEBD3;
+  --warn-bg: #FBEBD3;
   --deep: #1C1B24;
   --code: #1C1B24;
-  --codeBar: #272632;
-  --codeKey: #FB9E70;
-  --codeInk: #F2F1F5;
-  --codeMuted: #A9A6B8;
+  --code-bar: #272632;
+  --code-key: #FB9E70;
+  --code-ink: #F2F1F5;
+  --code-muted: #A9A6B8;
   --overlay: #1C1B2499;
   color-scheme: light;
 }
 
-/* variant: console. Console screens (Nodes, Node Detail, Build Artifact): a lighter hairline in the light theme. Nodes also uses the dark orange for accentSoft in the light theme. */
+/* variant: console. Console screens (Nodes, Node Detail, Build Artifact): a lighter hairline in the light theme. Nodes also uses the dark orange for accent-soft in the light theme. */
 [data-variant="console"] {
   --line: #DFDCE6;
-  --accentSoft: #A33600;
+  --accent-soft: #A33600;
 }
 
 /* variant: site. kairos.io and hadron-linux.io homepages: a darker raised surface in the dark theme. */
@@ -101,16 +102,16 @@
   --raised: #E6E4EC;
 }
 
-/* variant: hadron. hadron-linux.io: Hadron blue accent, white text on it, and the Hadron link colors. accentLine, accentSoft and codeKey are not set here, so they stay Kairos orange; no deck defines Hadron values for them. */
+/* variant: hadron. hadron-linux.io: Hadron blue accent, white text on it, and the Hadron link colors. accent-line, accent-soft and code-key are not set here, so they stay Kairos orange; no deck defines Hadron values for them. */
 [data-variant="hadron"] {
   --accent: #0275E7;
-  --onAccent: #FFFFFF;
+  --on-accent: #FFFFFF;
   --link: #0258B0;
 }
 
 /* variant: installer. Kairos Installer: a darker code bar in the dark theme. */
 [data-variant="installer"] {
-  --codeBar: #272632;
+  --code-bar: #272632;
 }
 
 /* variant: foundations. Foundations deck: a lighter hairline in the dark theme. */
@@ -131,18 +132,18 @@
   --sub: #CBC8D6;
   --muted: #A9A6B8;
   --accent: #FF7442;
-  --accentSoft: #FB9E70;
-  --accentLine: #FF7442;
-  --onAccent: #1C1B24;
+  --accent-soft: #FB9E70;
+  --accent-line: #FF7442;
+  --on-accent: #1C1B24;
   --link: #FF7442;
   --ok: #3FAF6E;
-  --warnBg: #33262E;
+  --warn-bg: #33262E;
   --deep: #0F0E15;
   --code: #0F0E15;
-  --codeBar: #1F1E28;
-  --codeKey: #FB9E70;
-  --codeInk: #F2F1F5;
-  --codeMuted: #A9A6B8;
+  --code-bar: #1F1E28;
+  --code-key: #FB9E70;
+  --code-ink: #F2F1F5;
+  --code-muted: #A9A6B8;
   --overlay: #0F0E15B3;
   color-scheme: dark;
 }
@@ -150,7 +151,7 @@
 [data-theme="dark"][data-variant="console"],
 [data-theme="dark"] [data-variant="console"]:not([data-theme="light"]) {
   --line: #33313F;
-  --accentSoft: #FB9E70;
+  --accent-soft: #FB9E70;
 }
 
 [data-theme="dark"][data-variant="site"],
@@ -161,13 +162,13 @@
 [data-theme="dark"][data-variant="hadron"],
 [data-theme="dark"] [data-variant="hadron"]:not([data-theme="light"]) {
   --accent: #0275E7;
-  --onAccent: #FFFFFF;
+  --on-accent: #FFFFFF;
   --link: #1BAAFF;
 }
 
 [data-theme="dark"][data-variant="installer"],
 [data-theme="dark"] [data-variant="installer"]:not([data-theme="light"]) {
-  --codeBar: #1C1B24;
+  --code-bar: #1C1B24;
 }
 
 [data-theme="dark"][data-variant="foundations"],
@@ -189,25 +190,25 @@
     --sub: #CBC8D6;
     --muted: #A9A6B8;
     --accent: #FF7442;
-    --accentSoft: #FB9E70;
-    --accentLine: #FF7442;
-    --onAccent: #1C1B24;
+    --accent-soft: #FB9E70;
+    --accent-line: #FF7442;
+    --on-accent: #1C1B24;
     --link: #FF7442;
     --ok: #3FAF6E;
-    --warnBg: #33262E;
+    --warn-bg: #33262E;
     --deep: #0F0E15;
     --code: #0F0E15;
-    --codeBar: #1F1E28;
-    --codeKey: #FB9E70;
-    --codeInk: #F2F1F5;
-    --codeMuted: #A9A6B8;
+    --code-bar: #1F1E28;
+    --code-key: #FB9E70;
+    --code-ink: #F2F1F5;
+    --code-muted: #A9A6B8;
     --overlay: #0F0E15B3;
     color-scheme: dark;
   }
   :root:not([data-theme="light"])[data-variant="console"],
   :root:not([data-theme="light"]) [data-variant="console"]:not([data-theme="light"]) {
     --line: #33313F;
-    --accentSoft: #FB9E70;
+    --accent-soft: #FB9E70;
   }
   :root:not([data-theme="light"])[data-variant="site"],
   :root:not([data-theme="light"]) [data-variant="site"]:not([data-theme="light"]) {
@@ -216,12 +217,12 @@
   :root:not([data-theme="light"])[data-variant="hadron"],
   :root:not([data-theme="light"]) [data-variant="hadron"]:not([data-theme="light"]) {
     --accent: #0275E7;
-    --onAccent: #FFFFFF;
+    --on-accent: #FFFFFF;
     --link: #1BAAFF;
   }
   :root:not([data-theme="light"])[data-variant="installer"],
   :root:not([data-theme="light"]) [data-variant="installer"]:not([data-theme="light"]) {
-    --codeBar: #1C1B24;
+    --code-bar: #1C1B24;
   }
   :root:not([data-theme="light"])[data-variant="foundations"],
   :root:not([data-theme="light"]) [data-variant="foundations"]:not([data-theme="light"]) {

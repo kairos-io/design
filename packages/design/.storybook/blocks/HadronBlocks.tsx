@@ -57,9 +57,9 @@ export function BrandCompare({ children }: { children?: ReactNode }) {
 
 const changed = Object.keys(variants.hadron.light) as ThemeToken[];
 const kept: ThemeToken[] = [
-  "accentLine",
-  "accentSoft",
-  "codeKey",
+  "accent-line",
+  "accent-soft",
+  "code-key",
   "bg",
   "surface",
   "line",

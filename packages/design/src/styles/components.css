@@ -110,7 +110,7 @@ kbd,
   border: 1.5px solid transparent;
   border-radius: var(--radius-base);
   background: var(--accent);
-  color: var(--onAccent);
+  color: var(--on-accent);
   font-size: 15px;
   font-weight: 700;
   line-height: 1.2;
@@ -123,8 +123,8 @@ kbd,
     border-color var(--duration-fast);
 }
 .btn:hover {
-  background: var(--accentSoft);
-  color: var(--onAccent);
+  background: var(--accent-soft);
+  color: var(--on-accent);
 }
 .btn:focus-visible {
   outline: 2px solid var(--ink);
@@ -544,7 +544,7 @@ input[type="checkbox"].toggle:checked::after {
 }
 .badge.primary {
   background: var(--accent);
-  color: var(--onAccent);
+  color: var(--on-accent);
 }
 .badge.primary::before {
   display: none;
@@ -999,7 +999,7 @@ input[type="checkbox"].toggle:checked::after {
 .rail button[aria-current="step"] .marker,
 .rail a[aria-current="page"] .marker {
   background: var(--accent);
-  color: var(--onAccent);
+  color: var(--on-accent);
 }
 .rail .step-title {
   display: block;
@@ -1169,7 +1169,7 @@ input[type="checkbox"].toggle:checked::after {
 .code {
   border-radius: var(--radius-base);
   background: var(--code);
-  color: var(--codeInk);
+  color: var(--code-ink);
   font-family: var(--font-mono);
   font-size: 13px;
   line-height: 1.8;
@@ -1186,8 +1186,8 @@ input[type="checkbox"].toggle:checked::after {
   justify-content: space-between;
   gap: 12px;
   padding: 8px 14px;
-  background: var(--codeBar);
-  color: var(--codeMuted);
+  background: var(--code-bar);
+  color: var(--code-muted);
   font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1.5;
@@ -1205,13 +1205,13 @@ input[type="checkbox"].toggle:checked::after {
 }
 .prompt,
 .code .key {
-  color: var(--codeKey);
+  color: var(--code-key);
 }
 .code .comment,
 .code .muted,
 .output-box .muted,
 .terminal .muted {
-  color: var(--codeMuted);
+  color: var(--code-muted);
 }
 .output-box .error,
 .terminal .error {
@@ -1227,8 +1227,8 @@ input[type="checkbox"].toggle:checked::after {
 .code.editor .gutter {
   padding: 16px 10px;
   text-align: right;
-  background: var(--codeBar);
-  color: var(--codeMuted);
+  background: var(--code-bar);
+  color: var(--code-muted);
   user-select: none;
 }
 .code.editor .lines {
@@ -1275,7 +1275,7 @@ input[type="checkbox"].toggle:checked::after {
 .disk-layout .state,
 .disk-layout .recovery,
 .disk-layout .persistent {
-  color: var(--onAccent);
+  color: var(--on-accent);
 }
 
 /* Pages without a rail: the progress and message pages. */

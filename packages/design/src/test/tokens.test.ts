@@ -54,10 +54,10 @@ describe("design tokens", () => {
   });
 
   it("puts dark ink on Kairos orange and white on Hadron blue", () => {
-    expect(themeLight.onAccent).toBe(themeLight.ink);
+    expect(themeLight["on-accent"]).toBe(themeLight.ink);
     expect(variants.hadron.light.accent).toBe(brand["hadron-blue"]);
-    expect(variants.hadron.light.onAccent).toBe("#FFFFFF");
-    expect(variants.hadron.dark.onAccent).toBe("#FFFFFF");
+    expect(variants.hadron.light["on-accent"]).toBe("#FFFFFF");
+    expect(variants.hadron.dark["on-accent"]).toBe("#FFFFFF");
   });
 
   it("writes every variant under data-variant in both themes", () => {
@@ -93,12 +93,12 @@ describe("design tokens", () => {
     expect(resolveTheme("dark")).toEqual(themeDark);
     const hadronLight = resolveTheme("light", "hadron");
     expect(hadronLight.accent).toBe(brand["hadron-blue"]);
-    expect(hadronLight.onAccent).toBe("#FFFFFF");
+    expect(hadronLight["on-accent"]).toBe("#FFFFFF");
     expect(hadronLight.link).toBe(variants.hadron.light.link);
     // Names the variant does not set keep the theme's value: these stay Kairos orange on purpose.
-    expect(hadronLight.accentSoft).toBe(themeLight.accentSoft);
-    expect(hadronLight.accentLine).toBe(themeLight.accentLine);
-    expect(hadronLight.codeKey).toBe(themeLight.codeKey);
+    expect(hadronLight["accent-soft"]).toBe(themeLight["accent-soft"]);
+    expect(hadronLight["accent-line"]).toBe(themeLight["accent-line"]);
+    expect(hadronLight["code-key"]).toBe(themeLight["code-key"]);
     expect(hadronLight.bg).toBe(themeLight.bg);
     const hadronDark = resolveTheme("dark", "hadron");
     expect(hadronDark.link).toBe(brand["hadron-sky"]);

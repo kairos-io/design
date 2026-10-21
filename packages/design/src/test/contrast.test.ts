@@ -67,17 +67,17 @@ const normalText: Pair[] = [
   ["bg on ink", "bg", "ink"],
   ["ok on bg", "ok", "bg"],
   ["ok on surface", "ok", "surface"],
-  ["codeInk on code", "codeInk", "code"],
-  ["codeMuted on codeBar", "codeMuted", "codeBar"],
+  ["code-ink on code", "code-ink", "code"],
+  ["code-muted on code-bar", "code-muted", "code-bar"],
 ];
 
 // Large or bold text and the accent used as a line: 3:1. The hairline
 // (--line) is decorative and sits at about 1.3:1 by design; inputs read
 // through the surface step, not the border.
 const largeOrLines: Pair[] = [
-  ["onAccent on accent", "onAccent", "accent"],
-  ["accentLine on bg", "accentLine", "bg"],
-  ["accentLine on surface", "accentLine", "surface"],
+  ["on-accent on accent", "on-accent", "accent"],
+  ["accent-line on bg", "accent-line", "bg"],
+  ["accent-line on surface", "accent-line", "surface"],
   ["accent on bg", "accent", "bg"],
   ["accent on surface", "accent", "surface"],
 ];
@@ -102,7 +102,7 @@ describe.each([
 
   it("ink on the Kairos accent passes AA for normal text", () => {
     if (variant === "hadron") return;
-    expect(on("onAccent", "accent")).toBeGreaterThanOrEqual(4.5);
+    expect(on("on-accent", "accent")).toBeGreaterThanOrEqual(4.5);
   });
 
   it("white on Hadron deep passes AA for normal text, the fix for small text on blue", () => {

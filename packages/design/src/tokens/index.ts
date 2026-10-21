@@ -5,7 +5,7 @@
 // tailwind.css from it, and scripts/check.js fails when a deck and the file
 // disagree. This module is a typed view of the same file, so a value here is
 // always the value the decks and the stylesheets carry.
-import data from "../../tokens.json" with { type: "json" };
+import data from "./resolved.json" with { type: "json" };
 
 export const tokens = data;
 export default tokens;
