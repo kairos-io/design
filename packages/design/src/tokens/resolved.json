@@ -213,7 +213,6 @@
       "#7A2800": "Talk Deck: dark orange text or fill",
       "#8B889A": "Installer: comment color in the cloud-config sample",
       "#6A6879": "Installer: muted text in the code sample",
-      "#3A2630": "Node Detail: fallback of var(--warn-bg), differs from the warn-bg dark value",
       "#E04848": "Node Detail: red, not the recovery red",
       "#FFF0E8": "Index and Console: pale orange tint",
       "#EEEDF2": "Foundations and Talk Deck: table row hairline"
