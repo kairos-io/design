@@ -29,7 +29,9 @@ export const AnnouncementBar = React.forwardRef<HTMLDivElement, AnnouncementBarP
     >
       {tag && <span className="font-mono text-xs text-accent-soft">{tag}</span>}
       <span>{children}</span>
-      {action && <span className="font-bold [&_a]:text-bg [&_a]:no-underline [&_a:hover]:underline">{action}</span>}
+      {action && (
+        <span className="font-bold [&_a]:text-bg [&_a]:no-underline [&_a:hover]:underline">{action}</span>
+      )}
     </div>
   ),
 );

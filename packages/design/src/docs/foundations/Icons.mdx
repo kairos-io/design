@@ -5,17 +5,18 @@ import { DoDont } from "../../../.storybook/blocks/index.ts";
 
 # Icons
 
-The apps use [Lucide](https://lucide.dev) through `lucide-react`: one stroke weight, a 24-unit grid, and a name for most things an infrastructure tool needs (`Server`, `Package`, `Rocket`, `KeyRound`). The package depends on it and the components use it for their own icons (the loading spinner, the dialog close, the select chevron).
+The console and the installer use [Lucide](https://lucide.dev) through `lucide-react`: one stroke weight, a 24-unit grid, and a name for most things an infrastructure tool needs (`Server`, `Package`, `Rocket`, `KeyRound`). The package depends on it and the components use it for their own icons (the loading spinner, the dialog close, the select chevron, the copy action). Status is not an icon: it is the diamond, drawn by `StatusDot`.
 
 ## Sizes
 
-- 16px (`size-4`) inside buttons, inputs, sidebar items, badges and table cells. The `Button` sets this on any SVG child.
-- 14px (`h-3.5 w-3.5`) for the info tooltip trigger and breadcrumb chevrons.
+- 16px (`size-4`) inside buttons, inputs, sidebar items and table cells. The `Button` sets this on any SVG child.
+- 14px (`h-3.5 w-3.5`) for the info tooltip trigger and breadcrumb chevrons; 12px in the terminal bar.
 - 40px (`h-10 w-10`) for the empty-state illustration, in muted ink.
+- The status diamond is 11px beside 14px text and 14px beside body copy.
 
 ## Colour
 
-Icons take `currentColor`. Next to text they inherit; alone in a tile they take a tone (`text-ok`) through the `toneText` map.
+Icons take `currentColor`. Next to text they inherit; alone in a tile they take a tone through the `toneText` map (`text-ok`, `text-status-recovery`, `text-link`). The warning amber is for a diamond or an icon beside ink text, never for a sentence: it does not pass as small text on a light surface.
 
 ## Labelling
 
@@ -28,7 +29,7 @@ An icon next to text is decorative: `aria-hidden="true"`. An icon that is the wh
         Pick the Lucide icon that names the object (a server, a package) or the action (download, rocket).
       </li>
       <li>
-        Keep one icon per meaning across the apps: nodes are <code>Server</code>, artifacts are{" "}
+        Keep one icon per meaning across the surfaces: nodes are <code>Server</code>, artifacts are{" "}
         <code>Package</code>.
       </li>
       <li>Pair an icon with a word wherever there is room.</li>
@@ -38,7 +39,7 @@ An icon next to text is decorative: `aria-hidden="true"`. An icon that is the wh
     <ul>
       <li>Mix icon sets, filled styles or emoji with Lucide.</li>
       <li>Scale an icon above 40px as decoration; use the mark or an illustration instead.</li>
-      <li>Colour an icon with a brand orange to draw attention. Use the primary button for that.</li>
+      <li>Colour an icon with the accent to draw attention. Use the accent button for that.</li>
     </ul>
   }
 />

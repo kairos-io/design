@@ -1,9 +1,12 @@
 import { render, screen } from "@testing-library/react";
+import { tilePalettes } from "../../lib/tiles.ts";
 import { Hero } from "./Hero.tsx";
 
 describe("Hero", () => {
   it("renders the headline as the page's h1 with the eyebrow and lede", () => {
-    render(<Hero eyebrow="Kairos · CNCF sandbox project" title="Bring any Linux." lede="Run it immutable." />);
+    render(
+      <Hero eyebrow="Kairos · CNCF sandbox project" title="Bring any Linux." lede="Run it immutable." />,
+    );
     expect(screen.getByRole("heading", { level: 1, name: "Bring any Linux." })).toBeInTheDocument();
     expect(screen.getByText("Kairos · CNCF sandbox project")).toBeInTheDocument();
     expect(screen.getByText("Run it immutable.")).toBeInTheDocument();
@@ -18,7 +21,7 @@ describe("Hero", () => {
 
   it("paints the Hadron palette when asked", () => {
     const { container } = render(<Hero title="x" palette="hadron" />);
-    expect(container.innerHTML).toContain("var(--hadron-blue)");
-    expect(container.innerHTML).not.toContain("var(--kairos-orange)");
+    expect(container.innerHTML).toContain(tilePalettes.hadron[1]);
+    expect(container.innerHTML).not.toContain(tilePalettes.kairos[2]);
   });
 });

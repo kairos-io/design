@@ -44,12 +44,18 @@ export interface SiteSectionProps
 export const SiteSection = React.forwardRef<HTMLElement, SiteSectionProps>(
   ({ tone, padding = "base", as: Tag = "section", className, innerClassName, children, ...props }, ref) => {
     const inner = (
-      <div className={cn("mx-auto w-full max-w-(--page-max) px-4 sm:px-8", paddings[padding], innerClassName)}>
+      <div
+        className={cn("mx-auto w-full max-w-(--page-max) px-4 sm:px-8", paddings[padding], innerClassName)}
+      >
         {children}
       </div>
     );
     return (
-      <Tag ref={ref as React.Ref<HTMLDivElement>} className={cn(sectionVariants({ tone }), className)} {...props}>
+      <Tag
+        ref={ref as React.Ref<HTMLDivElement>}
+        className={cn(sectionVariants({ tone }), className)}
+        {...props}
+      >
         {tone === "deep" ? (
           <div data-theme="dark" className="text-ink">
             {inner}
@@ -63,7 +69,7 @@ export const SiteSection = React.forwardRef<HTMLElement, SiteSectionProps>(
 );
 SiteSection.displayName = "SiteSection";
 
-export interface SectionHeadingProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface SectionHeadingProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   /** A mono line above the title: a kicker such as "Start here". */
   eyebrow?: React.ReactNode;
   title: React.ReactNode;
@@ -80,11 +86,7 @@ export const SectionHeading = React.forwardRef<HTMLDivElement, SectionHeadingPro
   ({ eyebrow, title, lede, action, level = 2, className, ...props }, ref) => {
     const Heading: "h2" | "h3" = level === 2 ? "h2" : "h3";
     return (
-      <div
-        ref={ref}
-        className={cn("flex flex-wrap items-end justify-between gap-6", className)}
-        {...props}
-      >
+      <div ref={ref} className={cn("flex flex-wrap items-end justify-between gap-6", className)} {...props}>
         <div className="flex max-w-[640px] flex-col gap-3">
           {eyebrow && <span className="font-mono text-xs text-accent-soft">{eyebrow}</span>}
           <Heading

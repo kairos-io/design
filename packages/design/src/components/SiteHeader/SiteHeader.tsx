@@ -29,11 +29,7 @@ export interface SiteHeaderProps extends React.HTMLAttributes<HTMLElement> {
  */
 export const SiteHeader = React.forwardRef<HTMLElement, SiteHeaderProps>(
   ({ logo, links = [], actions, bordered = false, navLabel = "Primary", className, ...props }, ref) => (
-    <header
-      ref={ref}
-      className={cn("w-full", bordered && "border-b border-line", className)}
-      {...props}
-    >
+    <header ref={ref} className={cn("w-full", bordered && "border-b border-line", className)} {...props}>
       <div className="mx-auto flex w-full max-w-(--page-max) flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-4 sm:px-8">
         <div className="flex flex-wrap items-center gap-x-10 gap-y-3">
           <div className="flex shrink-0 items-center">{logo}</div>

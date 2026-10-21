@@ -10,7 +10,10 @@ export interface TerminalLine {
   prompt?: boolean;
 }
 
-export interface TerminalProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children" | "title" | "onCopy"> {
+export interface TerminalProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  "children" | "title" | "onCopy"
+> {
   /** The lines to show; strings are plain lines. */
   lines: Array<string | TerminalLine>;
   /** Keeps the newest line in view as lines arrive. */
@@ -40,7 +43,16 @@ function normalise(line: string | TerminalLine): TerminalLine {
  */
 export const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
   (
-    { lines, autoscroll = true, maxHeight = "70vh", title = "terminal", copy = false, onCopy, className, ...props },
+    {
+      lines,
+      autoscroll = true,
+      maxHeight = "70vh",
+      title = "terminal",
+      copy = false,
+      onCopy,
+      className,
+      ...props
+    },
     ref,
   ) => {
     const inner = React.useRef<HTMLDivElement | null>(null);
@@ -92,7 +104,11 @@ export const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
                 onClick={handleCopy}
                 className="inline-flex items-center gap-1.5 rounded-sm font-mono text-xs text-code-muted transition-colors hover:text-code-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-code-ink"
               >
-                {copied ? <Check className="h-3 w-3" aria-hidden="true" /> : <Copy className="h-3 w-3" aria-hidden="true" />}
+                {copied ? (
+                  <Check className="h-3 w-3" aria-hidden="true" />
+                ) : (
+                  <Copy className="h-3 w-3" aria-hidden="true" />
+                )}
                 {copied ? "copied" : "copy"}
               </button>
             )}

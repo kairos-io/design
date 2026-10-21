@@ -44,11 +44,19 @@ export const Phases: Story = {
   name: "Phases, mapped to looks",
   render: () => (
     <div className="flex flex-wrap items-center gap-1.5">
-      {["Online", "Ready", "Pending", "Degraded", "Failed", "Running", "Building", "Provisioning", "Expired"].map(
-        (phase) => (
-          <StatusBadge key={phase} status={phase} />
-        ),
-      )}
+      {[
+        "Online",
+        "Ready",
+        "Pending",
+        "Degraded",
+        "Failed",
+        "Running",
+        "Building",
+        "Provisioning",
+        "Expired",
+      ].map((phase) => (
+        <StatusBadge key={phase} status={phase} />
+      ))}
     </div>
   ),
 };

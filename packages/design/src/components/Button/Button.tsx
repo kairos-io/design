@@ -10,19 +10,22 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         /** The one action that matters: the accent with dark ink on it. "Download ISO". */
-        default: "bg-accent font-bold text-on-accent hover:bg-accent-soft disabled:bg-raised disabled:text-muted",
+        default:
+          "bg-accent font-bold text-on-accent hover:bg-accent/85 disabled:bg-raised disabled:text-muted",
         /** The dark button: ink with the page colour on it. "Read the docs". */
         dark: "bg-ink font-semibold text-bg hover:bg-deep disabled:bg-raised disabled:text-muted",
         /** The same as dark; the name the first release used. */
         secondary: "bg-ink font-semibold text-bg hover:bg-deep disabled:bg-raised disabled:text-muted",
         /** A 1.5px ink hairline, no fill. "GitHub". */
-        outline: "border-[1.5px] border-ink bg-transparent font-semibold text-ink hover:bg-hover disabled:border-line disabled:text-muted",
+        outline:
+          "border-[1.5px] border-ink bg-transparent font-semibold text-ink hover:bg-hover disabled:border-line disabled:text-muted",
         /** No chrome until hovered: toolbars, table rows. */
         ghost: "font-semibold text-ink hover:bg-hover disabled:text-muted",
         /** An inline action in the link colour. "Learn more →". */
         link: "px-1.5 font-semibold text-link hover:text-accent disabled:text-muted",
         /** Loses data: the recovery red with white on it. "Reset node". */
-        destructive: "bg-status-recovery font-semibold text-status-ink hover:bg-status-recovery/90 disabled:bg-raised disabled:text-muted",
+        destructive:
+          "bg-status-recovery font-semibold text-status-ink hover:bg-status-recovery/90 disabled:bg-raised disabled:text-muted",
         "destructive-outline":
           "border-[1.5px] border-status-recovery bg-transparent font-semibold text-status-recovery hover:bg-hover disabled:border-line disabled:text-muted",
         /** @deprecated The sidebar is no longer navy; use ghost. Kept for callers of the first release. */

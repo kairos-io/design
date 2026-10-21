@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn.ts";
-import { StatusDiamond } from "../StatusDiamond/StatusDiamond.tsx";
+import { StatusDot } from "../StatusDot/StatusDot.tsx";
 
 export interface ChoiceCardProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "title" | "onSelect"> {
   title: React.ReactNode;
@@ -41,12 +41,7 @@ export const ChoiceCard = React.forwardRef<HTMLButtonElement, ChoiceCardProps>(
       <span className="flex items-center justify-between gap-2 text-base font-bold text-ink">
         <span className="flex min-w-0 items-center gap-2">
           {diamond && (
-            <StatusDiamond
-              size={11}
-              tone="info"
-              outline={!selected}
-              className={cn("stroke-ink", !selected && "fill-none")}
-            />
+            <StatusDot size={11} tone="info" outline={!selected} className="stroke-ink" />
           )}
           <span className="min-w-0">{title}</span>
         </span>

@@ -20,11 +20,11 @@ const meta = {
     required: { control: "boolean" },
   },
   args: {
-    id: "device",
-    label: "Install device",
-    help: "“auto” picks the largest disk on the machine.",
+    id: "hostname",
+    label: "Hostname",
+    help: "Lowercase, digits and dashes.",
     required: false,
-    children: <Input placeholder="auto" />,
+    children: <Input mono defaultValue="edge-store-0142" />,
   },
 } satisfies Meta<typeof Field>;
 
@@ -34,7 +34,13 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const WithError: Story = {
-  args: { error: "Choose a device, or leave “auto”.", children: <Input defaultValue="/dev/nope" /> },
+  args: {
+    id: "disk",
+    label: "Target disk",
+    help: undefined,
+    error: "Disk will be wiped.",
+    children: <Input mono defaultValue="/dev/nvme0n1" />,
+  },
 };
 
 export const Required: Story = {
@@ -46,6 +52,6 @@ export const WithTextarea: Story = {
     id: "cloud-config",
     label: "Cloud config",
     help: "YAML, starting with #cloud-config.",
-    children: <Textarea className="font-mono" rows={5} defaultValue={"#cloud-config\nhostname: edge-01"} />,
+    children: <Textarea mono rows={5} defaultValue={"#cloud-config\nhostname: edge-store-0142"} />,
   },
 };

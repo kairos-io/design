@@ -9,6 +9,7 @@
 @source "../src/components";
 @source "../src/lib";
 @source "../src/docs";
+@source "../src/pages";
 @source "./blocks";
 @source "./preview.tsx";
 

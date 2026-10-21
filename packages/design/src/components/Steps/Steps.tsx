@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn.ts";
-import { StatusDiamond } from "../StatusDiamond/StatusDiamond.tsx";
+import { StatusDot } from "../StatusDot/StatusDot.tsx";
 
 export type StepState = "pending" | "active" | "done" | "failed";
 
@@ -46,7 +46,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(({ items, cl
           aria-current={item.state === "active" ? "step" : undefined}
           className={cn("flex items-center gap-2.5 px-1 py-[7px] text-sm", rowStyles[item.state])}
         >
-          <StatusDiamond
+          <StatusDot
             size={11}
             tone={item.state === "done" ? "success" : item.state === "failed" ? "danger" : item.state === "active" ? "info" : "neutral"}
             outline={item.state === "pending"}

@@ -1,23 +1,40 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-variant="installer">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Kairos web installer</title>
+    <title>Kairos Installer</title>
     <link rel="stylesheet" href="/tokens.css" />
     <link rel="stylesheet" href="/components.css" />
   </head>
   <body>
-    <main class="container narrow">
-      <section class="card">
-        <h2 class="card-title">Install Kairos</h2>
-        <ul class="steps">
-          <li class="done"><span class="marker">✓</span><span>Partitioning disk</span></li>
-          <li class="active"><span class="marker">▶</span><span>Installing active system</span></li>
-          <li><span class="marker"></span><span>Configuring bootloader</span></li>
-        </ul>
-        <p class="card-actions"><button class="btn" type="button">Reboot</button></p>
-      </section>
-    </main>
+    <div class="page">
+      <header class="topbar">
+        <span class="brand">Kairos <b>Installer</b></span>
+        <div class="meta">
+          <span class="tag surface">192.168.1.42:8080</span><span class="tag surface">live media</span>
+        </div>
+      </header>
+      <main class="container narrow">
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">Step 4 of 4</p>
+            <h1>Installing</h1>
+            <p class="description">The machine reboots into Hadron when this finishes.</p>
+          </div>
+        </header>
+        <section class="card form-card">
+          <div class="progress-head">
+            <span>Writing image to /dev/nvme0n1</span><span class="pct">68%</span>
+          </div>
+          <ul class="steps">
+            <li class="done"><span class="marker"></span><span>Partitioning disk</span></li>
+            <li class="active"><span class="marker"></span><span>Installing active system</span></li>
+            <li><span class="marker"></span><span>Configuring bootloader</span></li>
+          </ul>
+          <div class="card-actions"><button class="btn lg" type="button">Reboot now</button></div>
+        </section>
+      </main>
+    </div>
   </body>
 </html>

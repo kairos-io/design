@@ -32,7 +32,12 @@ function fontFaces(): string {
 }
 
 /** A complete HTML document: the page's own markup with the stylesheets inline. */
-export function vanillaPage(body: string, theme: "light" | "dark", variant?: string, title = "Kairos"): string {
+export function vanillaPage(
+  body: string,
+  theme: "light" | "dark",
+  variant?: string,
+  title = "Kairos",
+): string {
   const variantAttr = variant ? ` data-variant="${variant}"` : "";
   return `<!DOCTYPE html>
 <html lang="en" data-theme="${theme}"${variantAttr}>

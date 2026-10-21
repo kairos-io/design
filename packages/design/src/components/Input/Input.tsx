@@ -16,17 +16,19 @@ export const inputClasses =
  * when invalid. Pair it with Label, or use Field for label, help and error
  * together.
  */
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type, mono, ...props }, ref) => (
-  <input
-    type={type}
-    className={cn(
-      inputClasses,
-      "file:mr-3 file:border-0 file:bg-transparent file:text-sm file:font-semibold file:text-ink",
-      mono && "font-mono text-[13px]",
-      className,
-    )}
-    ref={ref}
-    {...props}
-  />
-));
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, mono, ...props }, ref) => (
+    <input
+      type={type}
+      className={cn(
+        inputClasses,
+        "file:mr-3 file:border-0 file:bg-transparent file:text-sm file:font-semibold file:text-ink",
+        mono && "font-mono text-[13px]",
+        className,
+      )}
+      ref={ref}
+      {...props}
+    />
+  ),
+);
 Input.displayName = "Input";

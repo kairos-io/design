@@ -22,9 +22,27 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const stages = [
-  { stage: "Build", tone: 0, name: "Factory", job: "Kairosify any image: add kairos-init to your Dockerfile.", cmd: "RUN /kairos-init" },
-  { stage: "Deploy", tone: 1, name: "Installer", job: "Configure and install from live media in a browser.", cmd: "http://node:8080" },
-  { stage: "Operate", tone: 2, name: "Operator", job: "Day-2 upgrades as Kubernetes resources.", cmd: "kubectl apply -f nodeop.yaml" },
+  {
+    stage: "Build",
+    tone: 0,
+    name: "Factory",
+    job: "Kairosify any image: add kairos-init to your Dockerfile.",
+    cmd: "RUN /kairos-init",
+  },
+  {
+    stage: "Deploy",
+    tone: 1,
+    name: "Installer",
+    job: "Configure and install from live media in a browser.",
+    cmd: "http://node:8080",
+  },
+  {
+    stage: "Operate",
+    tone: 2,
+    name: "Operator",
+    job: "Day-2 upgrades as Kubernetes resources.",
+    cmd: "kubectl apply -f nodeop.yaml",
+  },
 ] as const;
 
 export const Stages: Story = {

@@ -19,6 +19,8 @@ No build step and no network, so it takes the plain stylesheets.
 
 Gains: the installer can never drift from the console again, and the Kairos Installer deck is what it looks like.
 
+What changed in `components.css` compared with the installer's own stylesheet, for the review: `.badge` and `.status` are surface chips with a tone diamond (`.tone-*` colours the diamond, `.outline` draws it hollow), never a tinted fill; `.banner`, `.alert` and `.confirm` are surfaces with a diamond; `.btn.secondary` is the ink button and `.btn.outline` a 1.5px ink hairline, both at the deck's 15px; `.card` has no border; `.sidebar` and `.topbar` are the canvas with a hairline; inputs are mono on a surface with a 1.5px line that turns to ink on focus; `.choice` is a surface card with an ink border when selected. New: `.tag`, `.segmented`, `.toggle`, `.kv`, `.callout`, `.tilebar`, `.terminal`, `.code.editor`, `.disk-layout`, `.stat-label` and `.stat-value`. The Pages/Kairos Installer stories render each step from these two files alone.
+
 ## The Kairos console ([#5514](https://github.com/kairos-io/kairos/issues/5514))
 
 AuroraBoot's UI becomes the Kairos console. It is React 19 on Tailwind v4 already, so the move is a rename plus deletion.

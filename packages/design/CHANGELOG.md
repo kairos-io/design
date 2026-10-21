@@ -4,6 +4,17 @@ All notable changes to `@kairos-io/design`. The format is [Keep a Changelog](htt
 
 ## [Unreleased]
 
+### Added
+
+- Pages: the decks' screens built from the components, under "Pages" in the Storybook. The Kairos console (Fleet › Nodes, Fleet › Node detail, Factory › Build artifact), the kairos.io homepage, the hadron-linux.io homepage, the Docs product page, the Kairos Installer's steps (real pages in an iframe from `tokens.css` and `components.css` alone) and the talk deck's layouts.
+- Site components from the homepage and docs decks: `AnnouncementBar`, `SiteHeader`, `SiteFooter`, `Hero` (with the right-edge tile field, in either palette), `SiteSection` and `SectionHeading`, `FeatureGrid` and `FeatureCell`, `CommandSample`, `DocsNav` and `DocsToc`. The deep section and the footer nest `data-theme="dark"`, so they read the dark tokens in both page themes; the L1 / L2 / L3 track is `SegmentedControl` with `code`.
+- `Slide` and the layouts of the talk deck (`SlideTitle`, `SlideSpeaker`, `SlideAgenda`, `SlideDivider`, `SlideStatement`, `SlideList`, `SlideTerminal`, `SlideCode`, `SlideLifecycle`, `SlideTable`, `SlideNumber`, `SlideImage`, `SlideScreenshot`, `SlideQuote`, `SlideDemo`, `SlideClosing`), a 1920×1080 frame scaled to its container, light mode only, with `brand="hadron"` for a Hadron talk.
+- `HadronMark` and `HadronLogo`, the Hadron artwork from the decks under `assets/logos/hadron-*`, and `hadronLogoAssets`. The Kairos lockup gains a `dark` rendition (colour mark, white wordmark, the decks' dark-surface logo) and `logoAssets.horizontal.dark`.
+- Foundations/Hadron: what the variant changes and keeps, the three blues, the contrast rule, the Hadron tiles, when a screen is Hadron, and the same components under both brands. Foundations/Naming: the Naming deck as a docs page.
+- `applyBrand()`, `getBrand()` and the `Brand` type set and read `data-variant="hadron"` on `<html>`, the way `applyTheme` does `data-theme`; `resolveThemeTokens(mode, variant)` returns the token values an element under a theme and a variant reads.
+- The Storybook toolbar has a Brand switch (Kairos, Hadron) beside the theme switch; the contrast table and the contrast tests cover every pair in both themes as Kairos and as Hadron, and a test fails the build when a component names a brand colour instead of the accent.
+- `phaseLook()` maps a phase to the deck's five status looks (Healthy filled green, Upgrading filled accent, Recovery filled red, Installing accent outline, Offline muted outline); `toneFill` and `toneStroke`. `CardLabel` and `CardValue` for the deck's stat tile. `inputClasses` is exported.
+
 ### Changed
 
 - The package moved into `kairos-io/design` as `packages/design`, next to the design decks, and merged with the tokens package that landed there (kairos-io/kairos#5511). `tokens.json` is now the only token source; `src/tokens/index.ts` is a typed view of it. The generator and the deck check are the repository's, extended with the status warning amber and the ink on a status fill, the terminal inks (`codeInk`, `codeMuted`), the dialog scrim (`overlay`), the 2 / 4 / 8 / full radius steps and the motion tokens. See ADR 0003.
@@ -14,6 +25,14 @@ All notable changes to `@kairos-io/design`. The format is [Keep a Changelog](htt
 - The Tailwind entry is `@kairos-io/design/tailwind.css` (it imports `tokens.css`); `theme.css` is gone. `tokens.css`, `tailwind.css` and `tokens.json` are exported from the package root as well as from `dist/`.
 - The tones map onto the decks' status colours: success is `status-healthy` with `ok` ink, warning `status-warning`, danger `status-recovery`, info the accent with `link` ink, neutral `muted`. Badges and dots draw a diamond, as the decks do.
 - The Storybook is published under `/storybook/` of the repository's Pages site, next to the decks, and the packed tarball under `/packages/design/` so a branch build can be installed with `npm install <url>`.
+- Button follows the Foundations deck: the accent with dark ink (bold, 15px, 11×18 padding), a new `dark` variant (the ink button; `secondary` is its alias), a 1.5px ink `outline`, `link` in the link colour, `destructive` in the recovery red; focus is a 2px ink outline, disabled is the raised fill with muted ink. `on-navy` is deprecated (use `ghost`).
+- Card has no border or shadow; `bordered` adds a hairline. Input, Textarea and the Select trigger share one look: a surface with a 1.5px hairline that turns to ink on focus and recovery red when invalid; `mono` sets Martian Mono at 13px for technical values.
+- StatusDot is the deck's diamond (SVG), filled or `outline`d in its tone; StatusBadge is a surface chip with the diamond and ink text, never tinted, with `outline` and `bare`. `toneSoft` is deprecated.
+- Badge is the deck's tag: mono 12px on the raised fill with a 2px radius, `outline` for a hairline, `accent` for a count; `default` is no longer the accent. Chip matches, with an `outline` prop.
+- Tabs are a row on a hairline, 15px semibold, the active tab underlined in the accent line. SegmentedControl is the raised track with the chosen option on the surface; options take a mono `code` ("L1") and `fill` spreads them evenly.
+- Terminal is the deck's code block: a bar with a `title` and an optional `copy` action, `prompt` lines with "$" in the key colour, `codeInk` and `codeMuted` text. Alert is the deck's callout: a surface with a tone diamond, a bold lead in the same line and a link-coloured `action`; the default tone is `info`. Label is 14px semibold; InfoTooltip's panel is a surface with a 1.5px hairline and link-coloured links.
+- `components.css` draws the decks: 16px body, links in `--link`, buttons at 15px/700 with the accent, ink, outline and link variants, 1.5px input borders with ink on focus, mono inputs, diamond checkboxes and radios, a `.toggle` switch, status as a diamond beside ink text on a surface chip, `.tag` chips in mono on raised with a 2px radius, callouts as a surface with a diamond in the margin, the step rail with tile markers, a `.tilebar` progress bar in the tile order, a `.terminal` and `.code.editor` on the code ground, a `.disk-layout` bar, a `.segmented` control, and the 2px ink focus ring. No shadows, no tinted fills.
+- Foundations/Brand covers both marks, the lockup rules from the Naming deck and the "never" list from the Foundations deck; the logo generator reads every SVG shape tag, not only rect and path.
 
 ### Planned
 

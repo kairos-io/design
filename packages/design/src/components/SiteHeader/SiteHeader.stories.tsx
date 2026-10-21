@@ -37,9 +37,7 @@ const meta = {
         >
           ★ GitHub
         </a>
-        <Button className="bg-ink text-bg hover:bg-ink/90" size="lg">
-          Quick start
-        </Button>
+        <Button variant="dark">Quick start</Button>
       </>
     ),
   },

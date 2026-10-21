@@ -10,7 +10,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "One choice from two to five short options, shown all at once: an architecture, an output format, a boot mode. It is a radio group: arrow keys move the choice and skip disabled options. Longer lists go in a Select.",
+          "One choice from two to five short options, shown all at once on a raised track with the chosen one lifted to the surface: the docs' level picker, an architecture, an output format. It is a radio group: arrow keys move the choice and skip disabled options. Longer lists go in a Select.",
       },
     },
   },
@@ -23,6 +23,13 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+type Level = "l1" | "l2" | "l3";
+const levels: SegmentedOption<Level>[] = [
+  { value: "l1", label: "Guided", code: "L1" },
+  { value: "l2", label: "Automate", code: "L2" },
+  { value: "l3", label: "Extend", code: "L3" },
+];
+
 type Arch = "amd64" | "arm64" | "riscv64";
 const archOptions: SegmentedOption<Arch>[] = [
   { value: "amd64", label: "amd64", hint: "x86-64 servers and VMs" },
@@ -34,6 +41,8 @@ function Controlled<T extends string>(props: {
   options: SegmentedOption<T>[];
   initial: T;
   "aria-label": string;
+  fill?: boolean;
+  className?: string;
 }) {
   const [value, setValue] = useState<T>(props.initial);
   return (
@@ -42,19 +51,31 @@ function Controlled<T extends string>(props: {
       onChange={(v) => setValue(v)}
       options={props.options}
       aria-label={props["aria-label"]}
+      fill={props.fill}
+      className={props.className}
     />
   );
 }
 
 export const Default: Story = {
-  args: { value: "amd64", onChange: () => {}, options: archOptions, "aria-label": "Architecture" },
-  render: () => <Controlled options={archOptions} initial="amd64" aria-label="Architecture" />,
+  name: "The docs' level picker",
+  args: { value: "l1", onChange: () => {}, options: levels, "aria-label": "Docs level" },
+  render: () => <Controlled options={levels} initial="l1" aria-label="Docs level" className="max-w-md" />,
 };
 
-export const WithoutHints: Story = {
+export const WithHints: Story = {
+  args: { value: "amd64", onChange: () => {}, options: archOptions, "aria-label": "Architecture" },
+  render: () => (
+    <Controlled options={archOptions} initial="amd64" aria-label="Architecture" className="max-w-lg" />
+  ),
+};
+
+export const Compact: Story = {
+  name: "Own widths",
   args: { value: "iso", onChange: () => {}, options: [], "aria-label": "Output" },
   render: () => (
     <Controlled
+      fill={false}
       options={[
         { value: "iso", label: "ISO" },
         { value: "raw", label: "Raw disk" },

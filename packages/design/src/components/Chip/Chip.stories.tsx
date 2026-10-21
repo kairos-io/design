@@ -10,11 +10,11 @@ const meta = {
     docs: {
       description: {
         component:
-          "A compact token for a node label, an active filter or a file name. Removable chips carry a labelled remove button. For a status, use StatusBadge; for a count or a category, Badge.",
+          "A compact token for a node label, an active filter or a file name: the deck's tag (mono, 12px, raised or outlined, a 2px radius) with an optional remove button. For a status, use StatusBadge; for a static version or group, Badge.",
       },
     },
   },
-  args: { children: "site=rack2", selected: false, mono: true },
+  args: { children: "group: retail-eu", selected: false, mono: true, outline: false },
 } satisfies Meta<typeof Chip>;
 
 export default meta;
@@ -22,12 +22,16 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
+export const Outline: Story = {
+  args: { outline: true },
+};
+
 export const Removable: Story = {
   args: { onRemove: () => {} },
 };
 
 export const Selected: Story = {
-  args: { selected: true, children: "phase:online" },
+  args: { selected: true, children: "phase: healthy" },
 };
 
 export const Labels: Story = {
@@ -37,7 +41,7 @@ export const Labels: Story = {
       "site=rack2",
       "role=worker",
       "gpu=true",
-      "kairos.io/version=v3.6.0",
+      "kairos.io/version=v0.5.1",
     ]);
     return (
       <div className="flex max-w-md flex-wrap gap-1.5">
@@ -55,10 +59,10 @@ export const Labels: Story = {
 export const Filters: Story = {
   name: "Filter chips (toggle)",
   render: () => {
-    const phases = ["online", "offline", "building", "pending"];
-    const [active, setActive] = useState<string[]>(["online"]);
+    const phases = ["healthy", "upgrading", "installing", "offline"];
+    const [active, setActive] = useState<string[]>(["healthy"]);
     return (
-      <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter by phase">
+      <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter by state">
         {phases.map((p) => {
           const on = active.includes(p);
           return (
@@ -67,7 +71,7 @@ export const Filters: Story = {
               type="button"
               aria-pressed={on}
               onClick={() => setActive((prev) => (on ? prev.filter((x) => x !== p) : [...prev, p]))}
-              className="rounded-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+              className="rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
             >
               <Chip selected={on} mono={false}>
                 {p}

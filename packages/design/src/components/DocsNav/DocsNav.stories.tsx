@@ -15,7 +15,10 @@ const meta = {
   },
   args: {
     groups: [
-      { title: "Start here", items: ["Quick start", "Choose your path", "Glossary"].map((l) => ({ label: l, href: `#${l}` })) },
+      {
+        title: "Start here",
+        items: ["Quick start", "Choose your path", "Glossary"].map((l) => ({ label: l, href: `#${l}` })),
+      },
       {
         title: "Products",
         items: ["Factory", "Console", "Installer", "Operator", "Lab"].map((l) => ({
@@ -24,8 +27,17 @@ const meta = {
           current: l === "Console",
         })),
       },
-      { title: "Runs on", items: ["Hadron", "Kairos on Ubuntu", "Bring your own base"].map((l) => ({ label: l, href: `#${l}` })) },
-      { title: "Reference", items: ["Configuration", "kairos CLI", "Architecture"].map((l) => ({ label: l, href: `#${l}` })) },
+      {
+        title: "Runs on",
+        items: ["Hadron", "Kairos on Ubuntu", "Bring your own base"].map((l) => ({
+          label: l,
+          href: `#${l}`,
+        })),
+      },
+      {
+        title: "Reference",
+        items: ["Configuration", "kairos CLI", "Architecture"].map((l) => ({ label: l, href: `#${l}` })),
+      },
     ],
   },
 } satisfies Meta<typeof DocsNav>;

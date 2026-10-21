@@ -3,7 +3,7 @@ import { cn } from "../../lib/cn.ts";
 import { TileField, type TileFieldProps } from "../Tiles/TileField.tsx";
 import type { PaletteProp } from "../Tiles/shared.ts";
 
-export interface HeroProps extends React.HTMLAttributes<HTMLElement>, PaletteProp {
+export interface HeroProps extends Omit<React.HTMLAttributes<HTMLElement>, "title">, PaletteProp {
   /** The mono line above the title: "Kairos · CNCF sandbox project". */
   eyebrow?: React.ReactNode;
   /** The headline. One or two lines; use <br /> for the break the deck sets. */

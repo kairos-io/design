@@ -14,25 +14,26 @@ export interface SelectTriggerProps extends React.ComponentPropsWithoutRef<typeo
 }
 
 /** The trigger is drawn like Input: a surface with a 1.5px hairline that turns to ink while open or focused. */
-export const SelectTrigger = React.forwardRef<React.ComponentRef<typeof SelectPrimitive.Trigger>, SelectTriggerProps>(
-  ({ className, children, mono, ...props }, ref) => (
-    <SelectPrimitive.Trigger
-      ref={ref}
-      className={cn(
-        inputClasses,
-        "flex items-center justify-between gap-2 whitespace-nowrap text-left data-[state=open]:border-ink data-[placeholder]:text-muted [&>span]:line-clamp-1",
-        mono && "font-mono text-[13px]",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-      <SelectPrimitive.Icon asChild>
-        <ChevronDown className="h-4 w-4 shrink-0" aria-hidden="true" />
-      </SelectPrimitive.Icon>
-    </SelectPrimitive.Trigger>
-  ),
-);
+export const SelectTrigger = React.forwardRef<
+  React.ComponentRef<typeof SelectPrimitive.Trigger>,
+  SelectTriggerProps
+>(({ className, children, mono, ...props }, ref) => (
+  <SelectPrimitive.Trigger
+    ref={ref}
+    className={cn(
+      inputClasses,
+      "flex items-center justify-between gap-2 whitespace-nowrap text-left data-[state=open]:border-ink data-[placeholder]:text-muted [&>span]:line-clamp-1",
+      mono && "font-mono text-[13px]",
+      className,
+    )}
+    {...props}
+  >
+    {children}
+    <SelectPrimitive.Icon asChild>
+      <ChevronDown className="h-4 w-4 shrink-0" aria-hidden="true" />
+    </SelectPrimitive.Icon>
+  </SelectPrimitive.Trigger>
+));
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 export const SelectScrollUpButton = React.forwardRef<

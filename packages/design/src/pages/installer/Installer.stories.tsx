@@ -8,10 +8,34 @@ import { VanillaFrame, diamond, markSvg } from "../../components/Vanilla/frame.t
 // network. Each story is one step, as a real page in an iframe.
 
 const STEPS = [
-  { t: "Device", d: "Hardware checks", h: "This machine is ready", sub: "Kairos checked the hardware this live image booted on.", cta: "Continue" },
-  { t: "Configure", d: "Cloud-config", h: "Configure the node", sub: "Applied on first boot. Paste YAML or fill the essentials.", cta: "Continue to disk" },
-  { t: "Disk", d: "Target and layout", h: "Choose the target disk", sub: "Kairos creates an A/B layout with a recovery partition.", cta: "Install Kairos" },
-  { t: "Install", d: "Write and reboot", h: "Installing", sub: "The machine reboots into Hadron when this finishes.", cta: "Reboot now" },
+  {
+    t: "Device",
+    d: "Hardware checks",
+    h: "This machine is ready",
+    sub: "Kairos checked the hardware this live image booted on.",
+    cta: "Continue",
+  },
+  {
+    t: "Configure",
+    d: "Cloud-config",
+    h: "Configure the node",
+    sub: "Applied on first boot. Paste YAML or fill the essentials.",
+    cta: "Continue to disk",
+  },
+  {
+    t: "Disk",
+    d: "Target and layout",
+    h: "Choose the target disk",
+    sub: "Kairos creates an A/B layout with a recovery partition.",
+    cta: "Install Kairos",
+  },
+  {
+    t: "Install",
+    d: "Write and reboot",
+    h: "Installing",
+    sub: "The machine reboots into Hadron when this finishes.",
+    cta: "Reboot now",
+  },
 ];
 
 const DEVICE = [
@@ -108,7 +132,10 @@ const configureForm = shell(
       ["SSH keys from", "github:mauromorales"],
       ["Register with", "Kairos console · kairos.local"],
     ]
-      .map(([l, v], i) => `<div class="field"><label for="f${i}">${l}</label><input type="text" id="f${i}" value="${v}"></div>`)
+      .map(
+        ([l, v], i) =>
+          `<div class="field"><label for="f${i}">${l}</label><input type="text" id="f${i}" value="${v}"></div>`,
+      )
       .join("")}
   </div>
   <div class="row">
@@ -155,7 +182,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The Kairos Installer, the on-node install UI at :8080, from the deck `Kairos Installer.dc.html`. Four steps in a rail beside the content: Device, Configure (YAML or a form), Disk and Install. Every screen is a real page in an iframe built from `tokens.css` and `components.css` alone, with `data-variant=\"installer\"` on `<html>`, because the installer ships inside the ISO with no build step and no network. Switch the toolbar theme to see both.",
+          'The Kairos Installer, the on-node install UI at :8080, from the deck `Kairos Installer.dc.html`. Four steps in a rail beside the content: Device, Configure (YAML or a form), Disk and Install. Every screen is a real page in an iframe built from `tokens.css` and `components.css` alone, with `data-variant="installer"` on `<html>`, because the installer ships inside the ISO with no build step and no network. Switch the toolbar theme to see both.',
       },
     },
   },
@@ -167,7 +194,9 @@ type Story = StoryObj<typeof meta>;
 const H = 720;
 
 export const Device: Story = {
-  render: () => <VanillaFrame body={device} height={H} variant="installer" title="Kairos Installer · Device" />,
+  render: () => (
+    <VanillaFrame body={device} height={H} variant="installer" title="Kairos Installer · Device" />
+  ),
 };
 
 export const ConfigureYaml: Story = {
@@ -189,5 +218,7 @@ export const Disk: Story = {
 };
 
 export const Install: Story = {
-  render: () => <VanillaFrame body={install} height={H} variant="installer" title="Kairos Installer · Install" />,
+  render: () => (
+    <VanillaFrame body={install} height={H} variant="installer" title="Kairos Installer · Install" />
+  ),
 };

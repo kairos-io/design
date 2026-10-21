@@ -53,7 +53,7 @@ The attribute works on any element, so one section of a page can be dark on a li
 
 A few screens change a few values. `data-variant="hadron"` is the one most projects need: the Hadron blue accent, white ink on it, and the Hadron links. `console`, `site`, `installer` and `foundations` record the small differences the decks of those screens carry. Put `data-variant` on the element that carries `data-theme`, or below it. A variant never changes a component, only the values it reads.
 
-In code, `applyBrand("hadron")` sets the attribute on `<html>` and `applyBrand("kairos")` removes it (other variants are left alone); `getBrand()` reads it back. The tokens as data have the same view: `resolveTheme("dark", "hadron")` is the map an element under `data-theme="dark" data-variant="hadron"` reads. In the Storybook, the toolbar's **Brand** switch sets the attribute on the preview, for stories and for these pages.
+In code, `applyBrand("hadron")` sets the attribute on `<html>` and `applyBrand("kairos")` removes it (other variants are left alone); `getBrand()` reads it back. The tokens as data have the same view: `resolveThemeTokens("dark", "hadron")` from the package root (`resolveTheme` on the `@kairos-io/design/tokens` entry) is the map an element under `data-theme="dark" data-variant="hadron"` reads. In the Storybook, the toolbar's **Brand** switch sets the attribute on the preview, for stories and for these pages.
 
 ### Every component under Hadron
 

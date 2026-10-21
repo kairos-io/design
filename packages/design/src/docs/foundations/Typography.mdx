@@ -29,7 +29,7 @@ Eight steps, from the one display line on a homepage to the mono metadata. Nothi
 
 - Headlines are semibold with negative tracking that tightens as the size grows: display at -4.5%, h1 at -3.5%, h2 at -3%, h3 at -2%.
 - Body and body-large set 1.6 line height. Titles set about 1.1.
-- Labels (form labels, buttons, tabs, table headers) are 14px semibold.
-- Anything an operator might copy (a command, a version, a hostname, a disk path) is mono at 13px.
+- Labels (form labels, table headers) are 14px semibold; buttons and tabs are 15px, bold on the accent button and semibold elsewhere; the small button is 13px.
+- Anything an operator might copy (a command, a version, a hostname, a disk path) is mono at 13px: `Input`, `Textarea` and `SelectTrigger` take `mono` for it, and tags are mono at 12px.
 - Text never goes below 12px, and 12px is only ever mono metadata.
 - Lines stay under about 70 characters for descriptions (`max-w-[70ch]`); `text-wrap: pretty` on paragraphs, `balance` on titles.

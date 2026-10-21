@@ -4,17 +4,20 @@ import { cn } from "../../lib/cn.ts";
 import { StatusDot } from "../StatusDot/StatusDot.tsx";
 import type { Tone } from "../../lib/tone.ts";
 
-const alertVariants = cva("grid grid-cols-[18px_1fr] gap-x-2.5 rounded-base bg-surface text-ink wrap-anywhere", {
-  variants: {
-    variant: {
-      /** The callout of the Foundations deck: a page-level message. */
-      banner: "px-4 py-3.5 text-[15px] leading-normal",
-      /** Inside a form or card: smaller type and padding. */
-      inline: "px-3 py-2.5 text-[13px] leading-snug",
+const alertVariants = cva(
+  "grid grid-cols-[18px_1fr] gap-x-2.5 rounded-base bg-surface text-ink wrap-anywhere",
+  {
+    variants: {
+      variant: {
+        /** The callout of the Foundations deck: a page-level message. */
+        banner: "px-4 py-3.5 text-[15px] leading-normal",
+        /** Inside a form or card: smaller type and padding. */
+        inline: "px-3 py-2.5 text-[13px] leading-snug",
+      },
     },
+    defaultVariants: { variant: "banner" },
   },
-  defaultVariants: { variant: "banner" },
-});
+);
 
 export interface AlertProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">, VariantProps<typeof alertVariants> {

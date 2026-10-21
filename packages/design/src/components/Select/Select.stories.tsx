@@ -19,7 +19,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "One choice from a list too long for a SegmentedControl: a base image, a Kubernetes release, an architecture. Built on Radix Select, so it is a combobox with full keyboard support. Always pair the trigger with a Label or an `aria-label`.",
+          "One choice from a list too long for a SegmentedControl: a target disk, a base image, a Kubernetes release. The trigger is drawn like Input and takes `mono` for technical values. Built on Radix Select, so it is a combobox with full keyboard support. Always pair the trigger with a Label or an `aria-label`.",
       },
     },
   },
@@ -29,6 +29,26 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  name: "The deck's target disk",
+  render: () => (
+    <div className="grid w-[320px] max-w-full gap-1.5">
+      <Label htmlFor="disk">Target disk</Label>
+      <Select defaultValue="nvme0n1">
+        <SelectTrigger id="disk" mono>
+          <SelectValue placeholder="Choose a disk" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="nvme0n1">/dev/nvme0n1</SelectItem>
+          <SelectItem value="sda">/dev/sda</SelectItem>
+          <SelectItem value="auto">auto</SelectItem>
+        </SelectContent>
+      </Select>
+      <span className="text-[13px] text-status-recovery">Disk will be wiped.</span>
+    </div>
+  ),
+};
+
+export const BaseImage: Story = {
   render: () => (
     <div className="grid w-[320px] max-w-full gap-1.5">
       <Label htmlFor="base-image">Base image</Label>

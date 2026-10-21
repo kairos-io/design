@@ -52,7 +52,9 @@ describe("SegmentedControl", () => {
     const l1 = screen.getByRole("radio", { name: "Guided" });
     expect(l1).toHaveTextContent("L1");
     expect(l1.querySelector("span")?.className).toContain("text-link");
-    expect(screen.getByRole("radio", { name: "Automate" })).toHaveAccessibleDescription("Scripts and the CLI");
+    expect(screen.getByRole("radio", { name: "Automate" })).toHaveAccessibleDescription(
+      "Scripts and the CLI",
+    );
   });
 
   it("selects on click", async () => {

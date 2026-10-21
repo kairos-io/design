@@ -17,8 +17,7 @@ const meta = {
     label: "About the base image",
     children: (
       <>
-        A container image with a Kairos framework, for example{" "}
-        <code>quay.io/kairos/ubuntu:24.04-standard</code>.{" "}
+        A container image with a Kairos framework, for example <code>quay.io/kairos/hadron:v0.5.1</code>.{" "}
         <a href="https://kairos.io/docs" target="_blank" rel="noreferrer">
           Image reference docs
         </a>
@@ -33,7 +32,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   render: (args) => (
     <div className="pt-24">
-      <label className="flex items-center text-sm font-medium">
+      <label className="flex items-center text-sm font-semibold">
         Base image
         <InfoTooltip {...args} />
       </label>
@@ -46,7 +45,7 @@ export const Open: Story = {
   args: { defaultOpen: true },
   render: (args) => (
     <div className="pt-24">
-      <label className="flex items-center text-sm font-medium">
+      <label className="flex items-center text-sm font-semibold">
         Base image
         <InfoTooltip {...args} />
       </label>

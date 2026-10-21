@@ -7,13 +7,15 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /** The surface everything sits on: `--surface` on the canvas, a 4px radius, no shadow, as the Foundations deck draws its cards. */
-export const Card = React.forwardRef<HTMLDivElement, CardProps>(({ className, bordered = false, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("rounded-base bg-surface text-ink", bordered && "border border-line", className)}
-    {...props}
-  />
-));
+export const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ className, bordered = false, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn("rounded-base bg-surface text-ink", bordered && "border border-line", className)}
+      {...props}
+    />
+  ),
+);
 Card.displayName = "Card";
 
 export const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
@@ -26,7 +28,11 @@ CardHeader.displayName = "CardHeader";
 /** The card's name: 18px, with the product in bold where there is one ("**Kairos** console"). */
 export const CardTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("text-lg leading-tight font-semibold tracking-[-0.01em]", className)} {...props} />
+    <div
+      ref={ref}
+      className={cn("text-lg leading-tight font-semibold tracking-[-0.01em]", className)}
+      {...props}
+    />
   ),
 );
 CardTitle.displayName = "CardTitle";

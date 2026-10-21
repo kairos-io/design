@@ -8,7 +8,8 @@ export {
   ToneRow,
 } from "./ColorGrid.tsx";
 export { DoDont } from "./DoDont.tsx";
-export { ClearSpace, LogoGrid } from "./LogoGrid.tsx";
+export { BrandCompare, HadronVariantTable } from "./HadronBlocks.tsx";
+export { ClearSpace, HadronLogoGrid, LogoGrid } from "./LogoGrid.tsx";
 export { ElevationSteps, FadeUpDemo, MotionTable, RadiusScale } from "./RadiusShadow.tsx";
 export { Breakpoints, LayoutMeasures, SpacingScale } from "./SpacingScale.tsx";
 export { TokenTable } from "./TokenTable.tsx";

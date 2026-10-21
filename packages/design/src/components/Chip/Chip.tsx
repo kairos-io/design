@@ -25,7 +25,10 @@ export interface ChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "
  * `selected` and wrap it in one for toggling filters.
  */
 export const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(
-  ({ children, onRemove, removeLabel, selected = false, mono = true, outline = false, className, ...props }, ref) => {
+  (
+    { children, onRemove, removeLabel, selected = false, mono = true, outline = false, className, ...props },
+    ref,
+  ) => {
     const name = removeLabel ?? (typeof children === "string" ? `Remove ${children}` : "Remove");
     return (
       <span

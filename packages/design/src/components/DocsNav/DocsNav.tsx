@@ -32,10 +32,7 @@ export const DocsNav = React.forwardRef<HTMLElement, DocsNavProps>(
     <nav
       ref={ref}
       aria-label={label}
-      className={cn(
-        "flex w-64 flex-none flex-col gap-5 border-r border-line bg-side px-3.5 py-6",
-        className,
-      )}
+      className={cn("flex w-64 flex-none flex-col gap-5 border-r border-line bg-side px-3.5 py-6", className)}
       {...props}
     >
       {groups.map((g, gi) => (
@@ -75,7 +72,7 @@ export const DocsNav = React.forwardRef<HTMLElement, DocsNavProps>(
 );
 DocsNav.displayName = "DocsNav";
 
-export interface DocsTocProps extends React.HTMLAttributes<HTMLElement> {
+export interface DocsTocProps extends Omit<React.HTMLAttributes<HTMLElement>, "title"> {
   /** The headings on the page, in order. */
   items: { label: React.ReactNode; href: string; current?: boolean }[];
   /** A link under the list: "Edit this page". */

@@ -11,7 +11,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The footer of the site pages. It is the dark canvas in both themes: the component nests `data-theme=\"dark\"`, so everything inside reads the dark tokens. Columns for kairos.io, one row (`compact`) for hadron-linux.io.",
+          'The footer of the site pages. It is the dark canvas in both themes: the component nests `data-theme="dark"`, so everything inside reads the dark tokens. Columns for kairos.io, one row (`compact`) for hadron-linux.io.',
       },
     },
   },

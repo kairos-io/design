@@ -27,5 +27,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const WithoutTag: Story = {
-  args: { tag: undefined, children: "KubeCon NA: find us at the Project Pavilion, kiosk P-15B.", action: <a href="#">Schedule →</a> },
+  args: {
+    tag: undefined,
+    children: "KubeCon NA: find us at the Project Pavilion, kiosk P-15B.",
+    action: <a href="#">Schedule →</a>,
+  },
 };

@@ -37,14 +37,8 @@ export const Default: Story = {
   render: (args) => (
     <Hero {...args}>
       <div className="flex flex-wrap gap-2.5 pt-1.5">
-        <Button size="lg" className="h-auto px-[22px] py-[15px] text-base font-bold">
-          Download ISO · x86_64
-        </Button>
-        <Button
-          size="lg"
-          variant="outline"
-          className="h-auto border-[1.5px] border-ink px-5 py-[13.5px] text-base font-semibold"
-        >
+        <Button size="lg">Download ISO · x86_64</Button>
+        <Button size="lg" variant="outline">
           Choose your path
         </Button>
       </div>
@@ -65,14 +59,8 @@ export const Hadron: Story = {
     <div data-variant="hadron">
       <Hero {...args}>
         <div className="flex flex-wrap gap-2.5">
-          <Button size="lg" className="h-auto px-[22px] py-[15px] text-base font-bold">
-            Get Hadron with Kairos
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="h-auto border-[1.5px] border-ink px-5 py-[13.5px] text-base font-semibold"
-          >
+          <Button size="lg">Get Hadron with Kairos</Button>
+          <Button size="lg" variant="outline">
             Component versions
           </Button>
         </div>

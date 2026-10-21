@@ -104,7 +104,7 @@ export const SidebarHeader = React.forwardRef<HTMLDivElement, SidebarHeaderProps
   const { mode, setMode } = useSidebar();
   const collapse = (cls?: string) => (
     <Button
-      variant="on-navy"
+      variant="ghost"
       size="icon-sm"
       aria-label="Collapse sidebar"
       title="Collapse sidebar"
@@ -116,7 +116,7 @@ export const SidebarHeader = React.forwardRef<HTMLDivElement, SidebarHeaderProps
   );
   const expand = (cls?: string) => (
     <Button
-      variant="on-navy"
+      variant="ghost"
       size="icon-sm"
       aria-label="Expand sidebar"
       title="Expand sidebar"
@@ -489,7 +489,7 @@ export function AppShell({
           {drawer && (
             <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
               <DialogPrimitive.Trigger asChild>
-                <Button variant="on-navy" size="icon" aria-label="Open navigation" className="opacity-100">
+                <Button variant="ghost" size="icon" aria-label="Open navigation" className="opacity-100">
                   <Menu className="h-5 w-5" />
                 </Button>
               </DialogPrimitive.Trigger>
@@ -507,7 +507,7 @@ export function AppShell({
                       </DialogPrimitive.Title>
                     </div>
                     <DialogPrimitive.Close asChild>
-                      <Button variant="on-navy" size="icon-sm" aria-label="Close navigation">
+                      <Button variant="ghost" size="icon-sm" aria-label="Close navigation">
                         <X className="h-4 w-4" />
                       </Button>
                     </DialogPrimitive.Close>

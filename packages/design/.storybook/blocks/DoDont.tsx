@@ -3,16 +3,13 @@ import type { ReactNode } from "react";
 function Column({ kind, children }: { kind: "do" | "dont"; children: ReactNode }) {
   const isDo = kind === "do";
   return (
-    <div
-      className={`rounded-base border p-4 text-sm ${
-        isDo
-          ? "border-status-healthy/25 bg-status-healthy/10"
-          : "border-status-recovery/25 bg-status-recovery/10"
-      }`}
-    >
+    <div className="rounded-base bg-surface p-4 text-sm">
       <div
-        className={`mb-2 text-xs font-semibold uppercase tracking-wider ${isDo ? "text-ok" : "text-status-recovery"}`}
+        className={`mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider ${isDo ? "text-ok" : "text-status-recovery"}`}
       >
+        <svg width="11" height="11" viewBox="0 0 12 12" aria-hidden="true" className="fill-current">
+          <polygon points="6,0.8 11.2,6 6,11.2 0.8,6" />
+        </svg>
         {isDo ? "Do" : "Don't"}
       </div>
       <div className="flex flex-col gap-2 text-ink [&_ul]:list-disc [&_ul]:pl-5 [&_p]:m-0">{children}</div>
