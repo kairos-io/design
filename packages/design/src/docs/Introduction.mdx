@@ -1,0 +1,59 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Introduction" />
+
+# Kairos design system
+
+One source of truth for how Kairos looks on the web: the colours, type, spacing and components that AuroraBoot, the Kairos web installer, the docs site and the package browser share. It is published as `@kairos-io/design` on npm and documented here.
+
+## Why
+
+[kairos-io/kairos#5083](https://github.com/kairos-io/kairos/issues/5083) asked for a shared design system so that every Kairos web project draws from the same foundations instead of carrying its own slightly different copy. The projects already agreed on most of it in practice. This package writes that agreement down, tests it, and ships it so that nobody copies a stylesheet again.
+
+## What it codifies
+
+Nothing here is new. The values come from what the projects ship today:
+
+- **AuroraBoot** (`ui/src/index.css` and `ui/src/components`): the semantic colour tokens, the dark theme, the radius scale, and the button, badge, card, input, dialog, table, tabs and app shell components.
+- **The Kairos web installer** (`installer/internal/webui/public/style.css`): the same tokens as plain CSS classes for a page with no build step, and the step rail, progress list and log panel.
+- **kairos-docs** (`src/css/custom.css`): the brand palette under its `--kairos-*` names, Noto Sans, the navy navbar and sidebar.
+- **packages.kairos.io**: the one project still on a different font and framework, listed in Adoption with what it would take to move.
+- **The CNCF artwork** for Kairos: the mark in its three oranges and the horizontal and stacked logos in colour, white and black.
+- **The tiles**: the mark's rhombi laid flat as a hexagon in the three oranges, fields that fade to outlines, a tile bar and a numbered marker. These come from the Tessellate direction in `kairos-io/design-system` (Mauro Morales, October 2026), ported onto this package's tokens. The one piece that is not yet shipped by a project.
+
+## Three ways in
+
+<table className="w-full text-sm">
+  <thead>
+    <tr className="border-b border-border text-left text-muted-foreground">
+      <th className="py-2 pr-3 font-medium">Entry point</th>
+      <th className="py-2 font-medium">Use it when</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr className="border-b border-border align-top">
+      <td className="py-2 pr-3 font-mono text-xs">@kairos-io/design/tokens.css</td>
+      <td className="py-2">Any page, any framework. Custom properties for light and dark, nothing else.</td>
+    </tr>
+    <tr className="border-b border-border align-top">
+      <td className="py-2 pr-3 font-mono text-xs">@kairos-io/design + styles.css</td>
+      <td className="py-2">
+        A React app. Components built on Tailwind v4 and Radix, with the compiled styles.
+      </td>
+    </tr>
+    <tr className="border-b border-border align-top">
+      <td className="py-2 pr-3 font-mono text-xs">@kairos-io/design/components.css</td>
+      <td className="py-2">
+        A page with no build step. The installer's class names (.btn, .card, .badge) over the tokens.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+Start with **Getting started**, then the **Foundations** pages for the tokens and the rules around them. Each component page shows every variant and state in both themes, with its accessibility checks run live.
+
+## Where to go
+
+- Source and issues: [github.com/wcrum/kairos-design-system](https://github.com/wcrum/kairos-design-system). File issues on [kairos-io/kairos](https://github.com/kairos-io/kairos/issues), like every Kairos repository.
+- The tokens as data: `import { tokens } from "@kairos-io/design/tokens"`.
+- Decisions: `docs/adr/` in the repository explains the stack and why the first release records rather than redesigns.
