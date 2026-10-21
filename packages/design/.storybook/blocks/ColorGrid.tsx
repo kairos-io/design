@@ -86,22 +86,72 @@ export function ColorGrid({ group }: { group?: string }) {
 type Fixed = { name: string; value: string; label: string; use: string };
 
 const kairosEntries: Fixed[] = [
-  { name: "kairos-light", value: brand["kairos-light"], label: "Light", use: "The top rhombus of the mark. Soft accent in the dark theme." },
-  { name: "kairos-mid", value: brand["kairos-mid"], label: "Mid", use: "The left rhombus. The accent and links in the dark theme." },
-  { name: "kairos-orange", value: brand["kairos-orange"], label: "Kairos orange", use: "The right rhombus. The accent in the light theme." },
+  {
+    name: "kairos-light",
+    value: brand["kairos-light"],
+    label: "Light",
+    use: "The top rhombus of the mark. Soft accent in the dark theme.",
+  },
+  {
+    name: "kairos-mid",
+    value: brand["kairos-mid"],
+    label: "Mid",
+    use: "The left rhombus. The accent and links in the dark theme.",
+  },
+  {
+    name: "kairos-orange",
+    value: brand["kairos-orange"],
+    label: "Kairos orange",
+    use: "The right rhombus. The accent in the light theme.",
+  },
 ];
 
 const hadronEntries: Fixed[] = [
-  { name: "hadron-sky", value: brand["hadron-sky"], label: "Sky", use: "The light tile. Links in the dark theme under the Hadron variant." },
-  { name: "hadron-blue", value: brand["hadron-blue"], label: "Hadron blue", use: "The accent under the Hadron variant, with white ink." },
-  { name: "hadron-deep", value: brand["hadron-deep"], label: "Deep", use: "The dark tile. Small text on blue uses Deep, where white reaches 7.2:1." },
+  {
+    name: "hadron-sky",
+    value: brand["hadron-sky"],
+    label: "Sky",
+    use: "The light tile. Links in the dark theme under the Hadron variant.",
+  },
+  {
+    name: "hadron-blue",
+    value: brand["hadron-blue"],
+    label: "Hadron blue",
+    use: "The accent under the Hadron variant, with white ink.",
+  },
+  {
+    name: "hadron-deep",
+    value: brand["hadron-deep"],
+    label: "Deep",
+    use: "The dark tile. Small text on blue uses Deep, where white reaches 7.2:1.",
+  },
 ];
 
 const statusEntries: Fixed[] = [
-  { name: "status-healthy", value: status.healthy, label: "Healthy", use: "The node-state diamond for healthy and ready." },
-  { name: "status-warning", value: status.warning, label: "Warning", use: "Degraded, pending, the CPU diamond in the console." },
-  { name: "status-recovery", value: status.recovery, label: "Recovery", use: "Recovery, failed, the destructive button." },
-  { name: "status-ink", value: status.ink, label: "Ink on status", use: "White, for text on a status fill such as the destructive button." },
+  {
+    name: "status-healthy",
+    value: status.healthy,
+    label: "Healthy",
+    use: "The node-state diamond for healthy and ready.",
+  },
+  {
+    name: "status-warning",
+    value: status.warning,
+    label: "Warning",
+    use: "Degraded, pending, the CPU diamond in the console.",
+  },
+  {
+    name: "status-recovery",
+    value: status.recovery,
+    label: "Recovery",
+    use: "Recovery, failed, the destructive button.",
+  },
+  {
+    name: "status-ink",
+    value: status.ink,
+    label: "Ink on status",
+    use: "White, for text on a status fill such as the destructive button.",
+  },
 ];
 
 function FixedGrid({ entries }: { entries: Fixed[] }) {

@@ -1,6 +1,6 @@
 # ADR 0002: Record the shipped design; do not redesign
 
-Date: 2026-10-09. Status: accepted.
+Date: 2026-10-09. Status: superseded by ADR 0003 on 2026-10-20, when the package moved into kairos-io/design and took the decks as its source.
 
 ## Context
 

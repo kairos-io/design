@@ -10,17 +10,17 @@
     <link rel="stylesheet" href="../../dist/tokens.css" />
     <link rel="stylesheet" href="../../dist/components.css" />
     <script>
-      // Optional. With no class on <html> the page follows the OS theme.
+      // Optional. With no data-theme on <html> the page follows the OS theme.
       try {
         var m = localStorage.getItem("kairos-theme");
-        if (m === "light" || m === "dark") document.documentElement.classList.add(m);
+        if (m === "light" || m === "dark") document.documentElement.setAttribute("data-theme", m);
       } catch (e) {}
     </script>
   </head>
   <body>
     <header class="topbar">
       <a class="brand" href="#"
-        ><img src="../../dist/assets/logos/kairos-horizontal-white.svg" alt="Kairos" /><span
+        ><img src="../../dist/assets/logos/kairos-horizontal-color.svg" alt="Kairos" /><span
           >Package browser</span
         ></a
       >

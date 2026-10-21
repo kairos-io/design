@@ -4,11 +4,7 @@ import { cn } from "../../lib/cn.ts";
 /** The surface everything sits on: a bordered, lightly raised panel. AuroraBoot's ui/card.tsx. */
 export const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("rounded-lg border bg-surface text-ink", className)}
-      {...props}
-    />
+    <div ref={ref} className={cn("rounded-lg border bg-surface text-ink", className)} {...props} />
   ),
 );
 Card.displayName = "Card";

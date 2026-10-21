@@ -4,6 +4,17 @@ All notable changes to `@kairos-io/design`. The format is [Keep a Changelog](htt
 
 ## [Unreleased]
 
+### Changed
+
+- The package moved into `kairos-io/design` as `packages/design`, next to the design decks, and merged with the tokens package that landed there (kairos-io/kairos#5511). `tokens.json` is now the only token source; `src/tokens/index.ts` is a typed view of it. The generator and the deck check are the repository's, extended with the status warning amber and the ink on a status fill, the terminal inks (`codeInk`, `codeMuted`), the dialog scrim (`overlay`), the 2 / 4 / 8 / full radius steps and the motion tokens. See ADR 0003.
+- The design is the decks' (Tessellate). Urbanist and Martian Mono replace Noto Sans and ship self-hosted under `assets/fonts`, loaded by `fonts.css`; one violet neutral family replaces the slate and navy set; the radius is 4px with 2px for tags and 8px for dialogs; there are no shadows and the Tailwind `shadow-*` utilities are removed; ink on the accent is dark on Kairos orange and white on Hadron blue; links are `--link`.
+- Components use the decks' token names: `bg`, `side`, `surface`, `inner`, `head`, `hover`, `raised`, `line`, `ink`, `sub`, `muted`, `accent`, `accentSoft`, `accentLine`, `onAccent`, `link`, `ok`, `warnBg`, `deep`, `code`, `codeBar`, `codeKey`. The AuroraBoot names (`background`, `card`, `muted-foreground`, `primary`, `sidebar-*`, `terminal-*`) are gone; the Adoption page lists the renames.
+- The theme is `data-theme="light|dark"` on `<html>` (or any element), as the decks use it. `applyTheme`, `useTheme`, `ThemeToggle` and `inlineThemeScript()` set the attribute; the `light` and `dark` classes are no longer read.
+- Hadron is `data-variant="hadron"`: the blue accent with white ink and the Hadron links in either theme. The tiles keep `palette="hadron"`.
+- The Tailwind entry is `@kairos-io/design/tailwind.css` (it imports `tokens.css`); `theme.css` is gone. `tokens.css`, `tailwind.css` and `tokens.json` are exported from the package root as well as from `dist/`.
+- The tones map onto the decks' status colours: success is `status-healthy` with `ok` ink, warning `status-warning`, danger `status-recovery`, info the accent with `link` ink, neutral `muted`. Badges and dots draw a diamond, as the decks do.
+- The Storybook is published under `/storybook/` of the repository's Pages site, next to the decks, and the packed tarball under `/packages/design/` so a branch build can be installed with `npm install <url>`.
+
 ### Planned
 
 - Radio cards (the installer's `.choice`), a skeleton loader, a Radix `Tooltip`, the fleet `Gauge` and `Sparkline`.
@@ -49,5 +60,5 @@ The first cut: the design the Kairos web projects already ship, as one package.
 - Every control uses the same 2px focus ring; the vanilla layer's `--shadow-focus` matches.
 - The shipped `styles.css` no longer includes utilities used only by stories and tests.
 
-[Unreleased]: https://github.com/wcrum/kairos-design-system/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/wcrum/kairos-design-system/releases/tag/v0.1.0
+[Unreleased]: https://github.com/kairos-io/design/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/kairos-io/design/releases/tag/v0.1.0

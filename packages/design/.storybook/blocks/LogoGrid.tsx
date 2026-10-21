@@ -43,9 +43,7 @@ export function LogoGrid() {
                     className="h-20 w-auto max-w-full"
                   />
                   <figcaption
-                    className={
-                      variant === "color" ? "font-mono text-xs text-muted" : "font-mono text-xs"
-                    }
+                    className={variant === "color" ? "font-mono text-xs text-muted" : "font-mono text-xs"}
                     style={
                       variant === "color"
                         ? undefined

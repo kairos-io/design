@@ -1,114 +1,66 @@
 import { Meta } from "@storybook/addon-docs/blocks";
-import { BrandPalette, ColorGrid, ContrastTable, DoDont, ToneRow } from "../../../.storybook/blocks/index.ts";
+import {
+  BrandPalette,
+  ColorGrid,
+  ContrastTable,
+  DoDont,
+  HadronPalette,
+  StatusPalette,
+  ToneRow,
+} from "../../../.storybook/blocks/index.ts";
 
 <Meta title="Foundations/Color" />
 
 # Color
 
-Two layers. The **brand palette** is the handful of fixed colours the artwork and the docs use. The **semantic tokens** are what components refer to: a role (`primary`, `muted-foreground`, `danger`) rather than a colour, with a value per theme. Switch the theme and every component follows, because nothing in a component names a colour.
+Brand colours come straight from the logos. Light mode sits on a violet-tinted mist, dark mode on violet ink: one cool neutral family across both themes, never navy, never brown. Orange takes dark ink text; Hadron blue takes white.
 
-## Brand palette
+Two layers. The **brand and status colours** are fixed: the three oranges, the three blues, the node-state greens, amber and red. The **theme tokens** are what components refer to: a role (`surface`, `sub`, `accent`, `line`) with a value per theme. Switch the theme and every component follows, because nothing in a component names a colour.
 
-The oranges are the fills of the mark. The navy is the chrome of the docs site, the sidebar and the top bar. `tokens.css` exposes these as `--brand-*` and, for the docs site, under the `--kairos-*` names it already uses.
+## Kairos, from the logo
 
 <BrandPalette />
 
-### Hadron blue
+## Hadron, from the logo
 
-The second brand set, for hadron-linux.io and the Hadron product surfaces. Hadron swaps the accent and nothing else: the same neutrals, the same tones, the same components, with the three blues where the three oranges were. `tokens.css` exposes them as `--brand-hadron-*`; the tiles take `palette="hadron"`.
+The secondary brand. Hadron swaps the accent and nothing else: the same neutrals, the same status colours, the same components, with the three blues where the three oranges were. Set `data-variant="hadron"` on the element that carries `data-theme` and the accent, the ink on it and the links change; the tiles take `palette="hadron"`. [Hadron](?path=/docs/foundations-hadron--docs) has the rules.
 
-<div className="grid gap-3 sm:grid-cols-3">
-  <div className="flex items-center gap-3 rounded-base border p-3">
-    <span className="h-10 w-10 shrink-0 rounded-base bg-hadron-sky" aria-hidden="true" />
-    <div className="text-sm">
-      <div className="font-semibold">Sky</div>
-      <div className="font-mono text-xs text-muted">--brand-hadron-sky · #1BAAFF</div>
-    </div>
-  </div>
-  <div className="flex items-center gap-3 rounded-base border p-3">
-    <span className="h-10 w-10 shrink-0 rounded-base bg-hadron-blue" aria-hidden="true" />
-    <div className="text-sm">
-      <div className="font-semibold">Hadron blue</div>
-      <div className="font-mono text-xs text-muted">--brand-hadron-blue · #0275E7</div>
-    </div>
-  </div>
-  <div className="flex items-center gap-3 rounded-base border p-3">
-    <span className="h-10 w-10 shrink-0 rounded-base bg-hadron-deep" aria-hidden="true" />
-    <div className="text-sm">
-      <div className="font-semibold">Deep</div>
-      <div className="font-mono text-xs text-muted">--brand-hadron-deep · #004CCE</div>
-    </div>
-  </div>
-</div>
+<HadronPalette />
 
-Ink on the accents follows the value, not the brand: navy on the oranges and on Sky, white on Hadron blue and Deep.
+## Status
 
-<table className="w-full text-sm">
-  <thead>
-    <tr className="border-b border-line text-left text-muted">
-      <th className="py-2 pr-3 font-medium">Ink on</th>
-      <th className="py-2 pr-3 font-medium">Ink</th>
-      <th className="py-2 font-medium">Ratio</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr className="border-b border-line">
-      <td className="py-2 pr-3">Kairos orange #EE5007</td>
-      <td className="py-2 pr-3">Navy</td>
-      <td className="py-2 font-mono text-xs">4.92:1</td>
-    </tr>
-    <tr className="border-b border-line">
-      <td className="py-2 pr-3">Sky #1BAAFF</td>
-      <td className="py-2 pr-3">Navy</td>
-      <td className="py-2 font-mono text-xs">7.01:1</td>
-    </tr>
-    <tr className="border-b border-line">
-      <td className="py-2 pr-3">Hadron blue #0275E7</td>
-      <td className="py-2 pr-3">White</td>
-      <td className="py-2 font-mono text-xs">4.47:1</td>
-    </tr>
-    <tr className="border-b border-line">
-      <td className="py-2 pr-3">Deep #004CCE</td>
-      <td className="py-2 pr-3">White</td>
-      <td className="py-2 font-mono text-xs">7.18:1</td>
-    </tr>
-  </tbody>
-</table>
+<StatusPalette />
 
-White on Hadron blue sits just under 4.5:1, so keep text on it at 14px bold or 18px and larger, or use Deep.
+## Theme tokens
 
-## Semantic tokens
-
-Every swatch is live: switch the toolbar theme and it changes. The two values are light and dark.
+Every swatch is live: switch the toolbar theme and it changes. The two values are light and dark. The names are the ones the design decks use, so a value in a deck and a value in a component are the same token.
 
 <ColorGrid />
 
-## Status tones
+## Tones
 
-Five tones carry every status in the system. `StatusBadge`, `StatusDot`, `Alert`, `Steps` and `StatTile` all take a tone, and `phaseTone()` maps a node, build or deployment phase string onto one so that "Online" is green on every screen.
+Five tones carry every status in the system. `StatusBadge`, `StatusDot`, `Alert`, `Steps` and `StatTile` take a tone, and `phaseTone()` maps a node, build or deployment phase string onto one so that "Healthy" is the same green on every screen. The decks draw a status as a coloured diamond beside ink text on a surface, not as a tinted pill: a tone has a fill for the diamond, the dot and the bar, and an ink for the rare text that must carry the tone itself.
 
 <ToneRow />
 
-A tone has two tokens. The solid value (`--success`) is for dots, bars and icons. The `-foreground` value is ink for text on the tone's 15% fill, which is how a badge or banner is drawn: `bg-status-healthy/15 text-ok border-status-healthy/25`.
-
 ## Contrast
 
-Computed from the token values, not promised. Normal text needs 4.5:1 for AA; large text and interface parts need 3:1.
+Computed from the token values, not promised. Normal text needs 4.5:1 for AA; large text and interface parts need 3:1. The decks state two of these: ink on Kairos orange and white on Hadron blue.
 
 <ContrastTable />
 
-The muted text and the warning ink sit at the edge in one theme or the other. Use muted text for secondary lines, never for the only copy of a fact, and keep warning text at 13px or larger.
+White on Hadron blue sits just under 4.5:1, so keep text on it at 14px bold or 18px and larger, or use `--hadron-deep`, where white reaches 7.2:1. The warning amber is a fill, not an ink: put it in a diamond or a bar beside ink text, never as small text on a light surface.
 
 <DoDont
   do={
     <ul>
       <li>
-        Use <code>primary</code> for the one action that matters on a view, and the outline, secondary and
-        ghost buttons for the rest.
+        Use <code>accent</code> for the one action that matters on a view, the dark <code>ink</code> button
+        and the outline button for the rest.
       </li>
       <li>
-        Put text on a surface token (<code>card</code>, <code>popover</code>) with its paired{" "}
-        <code>-foreground</code>.
+        Put body copy on a surface in <code>sub</code>, labels and metadata in <code>muted</code>, and the
+        headline in <code>ink</code>.
       </li>
       <li>
         Read a status through <code>phaseTone()</code> so every screen agrees on what colour "pending" is.
@@ -118,11 +70,9 @@ The muted text and the warning ink sit at the edge in one theme or the other. Us
   dont={
     <ul>
       <li>Write a hex value or a Tailwind palette class in a component. The tests fail the build.</li>
-      <li>Use orange to mean a status, or a status tone to decorate.</li>
-      <li>
-        Put white text on orange in the dark theme. There the primary ink is navy, because the dark primary is
-        the softer orange.
-      </li>
+      <li>Use orange to mean a status, or a status colour to decorate.</li>
+      <li>Put white text on Kairos orange. The ink on orange is dark in both themes.</li>
+      <li>Reach for navy or brown. The neutrals are one violet family in both themes.</li>
     </ul>
   }
 />

@@ -112,11 +112,7 @@ describe("Tiles", () => {
   it("paints the Hadron palette with the blue custom properties and the right ink", () => {
     const { container } = render(<TileUnit palette="hadron" />);
     const fills = Array.from(container.querySelectorAll("polygon")).map((p) => p.getAttribute("fill"));
-    expect(fills).toEqual([
-      "var(--hadron-sky)",
-      "var(--hadron-blue)",
-      "var(--hadron-deep)",
-    ]);
+    expect(fills).toEqual(["var(--hadron-sky)", "var(--hadron-blue)", "var(--hadron-deep)"]);
     render(
       <>
         <TileMarker palette="hadron" tone={0}>

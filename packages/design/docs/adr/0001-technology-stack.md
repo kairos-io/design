@@ -10,7 +10,7 @@ The consumers are known. AuroraBoot's UI is React 19, Tailwind v4, Radix primiti
 
 ## Decision
 
-- **Tokens as CSS custom properties, generated from one TypeScript source.** `src/tokens/index.ts` is the truth; a script writes `tokens.css` (plain custom properties, light and dark) and `theme.css` (Tailwind v4 `@theme inline`). Custom properties are the one format every consumer reads: the installer and Docusaurus with no tooling, Tailwind through the theme mapping, JavaScript through the `./tokens` entry.
+- **Tokens as CSS custom properties, generated from one source.** A script writes `tokens.css` (plain custom properties, light and dark) and a Tailwind v4 `@theme inline` file from the token source (since ADR 0003, `tokens.json`, shared with the decks). Custom properties are the one format every consumer reads: the installer and Docusaurus with no tooling, Tailwind through the theme mapping, JavaScript through the `./tokens` entry.
 - **React 19 components on Tailwind v4, Radix and CVA.** That is what AuroraBoot already is, so its components port without change and it adopts the package by deleting code. Docusaurus can host the same components. Nothing else in the Kairos web estate uses a different component framework.
 - **A framework-free CSS layer.** `components.css` carries the installer's class names over the tokens, so a page with no build step is a first-class consumer rather than a copy.
 - **Storybook 10 with the react-vite framework**, the docs, a11y and themes addons, published to GitHub Pages from `main`. Grafana's UI catalogue was the reference the issue discussion pointed at.

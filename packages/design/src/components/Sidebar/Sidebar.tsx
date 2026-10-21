@@ -63,9 +63,7 @@ export const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
           ref={ref}
           className={cn(
             "flex h-full flex-col bg-side text-ink",
-            mode === "full"
-              ? "w-60 md:absolute md:inset-y-0 md:left-0 md:z-40 lg:static"
-              : "w-full",
+            mode === "full" ? "w-60 md:absolute md:inset-y-0 md:left-0 md:z-40 lg:static" : "w-full",
             className,
           )}
           {...props}
@@ -261,9 +259,7 @@ export const SidebarItem = React.forwardRef<HTMLAnchorElement, SidebarItemProps>
     const classes = cn(
       "flex items-center gap-3 rounded-base py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
       sidebarModeClasses.linkLayout[mode],
-      active
-        ? "bg-accent text-on-accent"
-        : "text-ink opacity-80 hover:bg-raised hover:opacity-100",
+      active ? "bg-accent text-on-accent" : "text-ink opacity-80 hover:bg-raised hover:opacity-100",
       className,
     );
     const content = (
@@ -350,9 +346,7 @@ export const SidebarSteps = React.forwardRef<HTMLElement, SidebarStepsProps>(fun
       className={cn("grid flex-1 content-start gap-1 overflow-y-auto overflow-x-hidden p-3", className)}
       {...props}
     >
-      <span className="block px-3 py-1 text-[10px] uppercase tracking-wider text-muted">
-        {label}
-      </span>
+      <span className="block px-3 py-1 text-[10px] uppercase tracking-wider text-muted">{label}</span>
       {steps.map((step, i) => {
         const isCurrent = step.id === current;
         const done = step.state === "done";

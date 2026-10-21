@@ -5,7 +5,9 @@ function Column({ kind, children }: { kind: "do" | "dont"; children: ReactNode }
   return (
     <div
       className={`rounded-base border p-4 text-sm ${
-        isDo ? "border-status-healthy/25 bg-status-healthy/10" : "border-status-recovery/25 bg-status-recovery/10"
+        isDo
+          ? "border-status-healthy/25 bg-status-healthy/10"
+          : "border-status-recovery/25 bg-status-recovery/10"
       }`}
     >
       <div
@@ -13,9 +15,7 @@ function Column({ kind, children }: { kind: "do" | "dont"; children: ReactNode }
       >
         {isDo ? "Do" : "Don't"}
       </div>
-      <div className="flex flex-col gap-2 text-ink [&_ul]:list-disc [&_ul]:pl-5 [&_p]:m-0">
-        {children}
-      </div>
+      <div className="flex flex-col gap-2 text-ink [&_ul]:list-disc [&_ul]:pl-5 [&_p]:m-0">{children}</div>
     </div>
   );
 }

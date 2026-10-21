@@ -17,8 +17,7 @@ export const buttonVariants = cva(
         "destructive-outline": "border border-line bg-bg text-status-recovery hover:bg-status-recovery/10",
         link: "text-accent underline-offset-4 hover:underline",
         /** For the navy sidebar and top bar: sidebar ink, brighter on hover. */
-        "on-navy":
-          "text-ink opacity-70 hover:bg-raised hover:text-ink hover:opacity-100",
+        "on-navy": "text-ink opacity-70 hover:bg-raised hover:text-ink hover:opacity-100",
       },
       size: {
         sm: "h-7 rounded-base px-3 text-xs",

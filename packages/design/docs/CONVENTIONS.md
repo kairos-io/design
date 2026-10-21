@@ -6,12 +6,11 @@ tests and review.
 
 ## Where the design comes from
 
-The system codifies what the Kairos web projects already ship. When a
-component exists in AuroraBoot's `ui/src` (components/ui, components/fleet,
-components/wizard), port it as it is: same variants, same class strings, same
-behaviour. The web installer's `style.css` and `kairos-docs`' `custom.css`
-cover the rest. Do not redesign; record. A deliberate change is a changelog
-entry with a reason.
+The decks in this repository are the design: `Kairos - Foundations.dc.html`
+for the primitives (buttons, inputs, status, tabs, cards, the terminal) and
+the screen decks for the compositions. A component renders what its deck
+shows: same sizes, same tokens, same states. Do not redesign; record. A
+piece that no deck shows is a proposal, and the pull request says so.
 
 ## Files
 
@@ -37,8 +36,9 @@ component name.
   `src/test/noHardcodedColors.test.ts` fails the build on both.
 - Variants through `class-variance-authority`; merge classes with `cn()`.
 - Tones (`success | warning | danger | info | neutral`) come from
-  `src/lib/tone.ts`, and tone-to-class maps are written out in full so
-  Tailwind finds every class.
+  `src/lib/tone.ts` and map onto the status colours in `src/tokens`; the
+  tone-to-class maps are written out in full so Tailwind finds every class.
+  A status is a coloured diamond beside ink text, as the decks draw it.
 - No router, no data fetching, no app state. Links take `href`, or `asChild`
   so the host passes its own `<Link>`.
 - Radix primitives for anything with focus management or ARIA state

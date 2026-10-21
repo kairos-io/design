@@ -1,0 +1,26 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { ElevationSteps, FadeUpDemo, MotionTable, RadiusScale } from "../../../.storybook/blocks/index.ts";
+
+<Meta title="Foundations/Radius, elevation & motion" />
+
+# Radius, elevation and motion
+
+## Radius
+
+One radius, 4px, and two neighbours: 2px for tags and chips, 8px for dialogs. The Tailwind `rounded-sm`, `rounded-base` and `rounded-lg` utilities map onto them through `tailwind.css`; every other `rounded-*` step is removed so a component cannot reach for a 10px corner. `rounded-full` stays for dots.
+
+<RadiusScale />
+
+## Elevation
+
+No drop shadows anywhere. Elevation is a tone step: the canvas (`--bg`), a surface on it (`--surface`), and a raised element on the surface (`--raised`). Borders are 1px hairlines in `--line`, or 1.5px for inputs. The Tailwind `shadow-*` utilities are removed by `tailwind.css`, so a component cannot cast one.
+
+<ElevationSteps />
+
+## Motion
+
+One easing and three durations. Hover changes use `fast`; anything that opens uses `base`; the one entrance animation, `fade-up`, uses `slow`, as does a tile landing. All of it is transform and opacity only, and `prefers-reduced-motion: reduce` sets every duration to zero and turns the animations off.
+
+<MotionTable />
+
+<FadeUpDemo />

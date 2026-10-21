@@ -50,10 +50,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           <span>{label}</span>
         </label>
         {description && (
-          <p
-            id={descriptionId}
-            className={cn("pl-6 text-xs text-muted", disabled && "opacity-70")}
-          >
+          <p id={descriptionId} className={cn("pl-6 text-xs text-muted", disabled && "opacity-70")}>
             {description}
           </p>
         )}

@@ -7,17 +7,15 @@ import { Breakpoints, LayoutMeasures, SpacingScale } from "../../../.storybook/b
 
 ## The scale
 
-A 4px base, the Tailwind scale. Components use the steps below; the ones the apps reach for most are 2 (8px) between controls, 4 (16px) inside a tile, 6 (24px) inside a card and between cards, and 8 (32px) for page padding.
+A 4px base: 4, 8, 12, 16, 24, 32, 48 and 80. `tokens.css` exposes them as `--space-4` to `--space-80`; in Tailwind the step is 4px, so `p-1` is 4px, `p-4` is 16px and `p-20` is 80px. The steps the screens reach for most are 8 between controls, 16 inside a tile, 24 inside a card and between cards, 32 for page padding and 80 between page sections.
 
 <SpacingScale />
 
 ## Breakpoints
 
-Min-width, mobile first. The apps make two decisions: below `md` the sidebar is a drawer behind a navy top bar, and from `lg` it shows its labels.
+Min-width, mobile first. The console makes two decisions: below `md` the sidebar is a drawer behind a top bar, and from `lg` it shows its labels.
 
 <Breakpoints />
-
-The docs site uses Infima's 996px for its own navbar collapse; it is not part of this system.
 
 ## Measures
 
@@ -25,7 +23,7 @@ The docs site uses Infima's 996px for its own navbar collapse; it is not part of
 
 ## Page layout
 
-- Content is padded 32px on desktop, 24px below `lg`, 16px below `md`, and capped at 1080px; the message and progress pages cap at 760px.
+- Content is padded 32px on desktop, 24px below `lg`, 16px below `md`, and capped at `--page-max` (1280px).
 - A form field is capped at 640px so a text input never spans a wide screen.
-- The review step is a two-column grid, editor and a 300px aside, that stacks below `lg`.
-- A sticky footer with the step actions sits on a translucent, blurred bar above the content.
+- A page never scrolls sideways; the render check fails one that does on desktop.
+- Tile fields sit in heroes and empty states only, never behind text.

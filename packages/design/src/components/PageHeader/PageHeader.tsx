@@ -68,9 +68,7 @@ export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
           </div>
           {description && <p className="mt-1 text-muted">{description}</p>}
           {meta && (
-            <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
-              {meta}
-            </div>
+            <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">{meta}</div>
           )}
         </div>
         {children && <div className="flex flex-wrap items-center gap-2">{children}</div>}

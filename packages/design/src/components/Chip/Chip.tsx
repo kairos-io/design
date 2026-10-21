@@ -31,9 +31,7 @@ export const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(
           "inline-flex max-w-full items-center gap-1.5 rounded-base border py-0.5 pl-2.5 text-xs",
           onRemove ? "pr-1" : "pr-2.5",
           mono && "font-mono",
-          selected
-            ? "border-accent bg-raised text-ink"
-            : "border-line bg-raised text-ink",
+          selected ? "border-accent bg-raised text-ink" : "border-line bg-raised text-ink",
           className,
         )}
         {...props}

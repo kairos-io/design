@@ -10,7 +10,11 @@ export function SpacingScale() {
           <div className="font-mono text-muted">
             <span className="font-semibold text-ink">{px}px</span> · --space-{px} · {px / 4}
           </div>
-          <div className="h-4 rounded-sm bg-accent" style={{ width: `${(px / max) * 100}%` }} aria-hidden="true" />
+          <div
+            className="h-4 rounded-sm bg-accent"
+            style={{ width: `${(px / max) * 100}%` }}
+            aria-hidden="true"
+          />
         </div>
       ))}
     </div>

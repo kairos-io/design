@@ -4,22 +4,20 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # Kairos design system
 
-One source of truth for how Kairos looks on the web: the colours, type, spacing and components that AuroraBoot, the Kairos web installer, the docs site and the package browser share. It is published as `@kairos-io/design` on npm and documented here.
+One source of truth for how Kairos looks on the web: the colours, type, spacing and components that kairos.io, the docs, the Kairos Installer, the Kairos console and hadron-linux.io share. The design is **Tessellate**, drawn in the decks of [kairos-io/design](https://github.com/kairos-io/design); this package is the same design as code, published as `@kairos-io/design` and documented here.
 
 ## Why
 
-[kairos-io/kairos#5083](https://github.com/kairos-io/kairos/issues/5083) asked for a shared design system so that every Kairos web project draws from the same foundations instead of carrying its own slightly different copy. The projects already agreed on most of it in practice. This package writes that agreement down, tests it, and ships it so that nobody copies a stylesheet again.
+[kairos-io/kairos#5083](https://github.com/kairos-io/kairos/issues/5083) asked for a shared design system so that every Kairos web project draws from the same foundations instead of carrying its own slightly different copy. The decks settled what it looks like. The package makes it importable: the tokens as CSS custom properties and a Tailwind theme (#5511), React components with this Storybook (#5512), and a framework-free CSS layer for pages with no build step.
 
-## What it codifies
+## One source
 
-Nothing here is new. The values come from what the projects ship today:
+`packages/design/tokens.json` holds every value once. The decks read it, the stylesheets are generated from it, and a check in CI fails when a deck and the file disagree. So a colour in the Foundations deck, a swatch on these pages and a `bg-surface` in a component are the same number.
 
-- **AuroraBoot** (`ui/src/index.css` and `ui/src/components`): the semantic colour tokens, the dark theme, the radius scale, and the button, badge, card, input, dialog, table, tabs and app shell components.
-- **The Kairos web installer** (`installer/internal/webui/public/style.css`): the same tokens as plain CSS classes for a page with no build step, and the step rail, progress list and log panel.
-- **kairos-docs** (`src/css/custom.css`): the brand palette under its `--kairos-*` names, Noto Sans, the navy navbar and sidebar.
-- **packages.kairos.io**: the one project still on a different font and framework, listed in Adoption with what it would take to move.
-- **The CNCF artwork** for Kairos: the mark in its three oranges and the horizontal and stacked logos in colour, white and black.
-- **The tiles**: the mark's rhombi laid flat as a hexagon in the three oranges, fields that fade to outlines, a tile bar and a numbered marker. These come from the Tessellate direction in `kairos-io/design-system` (Mauro Morales, October 2026), ported onto this package's tokens. The one piece that is not yet shipped by a project.
+- **Foundations**: brand, colour, type, spacing, radius and elevation, theming, the tiles, icons.
+- **Components**: every component in light and dark, with its accessibility checks run live.
+- **Pages**: the screens from the decks, built from the components, so the decks and the package can be read side by side.
+- **Adoption**: what each Kairos web project does to take the package.
 
 ## Three ways in
 
@@ -33,12 +31,15 @@ Nothing here is new. The values come from what the projects ship today:
   <tbody>
     <tr className="border-b border-line align-top">
       <td className="py-2 pr-3 font-mono text-xs">@kairos-io/design/tokens.css</td>
-      <td className="py-2">Any page, any framework. Custom properties for light and dark, nothing else.</td>
+      <td className="py-2">
+        Any page, any framework. Custom properties for light, dark and the variants, nothing else.
+      </td>
     </tr>
     <tr className="border-b border-line align-top">
       <td className="py-2 pr-3 font-mono text-xs">@kairos-io/design + styles.css</td>
       <td className="py-2">
-        A React app. Components built on Tailwind v4 and Radix, with the compiled styles.
+        A React app. Components built on Tailwind v4 and Radix, with the compiled styles. A Tailwind app
+        imports tailwind.css instead and scans the package.
       </td>
     </tr>
     <tr className="border-b border-line align-top">
@@ -50,10 +51,11 @@ Nothing here is new. The values come from what the projects ship today:
   </tbody>
 </table>
 
-Start with **Getting started**, then the **Foundations** pages for the tokens and the rules around them. Each component page shows every variant and state in both themes, with its accessibility checks run live.
+Start with **Getting started**, then the **Foundations** pages for the tokens and the rules around them.
 
 ## Where to go
 
-- Source and issues: [github.com/wcrum/kairos-design-system](https://github.com/wcrum/kairos-design-system). File issues on [kairos-io/kairos](https://github.com/kairos-io/kairos/issues), like every Kairos repository.
+- The decks: [kairos-io.github.io/design](https://kairos-io.github.io/design/). Foundations, the screens, Naming, the talk deck.
+- Source: [github.com/kairos-io/design](https://github.com/kairos-io/design), `packages/design`. Issues go to [kairos-io/kairos](https://github.com/kairos-io/kairos/issues), like every Kairos repository.
 - The tokens as data: `import { tokens } from "@kairos-io/design/tokens"`.
-- Decisions: `docs/adr/` in the repository explains the stack and why the first release records rather than redesigns.
+- Decisions: `packages/design/docs/adr/` explains the stack and why the package follows the decks.

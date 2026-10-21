@@ -1,6 +1,15 @@
 import fs from "node:fs";
 import path from "node:path";
-import { brand, status, themeDark, themeLight, themeTokens, toneTokens, tones, variants } from "../tokens/index.ts";
+import {
+  brand,
+  status,
+  themeDark,
+  themeLight,
+  themeTokens,
+  toneTokens,
+  tones,
+  variants,
+} from "../tokens/index.ts";
 
 // tokens.json is the source; scripts/build.cjs writes these two files from it
 // and scripts/check.cjs fails CI when they are stale. These tests pin the
@@ -25,12 +34,17 @@ describe("design tokens", () => {
     }
   });
 
-  it.each(themeTokens)("writes --%s into the light, dark and system blocks and the Tailwind theme", (name) => {
-    expect(block(tokensCss, ':root,\n[data-theme="light"] {')).toContain(`--${name}: ${themeLight[name]};`);
-    expect(block(tokensCss, '[data-theme="dark"] {')).toContain(`--${name}: ${themeDark[name]};`);
-    expect(block(tokensCss, ':root:not([data-theme="light"]) {')).toContain(`--${name}: ${themeDark[name]};`);
-    expect(tailwindCss).toContain(`--color-${kebab(name)}: var(--${name});`);
-  });
+  it.each(themeTokens)(
+    "writes --%s into the light, dark and system blocks and the Tailwind theme",
+    (name) => {
+      expect(block(tokensCss, ':root,\n[data-theme="light"] {')).toContain(`--${name}: ${themeLight[name]};`);
+      expect(block(tokensCss, '[data-theme="dark"] {')).toContain(`--${name}: ${themeDark[name]};`);
+      expect(block(tokensCss, ':root:not([data-theme="light"]) {')).toContain(
+        `--${name}: ${themeDark[name]};`,
+      );
+      expect(tailwindCss).toContain(`--color-${kebab(name)}: var(--${name});`);
+    },
+  );
 
   it("uses the Kairos orange as the light accent and the mid orange in the dark theme", () => {
     expect(themeLight.accent).toBe(brand["kairos-orange"]);

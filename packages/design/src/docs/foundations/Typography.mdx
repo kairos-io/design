@@ -7,9 +7,9 @@ import { FontStacks, TypeScale, Weights } from "../../../.storybook/blocks/index
 
 ## Faces
 
-Noto Sans is the brand face: the docs site and AuroraBoot load it from Google Fonts, in weights 300 to 700. It was chosen for its coverage (Kairos is read in many scripts) and its neutral, open shapes at small sizes, which is where most of the interface lives. The installer cannot fetch it, so the stack falls back to the system face there; the interface must still read well in San Francisco, Segoe UI or Roboto.
+Urbanist, a geometric sans, for everything people read. Martian Mono, set at its normal width, for commands, versions, hostnames and metadata. Both are self-hosted in the package under `assets/fonts` and loaded by `fonts.css`, so a page renders the same offline, behind font blockers and without a third-party request. Sentence case everywhere.
 
-Logs, image references, node names and anything an operator might copy are set in the system monospace stack.
+The stacks carry full system fallbacks for Linux, macOS, Windows and Android, because the installer runs on machines that have never seen a web font.
 
 <FontStacks />
 
@@ -17,19 +17,19 @@ Logs, image references, node names and anything an operator might copy are set i
 
 <Weights />
 
-Regular for body, medium for labels and buttons, semibold for titles inside components, bold for page titles. Light (300) is loaded for the docs' marketing pages and not used in the apps.
+Regular for body, semibold for titles, labels and buttons, bold for emphasis inside a line. There is no light weight.
 
 ## Scale
 
-The apps use 14px body; the docs site uses 16px. Every other step is shared.
+Eight steps, from the one display line on a homepage to the mono metadata. Nothing goes below 12px; the render check fails a page that does.
 
 <TypeScale />
 
 ## Rules
 
-- Page titles are 30/36 bold with -0.025em tracking, and wrap rather than truncate (`text-wrap: balance`, `overflow-wrap: anywhere`).
-- Card and dialog titles are 16 semibold with `leading-none` and -0.01em tracking.
-- A stat value is 24 semibold with tabular figures.
-- Section labels in the sidebar are 10px uppercase with 0.05em tracking at 40% opacity.
-- Nothing goes below 10px, and 10px is only ever uppercase labels.
-- Line length stays under about 70 characters for descriptions (`max-w-[70ch]`).
+- Headlines are semibold with negative tracking that tightens as the size grows: display at -4.5%, h1 at -3.5%, h2 at -3%, h3 at -2%.
+- Body and body-large set 1.6 line height. Titles set about 1.1.
+- Labels (form labels, buttons, tabs, table headers) are 14px semibold.
+- Anything an operator might copy (a command, a version, a hostname, a disk path) is mono at 13px.
+- Text never goes below 12px, and 12px is only ever mono metadata.
+- Lines stay under about 70 characters for descriptions (`max-w-[70ch]`); `text-wrap: pretty` on paragraphs, `balance` on titles.

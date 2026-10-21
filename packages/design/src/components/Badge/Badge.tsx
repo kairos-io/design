@@ -9,8 +9,7 @@ export const badgeVariants = cva(
       variant: {
         default: "border-transparent bg-accent text-on-accent hover:bg-accent/80",
         secondary: "border-transparent bg-raised text-ink hover:bg-raised/80",
-        destructive:
-          "border-transparent bg-status-recovery text-status-ink hover:bg-status-recovery/80",
+        destructive: "border-transparent bg-status-recovery text-status-ink hover:bg-status-recovery/80",
         outline: "text-ink",
       },
     },
