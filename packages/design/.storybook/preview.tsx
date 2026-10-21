@@ -1,5 +1,5 @@
 import type { Preview } from "@storybook/react-vite";
-import { withThemeByClassName } from "@storybook/addon-themes";
+import { withThemeByDataAttribute } from "@storybook/addon-themes";
 import { kairosDocsTheme } from "./theme.ts";
 import "./preview.css";
 
@@ -25,15 +25,19 @@ const preview: Preview = {
           "Foundations",
           [
             "Brand",
+            "Hadron",
             "Color",
             "Typography",
             "Spacing & layout",
-            "Radius, shadows & motion",
+            "Radius, elevation & motion",
             "Theming",
+            "Tiles",
             "Icons",
+            "Naming",
           ],
           "Components",
           "Patterns",
+          "Pages",
           "Adoption",
           "Changelog",
         ],
@@ -45,9 +49,13 @@ const preview: Preview = {
     },
   },
   decorators: [
-    withThemeByClassName({
+    // tokens.css reads the theme from data-theme on <html>, as the decks and
+    // the installer do. Light is the default; "system" leaves the attribute
+    // off and follows prefers-color-scheme.
+    withThemeByDataAttribute({
       themes: { light: "light", dark: "dark" },
       defaultTheme: "light",
+      attributeName: "data-theme",
       parentSelector: "html",
     }),
   ],

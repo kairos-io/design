@@ -5,25 +5,25 @@ import { Loader2 } from "lucide-react";
 import { cn } from "../../lib/cn.ts";
 
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-base text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary-hover",
-        outline: "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        destructive: "bg-danger text-destructive-foreground shadow-sm hover:bg-danger/90",
-        "destructive-outline": "border border-input bg-background text-danger-foreground hover:bg-danger/10",
-        link: "text-primary underline-offset-4 hover:underline",
+        default: "bg-accent text-on-accent hover:bg-accent-soft",
+        outline: "border border-line bg-bg hover:bg-hover hover:text-ink",
+        secondary: "bg-raised text-ink hover:bg-raised/80",
+        ghost: "hover:bg-hover hover:text-ink",
+        destructive: "bg-status-recovery text-status-ink hover:bg-status-recovery/90",
+        "destructive-outline": "border border-line bg-bg text-status-recovery hover:bg-status-recovery/10",
+        link: "text-accent underline-offset-4 hover:underline",
         /** For the navy sidebar and top bar: sidebar ink, brighter on hover. */
         "on-navy":
-          "text-sidebar-fg opacity-70 hover:bg-sidebar-muted hover:text-sidebar-fg hover:opacity-100",
+          "text-ink opacity-70 hover:bg-raised hover:text-ink hover:opacity-100",
       },
       size: {
-        sm: "h-7 rounded-md px-3 text-xs",
+        sm: "h-7 rounded-base px-3 text-xs",
         default: "h-8 px-3 py-1.5",
-        lg: "h-10 rounded-md px-6",
+        lg: "h-10 rounded-base px-6",
         icon: "h-8 w-8",
         "icon-sm": "h-7 w-7",
       },

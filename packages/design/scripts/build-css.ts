@@ -1,5 +1,5 @@
-// Builds every stylesheet the package ships into dist/ and copies the logo
-// assets. Run after build:tokens.
+// Builds every stylesheet the package ships into dist/ and copies the assets
+// (logos, tile patterns, fonts). Run after build:tokens.
 import { execFileSync } from "node:child_process";
 import { copyFileSync, cpSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -15,8 +15,13 @@ execFileSync(tailwind, ["-i", "src/styles/index.css", "-o", "dist/styles.css", "
   stdio: "inherit",
 });
 
-for (const name of ["tokens.css", "theme.css", "fonts.css", "components.css"]) {
+// The generated token files live at the package root (the decks and the
+// Pages site read them there); a copy in dist/ keeps the CDN path stable.
+for (const name of ["tokens.css", "tailwind.css"]) {
+  copyFileSync(resolve(root, name), resolve(dist, name));
+}
+for (const name of ["fonts.css", "components.css"]) {
   copyFileSync(resolve(root, "src/styles", name), resolve(dist, name));
 }
 cpSync(resolve(root, "src/assets"), resolve(dist, "assets"), { recursive: true });
-console.log("wrote dist/styles.css, tokens.css, theme.css, fonts.css, components.css and assets/");
+console.log("wrote dist/styles.css, tokens.css, tailwind.css, fonts.css, components.css and assets/");

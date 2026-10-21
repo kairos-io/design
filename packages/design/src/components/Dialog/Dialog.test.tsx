@@ -54,7 +54,7 @@ describe("ConfirmDialog", () => {
       />,
     );
     const confirm = screen.getByRole("button", { name: "Decommission" });
-    expect(confirm.className).toContain("bg-danger");
+    expect(confirm.className).toContain("bg-status-recovery");
     await userEvent.click(confirm);
     expect(onConfirm).toHaveBeenCalledTimes(1);
     expect(onOpenChange).toHaveBeenCalledWith(false);

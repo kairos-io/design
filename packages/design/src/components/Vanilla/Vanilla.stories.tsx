@@ -1,20 +1,21 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useMemo, useState } from "react";
-import tokensCss from "../../styles/tokens.css?raw";
+import tokensCss from "../../../tokens.css?raw";
+import fontsCss from "../../../src/assets/fonts/fonts.css?raw";
 import componentsCss from "../../styles/components.css?raw";
 import { logos } from "../Logo/logos.generated.ts";
 
 // The vanilla layer is for pages with no build step, so the story renders a
 // real one: an iframe whose document links nothing and bundles nothing, just
 // tokens.css and components.css inline. The frame follows the Storybook
-// theme by copying the `dark` class onto its own <html>.
+// theme by copying the data-theme attribute onto its own <html>.
 
 function useStorybookTheme(): "light" | "dark" {
-  const read = () => (document.documentElement.classList.contains("dark") ? "dark" : "light");
+  const read = () => (document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light");
   const [theme, setTheme] = useState<"light" | "dark">(read);
   useEffect(() => {
     const observer = new MutationObserver(() => setTheme(read()));
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     return () => observer.disconnect();
   }, []);
   return theme;
@@ -22,11 +23,12 @@ function useStorybookTheme(): "light" | "dark" {
 
 function page(body: string, theme: "light" | "dark"): string {
   return `<!DOCTYPE html>
-<html lang="en" class="${theme}">
+<html lang="en" data-theme="${theme}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vanilla CSS sample</title>
+<style>${fontsCss.replaceAll("url(", "url(/fonts/")}</style>
 <style>${tokensCss}</style>
 <style>${componentsCss}</style>
 </head>

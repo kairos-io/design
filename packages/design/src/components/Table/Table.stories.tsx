@@ -56,7 +56,7 @@ export const Nodes: Story = {
             <TableCell>
               <span
                 className={cn(
-                  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold",
+                  "inline-flex items-center rounded-base border px-2.5 py-0.5 text-xs font-semibold",
                   toneSoft[phaseTone(n.phase)],
                 )}
               >
@@ -80,7 +80,7 @@ export const WithFooterAndSelection: Story = {
       <TableHeader>
         <TableRow>
           <TableHead className="w-8">
-            <input type="checkbox" aria-label="Select all" className="accent-primary" />
+            <input type="checkbox" aria-label="Select all" className="accent-accent" />
           </TableHead>
           <TableHead>Artifact</TableHead>
           <TableHead>Size</TableHead>
@@ -93,7 +93,7 @@ export const WithFooterAndSelection: Story = {
               type="checkbox"
               aria-label="Select kairos-ubuntu-24.04.iso"
               defaultChecked
-              className="accent-primary"
+              className="accent-accent"
             />
           </TableCell>
           <TableCell>kairos-ubuntu-24.04-standard-amd64.iso</TableCell>
@@ -101,7 +101,7 @@ export const WithFooterAndSelection: Story = {
         </TableRow>
         <TableRow>
           <TableCell>
-            <input type="checkbox" aria-label="Select kairos-alpine-3.21.raw" className="accent-primary" />
+            <input type="checkbox" aria-label="Select kairos-alpine-3.21.raw" className="accent-accent" />
           </TableCell>
           <TableCell>kairos-alpine-3.21-core-arm64.raw</TableCell>
           <TableCell className="tabular-nums">812 MB</TableCell>

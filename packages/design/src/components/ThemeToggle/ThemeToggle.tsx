@@ -45,7 +45,7 @@ export const ThemeToggle = React.forwardRef<HTMLElement, ThemeToggleProps>(funct
         title={`Theme: ${mode}`}
         onClick={() => setMode(nextMode[mode])}
         className={cn(
-          "inline-flex h-8 w-8 items-center justify-center rounded-md text-sidebar-fg opacity-70 transition-colors hover:bg-sidebar-muted hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "inline-flex h-8 w-8 items-center justify-center rounded-base text-ink opacity-70 transition-colors hover:bg-raised hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
           className,
         )}
         {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
@@ -60,7 +60,7 @@ export const ThemeToggle = React.forwardRef<HTMLElement, ThemeToggleProps>(funct
       ref={ref as React.Ref<HTMLDivElement>}
       role="group"
       aria-label="Theme"
-      className={cn("flex w-full gap-1 rounded-md bg-sidebar-muted p-1", className)}
+      className={cn("flex w-full gap-1 rounded-base bg-raised p-1", className)}
       {...props}
     >
       {options.map(({ mode: m, icon: Icon, label }) => (
@@ -72,8 +72,8 @@ export const ThemeToggle = React.forwardRef<HTMLElement, ThemeToggleProps>(funct
           title={label}
           onClick={() => setMode(m)}
           className={cn(
-            "inline-flex h-7 flex-1 items-center justify-center rounded text-sidebar-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-            mode === m ? "bg-sidebar-accent text-primary-foreground" : "opacity-70 hover:opacity-100",
+            "inline-flex h-7 flex-1 items-center justify-center rounded-base text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
+            mode === m ? "bg-accent text-on-accent" : "opacity-70 hover:opacity-100",
           )}
         >
           <Icon className="h-4 w-4" aria-hidden="true" />

@@ -64,7 +64,7 @@ export function Toaster({ duration = 3000, className }: ToasterProps) {
         <div
           key={t.id}
           data-tone={t.tone}
-          className="flex items-center gap-3 overflow-hidden rounded-lg border bg-popover pr-2 text-sm font-medium text-popover-foreground shadow-lg animate-fade-up"
+          className="flex items-center gap-3 overflow-hidden rounded-base border bg-surface pr-2 text-sm font-medium text-ink animate-fade-up"
         >
           <span aria-hidden="true" className={cn("self-stretch w-1 shrink-0", toneBar[t.tone])} />
           <span className="flex-1 py-3">{t.message}</span>
@@ -72,7 +72,7 @@ export function Toaster({ duration = 3000, className }: ToasterProps) {
             type="button"
             aria-label="Dismiss"
             onClick={() => dismiss(t.id)}
-            className="shrink-0 rounded p-1 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="shrink-0 rounded-base p-1 text-muted transition-colors hover:bg-hover hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
           >
             <X className="h-3.5 w-3.5" aria-hidden="true" />
           </button>

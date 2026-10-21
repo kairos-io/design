@@ -29,22 +29,22 @@ export const Default: Story = {
           Metrics
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="overview" className="rounded-lg border bg-card p-4 text-sm">
+      <TabsContent value="overview" className="rounded-base border bg-surface p-4 text-sm">
         <dl className="grid grid-cols-[120px_1fr] gap-y-1">
-          <dt className="text-muted-foreground">Hostname</dt>
+          <dt className="text-muted">Hostname</dt>
           <dd className="font-mono">edge-rack2-07</dd>
-          <dt className="text-muted-foreground">Image</dt>
+          <dt className="text-muted">Image</dt>
           <dd className="font-mono">
             quay.io/kairos/ubuntu:24.04-standard-amd64-generic-v3.6.0-k3sv1.33.1-k3s1
           </dd>
-          <dt className="text-muted-foreground">Phase</dt>
+          <dt className="text-muted">Phase</dt>
           <dd>Online</dd>
         </dl>
       </TabsContent>
-      <TabsContent value="logs" className="rounded-lg border bg-card p-4 font-mono text-sm">
+      <TabsContent value="logs" className="rounded-base border bg-surface p-4 font-mono text-sm">
         kairos-agent: upgrade complete, rebooting into active
       </TabsContent>
-      <TabsContent value="labels" className="rounded-lg border bg-card p-4 text-sm">
+      <TabsContent value="labels" className="rounded-base border bg-surface p-4 text-sm">
         site=rack2, role=worker
       </TabsContent>
       <TabsContent value="metrics">Metrics</TabsContent>

@@ -23,6 +23,6 @@ describe("Steps", () => {
 
   it("colours a failed step in danger", () => {
     render(<Steps aria-label="Steps" items={[{ id: "a", label: "Bootloader", state: "failed" }]} />);
-    expect(screen.getByRole("listitem").className).toContain("text-danger-foreground");
+    expect(screen.getByRole("listitem").className).toContain("text-status-recovery");
   });
 });

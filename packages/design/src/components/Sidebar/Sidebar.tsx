@@ -62,9 +62,9 @@ export const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
         <aside
           ref={ref}
           className={cn(
-            "flex h-full flex-col bg-sidebar-bg text-sidebar-fg",
+            "flex h-full flex-col bg-side text-ink",
             mode === "full"
-              ? "w-60 md:absolute md:inset-y-0 md:left-0 md:z-40 md:shadow-lg lg:static lg:shadow-none"
+              ? "w-60 md:absolute md:inset-y-0 md:left-0 md:z-40 lg:static"
               : "w-full",
             className,
           )}
@@ -153,7 +153,7 @@ export const SidebarHeader = React.forwardRef<HTMLDivElement, SidebarHeaderProps
         </div>
       )}
       <div className={cn("text-center", sidebarModeClasses.fullOnly[mode])}>
-        <span className="block text-base font-bold leading-tight text-brand-white">{title}</span>
+        <span className="block text-base font-bold leading-tight text-bg">{title}</span>
       </div>
       {setMode && mode === "full" && collapse("absolute right-2 top-2")}
       {setMode && mode === "rail" && expand()}
@@ -170,7 +170,7 @@ SidebarHeader.displayName = "SidebarHeader";
 
 /** The thin line between the header, the navigation and the footer. */
 export function SidebarDivider({ className }: { className?: string }) {
-  return <div className={cn("mx-4 border-t border-sidebar-muted", className)} />;
+  return <div className={cn("mx-4 border-t border-raised", className)} />;
 }
 
 export interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
@@ -214,13 +214,13 @@ export const SidebarSection = React.forwardRef<HTMLDivElement, SidebarSectionPro
         <>
           <span
             className={cn(
-              "block px-3 pt-4 pb-1 text-[10px] uppercase tracking-wider text-sidebar-fg-muted",
+              "block px-3 pt-4 pb-1 text-[10px] uppercase tracking-wider text-muted",
               sidebarModeClasses.label[mode],
             )}
           >
             {label}
           </span>
-          <div className={cn("mx-2 my-2 border-t border-sidebar-muted", sidebarModeClasses.railOnly[mode])} />
+          <div className={cn("mx-2 my-2 border-t border-raised", sidebarModeClasses.railOnly[mode])} />
         </>
       )}
       <div className="space-y-1">{children}</div>
@@ -259,11 +259,11 @@ export const SidebarItem = React.forwardRef<HTMLAnchorElement, SidebarItemProps>
   ) => {
     const { mode, onNavigate } = useSidebar();
     const classes = cn(
-      "flex items-center gap-3 rounded-md py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      "flex items-center gap-3 rounded-base py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
       sidebarModeClasses.linkLayout[mode],
       active
-        ? "bg-sidebar-accent text-primary-foreground"
-        : "text-sidebar-fg opacity-80 hover:bg-sidebar-muted hover:opacity-100",
+        ? "bg-accent text-on-accent"
+        : "text-ink opacity-80 hover:bg-raised hover:opacity-100",
       className,
     );
     const content = (
@@ -350,7 +350,7 @@ export const SidebarSteps = React.forwardRef<HTMLElement, SidebarStepsProps>(fun
       className={cn("grid flex-1 content-start gap-1 overflow-y-auto overflow-x-hidden p-3", className)}
       {...props}
     >
-      <span className="block px-3 py-1 text-[10px] uppercase tracking-wider text-sidebar-fg-muted">
+      <span className="block px-3 py-1 text-[10px] uppercase tracking-wider text-muted">
         {label}
       </span>
       {steps.map((step, i) => {
@@ -365,10 +365,10 @@ export const SidebarSteps = React.forwardRef<HTMLElement, SidebarStepsProps>(fun
             aria-current={isCurrent ? "step" : undefined}
             onClick={() => onStepChange?.(step.id)}
             className={cn(
-              "flex w-full items-start gap-2.5 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed",
+              "flex w-full items-start gap-2.5 rounded-base px-3 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink disabled:cursor-not-allowed",
               isCurrent
-                ? "bg-sidebar-accent text-primary-foreground"
-                : "text-sidebar-fg opacity-80 enabled:hover:bg-sidebar-muted enabled:hover:opacity-100",
+                ? "bg-accent text-on-accent"
+                : "text-ink opacity-80 enabled:hover:bg-raised enabled:hover:opacity-100",
             )}
           >
             <span
@@ -376,10 +376,10 @@ export const SidebarSteps = React.forwardRef<HTMLElement, SidebarStepsProps>(fun
               className={cn(
                 "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs font-semibold tabular-nums",
                 isCurrent
-                  ? "border-brand-white bg-brand-white text-brand-navy"
+                  ? "border-surface bg-surface text-ink"
                   : done
-                    ? "border-transparent bg-sidebar-muted"
-                    : "border-sidebar-fg/25",
+                    ? "border-transparent bg-raised"
+                    : "border-ink/25",
               )}
             >
               {done && !isCurrent ? <Check className="h-3.5 w-3.5" /> : i + 1}
@@ -412,14 +412,14 @@ export const Topbar = React.forwardRef<HTMLElement, TopbarProps>(
     const brand = (
       <>
         {logo}
-        {title && <span className="text-base font-bold text-brand-white">{title}</span>}
+        {title && <span className="text-base font-bold text-bg">{title}</span>}
       </>
     );
     return (
       <header
         ref={ref}
         className={cn(
-          "flex h-14 shrink-0 items-center justify-between gap-3 bg-sidebar-bg px-4 text-sidebar-fg",
+          "flex h-14 shrink-0 items-center justify-between gap-3 bg-side px-4 text-ink",
           className,
         )}
         {...props}
@@ -493,12 +493,12 @@ export function AppShell({
                 <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-overlay animate-fade-in" />
                 <DialogPrimitive.Content
                   aria-describedby={undefined}
-                  className="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-sidebar-bg text-sidebar-fg shadow-lg"
+                  className="fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col bg-side text-ink"
                 >
                   <div className="flex items-center justify-between px-4 pt-4 pb-3">
                     <div className="flex items-center gap-2">
                       {logo}
-                      <DialogPrimitive.Title className="text-base font-bold text-brand-white">
+                      <DialogPrimitive.Title className="text-base font-bold text-bg">
                         {title}
                       </DialogPrimitive.Title>
                     </div>

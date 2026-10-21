@@ -46,7 +46,7 @@ export const Labels: Story = {
             {l}
           </Chip>
         ))}
-        {labels.length === 0 && <span className="text-sm text-muted-foreground">No labels</span>}
+        {labels.length === 0 && <span className="text-sm text-muted">No labels</span>}
       </div>
     );
   },
@@ -67,7 +67,7 @@ export const Filters: Story = {
               type="button"
               aria-pressed={on}
               onClick={() => setActive((prev) => (on ? prev.filter((x) => x !== p) : [...prev, p]))}
-              className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="rounded-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
             >
               <Chip selected={on} mono={false}>
                 {p}

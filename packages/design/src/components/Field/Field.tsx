@@ -46,7 +46,7 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
         <Label htmlFor={id}>
           {label}
           {required && (
-            <span className="ml-0.5 text-danger-foreground" aria-hidden="true">
+            <span className="ml-0.5 text-status-recovery" aria-hidden="true">
               *
             </span>
           )}
@@ -55,12 +55,12 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
           ? children(control)
           : React.cloneElement(children as React.ReactElement<FieldControlProps>, control)}
         {help && (
-          <p id={helpId} className="text-[13px] text-muted-foreground">
+          <p id={helpId} className="text-[13px] text-muted">
             {help}
           </p>
         )}
         {error && (
-          <p id={errorId} role="alert" className="text-[13px] text-danger-foreground">
+          <p id={errorId} role="alert" className="text-[13px] text-status-recovery">
             {error}
           </p>
         )}

@@ -27,7 +27,7 @@ export interface PageHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   children?: React.ReactNode;
 }
 
-const linkClass = "truncate hover:text-foreground hover:underline";
+const linkClass = "truncate hover:text-ink hover:underline";
 
 /**
  * The top of every page: an optional breadcrumb, the h1 with an optional
@@ -40,7 +40,7 @@ export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
     <div ref={ref} className={cn("mb-8", className)} {...props}>
       {breadcrumb && breadcrumb.length > 0 && (
         <nav aria-label="Breadcrumb" className="mb-2">
-          <ol className="flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
+          <ol className="flex flex-wrap items-center gap-1 text-sm text-muted">
             {breadcrumb.map((item, i) => (
               <li key={`${i}-${item.label}`} className="flex min-w-0 items-center gap-1">
                 {i > 0 && <ChevronRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />}
@@ -66,9 +66,9 @@ export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
             <h1 className="min-w-0 break-words text-3xl font-bold tracking-tight">{title}</h1>
             {status}
           </div>
-          {description && <p className="mt-1 text-muted-foreground">{description}</p>}
+          {description && <p className="mt-1 text-muted">{description}</p>}
           {meta && (
-            <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+            <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
               {meta}
             </div>
           )}

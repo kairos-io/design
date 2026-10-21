@@ -86,7 +86,7 @@ export const WithIcon: Story = {
 
 export const Inline: Story = {
   render: (args) => (
-    <div className="max-w-md rounded-xl border bg-card p-4">
+    <div className="max-w-md rounded-lg border bg-surface p-4">
       <p className="mb-2 text-sm font-medium">Cloud config</p>
       <Alert {...args} variant="inline" tone="warning">
         The config was edited by hand. The summary may be out of date.

@@ -25,7 +25,7 @@ export const Tile = React.forwardRef<SVGSVGElement, TileProps>(
     >
       <polygon
         points={tilePoints}
-        fill={tone === "rest" ? "var(--muted)" : tilePalettes[palette][tone]}
+        fill={tone === "rest" ? "var(--inner)" : tilePalettes[palette][tone]}
         style={{ transition: "fill var(--duration-base) var(--ease-out)" }}
       />
     </svg>

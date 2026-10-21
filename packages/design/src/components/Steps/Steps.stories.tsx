@@ -43,7 +43,7 @@ export const Complete: Story = { args: { items: install(8) } };
 
 export const InACard: Story = {
   render: (args) => (
-    <section className="max-w-md rounded-xl border bg-card p-6">
+    <section className="max-w-md rounded-lg border bg-surface p-6">
       <Steps {...args} />
     </section>
   ),

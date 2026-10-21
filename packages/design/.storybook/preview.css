@@ -3,8 +3,7 @@
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities);
-@import "../src/styles/tokens.css";
-@import "../src/styles/theme.css";
+@import "../tailwind.css";
 @import "../src/styles/base.css";
 
 @source "../src/components";
@@ -16,9 +15,9 @@
 html,
 body,
 .sb-show-main {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-family-sans);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
 }
 
 .sb-show-main.sb-main-padded {
@@ -27,34 +26,34 @@ body,
 
 /* Docs pages inherit the tokens too, so swatches and examples switch with the theme. */
 .sbdocs.sbdocs-content {
-  font-family: var(--font-family-sans);
+  font-family: var(--font-sans);
 }
 
 /* Docs prose follows the tokens in the dark theme. */
-.dark .sbdocs.sbdocs-wrapper,
-.dark .sbdocs.sbdocs-content {
-  background: var(--background);
-  color: var(--foreground);
+[data-theme="dark"] .sbdocs.sbdocs-wrapper,
+[data-theme="dark"] .sbdocs.sbdocs-content {
+  background: var(--bg);
+  color: var(--ink);
 }
-.dark .sbdocs.sbdocs-content :is(h1, h2, h3, h4, h5, h6, p, li, td, th, dt, dd, blockquote) {
-  color: var(--foreground);
+[data-theme="dark"] .sbdocs.sbdocs-content :is(h1, h2, h3, h4, h5, h6, p, li, td, th, dt, dd, blockquote) {
+  color: var(--ink);
 }
-.dark .sbdocs.sbdocs-content :is(h1, h2, table, th, td) {
-  border-color: var(--border);
+[data-theme="dark"] .sbdocs.sbdocs-content :is(h1, h2, table, th, td) {
+  border-color: var(--line);
 }
-.dark .sbdocs.sbdocs-content tr:nth-of-type(2n) {
-  background: var(--muted);
+[data-theme="dark"] .sbdocs.sbdocs-content tr:nth-of-type(2n) {
+  background: var(--inner);
 }
-.dark .sbdocs.sbdocs-content :not(pre) > code {
-  background: var(--muted);
-  color: var(--foreground);
-  border-color: var(--border);
+[data-theme="dark"] .sbdocs.sbdocs-content :not(pre) > code {
+  background: var(--inner);
+  color: var(--ink);
+  border-color: var(--line);
 }
-.dark .sbdocs.sbdocs-content a {
-  color: var(--primary);
+[data-theme="dark"] .sbdocs.sbdocs-content a {
+  color: var(--accent);
 }
-.dark .sbdocs.sbdocs-content .toc-list a {
-  color: var(--muted-foreground);
+[data-theme="dark"] .sbdocs.sbdocs-content .toc-list a {
+  color: var(--inner);
 }
 
 /* Preflight strips list markers; docs prose wants them back. */

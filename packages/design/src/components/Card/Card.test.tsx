@@ -17,12 +17,12 @@ describe("Card", () => {
     expect(screen.getByText("Every node that has registered.")).toBeInTheDocument();
     expect(screen.getByText("12 online")).toBeInTheDocument();
     expect(screen.getByText("Updated just now")).toBeInTheDocument();
-    expect(screen.getByTestId("card").className).toContain("bg-card");
+    expect(screen.getByTestId("card").className).toContain("bg-surface");
   });
 
   it("merges a custom class", () => {
     render(<Card data-testid="card" className="p-4" />);
     expect(screen.getByTestId("card").className).toContain("p-4");
-    expect(screen.getByTestId("card").className).toContain("rounded-xl");
+    expect(screen.getByTestId("card").className).toContain("rounded-lg");
   });
 });

@@ -68,4 +68,18 @@ export {
 } from "./lib/tiles.ts";
 
 // Tokens, also available on their own from "@kairos-io/design/tokens".
-export { tokens, brand, hadron, semanticLight, semanticDark, tones, breakpoints } from "./tokens/index.ts";
+export {
+  brand,
+  breakpoints,
+  hadron,
+  kairos,
+  status,
+  themeDark,
+  themeLight,
+  themes,
+  tokens,
+  toneTokens,
+  tones,
+  variants,
+} from "./tokens/index.ts";
+export type { BrandColor, ThemeToken, TypeStep, Variant } from "./tokens/index.ts";

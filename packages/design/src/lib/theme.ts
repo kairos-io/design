@@ -2,10 +2,10 @@
 // that only needs to apply the stored mode (a login screen, the installer's
 // theme.js) can call them directly.
 //
-// tokens.css reads the theme from <html>: `dark` or `light` as a class, or
-// data-theme="dark|light". With neither present it follows the operating
-// system, so applyTheme sets one of the two classes for an explicit choice
-// and clears both for "system".
+// tokens.css reads the theme from data-theme="light|dark" on <html> (or on
+// any element, to theme a part of a page). With the attribute absent it
+// follows the operating system, so applyTheme sets it for an explicit choice
+// and removes it for "system".
 
 export type ThemeMode = "system" | "light" | "dark";
 
@@ -48,10 +48,12 @@ export function resolveTheme(mode: ThemeMode): "light" | "dark" {
   return mode;
 }
 
-/** Sets `light` or `dark` on <html> for an explicit mode, and clears both for "system". */
+export const THEME_ATTRIBUTE = "data-theme";
+
+/** Sets data-theme="light" or "dark" on <html> for an explicit mode, and removes it for "system". */
 export function applyTheme(mode: ThemeMode, root: HTMLElement = document.documentElement): void {
-  root.classList.remove("light", "dark");
-  if (mode !== "system") root.classList.add(mode);
+  if (mode === "system") root.removeAttribute(THEME_ATTRIBUTE);
+  else root.setAttribute(THEME_ATTRIBUTE, mode);
 }
 
 /**
@@ -64,7 +66,7 @@ export function inlineThemeScript(storageKey: string = DEFAULT_THEME_KEY): strin
   return (
     "(function(){try{var m=localStorage.getItem(" +
     key +
-    ');if(m==="light"||m==="dark"){document.documentElement.classList.add(m);}}catch(e){}})();'
+    ');if(m==="light"||m==="dark"){document.documentElement.setAttribute("data-theme",m);}}catch(e){}})();'
   );
 }
 

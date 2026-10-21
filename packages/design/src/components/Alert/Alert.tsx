@@ -6,17 +6,17 @@ import { toneBg, type Tone } from "../../lib/tone.ts";
 const alertVariants = cva("flex items-start gap-2.5 border wrap-anywhere", {
   variants: {
     tone: {
-      success: "border-success/25 bg-success/12 text-success-foreground",
-      warning: "border-warning/25 bg-warning/12 text-warning-foreground",
-      danger: "border-danger/25 bg-danger/12 text-danger-foreground",
-      info: "border-info/25 bg-info/12 text-info-foreground",
-      neutral: "border-neutral/25 bg-neutral/12 text-neutral-foreground",
+      success: "border-status-healthy/25 bg-status-healthy/12 text-ok",
+      warning: "border-status-warning/25 bg-status-warning/12 text-status-warning",
+      danger: "border-status-recovery/25 bg-status-recovery/12 text-status-recovery",
+      info: "border-accent/25 bg-accent/12 text-link",
+      neutral: "border-muted/25 bg-muted/12 text-muted",
     },
     variant: {
       /** A page-level message, as the installer's `.alert` and `.banner`. */
-      banner: "rounded-lg px-3.5 py-3 text-sm",
+      banner: "rounded-base px-3.5 py-3 text-sm",
       /** Inside a form or card, as AuroraBoot's inline warnings. */
-      inline: "rounded-md px-3 py-2 text-[13px]",
+      inline: "rounded-base px-3 py-2 text-[13px]",
     },
   },
   defaultVariants: { tone: "warning", variant: "banner" },

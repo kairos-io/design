@@ -37,7 +37,7 @@ The variable names are the ones the decks already use (`--ink`, `--sub`, `--line
 ```html
 <div class="bg-bg text-ink border border-line rounded-base p-6">
   <h1 class="text-h1 font-sans">Run it immutable</h1>
-  <button class="bg-accent text-on-accent rounded-base px-4 py-2">Install</button>
+  <button class="bg-hover text-on-accent rounded-base px-4 py-2">Install</button>
 </div>
 ```
 
@@ -45,8 +45,8 @@ The variable names are the ones the decks already use (`--ink`, `--sub`, `--line
 - Brand colors do not change with the theme: `kairos-light`, `kairos-mid`, `kairos-orange`, `hadron-sky`, `hadron-blue`, `hadron-deep`, `status-healthy`, `status-recovery`.
 - The type scale is `text-display`, `text-h1`, `text-h2`, `text-h3`, `text-body-lg`, `text-body`, `text-label`, `text-mono`. Each sets size, weight and letter spacing.
 - The spacing scale 4, 8, 12, 16, 24, 32, 48 and 80 px is `1`, `2`, `3`, `4`, `6`, `8`, `12` and `20` (Tailwind's step is set to 4px).
-- There is one radius, `rounded-base` (4px). The shadow utilities are removed, because the design has no shadows.
-- Contrast on Hadron: white on `hadron-blue` `#0275E7` is 4.47:1, just under the WCAG AA 4.5:1 for normal-size text (the Foundations deck says 4.6:1). `bg-accent text-on-accent` under the `hadron` variant is therefore fine for large or bold text but not for small buttons; use `bg-hadron-deep text-white` (`#004CCE`, 7.18:1) there. Ink on Kairos orange is 4.70:1 (the Foundations deck says 5.3:1).
+- There is one radius, `rounded-base` (4px). The utilities are removed, because the design has no shadows.
+- Contrast on Hadron: white on `hadron-blue` `#0275E7` is 4.47:1, just under the WCAG AA 4.5:1 for normal-size text (the Foundations deck says 4.6:1). `bg-hover text-on-accent` under the `hadron` variant is therefore fine for large or bold text but not for small buttons; use `bg-hadron-deep text-bg` (`#004CCE`, 7.18:1) there. Ink on Kairos orange is 4.70:1 (the Foundations deck says 5.3:1).
 - The default Tailwind colors are still there. Add `--color-*: initial;` in your own `@theme` if you want only the Kairos colors.
 
 ## Tokens

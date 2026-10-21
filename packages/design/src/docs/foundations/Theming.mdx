@@ -10,10 +10,10 @@ import { Meta } from "@storybook/addon-docs/blocks";
 src/tokens/index.ts      the source: typed objects, one value per token per theme
         │  scripts/build-tokens.ts
         ├── src/styles/tokens.css   :root (light), .dark / [data-theme=dark], and the OS-preference block
-        └── src/styles/theme.css    @theme inline { --color-primary: var(--primary); ... } for Tailwind v4
+        └── src/styles/theme.css    @theme inline { --color-primary: var(--accent); ... } for Tailwind v4
 ```
 
-Components never read a token directly. They use Tailwind utilities (`bg-primary`), which `theme.css` maps onto the custom properties that `tokens.css` sets. So:
+Components never read a token directly. They use Tailwind utilities (`bg-accent`), which `theme.css` maps onto the custom properties that `tokens.css` sets. So:
 
 - Changing a value is an edit to `src/tokens/index.ts`, a run of `npm run build:tokens`, and a diff on two generated files that CI checks are in step.
 - Switching theme at runtime is a class on `<html>`. No rebuild, no JavaScript needed for the colours themselves.
@@ -23,21 +23,21 @@ Components never read a token directly. They use Tailwind utilities (`bg-primary
 
 <table className="w-full text-sm">
   <thead>
-    <tr className="border-b border-border text-left text-muted-foreground">
+    <tr className="border-b border-line text-left text-muted">
       <th className="py-2 pr-3 font-medium">On the html element</th>
       <th className="py-2 font-medium">Theme</th>
     </tr>
   </thead>
   <tbody>
-    <tr className="border-b border-border">
+    <tr className="border-b border-line">
       <td className="py-2 pr-3 font-mono text-xs">.dark or [data-theme="dark"]</td>
       <td className="py-2">Dark</td>
     </tr>
-    <tr className="border-b border-border">
+    <tr className="border-b border-line">
       <td className="py-2 pr-3 font-mono text-xs">.light or [data-theme="light"]</td>
       <td className="py-2">Light</td>
     </tr>
-    <tr className="border-b border-border">
+    <tr className="border-b border-line">
       <td className="py-2 pr-3 font-mono text-xs">neither</td>
       <td className="py-2">The OS preference</td>
     </tr>

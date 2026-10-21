@@ -50,7 +50,7 @@ export const DetailPage: Story = {
     description: undefined,
     breadcrumb: [{ label: "Nodes", href: "#" }, { label: "edge-node-01" }],
     status: (
-      <span className="inline-flex items-center rounded-md border border-success/25 bg-success/15 px-2.5 py-0.5 text-xs font-semibold text-success-foreground">
+      <span className="inline-flex items-center rounded-base border border-status-healthy/25 bg-status-healthy/15 px-2.5 py-0.5 text-xs font-semibold text-ok">
         online
       </span>
     ),

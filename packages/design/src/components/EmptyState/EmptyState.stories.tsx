@@ -48,7 +48,7 @@ export const NoResults: Story = {
 
 export const InACard: Story = {
   render: (args) => (
-    <div className="max-w-lg rounded-xl border bg-card">
+    <div className="max-w-lg rounded-lg border bg-surface">
       <EmptyState
         {...args}
         icon={Package}

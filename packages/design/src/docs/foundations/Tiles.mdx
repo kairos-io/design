@@ -32,7 +32,7 @@ A hexagon split into three rhombi, each in its tone. Always that order, like the
 
 ## The field
 
-<div className="relative h-60 overflow-hidden rounded-lg border bg-background">
+<div className="relative h-60 overflow-hidden rounded-base border bg-bg">
   <TileField fade="right" seed={5} radius={38} />
 </div>
 
@@ -40,26 +40,26 @@ A field tiles the plane with units and fills each rhombus with a seeded probabil
 
 <table className="w-full text-sm">
   <thead>
-    <tr className="border-b border-border text-left text-muted-foreground">
+    <tr className="border-b border-line text-left text-muted">
       <th className="py-2 pr-3 font-medium">Prop</th>
       <th className="py-2 font-medium">What it does</th>
     </tr>
   </thead>
   <tbody>
-    <tr className="border-b border-border align-top">
+    <tr className="border-b border-line align-top">
       <td className="py-2 pr-3 font-mono text-xs">fade</td>
       <td className="py-2">
         A preset name or a function <code>(u, v) =&gt; probability</code> over the field, 0 to 1 on both axes.
       </td>
     </tr>
-    <tr className="border-b border-border align-top">
+    <tr className="border-b border-line align-top">
       <td className="py-2 pr-3 font-mono text-xs">seed</td>
       <td className="py-2">
         Which rhombi fall away. The same seed always gives the same field, in the browser and in the asset
         build.
       </td>
     </tr>
-    <tr className="border-b border-border align-top">
+    <tr className="border-b border-line align-top">
       <td className="py-2 pr-3 font-mono text-xs">radius</td>
       <td className="py-2">
         The hexagon's circumradius in viewBox units. 38 reads as texture behind a hero; 64 reads as shapes on
@@ -73,33 +73,33 @@ The presets:
 
 <table className="w-full text-sm">
   <thead>
-    <tr className="border-b border-border text-left text-muted-foreground">
+    <tr className="border-b border-line text-left text-muted">
       <th className="py-2 pr-3 font-medium">Fade</th>
       <th className="py-2 font-medium">Use it for</th>
     </tr>
   </thead>
   <tbody>
-    <tr className="border-b border-border align-top">
+    <tr className="border-b border-line align-top">
       <td className="py-2 pr-3 font-mono text-xs">right</td>
       <td className="py-2">A hero with copy on the left. The default.</td>
     </tr>
-    <tr className="border-b border-border align-top">
+    <tr className="border-b border-line align-top">
       <td className="py-2 pr-3 font-mono text-xs">left</td>
       <td className="py-2">The mirror: copy on the right.</td>
     </tr>
-    <tr className="border-b border-border align-top">
+    <tr className="border-b border-line align-top">
       <td className="py-2 pr-3 font-mono text-xs">top, bottom</td>
       <td className="py-2">A band above or below a block of copy.</td>
     </tr>
-    <tr className="border-b border-border align-top">
+    <tr className="border-b border-line align-top">
       <td className="py-2 pr-3 font-mono text-xs">topRight, bottomRight</td>
       <td className="py-2">A corner, for a section divider or a card header.</td>
     </tr>
-    <tr className="border-b border-border align-top">
+    <tr className="border-b border-line align-top">
       <td className="py-2 pr-3 font-mono text-xs">center</td>
       <td className="py-2">An empty state, with the message set over the thin edge.</td>
     </tr>
-    <tr className="border-b border-border align-top">
+    <tr className="border-b border-line align-top">
       <td className="py-2 pr-3 font-mono text-xs">ramp</td>
       <td className="py-2">A linear fade from outlines to solid, for a progress or rollout illustration.</td>
     </tr>
@@ -190,7 +190,7 @@ The ink follows the tone, not the palette: navy on the oranges and on Sky (7.0:1
 
 ## Motion
 
-<div className="relative h-50 overflow-hidden rounded-lg border bg-background">
+<div className="relative h-50 overflow-hidden rounded-base border bg-bg">
   <TileField fade="right" seed={5} radius={38} animate="in" />
 </div>
 
@@ -204,13 +204,13 @@ The stories [Tiles into place](?path=/story/components-tiles--animated) and [Liv
 
 ## In a hero
 
-<div className="relative overflow-hidden rounded-lg border bg-background p-8">
+<div className="relative overflow-hidden rounded-base border bg-bg p-8">
   <div className="absolute inset-y-0 right-0 w-1/2">
     <TileField fade="right" seed={5} radius={38} />
   </div>
   <div className="relative max-w-sm">
     <h2 className="m-0 text-2xl font-bold tracking-tight">Immutable Kubernetes at the edge</h2>
-    <p className="mt-2 text-sm text-muted-foreground">
+    <p className="mt-2 text-sm text-muted">
       Build an image like a Dockerfile, boot it anywhere, upgrade it like a container.
     </p>
     <div className="mt-4">

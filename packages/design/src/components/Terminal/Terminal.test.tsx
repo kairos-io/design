@@ -12,6 +12,6 @@ describe("Terminal", () => {
 
   it("colours error lines", () => {
     render(<Terminal aria-label="Log" lines={[{ text: "[ERROR] no disk", error: true }]} />);
-    expect(screen.getByText("[ERROR] no disk").className).toContain("text-terminal-error");
+    expect(screen.getByText("[ERROR] no disk").className).toContain("text-status-recovery");
   });
 });

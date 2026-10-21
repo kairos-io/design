@@ -55,7 +55,7 @@ function SegmentedControlInner<T extends string>(
     <div
       ref={ref}
       role="radiogroup"
-      className={cn("inline-flex flex-wrap gap-1 rounded-lg border border-border bg-muted/40 p-1", className)}
+      className={cn("inline-flex flex-wrap gap-1 rounded-base border border-line bg-inner/40 p-1", className)}
       {...props}
     >
       {options.map((o, i) => {
@@ -78,17 +78,17 @@ function SegmentedControlInner<T extends string>(
             onClick={() => onChange(o.value)}
             onKeyDown={(e) => onKeyDown(e, i)}
             className={cn(
-              "flex flex-col items-start rounded-md px-3 py-1.5 text-left text-sm transition-colors",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "flex flex-col items-start rounded-base px-3 py-1.5 text-left text-sm transition-colors",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
               "disabled:cursor-not-allowed disabled:opacity-50",
               selected
-                ? "bg-card text-foreground shadow-sm ring-1 ring-primary"
-                : "text-muted-foreground hover:bg-card/60 hover:text-foreground",
+                ? "bg-surface text-ink ring-1 ring-accent"
+                : "text-muted hover:bg-surface/60 hover:text-ink",
             )}
           >
             <span className="font-medium">{o.label}</span>
             {o.hint && (
-              <span id={hintId} className="text-xs text-muted-foreground">
+              <span id={hintId} className="text-xs text-muted">
                 {o.hint}
               </span>
             )}

@@ -1,50 +1,45 @@
-import { breakpoints, layout, spacing } from "../../src/tokens/index.ts";
+import { breakpoints, layout, space } from "../../src/tokens/index.ts";
 
-/** The 4px scale as bars, with the Tailwind step and the pixel value. */
+/** The spacing scale as bars, with the pixel value, the token and the Tailwind step. */
 export function SpacingScale() {
+  const max = space[space.length - 1];
   return (
     <div className="flex flex-col gap-1.5">
-      {spacing.steps.map((step) => {
-        const px = step * spacing.base;
-        return (
-          <div key={step} className="grid grid-cols-[3rem_4rem_1fr] items-center gap-3 text-xs">
-            <span className="font-mono font-semibold text-foreground">{step}</span>
-            <span className="font-mono text-muted-foreground">{px}px</span>
-            <span
-              aria-hidden="true"
-              className="h-4 rounded-sm bg-primary"
-              style={{ width: Math.max(px, 2) }}
-            />
+      {space.map((px) => (
+        <div key={px} className="grid grid-cols-[6rem_1fr] items-center gap-3 text-xs">
+          <div className="font-mono text-muted">
+            <span className="font-semibold text-ink">{px}px</span> · --space-{px} · {px / 4}
           </div>
-        );
-      })}
+          <div className="h-4 rounded-sm bg-accent" style={{ width: `${(px / max) * 100}%` }} aria-hidden="true" />
+        </div>
+      ))}
     </div>
   );
 }
 
 const breakpointUse: Record<keyof typeof breakpoints, string> = {
-  sm: "Two-column swatch and card grids.",
-  md: "The sidebar stops being a drawer and becomes an icon rail.",
-  lg: "The sidebar shows its labels; the review aside sits beside the editor.",
-  xl: "Unused by the apps today.",
-  "2xl": "Unused by the apps today.",
+  sm: "Two columns in a card grid.",
+  md: "The console sidebar is a drawer below this.",
+  lg: "Sidebar labels show; the review step goes two-column.",
+  xl: "The page measure, --page-max.",
+  "2xl": "Unused by the Kairos surfaces today.",
 };
 
-/** The min-width breakpoints with what changes at each. */
+/** Min-width breakpoints, mobile first. Tailwind's defaults, which the components use through sm:, md:, lg:. */
 export function Breakpoints() {
   return (
     <table className="w-full text-sm">
       <thead>
-        <tr className="border-b border-border text-left text-muted-foreground">
-          <th className="py-2 pr-3 font-medium">Name</th>
+        <tr className="border-b border-line text-left text-muted">
+          <th className="py-2 pr-3 font-medium">Prefix</th>
           <th className="py-2 pr-3 font-medium">Min width</th>
-          <th className="py-2 font-medium">What changes</th>
+          <th className="py-2 font-medium">Use</th>
         </tr>
       </thead>
       <tbody>
         {(Object.keys(breakpoints) as (keyof typeof breakpoints)[]).map((k) => (
-          <tr key={k} className="border-b border-border">
-            <td className="py-2 pr-3 font-mono font-semibold">{k}</td>
+          <tr key={k} className="border-b border-line">
+            <td className="py-2 pr-3 font-mono text-xs">{k}:</td>
             <td className="py-2 pr-3 font-mono">{breakpoints[k]}px</td>
             <td className="py-2">{breakpointUse[k]}</td>
           </tr>
@@ -54,33 +49,23 @@ export function Breakpoints() {
   );
 }
 
-const layoutLabel: Record<keyof typeof layout, string> = {
-  sidebarWidth: "Sidebar, full",
-  sidebarRailWidth: "Sidebar, icon rail",
-  sidebarDrawerWidth: "Sidebar, drawer below md",
-  topbarHeight: "Top bar",
-  contentMaxWidth: "Content max width",
-  narrowMaxWidth: "Narrow page max width",
-  fieldMaxWidth: "Form field max width",
-};
-
-/** The fixed measures the app shell and forms share. */
+/** The fixed measures pages share. */
 export function LayoutMeasures() {
   return (
     <table className="w-full text-sm">
       <thead>
-        <tr className="border-b border-border text-left text-muted-foreground">
+        <tr className="border-b border-line text-left text-muted">
           <th className="py-2 pr-3 font-medium">Measure</th>
           <th className="py-2 pr-3 font-medium">Token</th>
           <th className="py-2 font-medium">Value</th>
         </tr>
       </thead>
       <tbody>
-        {(Object.keys(layout) as (keyof typeof layout)[]).map((k) => (
-          <tr key={k} className="border-b border-border">
-            <td className="py-2 pr-3">{layoutLabel[k]}</td>
-            <td className="py-2 pr-3 font-mono text-xs">layout.{k}</td>
-            <td className="py-2 font-mono">{layout[k]}px</td>
+        {Object.entries(layout).map(([k, v]) => (
+          <tr key={k} className="border-b border-line">
+            <td className="py-2 pr-3">Page max width</td>
+            <td className="py-2 pr-3 font-mono text-xs">--{k}</td>
+            <td className="py-2 font-mono">{v}</td>
           </tr>
         ))}
       </tbody>

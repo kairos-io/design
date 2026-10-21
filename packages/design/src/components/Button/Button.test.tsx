@@ -29,7 +29,7 @@ describe("Button", () => {
       </Button>,
     );
     const button = screen.getByRole("button");
-    expect(button.className).toContain("border-input");
+    expect(button.className).toContain("border-line");
     expect(button.className).toContain("h-10");
   });
 
@@ -41,7 +41,7 @@ describe("Button", () => {
     );
     const link = screen.getByRole("link", { name: "Docs" });
     expect(link).toHaveAttribute("href", "/docs");
-    expect(link.className).toContain("bg-primary");
+    expect(link.className).toContain("bg-accent");
   });
 
   it("warns in development when an icon-only button has no label", () => {

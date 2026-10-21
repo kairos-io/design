@@ -26,7 +26,7 @@ describe("Sidebar", () => {
     );
     const nodes = screen.getByRole("link", { name: "Nodes" });
     expect(nodes).toHaveAttribute("aria-current", "page");
-    expect(nodes.className).toContain("bg-sidebar-accent");
+    expect(nodes.className).toContain("bg-accent");
     expect(screen.getByRole("link", { name: "Groups" })).not.toHaveAttribute("aria-current");
     expect(screen.getByRole("navigation", { name: "Main" })).toBeInTheDocument();
   });

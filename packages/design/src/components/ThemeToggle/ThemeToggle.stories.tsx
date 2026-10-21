@@ -20,7 +20,7 @@ const meta = {
   args: { compact: false, storageKey: "kairos-theme" },
   decorators: [
     (Story) => (
-      <div className="w-60 rounded-lg bg-sidebar-bg p-3">
+      <div className="w-60 rounded-base bg-side p-3">
         <Story />
       </div>
     ),
@@ -36,7 +36,7 @@ export const Compact: Story = {
   args: { compact: true },
   decorators: [
     (Story) => (
-      <div className="inline-flex rounded-lg bg-sidebar-bg p-3">
+      <div className="inline-flex rounded-base bg-side p-3">
         <Story />
       </div>
     ),

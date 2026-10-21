@@ -8,7 +8,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const { generate, loadTokens, root } = require('./build');
+const { generate, loadTokens, root } = require('./build.cjs');
 
 const repo = path.join(root, '..', '..');
 const t = loadTokens();

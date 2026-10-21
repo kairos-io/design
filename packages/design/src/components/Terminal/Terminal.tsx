@@ -49,7 +49,7 @@ export const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
         tabIndex={0}
         style={{ maxHeight }}
         className={cn(
-          "overflow-y-auto rounded-xl bg-terminal-bg p-4 font-mono text-[13px] leading-normal text-terminal-fg shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "overflow-y-auto rounded-lg bg-code p-4 font-mono text-[13px] leading-normal text-code-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
           className,
         )}
         {...props}
@@ -58,7 +58,7 @@ export const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
           {lines.map((line, i) => {
             const l = typeof line === "string" ? { text: line } : line;
             return (
-              <div key={i} className={cn(l.error && "text-terminal-error")}>
+              <div key={i} className={cn(l.error && "text-status-recovery")}>
                 {l.text}
               </div>
             );

@@ -28,7 +28,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         disabled={disabled}
         aria-describedby={descriptionId}
         className={cn(
-          "m-0 h-4 w-4 shrink-0 cursor-pointer accent-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
+          "m-0 h-4 w-4 shrink-0 cursor-pointer accent-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 ring-offset-bg disabled:cursor-not-allowed disabled:opacity-50",
           !label && className,
         )}
         {...props}
@@ -52,7 +52,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         {description && (
           <p
             id={descriptionId}
-            className={cn("pl-6 text-xs text-muted-foreground", disabled && "opacity-70")}
+            className={cn("pl-6 text-xs text-muted", disabled && "opacity-70")}
           >
             {description}
           </p>

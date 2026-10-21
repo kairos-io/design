@@ -13,7 +13,7 @@ What each Kairos web project does to take the package, in the order that keeps e
 The source of most of this system, so the move is mostly deletion.
 
 1. `npm install @kairos-io/design`.
-2. In `ui/src/index.css`, replace the `:root` and `.dark` blocks and the `@theme inline` block with `@import "@kairos-io/design/tokens.css"; @import "@kairos-io/design/theme.css";` and add `@source "../node_modules/@kairos-io/design/dist";`. The token names are identical, so every existing `bg-primary` and `text-sidebar-fg` keeps its value. Keep `.terminal-output` and the `animate-fade-up` classes until the last step.
+2. In `ui/src/index.css`, replace the `:root` and `.dark` blocks and the `@theme inline` block with `@import "@kairos-io/design/tokens.css"; @import "@kairos-io/design/theme.css";` and add `@source "../node_modules/@kairos-io/design/dist";`. The token names are identical, so every existing `bg-accent` and `text-ink` keeps its value. Keep `.terminal-output` and the `animate-fade-up` classes until the last step.
 3. In `lib/theme.ts`, make `applyTheme` toggle both `light` and `dark` (the package's `applyTheme` does), and replace the inline script in `index.html` with `inlineThemeScript("auroraboot_theme")` so the stored key stays the same for existing users.
 4. Replace `components/ui/*` imports with imports from `@kairos-io/design`, one file at a time, running `vitest` after each. `Button`, `Badge`, `Card`, `Dialog`, `Input`, `Label`, `Select`, `Separator`, `Table`, `Tabs`, `Textarea` are drop-in. `StatusBadge`, `StatusDot`, `EmptyState`, `StatTile`, `PageHeader` (give each breadcrumb item an `element` holding the router `Link`), `SegmentedControl`, `ThemeToggle` and `InfoTooltip` follow.
 5. Delete `tokens.test.ts`; the package tests it. Keep `noHardcodedBrandColors.test.ts`, it still guards the pages.
@@ -37,7 +37,7 @@ Docusaurus keeps Infima. The package provides values, not components, at this st
 
 1. `npm install @kairos-io/design`.
 2. At the top of `src/css/custom.css`, `@import "@kairos-io/design/tokens.css";` and delete the `/* Kairos Color Palette */` block. The `--kairos-*` names resolve from the package.
-3. Map Infima's dark colours to the tokens where the values already agree: `--ifm-background-color: var(--background)` and `--ifm-background-surface-color: var(--card)` under `[data-theme='dark']`.
+3. Map Infima's dark colours to the tokens where the values already agree: `--ifm-background-color: var(--bg)` and `--ifm-background-surface-color: var(--surface)` under `[data-theme='dark']`.
 4. Replace the Google Fonts `@import` with `@import "@kairos-io/design/fonts.css";`.
 5. Later: the homepage and the image builder (`src/components/builder`) can use the React components inside Docusaurus, since both are React 19.
 
@@ -48,7 +48,7 @@ Gains: the docs site stops being the place where a new orange gets typed by hand
 The package browser is Go templates on Bulma with the Alata display face, the one Kairos surface that does not match the others.
 
 1. Add `tokens.css` and `components.css` to the template `<head>` from a vendored copy, and drop the Alata font.
-2. Replace Bulma's hero, box, panel and tag classes with `.topbar`, `.card`, `.card-title`, `.badge` and `.chip` from `components.css`, and set `body` to `var(--font-family-sans)`.
+2. Replace Bulma's hero, box, panel and tag classes with `.topbar`, `.card`, `.card-title`, `.badge` and `.chip` from `components.css`, and set `body` to `var(--font-sans)`.
 3. Keep DataTables; style its wrapper with the tokens (`--border`, `--muted-foreground`).
 4. Remove Bulma and Font Awesome from the CDN links when nothing uses them.
 

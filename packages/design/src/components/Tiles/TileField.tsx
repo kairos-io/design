@@ -60,7 +60,7 @@ export const TileField = React.forwardRef<SVGSVGElement, TileFieldProps>(
       height = 460,
       solid = false,
       palette = "kairos",
-      line = "var(--border)",
+      line = "var(--line)",
       animate = false,
       className,
       ...props

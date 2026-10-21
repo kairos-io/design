@@ -136,7 +136,7 @@ export const OnNavy: Story = {
   name: "On the navy sidebar",
   parameters: { backgrounds: { disable: true } },
   render: (args) => (
-    <div className="flex items-center gap-2 rounded-lg bg-sidebar-bg p-4">
+    <div className="flex items-center gap-2 rounded-base bg-side p-4">
       <Button {...args} variant="on-navy">
         Logout
       </Button>

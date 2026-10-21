@@ -27,7 +27,7 @@ export const Default: Story = {
         <CardDescription>Nodes present this token when they first call home.</CardDescription>
       </CardHeader>
       <CardContent>
-        <code className="rounded bg-muted px-2 py-1 font-mono text-xs">kairos-7f3a-9c21-ab40</code>
+        <code className="rounded-base bg-inner px-2 py-1 font-mono text-xs">kairos-7f3a-9c21-ab40</code>
       </CardContent>
       <CardFooter className="gap-2">
         <Button>Rotate token</Button>
@@ -59,7 +59,7 @@ export const Grid: Story = {
               quay.io/kairos/{flavor.toLowerCase().replace(/[^a-z0-9]+/g, "-")}
             </CardDescription>
           </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">Standard image with k3s.</CardContent>
+          <CardContent className="text-sm text-muted">Standard image with k3s.</CardContent>
         </Card>
       ))}
     </div>

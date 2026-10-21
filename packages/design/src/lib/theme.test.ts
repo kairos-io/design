@@ -11,7 +11,7 @@ import {
 describe("theme helpers", () => {
   afterEach(() => {
     localStorage.clear();
-    document.documentElement.className = "";
+    document.documentElement.removeAttribute("data-theme");
     vi.restoreAllMocks();
   });
 
@@ -53,30 +53,28 @@ describe("theme helpers", () => {
     expect(resolveTheme("light")).toBe("light");
   });
 
-  it("sets exactly one class for an explicit mode and none for system", () => {
+  it("sets data-theme for an explicit mode and removes it for system", () => {
     applyTheme("dark");
-    expect(document.documentElement.classList.contains("dark")).toBe(true);
-    expect(document.documentElement.classList.contains("light")).toBe(false);
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
     applyTheme("light");
-    expect(document.documentElement.classList.contains("light")).toBe(true);
-    expect(document.documentElement.classList.contains("dark")).toBe(false);
+    expect(document.documentElement.getAttribute("data-theme")).toBe("light");
     applyTheme("system");
-    expect(document.documentElement.className).toBe("");
+    expect(document.documentElement.hasAttribute("data-theme")).toBe(false);
   });
 
-  it("produces an inline script that applies the stored class", () => {
+  it("produces an inline script that applies the stored mode", () => {
     localStorage.setItem("my-key", "dark");
     const script = inlineThemeScript("my-key");
     expect(script).toContain('"my-key"');
     new Function(script)();
-    expect(document.documentElement.classList.contains("dark")).toBe(true);
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
   });
 
   it("binds the helpers to one key with createTheme", () => {
     const theme = createTheme({ storageKey: "t" });
     theme.set("light");
     expect(localStorage.getItem("t")).toBe("light");
-    expect(document.documentElement.classList.contains("light")).toBe(true);
+    expect(document.documentElement.getAttribute("data-theme")).toBe("light");
     expect(theme.get()).toBe("light");
     expect(theme.resolve()).toBe("light");
     expect(theme.inlineScript()).toContain('"t"');

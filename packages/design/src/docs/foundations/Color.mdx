@@ -18,25 +18,25 @@ The oranges are the fills of the mark. The navy is the chrome of the docs site, 
 The second brand set, for hadron-linux.io and the Hadron product surfaces. Hadron swaps the accent and nothing else: the same neutrals, the same tones, the same components, with the three blues where the three oranges were. `tokens.css` exposes them as `--brand-hadron-*`; the tiles take `palette="hadron"`.
 
 <div className="grid gap-3 sm:grid-cols-3">
-  <div className="flex items-center gap-3 rounded-lg border p-3">
-    <span className="h-10 w-10 shrink-0 rounded-md bg-brand-hadron-sky" aria-hidden="true" />
+  <div className="flex items-center gap-3 rounded-base border p-3">
+    <span className="h-10 w-10 shrink-0 rounded-base bg-hadron-sky" aria-hidden="true" />
     <div className="text-sm">
       <div className="font-semibold">Sky</div>
-      <div className="font-mono text-xs text-muted-foreground">--brand-hadron-sky · #1BAAFF</div>
+      <div className="font-mono text-xs text-muted">--brand-hadron-sky · #1BAAFF</div>
     </div>
   </div>
-  <div className="flex items-center gap-3 rounded-lg border p-3">
-    <span className="h-10 w-10 shrink-0 rounded-md bg-brand-hadron-blue" aria-hidden="true" />
+  <div className="flex items-center gap-3 rounded-base border p-3">
+    <span className="h-10 w-10 shrink-0 rounded-base bg-hadron-blue" aria-hidden="true" />
     <div className="text-sm">
       <div className="font-semibold">Hadron blue</div>
-      <div className="font-mono text-xs text-muted-foreground">--brand-hadron-blue · #0275E7</div>
+      <div className="font-mono text-xs text-muted">--brand-hadron-blue · #0275E7</div>
     </div>
   </div>
-  <div className="flex items-center gap-3 rounded-lg border p-3">
-    <span className="h-10 w-10 shrink-0 rounded-md bg-brand-hadron-deep" aria-hidden="true" />
+  <div className="flex items-center gap-3 rounded-base border p-3">
+    <span className="h-10 w-10 shrink-0 rounded-base bg-hadron-deep" aria-hidden="true" />
     <div className="text-sm">
       <div className="font-semibold">Deep</div>
-      <div className="font-mono text-xs text-muted-foreground">--brand-hadron-deep · #004CCE</div>
+      <div className="font-mono text-xs text-muted">--brand-hadron-deep · #004CCE</div>
     </div>
   </div>
 </div>
@@ -45,29 +45,29 @@ Ink on the accents follows the value, not the brand: navy on the oranges and on 
 
 <table className="w-full text-sm">
   <thead>
-    <tr className="border-b border-border text-left text-muted-foreground">
+    <tr className="border-b border-line text-left text-muted">
       <th className="py-2 pr-3 font-medium">Ink on</th>
       <th className="py-2 pr-3 font-medium">Ink</th>
       <th className="py-2 font-medium">Ratio</th>
     </tr>
   </thead>
   <tbody>
-    <tr className="border-b border-border">
+    <tr className="border-b border-line">
       <td className="py-2 pr-3">Kairos orange #EE5007</td>
       <td className="py-2 pr-3">Navy</td>
       <td className="py-2 font-mono text-xs">4.92:1</td>
     </tr>
-    <tr className="border-b border-border">
+    <tr className="border-b border-line">
       <td className="py-2 pr-3">Sky #1BAAFF</td>
       <td className="py-2 pr-3">Navy</td>
       <td className="py-2 font-mono text-xs">7.01:1</td>
     </tr>
-    <tr className="border-b border-border">
+    <tr className="border-b border-line">
       <td className="py-2 pr-3">Hadron blue #0275E7</td>
       <td className="py-2 pr-3">White</td>
       <td className="py-2 font-mono text-xs">4.47:1</td>
     </tr>
-    <tr className="border-b border-border">
+    <tr className="border-b border-line">
       <td className="py-2 pr-3">Deep #004CCE</td>
       <td className="py-2 pr-3">White</td>
       <td className="py-2 font-mono text-xs">7.18:1</td>
@@ -89,7 +89,7 @@ Five tones carry every status in the system. `StatusBadge`, `StatusDot`, `Alert`
 
 <ToneRow />
 
-A tone has two tokens. The solid value (`--success`) is for dots, bars and icons. The `-foreground` value is ink for text on the tone's 15% fill, which is how a badge or banner is drawn: `bg-success/15 text-success-foreground border-success/25`.
+A tone has two tokens. The solid value (`--success`) is for dots, bars and icons. The `-foreground` value is ink for text on the tone's 15% fill, which is how a badge or banner is drawn: `bg-status-healthy/15 text-ok border-status-healthy/25`.
 
 ## Contrast
 

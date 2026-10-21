@@ -31,8 +31,8 @@ component name.
 - TypeScript, strict. Named exports. `React.forwardRef` on anything that
   renders a DOM element a parent may need to reach.
 - Relative imports with explicit extensions: `../../lib/cn.ts`.
-- Class names: Tailwind utilities over the theme (`bg-primary`,
-  `text-muted-foreground`, `border-input`, `bg-success/15`). Never a hex
+- Class names: Tailwind utilities over the theme (`bg-accent`,
+  `text-muted`, `border-line`, `bg-status-healthy/15`). Never a hex
   literal, never a Tailwind palette colour such as `bg-green-600`; the test
   `src/test/noHardcodedColors.test.ts` fails the build on both.
 - Variants through `class-variance-authority`; merge classes with `cn()`.
@@ -73,7 +73,7 @@ uses `tokens.css` custom properties.
 
 ## Tiles
 
-The tile geometry is hard-edged: mitre joins, square caps, no rounded
+The tile geometry is hard-edged: mitre joins, square caps, no rounded-base
 corners anywhere on a rhombus. Filled faces and grid outlines share the
 exact same points so they coincide at every zoom. Motion never leaves a
 blank cell: the grid is always complete underneath, and an animated cube

@@ -17,17 +17,17 @@ export interface StepsProps extends React.OlHTMLAttributes<HTMLOListElement> {
 }
 
 const markerStyles: Record<StepState, string> = {
-  pending: "border-border bg-background",
-  active: "border-primary bg-primary text-primary-foreground",
-  done: "border-success/30 bg-success/15 text-success-foreground",
-  failed: "border-danger/30 bg-danger/15 text-danger-foreground",
+  pending: "border-line bg-bg",
+  active: "border-accent bg-accent text-on-accent",
+  done: "border-status-healthy/30 bg-status-healthy/15 text-ok",
+  failed: "border-status-recovery/30 bg-status-recovery/15 text-status-recovery",
 };
 
 const rowStyles: Record<StepState, string> = {
-  pending: "text-muted-foreground",
-  active: "font-medium text-foreground",
-  done: "text-foreground",
-  failed: "font-medium text-danger-foreground",
+  pending: "text-muted",
+  active: "font-medium text-ink",
+  done: "text-ink",
+  failed: "font-medium text-status-recovery",
 };
 
 const stateText: Record<StepState, string> = {

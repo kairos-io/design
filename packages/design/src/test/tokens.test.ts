@@ -1,9 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
-import { brand, semanticDark, semanticLight, tones } from "../tokens/index.ts";
+import { brand, status, themeDark, themeLight, themeTokens, toneTokens, tones, variants } from "../tokens/index.ts";
 
-const tokensCss = fs.readFileSync(path.resolve(__dirname, "../styles/tokens.css"), "utf8");
-const themeCss = fs.readFileSync(path.resolve(__dirname, "../styles/theme.css"), "utf8");
+// tokens.json is the source; scripts/build.cjs writes these two files from it
+// and scripts/check.cjs fails CI when they are stale. These tests pin the
+// contract the components rely on.
+const tokensCss = fs.readFileSync(path.resolve(__dirname, "../../tokens.css"), "utf8");
+const tailwindCss = fs.readFileSync(path.resolve(__dirname, "../../tailwind.css"), "utf8");
 
 function block(css: string, selector: string): string {
   const start = css.indexOf(selector);
@@ -11,39 +14,68 @@ function block(css: string, selector: string): string {
   return css.slice(start, css.indexOf("}", start));
 }
 
+const kebab = (s: string) => s.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+
 describe("design tokens", () => {
-  it("defines every semantic token for both themes", () => {
-    for (const name of Object.keys(semanticLight)) {
-      expect(semanticDark).toHaveProperty(name);
+  it("defines every theme token for both themes", () => {
+    for (const name of themeTokens) {
+      expect(themeDark).toHaveProperty(name);
+      expect(themeLight[name]).toMatch(/^#[0-9A-Fa-f]{6,8}$/);
+      expect(themeDark[name]).toMatch(/^#[0-9A-Fa-f]{6,8}$/);
     }
   });
 
-  it.each(Object.keys(semanticLight))("maps --%s into the Tailwind theme and both CSS themes", (name) => {
-    expect(block(tokensCss, ":root {\n  --background")).toContain(`--${name}:`);
-    expect(block(tokensCss, ".dark,")).toContain(`--${name}:`);
-    expect(themeCss).toContain(`--color-${name}: var(--${name});`);
+  it.each(themeTokens)("writes --%s into the light, dark and system blocks and the Tailwind theme", (name) => {
+    expect(block(tokensCss, ':root,\n[data-theme="light"] {')).toContain(`--${name}: ${themeLight[name]};`);
+    expect(block(tokensCss, '[data-theme="dark"] {')).toContain(`--${name}: ${themeDark[name]};`);
+    expect(block(tokensCss, ':root:not([data-theme="light"]) {')).toContain(`--${name}: ${themeDark[name]};`);
+    expect(tailwindCss).toContain(`--color-${kebab(name)}: var(--${name});`);
   });
 
-  it("uses the brand orange as the light primary and the soft orange in the dark theme", () => {
-    expect(semanticLight.primary).toBe(brand.orange);
-    expect(semanticDark.primary).toBe(brand.orangeSoft);
-    expect(brand.orange.toLowerCase()).toBe("#ee5007");
+  it("uses the Kairos orange as the light accent and the mid orange in the dark theme", () => {
+    expect(themeLight.accent).toBe(brand["kairos-orange"]);
+    expect(themeDark.accent).toBe(brand["kairos-mid"]);
+    expect(brand["kairos-orange"].toUpperCase()).toBe("#EE5007");
   });
 
-  it("keeps the generated CSS in step with the source", () => {
-    // The system-preference block must carry the same dark values as .dark.
-    const dark = block(tokensCss, ".dark,");
-    const system = block(tokensCss, ":root:not(.light)");
-    for (const [name, value] of Object.entries(semanticDark)) {
-      expect(dark).toContain(`--${name}: ${value};`);
-      expect(system).toContain(`--${name}: ${value};`);
+  it("puts dark ink on Kairos orange and white on Hadron blue", () => {
+    expect(themeLight.onAccent).toBe(themeLight.ink);
+    expect(variants.hadron.light.accent).toBe(brand["hadron-blue"]);
+    expect(variants.hadron.light.onAccent).toBe("#FFFFFF");
+    expect(variants.hadron.dark.onAccent).toBe("#FFFFFF");
+  });
+
+  it("writes every variant under data-variant in both themes", () => {
+    for (const name of Object.keys(variants)) {
+      expect(tokensCss).toContain(`[data-variant="${name}"] {`);
+      expect(tokensCss).toContain(`[data-theme="dark"][data-variant="${name}"]`);
     }
   });
 
-  it.each(tones)("has a %s tone with a foreground in both themes", (tone) => {
-    expect(semanticLight[tone]).toMatch(/^#/);
-    expect(semanticLight[`${tone}-foreground`]).toMatch(/^#/);
-    expect(semanticDark[tone]).toMatch(/^#/);
-    expect(semanticDark[`${tone}-foreground`]).toMatch(/^#/);
+  it("exposes the brand and status colours as fixed Tailwind colours", () => {
+    for (const [name, value] of Object.entries(brand)) {
+      expect(tokensCss).toContain(`--${name}: ${value};`);
+      expect(tailwindCss).toContain(`--color-${name}: ${value};`);
+    }
+    for (const [name, value] of Object.entries(status)) {
+      expect(tokensCss).toContain(`--status-${name}: ${value};`);
+      expect(tailwindCss).toContain(`--color-status-${name}: ${value};`);
+    }
+  });
+
+  it.each(tones)("paints the %s tone with tokens that exist", (tone) => {
+    const known = new Set([
+      ...themeTokens.map(kebab),
+      ...Object.keys(brand),
+      ...Object.keys(status).map((s) => `status-${s}`),
+    ]);
+    expect(known.has(toneTokens[tone].fill)).toBe(true);
+    expect(known.has(toneTokens[tone].ink)).toBe(true);
+  });
+
+  it("has no shadows and one radius family", () => {
+    expect(tailwindCss).toContain("--shadow-*: initial;");
+    expect(tailwindCss).toContain("--radius-base: 4px;");
+    expect(tokensCss).toContain("--radius-base: 4px;");
   });
 });

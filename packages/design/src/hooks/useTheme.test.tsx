@@ -9,7 +9,7 @@ function Probe() {
 
 describe("useTheme", () => {
   beforeEach(() => {
-    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.removeAttribute("data-theme");
     window.localStorage.clear();
   });
 
@@ -20,17 +20,16 @@ describe("useTheme", () => {
     const { result } = renderHook(() => useTheme());
     // After the mount effect the stored choice is applied.
     expect(result.current.mode).toBe("dark");
-    expect(document.documentElement.classList.contains("dark")).toBe(true);
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
   });
 
-  it("persists and applies a chosen mode, and clears both classes for system", () => {
+  it("persists and applies a chosen mode, and removes the attribute for system", () => {
     const { result } = renderHook(() => useTheme({ storageKey: "test-theme" }));
     act(() => result.current.setMode("light"));
     expect(window.localStorage.getItem("test-theme")).toBe("light");
-    expect(document.documentElement.classList.contains("light")).toBe(true);
+    expect(document.documentElement.getAttribute("data-theme")).toBe("light");
     act(() => result.current.setMode("system"));
-    expect(document.documentElement.classList.contains("light")).toBe(false);
-    expect(document.documentElement.classList.contains("dark")).toBe(false);
+    expect(document.documentElement.hasAttribute("data-theme")).toBe(false);
   });
 
   it("survives localStorage and matchMedia being unavailable", () => {

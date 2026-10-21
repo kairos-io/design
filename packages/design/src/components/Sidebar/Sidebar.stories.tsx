@@ -176,7 +176,7 @@ function Shell({ initialMode = "auto" }: { initialMode?: SidebarMode }) {
         <Button variant="outline">Register token</Button>
         <Button>Deploy</Button>
       </PageHeader>
-      <div className="rounded-xl border bg-card p-6 text-sm text-muted-foreground">
+      <div className="rounded-lg border bg-surface p-6 text-sm text-muted">
         Page content goes here. Resize the viewport: the sidebar becomes an icon rail below 1024px and a
         drawer below 768px.
       </div>
@@ -208,7 +208,7 @@ export const TopbarOnly: Story = {
       logo={<KairosLogo variant="white" className="h-7 w-auto" decorative />}
       title="Web Installer"
       actions={<ThemeToggle compact />}
-      className="rounded-lg"
+      className="rounded-base"
     />
   ),
 };
@@ -257,7 +257,7 @@ function Wizard() {
         title="Network"
         description="How this node reaches the registry and the rest of the cluster."
       />
-      <div className="rounded-xl border bg-card p-6 text-sm text-muted-foreground">The step's form.</div>
+      <div className="rounded-lg border bg-surface p-6 text-sm text-muted">The step's form.</div>
     </AppShell>
   );
 }

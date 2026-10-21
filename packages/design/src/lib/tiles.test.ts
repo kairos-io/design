@@ -42,12 +42,12 @@ describe("tile geometry", () => {
     const svg = tileFieldSvg({ width: 120, height: 80, radius: 30, seed: 1, solid: true });
     expect(svg.startsWith("<svg xmlns=")).toBe(true);
     expect(svg).toContain('aria-hidden="true"');
-    expect(svg).toContain("var(--brand-orange, #EE5007)");
+    expect(svg).toContain("var(--kairos-orange, #EE5007)");
     // Hard edges, and the full grid drawn before the faces so nothing crosses a filled face.
     expect(svg).toContain('stroke-linejoin="miter"');
-    expect(svg.indexOf('fill="none"')).toBeLessThan(svg.indexOf("var(--brand-orange-softer"));
-    expect(svg.lastIndexOf('fill="none"')).toBeLessThan(svg.indexOf("var(--brand-orange-softer"));
-    const faces = (svg.match(/var\(--brand-orange(?:-soft|-softer)?, #/g) ?? []).length / 2;
+    expect(svg.indexOf('fill="none"')).toBeLessThan(svg.indexOf("var(--kairos-light"));
+    expect(svg.lastIndexOf('fill="none"')).toBeLessThan(svg.indexOf("var(--kairos-light"));
+    const faces = (svg.match(/var\(--kairos-(?:light|mid|orange), #/g) ?? []).length / 2;
     const grid = (svg.match(/fill="none"/g) ?? []).length;
     expect(faces).toBe(grid);
   });
@@ -57,7 +57,7 @@ describe("tile geometry", () => {
       { width: 120, height: 80, radius: 30, seed: 1, solid: true },
       { palette: "hadron" },
     );
-    expect(svg).toContain("var(--brand-hadron-deep, #004CCE)");
+    expect(svg).toContain("var(--hadron-deep, #004CCE)");
     expect(svg).not.toContain("orange");
   });
 

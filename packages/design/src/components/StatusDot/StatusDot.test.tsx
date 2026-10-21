@@ -6,6 +6,6 @@ describe("StatusDot", () => {
     const { container } = render(<StatusDot tone="success" />);
     const dot = container.firstElementChild as HTMLElement;
     expect(dot).toHaveAttribute("aria-hidden", "true");
-    expect(dot.className).toContain("bg-success");
+    expect(dot.className).toContain("bg-status-healthy");
   });
 });

@@ -28,12 +28,12 @@ export const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(
       <span
         ref={ref}
         className={cn(
-          "inline-flex max-w-full items-center gap-1.5 rounded-md border py-0.5 pl-2.5 text-xs",
+          "inline-flex max-w-full items-center gap-1.5 rounded-base border py-0.5 pl-2.5 text-xs",
           onRemove ? "pr-1" : "pr-2.5",
           mono && "font-mono",
           selected
-            ? "border-primary bg-primary-soft text-foreground"
-            : "border-border bg-secondary text-secondary-foreground",
+            ? "border-accent bg-raised text-ink"
+            : "border-line bg-raised text-ink",
           className,
         )}
         {...props}
@@ -44,7 +44,7 @@ export const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(
             type="button"
             aria-label={name}
             onClick={onRemove}
-            className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-sm text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-sm text-muted transition-colors hover:bg-hover hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
           >
             <X className="h-3 w-3" aria-hidden="true" />
           </button>

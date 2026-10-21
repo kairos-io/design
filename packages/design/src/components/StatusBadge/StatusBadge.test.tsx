@@ -21,24 +21,24 @@ describe("StatusBadge", () => {
 
   it("styles an unknown phase with the neutral tone", () => {
     const { container } = render(<StatusBadge status="Expired" />);
-    expect(container.firstElementChild?.className).toContain("bg-neutral/15");
-    expect(container.firstElementChild?.className).toContain("text-neutral-foreground");
+    expect(container.firstElementChild?.className).toContain("bg-muted/15");
+    expect(container.firstElementChild?.className).toContain("text-muted");
   });
 
   it("styles Running with the info tone", () => {
     const { container } = render(<StatusBadge status="Running" />);
-    expect(container.firstElementChild?.className).toContain("bg-info/15");
-    expect(container.firstElementChild?.className).toContain("border-info/25");
+    expect(container.firstElementChild?.className).toContain("bg-accent/15");
+    expect(container.firstElementChild?.className).toContain("border-accent/25");
   });
 
   it("lets an explicit tone win over the status mapping", () => {
     const { container } = render(<StatusBadge status="Online" tone="danger" />);
-    expect(container.firstElementChild?.className).toContain("bg-danger/15");
+    expect(container.firstElementChild?.className).toContain("bg-status-recovery/15");
   });
 
   it("prefixes a decorative dot when asked", () => {
     const { container } = render(<StatusBadge status="Online" dot />);
     const dot = container.querySelector("[aria-hidden=true]");
-    expect(dot?.className).toContain("bg-success");
+    expect(dot?.className).toContain("bg-status-healthy");
   });
 });

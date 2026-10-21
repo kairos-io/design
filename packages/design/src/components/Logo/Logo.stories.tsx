@@ -28,9 +28,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 const surfaces: { name: string; className: string; variant: LogoVariant }[] = [
-  { name: "On the page", className: "bg-background text-foreground", variant: "color" },
-  { name: "On navy", className: "bg-sidebar-bg text-sidebar-fg", variant: "white" },
-  { name: "On a card", className: "bg-card text-card-foreground", variant: "color" },
+  { name: "On the page", className: "bg-bg text-ink", variant: "color" },
+  { name: "On navy", className: "bg-side text-ink", variant: "white" },
+  { name: "On a card", className: "bg-surface text-ink", variant: "color" },
 ];
 
 export const AllVariants: Story = {
@@ -42,8 +42,8 @@ export const AllVariants: Story = {
           key={variant}
           className={
             variant === "white"
-              ? "grid items-center gap-6 rounded-lg bg-sidebar-bg p-6 text-sidebar-fg sm:grid-cols-[auto_1fr_1fr]"
-              : "grid items-center gap-6 rounded-lg border bg-card p-6 text-card-foreground sm:grid-cols-[auto_1fr_1fr]"
+              ? "grid items-center gap-6 rounded-base bg-side p-6 text-ink sm:grid-cols-[auto_1fr_1fr]"
+              : "grid items-center gap-6 rounded-base border bg-surface p-6 text-ink sm:grid-cols-[auto_1fr_1fr]"
           }
         >
           <KairosMark variant={variant} height={64} label={`Kairos icon, ${variant}`} />
@@ -67,7 +67,7 @@ export const OnSurfaces: Story = {
       {surfaces.map((s) => (
         <figure
           key={s.name}
-          className={`flex flex-col items-center gap-3 rounded-lg border p-6 ${s.className}`}
+          className={`flex flex-col items-center gap-3 rounded-base border p-6 ${s.className}`}
         >
           <KairosLogo variant={s.variant} height={48} />
           <figcaption className="text-xs opacity-70">
@@ -95,10 +95,10 @@ export const Sizes: Story = {
 export const ClearSpace: Story = {
   name: "Clear space",
   render: () => (
-    <div className="inline-block rounded-lg border border-dashed border-primary p-12">
+    <div className="inline-block rounded-base border border-dashed border-accent p-12">
       <div className="relative">
         <KairosLogo height={64} />
-        <span className="absolute -top-10 left-0 text-xs text-muted-foreground">
+        <span className="absolute -top-10 left-0 text-xs text-muted">
           one rhombus of clear space on every side
         </span>
       </div>

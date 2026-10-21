@@ -17,14 +17,14 @@ export type TilePalette = "kairos" | "hadron";
 /** CSS custom properties the three tones paint with, per palette, from tokens.css. */
 export const tilePalettes: Record<TilePalette, Record<TileTone, string>> = {
   kairos: {
-    0: "var(--brand-orange-softer)",
-    1: "var(--brand-orange-soft)",
-    2: "var(--brand-orange)",
+    0: "var(--kairos-light)",
+    1: "var(--kairos-mid)",
+    2: "var(--kairos-orange)",
   },
   hadron: {
-    0: "var(--brand-hadron-sky)",
-    1: "var(--brand-hadron-blue)",
-    2: "var(--brand-hadron-deep)",
+    0: "var(--hadron-sky)",
+    1: "var(--hadron-blue)",
+    2: "var(--hadron-deep)",
   },
 };
 
@@ -223,7 +223,7 @@ export function tileFieldSvg(
   const grid = polygons
     .map(
       (p) =>
-        `<polygon points="${p.points}" fill="none" stroke="var(--border, ${line})" stroke-width="${strokeWidth}"/>`,
+        `<polygon points="${p.points}" fill="none" stroke="var(--line, ${line})" stroke-width="${strokeWidth}"/>`,
     )
     .join("\n    ");
   const faces = polygons

@@ -48,7 +48,7 @@ export const Default: Story = {
           <input
             id="label"
             placeholder="site=lab-east"
-            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex h-9 w-full rounded-base border border-line bg-transparent px-3 py-1 text-sm placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
           />
         </div>
         <DialogFooter>
@@ -71,7 +71,7 @@ export const Open: Story = {
           <DialogTitle>Run a command</DialogTitle>
           <DialogDescription>The command runs on the 3 selected nodes.</DialogDescription>
         </DialogHeader>
-        <pre className="rounded-md bg-muted p-3 font-mono text-xs">
+        <pre className="rounded-base bg-inner p-3 font-mono text-xs">
           kairos-agent upgrade --source dir:/tmp/image
         </pre>
         <DialogFooter>

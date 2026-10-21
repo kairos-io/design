@@ -21,15 +21,15 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
   ({ label, icon: Icon, value, sub, tone, children, className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("flex min-w-0 flex-col gap-1 rounded-lg border bg-card p-4", className)}
+      className={cn("flex min-w-0 flex-col gap-1 rounded-base border bg-surface p-4", className)}
       {...props}
     >
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+      <div className="flex items-center gap-2 text-sm text-muted">
         {Icon && <Icon className={cn("h-4 w-4 shrink-0", tone && toneText[tone])} aria-hidden="true" />}
         <span className="truncate">{label}</span>
       </div>
       <div className="text-2xl font-semibold tracking-tight">{value}</div>
-      {sub && <div className="text-xs text-muted-foreground">{sub}</div>}
+      {sub && <div className="text-xs text-muted">{sub}</div>}
       {children}
     </div>
   ),
@@ -56,7 +56,7 @@ export const MeterBar = React.forwardRef<HTMLDivElement, MeterBarProps>(
   ({ value, className, ...props }, ref) => {
     if (value == null) {
       return (
-        <div ref={ref} className={cn("text-muted-foreground", className)} {...props}>
+        <div ref={ref} className={cn("text-muted", className)} {...props}>
           —
         </div>
       );
@@ -65,7 +65,7 @@ export const MeterBar = React.forwardRef<HTMLDivElement, MeterBarProps>(
     const tone = usageTone(v);
     return (
       <div ref={ref} className={cn("flex items-center gap-2", className)} {...props}>
-        <div className="h-1.5 w-16 overflow-hidden rounded-full bg-muted" aria-hidden="true">
+        <div className="h-1.5 w-16 overflow-hidden rounded-full bg-inner" aria-hidden="true">
           <div
             data-tone={tone}
             className={cn("h-full rounded-full", toneBg[tone])}
@@ -103,7 +103,7 @@ export const StackBar = React.forwardRef<HTMLDivElement, StackBarProps>(
         ref={ref}
         role="img"
         aria-label={label}
-        className={cn("flex h-2 w-full overflow-hidden rounded-full bg-muted", className)}
+        className={cn("flex h-2 w-full overflow-hidden rounded-full bg-inner", className)}
         {...props}
       >
         {shown.map((c) => (

@@ -4,15 +4,23 @@
   *,
   ::before,
   ::after {
-    border-color: var(--border);
+    border-color: var(--line);
   }
 
   body {
-    background: var(--background);
-    color: var(--foreground);
-    font-family: var(--font-family-sans);
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Links are the link token; on hover they take the accent, as the decks do. */
+  a {
+    color: var(--link);
+  }
+  a:hover {
+    color: var(--accent);
   }
 
   /* Tailwind v4's preflight dropped the pointer on buttons; the apps and docs keep it. */

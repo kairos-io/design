@@ -22,14 +22,14 @@ describe("Tiles", () => {
   it("TileField paints filled tiles with the brand custom properties and outlines with the border", () => {
     const { container } = render(<TileField solid width={100} height={60} radius={30} />);
     const fills = Array.from(container.querySelectorAll("g polygon")).map((p) => p.getAttribute("fill"));
-    expect(fills).toContain("var(--brand-orange)");
+    expect(fills).toContain("var(--kairos-orange)");
     expect(fills).not.toContain("none");
     // The grid is complete underneath, one outline per cell, filled or not.
     expect(container.querySelectorAll('polygon[fill="none"]')).toHaveLength(
       container.querySelectorAll("g polygon").length,
     );
     const { container: faded } = render(<TileField fade={() => 0} width={100} height={60} radius={30} />);
-    expect(faded.querySelector("polygon")).toHaveAttribute("stroke", "var(--border)");
+    expect(faded.querySelector("polygon")).toHaveAttribute("stroke", "var(--line)");
   });
 
   it("animates filled tiles only, dense edge first, then settles back to plain paint", () => {
@@ -84,14 +84,14 @@ describe("Tiles", () => {
   it("TileUnit has the three tones in the logo's order", () => {
     const { container } = render(<TileUnit />);
     const fills = Array.from(container.querySelectorAll("polygon")).map((p) => p.getAttribute("fill"));
-    expect(fills).toEqual(["var(--brand-orange-softer)", "var(--brand-orange-soft)", "var(--brand-orange)"]);
+    expect(fills).toEqual(["var(--kairos-light)", "var(--kairos-mid)", "var(--kairos-orange)"]);
   });
 
   it("Tile keeps the 22:14 box", () => {
     const { container } = render(<Tile size={44} tone="rest" />);
     const svg = container.querySelector("svg")!;
     expect(svg).toHaveAttribute("height", "28");
-    expect(svg.querySelector("polygon")).toHaveAttribute("fill", "var(--muted)");
+    expect(svg.querySelector("polygon")).toHaveAttribute("fill", "var(--inner)");
   });
 
   it("TileBar is a progressbar with one tile per item", () => {
@@ -101,7 +101,7 @@ describe("Tiles", () => {
     expect(bar).toHaveAttribute("aria-valuenow", "4");
     expect(bar).toHaveAttribute("aria-valuetext", "4 of 10");
     expect(container.querySelectorAll("svg")).toHaveLength(10);
-    expect(container.querySelectorAll('polygon[fill="var(--muted)"]')).toHaveLength(6);
+    expect(container.querySelectorAll('polygon[fill="var(--inner)"]')).toHaveLength(6);
   });
 
   it("TileBar clamps done to the range", () => {
@@ -113,9 +113,9 @@ describe("Tiles", () => {
     const { container } = render(<TileUnit palette="hadron" />);
     const fills = Array.from(container.querySelectorAll("polygon")).map((p) => p.getAttribute("fill"));
     expect(fills).toEqual([
-      "var(--brand-hadron-sky)",
-      "var(--brand-hadron-blue)",
-      "var(--brand-hadron-deep)",
+      "var(--hadron-sky)",
+      "var(--hadron-blue)",
+      "var(--hadron-deep)",
     ]);
     render(
       <>
@@ -127,15 +127,15 @@ describe("Tiles", () => {
         </TileMarker>
       </>,
     );
-    expect(screen.getByText("sky").className).toContain("text-brand-navy");
-    expect(screen.getByText("deep").className).toContain("text-brand-white");
+    expect(screen.getByText("sky").className).toContain("text-ink");
+    expect(screen.getByText("deep").className).toContain("text-bg");
   });
 
   it("TileMarker shows its number in navy on the tone", () => {
     render(<TileMarker tone={1}>03</TileMarker>);
     const marker = screen.getByText("03");
-    expect(marker.className).toContain("text-brand-navy");
-    expect(marker.className).toContain("bg-brand-orange-soft");
+    expect(marker.className).toContain("text-ink");
+    expect(marker.className).toContain("bg-kairos-mid");
     expect(marker.className).toContain("clip-path");
   });
 });

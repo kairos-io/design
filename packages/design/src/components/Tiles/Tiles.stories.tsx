@@ -35,7 +35,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Field: Story = {
   render: (args) => (
-    <div className="relative h-80 overflow-hidden rounded-xl border bg-background">
+    <div className="relative h-80 overflow-hidden rounded-lg border bg-bg">
       <TileField {...args} />
     </div>
   ),
@@ -53,7 +53,7 @@ export const Animated: Story = {
     },
   },
   render: (args) => (
-    <div className="relative h-80 overflow-hidden rounded-xl border bg-background">
+    <div className="relative h-80 overflow-hidden rounded-lg border bg-bg">
       <TileField {...args} />
     </div>
   ),
@@ -71,7 +71,7 @@ export const Live: Story = {
     },
   },
   render: (args) => (
-    <div className="relative h-80 overflow-hidden rounded-xl border bg-background">
+    <div className="relative h-80 overflow-hidden rounded-lg border bg-bg">
       <TileField {...args} />
     </div>
   ),
@@ -81,7 +81,7 @@ export const Hero: Story = {
   name: "Hero with a field",
   args: { animate: "in" },
   render: (args) => (
-    <section className="relative overflow-hidden rounded-xl border bg-background">
+    <section className="relative overflow-hidden rounded-lg border bg-bg">
       <div className="absolute inset-y-0 right-0 w-[55%]">
         <TileField {...args} fade="right" />
       </div>
@@ -90,7 +90,7 @@ export const Hero: Story = {
           01
         </TileMarker>
         <h1 className="text-4xl font-bold tracking-tight">Immutable Kubernetes at the edge</h1>
-        <p className="mt-4 text-lg text-muted-foreground">
+        <p className="mt-4 text-lg text-muted">
           Build a bootable image from a Dockerfile, deploy it to any device and upgrade it like a container.
         </p>
         <div className="mt-8 flex gap-3">
@@ -107,12 +107,12 @@ export const Hero: Story = {
 export const EmptyState: Story = {
   name: "Empty state with a field",
   render: (args) => (
-    <div className="relative overflow-hidden rounded-xl border bg-card">
+    <div className="relative overflow-hidden rounded-lg border bg-surface">
       <TileField {...args} fade="topRight" radius={30} seed={9} className="opacity-70" />
       <div className="relative flex flex-col items-start gap-3 p-10">
         <TileUnit size={40} />
         <p className="text-lg font-semibold">No nodes yet</p>
-        <p className="max-w-sm text-sm text-muted-foreground">
+        <p className="max-w-sm text-sm text-muted">
           Register a machine with the token below, or boot one from an artifact and it will appear here.
         </p>
         <Button className="mt-2">Register a node</Button>
@@ -150,14 +150,14 @@ export const Bar: Story = {
       <div className="flex flex-col gap-2">
         <div className="flex justify-between text-sm">
           <span className="font-medium">Rollout to edge-rack2</span>
-          <span className="text-muted-foreground">33 of 40 nodes</span>
+          <span className="text-muted">33 of 40 nodes</span>
         </div>
         <TileBar total={40} done={33} aria-label="Rollout to edge-rack2" />
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex justify-between text-sm">
           <span className="font-medium">Install</span>
-          <span className="text-muted-foreground">step 3 of 8</span>
+          <span className="text-muted">step 3 of 8</span>
         </div>
         <TileBar total={8} done={3} size={24} aria-label="Install progress" />
       </div>
@@ -195,7 +195,7 @@ export const Hadron: Story = {
   name: "Hadron palette",
   render: (args) => (
     <div className="flex flex-col gap-6">
-      <div className="relative h-56 overflow-hidden rounded-xl border bg-background">
+      <div className="relative h-56 overflow-hidden rounded-lg border bg-bg">
         <TileField {...args} palette="hadron" seed={7} />
       </div>
       <div className="flex items-center gap-6">
@@ -216,9 +216,9 @@ export const Hadron: Story = {
 export const Dark: Story = {
   name: "On the navy surface",
   render: (args) => (
-    <div className="relative h-64 overflow-hidden rounded-xl bg-sidebar-bg">
-      <TileField {...args} fade="right" line="var(--sidebar-muted)" />
-      <div className="relative flex h-full flex-col items-start justify-end gap-3 p-8 text-brand-white">
+    <div className="relative h-64 overflow-hidden rounded-lg bg-side">
+      <TileField {...args} fade="right" line="var(--raised)" />
+      <div className="relative flex h-full flex-col items-start justify-end gap-3 p-8 text-bg">
         <TileMarker tone={0}>04</TileMarker>
         <p className="text-3xl font-bold tracking-tight">Section divider</p>
       </div>

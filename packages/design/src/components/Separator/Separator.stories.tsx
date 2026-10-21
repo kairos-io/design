@@ -25,7 +25,7 @@ export const Default: Story = {
     <div className="max-w-sm">
       <div className="space-y-1">
         <h4 className="text-sm font-medium leading-none">Kairos 3.6.0</h4>
-        <p className="text-sm text-muted-foreground">Ubuntu 24.04, k3s v1.33.1+k3s1</p>
+        <p className="text-sm text-muted">Ubuntu 24.04, k3s v1.33.1+k3s1</p>
       </div>
       <Separator {...args} className="my-4" />
       <div className="flex h-5 items-center gap-4 text-sm">
