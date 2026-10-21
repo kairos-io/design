@@ -4,7 +4,7 @@ import { cn } from "../../lib/cn.ts";
 
 export type SeparatorProps = React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>;
 
-/** A hairline in the border colour, as AuroraBoot's ui/separator.tsx. Decorative by default; set `decorative={false}` when it separates landmarks. */
+/** A 1px hairline in `--line`. Decorative by default; set `decorative={false}` when it separates landmarks. */
 export const Separator = React.forwardRef<React.ComponentRef<typeof SeparatorPrimitive.Root>, SeparatorProps>(
   ({ className, orientation = "horizontal", decorative = true, ...props }, ref) => (
     <SeparatorPrimitive.Root

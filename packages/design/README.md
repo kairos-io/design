@@ -86,35 +86,35 @@ The React components are React only. Every other framework, and every page witho
 
 ## What is in the package
 
-| Path                                      | Contents                                                                                                         |
-| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `@kairos-io/design`                       | The React components (including the tiles), `useTheme`, `applyTheme`, `cn()`, `phaseTone()` and the tone maps.   |
-| `@kairos-io/design/tokens`                | The tokens as typed JavaScript objects (a view of `tokens.json`), for charts and config.                         |
-| `@kairos-io/design/tokens.json`           | The source of truth: brand, status, the light and dark themes, the variants, type, space, radius, motion.        |
-| `@kairos-io/design/tokens.css`            | The custom properties: light is the default, dark under `data-theme="dark"` or the OS setting, plus the variants. |
-| `@kairos-io/design/tailwind.css`          | The Tailwind v4 `@theme` over the tokens. Imports `tokens.css`. Removes the default radius and shadow utilities.  |
+| Path                                      | Contents                                                                                                            |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `@kairos-io/design`                       | The React components (including the tiles), `useTheme`, `applyTheme`, `cn()`, `phaseTone()` and the tone maps.      |
+| `@kairos-io/design/tokens`                | The tokens as typed JavaScript objects (a view of `tokens.json`), for charts and config.                            |
+| `@kairos-io/design/tokens.json`           | The source of truth: brand, status, the light and dark themes, the variants, type, space, radius, motion.           |
+| `@kairos-io/design/tokens.css`            | The custom properties: light is the default, dark under `data-theme="dark"` or the OS setting, plus the variants.   |
+| `@kairos-io/design/tailwind.css`          | The Tailwind v4 `@theme` over the tokens. Imports `tokens.css`. Removes the default radius and shadow utilities.    |
 | `@kairos-io/design/styles.css`            | Tailwind preflight and the utilities the components use, the tokens, the theme and a small base, in cascade layers. |
-| `@kairos-io/design/components.css`        | The framework-free component classes over the tokens, under the installer's names.                               |
-| `@kairos-io/design/fonts.css`             | Urbanist and Martian Mono, self-hosted from `assets/fonts`. Optional; no third-party request.                    |
-| `@kairos-io/design/assets/logos/*.svg`    | The Kairos artwork: icon, horizontal and stacked, in colour, white and black.                                     |
-| `@kairos-io/design/assets/patterns/*.svg` | The tile fields and the tile unit as static SVG, in the Kairos and the Hadron palette.                            |
+| `@kairos-io/design/components.css`        | The framework-free component classes over the tokens, under the installer's names.                                  |
+| `@kairos-io/design/fonts.css`             | Urbanist and Martian Mono, self-hosted from `assets/fonts`. Optional; no third-party request.                       |
+| `@kairos-io/design/assets/logos/*.svg`    | The Kairos artwork: icon, horizontal and stacked, in colour, white and black.                                       |
+| `@kairos-io/design/assets/patterns/*.svg` | The tile fields and the tile unit as static SVG, in the Kairos and the Hadron palette.                              |
 
 ## The tokens
 
 The variable names are the ones the decks use, with no prefix: `--bg`, `--surface`, `--raised`, `--line`, `--ink`, `--sub`, `--muted`, `--accent`, `--onAccent`, `--link`, `--ok`, `--code`. Check for a clash before you add `tokens.css` to a page that has its own `--bg` or `--line`.
 
-| Group         | Tokens                                                                                                                                                                                                              |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Brand colors  | `kairos-light` #FB9E70, `kairos-mid` #FF7442, `kairos-orange` #EE5007, `hadron-sky` #1BAAFF, `hadron-blue` #0275E7, `hadron-deep` #004CCE                                                                           |
-| Status colors | `status-healthy` #2F8F57, `status-warning` #E9A23B, `status-recovery` #C62B2B, `status-ink` #FFFFFF                                                                                                                  |
+| Group         | Tokens                                                                                                                                                                                                                                                    |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Brand colors  | `kairos-light` #FB9E70, `kairos-mid` #FF7442, `kairos-orange` #EE5007, `hadron-sky` #1BAAFF, `hadron-blue` #0275E7, `hadron-deep` #004CCE                                                                                                                 |
+| Status colors | `status-healthy` #2F8F57, `status-warning` #E9A23B, `status-recovery` #C62B2B, `status-ink` #FFFFFF                                                                                                                                                       |
 | Theme colors  | `bg` `side` `surface` `inner` `head` `hover` `raised` `line` `ink` `sub` `muted` `accent` `accentSoft` `accentLine` `onAccent` `link` `ok` `warnBg` `deep` `code` `codeBar` `codeKey` `codeInk` `codeMuted` `overlay`, each with a light and a dark value |
-| Fonts         | `--font-sans` (Urbanist), `--font-mono` (Martian Mono), weights 400, 600, 700                                                                                                                                       |
-| Type scale    | display 84, h1 56, h2 40, h3 24, body-lg 19, body 16, label 14, mono 13 px; text is never smaller than 12px                                                                                                           |
-| Spacing       | 4, 8, 12, 16, 24, 32, 48, 80 px as `--space-4` to `--space-80`; the Tailwind step is 4px                                                                                                                             |
-| Radius        | `--radius-sm` 2px (tags), `--radius-base` 4px, `--radius-lg` 8px (dialogs), `--radius-full`                                                                                                                          |
-| Shadow        | none; elevation is a tone step, canvas to surface to raised                                                                                                                                                          |
-| Motion        | `--ease-out`, `--duration-fast` 150ms, `--duration-base` 200ms, `--duration-slow` 360ms; all 0ms under `prefers-reduced-motion`                                                                                       |
-| Layout        | `--page-max` 1280px                                                                                                                                                                                                  |
+| Fonts         | `--font-sans` (Urbanist), `--font-mono` (Martian Mono), weights 400, 600, 700                                                                                                                                                                             |
+| Type scale    | display 84, h1 56, h2 40, h3 24, body-lg 19, body 16, label 14, mono 13 px; text is never smaller than 12px                                                                                                                                               |
+| Spacing       | 4, 8, 12, 16, 24, 32, 48, 80 px as `--space-4` to `--space-80`; the Tailwind step is 4px                                                                                                                                                                  |
+| Radius        | `--radius-sm` 2px (tags), `--radius-base` 4px, `--radius-lg` 8px (dialogs), `--radius-full`                                                                                                                                                               |
+| Shadow        | none; elevation is a tone step, canvas to surface to raised                                                                                                                                                                                               |
+| Motion        | `--ease-out`, `--duration-fast` 150ms, `--duration-base` 200ms, `--duration-slow` 360ms; all 0ms under `prefers-reduced-motion`                                                                                                                           |
+| Layout        | `--page-max` 1280px                                                                                                                                                                                                                                       |
 
 **Theme.** Light is the default. Set `data-theme="light"` or `data-theme="dark"` on `<html>` (or on any element, to theme a part of the page). When `data-theme` is not set, the system setting decides. `useTheme`, `ThemeToggle`, `applyTheme` and `inlineThemeScript()` manage the attribute in React apps and plain pages.
 

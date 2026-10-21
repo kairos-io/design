@@ -2,36 +2,59 @@ import type { Tone } from "../tokens/index.ts";
 
 export type { Tone };
 
-// Phase strings come from the Kairos stores in mixed case ("Building",
-// "Online") and from older code paths in lower case, so every comparison
-// lowercases first. The table is AuroraBoot's.
-const phaseTones: Record<string, Tone> = {
-  online: "success",
-  ready: "success",
-  completed: "success",
-  active: "success",
-  healthy: "success",
-  pending: "warning",
-  queued: "warning",
-  delivered: "warning",
-  degraded: "warning",
-  offline: "danger",
-  failed: "danger",
-  error: "danger",
-  running: "info",
-  building: "info",
-  upgrading: "info",
-  installing: "info",
+/**
+ * How a status is drawn: its tone, and whether the diamond is filled or an
+ * outline. The Foundations deck shows five node states: Healthy (filled
+ * green), Upgrading (filled accent), Recovery (filled red), Installing
+ * (accent outline) and Offline (muted outline).
+ */
+export interface StatusLook {
+  tone: Tone;
+  outline: boolean;
+}
+
+// Phase strings come from the Kairos stores in mixed case ("Healthy",
+// "Upgrading") and from older code paths in lower case, so every comparison
+// lowercases first. The table follows the deck: a state in progress is the
+// accent, filled when the node is already running and outlined while it is
+// still being installed; a node that has gone quiet is a muted outline, not
+// an alarm; failure and recovery are red.
+const phaseLooks: Record<string, StatusLook> = {
+  healthy: { tone: "success", outline: false },
+  online: { tone: "success", outline: false },
+  ready: { tone: "success", outline: false },
+  completed: { tone: "success", outline: false },
+  active: { tone: "success", outline: false },
+  succeeded: { tone: "success", outline: false },
+  pending: { tone: "warning", outline: false },
+  queued: { tone: "warning", outline: false },
+  delivered: { tone: "warning", outline: false },
+  degraded: { tone: "warning", outline: false },
+  recovery: { tone: "danger", outline: false },
+  failed: { tone: "danger", outline: false },
+  error: { tone: "danger", outline: false },
+  upgrading: { tone: "info", outline: false },
+  running: { tone: "info", outline: false },
+  building: { tone: "info", outline: false },
+  installing: { tone: "info", outline: true },
+  provisioning: { tone: "info", outline: true },
+  offline: { tone: "neutral", outline: true },
+  unknown: { tone: "neutral", outline: true },
 };
+
+/** Maps a node, build or deployment phase to how it is drawn; unknown phases are a neutral outline. */
+export function phaseLook(phase: string | null | undefined): StatusLook {
+  return phaseLooks[(phase ?? "").trim().toLowerCase()] ?? { tone: "neutral", outline: true };
+}
 
 /** Maps a node, build or deployment phase to its status tone; unknown phases are neutral. */
 export function phaseTone(phase: string | null | undefined): Tone {
-  return phaseTones[(phase ?? "").toLowerCase()] ?? "neutral";
+  return phaseLook(phase).tone;
 }
 
 // Written out in full so Tailwind finds every class in the source.
 
-/** Solid tone background, for dots, bars and meters. */
+/** Solid tone background, for bars, meters and the tile bar. */
 export const toneBg: Record<Tone, string> = {
   success: "bg-status-healthy",
   warning: "bg-status-warning",
@@ -40,7 +63,29 @@ export const toneBg: Record<Tone, string> = {
   neutral: "bg-muted",
 };
 
-/** Tone ink, for icons and numbers that carry a status. */
+/** The diamond's fill and stroke, for inline SVG. */
+export const toneFill: Record<Tone, string> = {
+  success: "fill-status-healthy stroke-status-healthy",
+  warning: "fill-status-warning stroke-status-warning",
+  danger: "fill-status-recovery stroke-status-recovery",
+  info: "fill-accent stroke-accent",
+  neutral: "fill-muted stroke-muted",
+};
+
+/** The outlined diamond: no fill, the tone as stroke. */
+export const toneStroke: Record<Tone, string> = {
+  success: "fill-none stroke-status-healthy",
+  warning: "fill-none stroke-status-warning",
+  danger: "fill-none stroke-status-recovery",
+  info: "fill-none stroke-accent",
+  neutral: "fill-none stroke-muted",
+};
+
+/**
+ * Tone ink, for the few icons and numbers that carry a status themselves.
+ * The warning amber does not pass as small text on a light surface: use it
+ * for a diamond or an icon beside ink text, never for a sentence.
+ */
 export const toneText: Record<Tone, string> = {
   success: "text-ok",
   warning: "text-status-warning",
@@ -49,11 +94,16 @@ export const toneText: Record<Tone, string> = {
   neutral: "text-muted",
 };
 
-/** The soft fill: the tone at 15% behind its -foreground ink, with a 25% border. Badges, banners, step markers. */
+/**
+ * The status chip: a surface with ink text, the same for every tone, because
+ * the decks carry the tone in the diamond and never tint the chip.
+ * @deprecated Use StatusBadge, which draws the diamond. Kept so the class map
+ * still exists for pages that composed their own chips.
+ */
 export const toneSoft: Record<Tone, string> = {
-  success: "bg-status-healthy/15 text-ok border-status-healthy/25",
-  warning: "bg-status-warning/15 text-status-warning border-status-warning/25",
-  danger: "bg-status-recovery/15 text-status-recovery border-status-recovery/25",
-  info: "bg-accent/15 text-link border-accent/25",
-  neutral: "bg-muted/15 text-muted border-muted/25",
+  success: "bg-surface text-ink border-line",
+  warning: "bg-surface text-ink border-line",
+  danger: "bg-surface text-ink border-line",
+  info: "bg-surface text-ink border-line",
+  neutral: "bg-surface text-ink border-line",
 };

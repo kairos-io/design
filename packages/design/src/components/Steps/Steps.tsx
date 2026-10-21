@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Check, Play, X } from "lucide-react";
 import { cn } from "../../lib/cn.ts";
+import { StatusDiamond } from "../StatusDiamond/StatusDiamond.tsx";
 
 export type StepState = "pending" | "active" | "done" | "failed";
 
@@ -15,13 +15,6 @@ export interface StepsProps extends React.OlHTMLAttributes<HTMLOListElement> {
   /** Required: what the list tracks ("Installation steps"). */
   "aria-label": string;
 }
-
-const markerStyles: Record<StepState, string> = {
-  pending: "border-line bg-bg",
-  active: "border-accent bg-accent text-on-accent",
-  done: "border-status-healthy/30 bg-status-healthy/15 text-ok",
-  failed: "border-status-recovery/30 bg-status-recovery/15 text-status-recovery",
-};
 
 const rowStyles: Record<StepState, string> = {
   pending: "text-muted",
@@ -38,10 +31,10 @@ const stateText: Record<StepState, string> = {
 };
 
 /**
- * The progress checklist of a long operation, as the installer's progress
- * page draws it: a marker per step, the current step in the primary colour,
- * done in success and failed in danger. The state is also written out for
- * assistive technology.
+ * The progress checklist of a long operation: a status diamond per step,
+ * the current step filled with the accent, done steps healthy green, failed
+ * steps recovery red, steps ahead an outline. The state is also written out
+ * for assistive technology.
  */
 export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(({ items, className, ...props }, ref) => {
   return (
@@ -51,19 +44,13 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(({ items, cl
           key={item.id}
           data-state={item.state}
           aria-current={item.state === "active" ? "step" : undefined}
-          className={cn("flex items-center gap-2.5 px-1 py-1.5 text-sm", rowStyles[item.state])}
+          className={cn("flex items-center gap-2.5 px-1 py-[7px] text-sm", rowStyles[item.state])}
         >
-          <span
-            aria-hidden="true"
-            className={cn(
-              "inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs font-semibold",
-              markerStyles[item.state],
-            )}
-          >
-            {item.state === "done" && <Check className="h-3.5 w-3.5" />}
-            {item.state === "active" && <Play className="h-2.5 w-2.5 fill-current" />}
-            {item.state === "failed" && <X className="h-3.5 w-3.5" />}
-          </span>
+          <StatusDiamond
+            size={11}
+            tone={item.state === "done" ? "success" : item.state === "failed" ? "danger" : item.state === "active" ? "info" : "neutral"}
+            outline={item.state === "pending"}
+          />
           <span>{item.label}</span>
           <span className="sr-only">, {stateText[item.state]}</span>
         </li>

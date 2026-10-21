@@ -9,8 +9,8 @@ export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputE
 }
 
 /**
- * A native checkbox in the primary colour, as the apps and the installer
- * style theirs (accent-color, 16px). Native so it works with forms, keyboard
+ * A native checkbox in the accent colour (accent-color, 16px), with the
+ * 2px ink focus outline every control shares. Native so it works with forms, keyboard
  * and assistive technology without any script. Give it a `label`, or an
  * `aria-label` when the label is elsewhere. `className` goes on the input
  * when there is no label, and on the wrapping row when there is.
@@ -28,7 +28,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         disabled={disabled}
         aria-describedby={descriptionId}
         className={cn(
-          "m-0 h-4 w-4 shrink-0 cursor-pointer accent-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 ring-offset-bg disabled:cursor-not-allowed disabled:opacity-50",
+          "m-0 h-4 w-4 shrink-0 cursor-pointer rounded-sm accent-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-not-allowed disabled:opacity-50",
           !label && className,
         )}
         {...props}
@@ -42,7 +42,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         <label
           htmlFor={inputId}
           className={cn(
-            "flex cursor-pointer items-start gap-2 text-sm font-medium",
+            "flex cursor-pointer items-start gap-2 text-sm font-semibold",
             disabled && "cursor-not-allowed opacity-70",
           )}
         >
@@ -50,7 +50,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           <span>{label}</span>
         </label>
         {description && (
-          <p id={descriptionId} className={cn("pl-6 text-xs text-muted", disabled && "opacity-70")}>
+          <p id={descriptionId} className={cn("pl-6 text-[13px] text-muted", disabled && "opacity-70")}>
             {description}
           </p>
         )}

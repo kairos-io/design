@@ -1,16 +1,17 @@
 import * as React from "react";
+import { inputClasses } from "../Input/Input.tsx";
 import { cn } from "../../lib/cn.ts";
 
-export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  /** Mono at 13px, for YAML, logs and anything an operator will copy. */
+  mono?: boolean;
+}
 
-/** The multi-line text control, as AuroraBoot's ui/textarea.tsx. Add `font-mono` for YAML and logs. */
+/** The multi-line text control, drawn like Input. Set `mono` for cloud configs and logs. */
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, ...props }, ref) => (
+  ({ className, mono, ...props }, ref) => (
     <textarea
-      className={cn(
-        "flex min-h-[60px] w-full rounded-base border border-line bg-transparent px-3 py-2 text-sm placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink aria-invalid:border-status-recovery aria-invalid:ring-status-recovery disabled:cursor-not-allowed disabled:opacity-50",
-        className,
-      )}
+      className={cn(inputClasses, "min-h-[80px] leading-normal", mono && "font-mono text-[13px]", className)}
       ref={ref}
       {...props}
     />

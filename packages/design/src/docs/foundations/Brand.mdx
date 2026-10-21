@@ -1,49 +1,90 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 import { ClearSpace, DoDont, LogoGrid } from "../../../.storybook/blocks/index.ts";
+import { HadronLogoGrid } from "../../../.storybook/blocks/LogoGrid.tsx";
+import { HadronLogo, HadronMark, KairosLogo, KairosMark } from "../../components/Logo/index.ts";
 
 <Meta title="Foundations/Brand" />
 
 # Brand
 
-The Kairos mark is eighteen rhombi in three oranges, arranged as a ring of six cubes. The logos are the mark with the wordmark set beside it or under it. All of them come from the [CNCF artwork repository](https://github.com/cncf/artwork/tree/main/projects/kairos) and ship in this package unchanged, as SVG files under `assets/logos/` and as the `KairosMark` and `KairosLogo` components.
+Two marks, one system. **Kairos** is the project, the suite and the `kairos` CLI: the mark is eighteen rhombi in three oranges, a ring of six cubes. **Hadron** is a separate Linux distribution that ships with every Kairos release: it keeps its own name and its own logo, the same cube structure in three blues. The Foundations deck puts them side by side in its hero, "Kairos · Hadron", and states the rule for everything that follows: the marks do not change. Pick the rendition by the surface, never recolour, and never place a mark on an orange or blue fill or over a tile field.
 
-## The files
+The logos ship in this package unchanged, as SVG files under `assets/logos/` and as the `KairosMark`, `KairosLogo`, `HadronMark` and `HadronLogo` components. The Kairos artwork is the [CNCF artwork](https://github.com/cncf/artwork/tree/main/projects/kairos); the dark-surface lockups and the Hadron files are the decks' in this repository.
 
-Three layouts, three variants. Use the colour version wherever the background is plain; white on navy and on photographs; black only for one-colour print.
+## Kairos
+
+Three layouts, and the rendition by surface: colour on any plain light surface; on a dark surface the colour mark with the wordmark in white; white on a flat fill or photography; black only for one-colour print.
 
 <LogoGrid />
+
+## Hadron
+
+The mark is the same on light and dark surfaces, because the blues read on both. The lockup sets its wordmark in ink on light surfaces and in white on dark ones. There is a white mark for flat fills and photography and no one-colour lockup: on a fill, use the mark alone.
+
+<HadronLogoGrid />
 
 ## Clear space and size
 
 <ClearSpace />
 
-The same rhombi, laid flat as a hexagon and tiled into fields, are the system's one decorative pattern. [Tiles](?path=/docs/foundations-tiles--docs) sets out the unit, the fields, the tile bar and the marker, and where each may go.
+The same rhombi, laid flat as a hexagon and tiled into fields, are the system's one decorative pattern, in both palettes. [Tiles](?path=/docs/foundations-tiles--docs) sets out the unit, the fields, the tile bar and the marker, and where each may go. A mark never sits on a tile field.
 
-## In the interface
+## Lockups in the interface
 
-- The app shell shows the horizontal logo at 28px high in the top bar and 44px in the sidebar header, on navy, so it is the white variant there in both themes.
-- The docs navbar uses the mark at 30px beside the site name.
-- A favicon is the mark alone, colour variant.
-- Next to a product name ("Web Installer", "AuroraBoot") the name is set in the body face at 16px, weight 700, white on navy.
+A product has its own name, repo and binary, and in UI chrome it shows the mark plus its bold name. Functionality is part of Kairos and has no product name. From the Naming deck:
+
+<div className="flex flex-wrap items-center gap-8 rounded-base border border-line bg-surface p-6 text-ink">
+  <span className="inline-flex items-center gap-2 text-lg">
+    <KairosMark height={20} decorative />
+    Kairos <b className="font-bold">Installer</b>
+  </span>
+  <span className="inline-flex items-center gap-2 text-lg">
+    <KairosMark height={20} decorative />
+    <b className="font-bold">Kairos</b>
+  </span>
+  <span className="inline-flex items-center gap-2 text-lg">
+    <HadronMark height={20} decorative />
+    <b className="font-bold">Hadron</b>
+  </span>
+</div>
+
+- A product: the mark, "Kairos" in the regular weight, the product name in bold (Kairos **Installer**, Kairos **Factory**, Kairos **Operator**, Kairos **Lab**).
+- The console: the mark and a bold "Kairos" alone. Its sections (Factory, Deploy, Fleet) are page titles, not names in the chrome.
+- Hadron: its own mark and its own bold name. Never "Kairos Hadron".
+- The favicon is the mark alone, colour rendition. The marks are for favicons, product lockups and app chrome.
+- The two together, as on the Foundations hero and on hadron-linux.io ("Hadron v0.5.1 · by Kairos"): both lockups at the same height, Kairos first, a middle dot between them.
+
+<div className="flex flex-wrap items-center gap-8 rounded-base border border-line bg-surface p-6 text-ink">
+  <KairosLogo height={36} />
+  <span className="text-muted" aria-hidden="true">
+    ·
+  </span>
+  <HadronLogo height={36} />
+</div>
 
 <DoDont
   do={
     <ul>
-      <li>Use the files as they are, from the package or the CNCF repository.</li>
-      <li>Pick the variant by the surface: colour on plain, white on navy, black for one-colour print.</li>
-      <li>Keep one rhombus of clear space around the mark.</li>
+      <li>Use the files as they are, from the package, the CNCF repository or this repository's assets.</li>
+      <li>
+        Pick the rendition by the surface: colour on light, the dark lockup on dark, white on a flat fill or a
+        photograph, black for one-colour print.
+      </li>
+      <li>Keep one mark-height of clear space around the horizontal logo, and 24px as the minimum height.</li>
+      <li>Give each brand its own mark: Hadron is never shown under the Kairos mark.</li>
     </ul>
   }
   dont={
     <ul>
-      <li>Recolour the rhombi, even with the brand oranges in a different order.</li>
-      <li>Rotate, outline, or animate the mark.</li>
-      <li>Rebuild the wordmark in a font. It is outlines.</li>
-      <li>Use the oranges of the mark to mean a status. Status has its own tones.</li>
+      <li>Recolour the rhombi, even with the brand oranges or blues in a different order.</li>
+      <li>Place a mark on a Kairos orange or Hadron blue fill, or over a tile field.</li>
+      <li>Rotate, outline, shadow or animate a mark.</li>
+      <li>Rebuild a wordmark in a font. They are outlines.</li>
+      <li>Use the oranges or the blues of a mark to mean a status. Status has its own colours.</li>
     </ul>
   }
 />
 
 ## Trademark
 
-Kairos is a CNCF project and its name and logos are trademarks of The Linux Foundation. Use is subject to the [Linux Foundation trademark usage policy](https://www.linuxfoundation.org/trademark-usage), and the artwork repository's [LICENSE](https://github.com/cncf/artwork/blob/master/LICENSE.md) carries the key excerpts.
+Kairos is a CNCF project and its name and logos are trademarks of The Linux Foundation. Use is subject to the [Linux Foundation trademark usage policy](https://www.linuxfoundation.org/trademark-usage), and the artwork repository's [LICENSE](https://github.com/cncf/artwork/blob/master/LICENSE.md) carries the key excerpts. Hadron is engineered by the Kairos team and ships with every Kairos release; its name and logo are the project's, from the decks in this repository.

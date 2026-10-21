@@ -21,7 +21,8 @@ describe("Alert", () => {
     );
     const status = screen.getByRole("status");
     expect(status).toHaveTextContent("Disk will be erased");
-    expect(status.className).toContain("bg-status-warning/12");
+    expect(status.className).toContain("bg-surface");
+    expect(status.querySelector("svg")?.getAttribute("class")).toContain("fill-status-warning");
     expect(status).toHaveAttribute("data-tone", "warning");
   });
 

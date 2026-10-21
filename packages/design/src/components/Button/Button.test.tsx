@@ -29,8 +29,8 @@ describe("Button", () => {
       </Button>,
     );
     const button = screen.getByRole("button");
-    expect(button.className).toContain("border-line");
-    expect(button.className).toContain("h-10");
+    expect(button.className).toContain("border-ink");
+    expect(button.className).toContain("text-[17px]");
   });
 
   it("renders a link when asChild is set", () => {

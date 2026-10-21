@@ -20,9 +20,15 @@ describe("Card", () => {
     expect(screen.getByTestId("card").className).toContain("bg-surface");
   });
 
+  it("draws a hairline only when asked", () => {
+    render(<Card data-testid="card" bordered />);
+    expect(screen.getByTestId("card").className).toContain("border-line");
+  });
+
   it("merges a custom class", () => {
     render(<Card data-testid="card" className="p-4" />);
     expect(screen.getByTestId("card").className).toContain("p-4");
-    expect(screen.getByTestId("card").className).toContain("rounded-lg");
+    expect(screen.getByTestId("card").className).toContain("rounded-base");
+    expect(screen.getByTestId("card").className).not.toContain("border");
   });
 });

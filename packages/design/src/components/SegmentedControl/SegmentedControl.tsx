@@ -5,6 +5,9 @@ import { cn } from "../../lib/cn.ts";
 export interface SegmentedOption<T extends string> {
   value: T;
   label: string;
+  /** A short mono code over the label: the docs' "L1", "L2", "L3". */
+  code?: string;
+  /** A line under the label, read as the option's description. */
   hint?: string;
   disabled?: boolean;
 }
@@ -18,10 +21,12 @@ export interface SegmentedControlProps<T extends string> extends Omit<
   options: SegmentedOption<T>[];
   /** Required: the group's name ("Architecture"), as the radio group has no visible legend. */
   "aria-label": string;
+  /** Every option the same width, as the docs' level picker. Off, each option takes its own width. */
+  fill?: boolean;
 }
 
 function SegmentedControlInner<T extends string>(
-  { value, onChange, options, className, ...props }: SegmentedControlProps<T>,
+  { value, onChange, options, className, fill = true, ...props }: SegmentedControlProps<T>,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   const id = useId();
@@ -55,7 +60,11 @@ function SegmentedControlInner<T extends string>(
     <div
       ref={ref}
       role="radiogroup"
-      className={cn("inline-flex flex-wrap gap-1 rounded-base border border-line bg-inner/40 p-1", className)}
+      className={cn(
+        "gap-1 rounded-base bg-raised p-1",
+        fill ? "grid auto-cols-fr grid-flow-col" : "inline-flex flex-wrap",
+        className,
+      )}
       {...props}
     >
       {options.map((o, i) => {
@@ -78,17 +87,22 @@ function SegmentedControlInner<T extends string>(
             onClick={() => onChange(o.value)}
             onKeyDown={(e) => onKeyDown(e, i)}
             className={cn(
-              "flex flex-col items-start rounded-base px-3 py-1.5 text-left text-sm transition-colors",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
+              "flex flex-col items-start rounded-[3px] px-2.5 py-2 text-left transition-colors",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink",
               "disabled:cursor-not-allowed disabled:opacity-50",
-              selected
-                ? "bg-surface text-ink ring-1 ring-accent"
-                : "text-muted hover:bg-surface/60 hover:text-ink",
+              selected ? "bg-surface text-ink" : "text-muted hover:text-ink",
             )}
           >
-            <span className="font-medium">{o.label}</span>
+            {o.code && (
+              <span className={cn("font-mono text-xs leading-4", selected ? "text-link" : "text-muted")}>
+                {o.code}
+              </span>
+            )}
+            <span className={cn("text-[15px] leading-tight", selected ? "font-bold" : "font-semibold")}>
+              {o.label}
+            </span>
             {o.hint && (
-              <span id={hintId} className="text-xs text-muted">
+              <span id={hintId} className="mt-0.5 text-[13px] leading-snug text-muted">
                 {o.hint}
               </span>
             )}
@@ -100,9 +114,12 @@ function SegmentedControlInner<T extends string>(
 }
 
 /**
- * A compact single choice (a radio group) for a few short options, as
- * AuroraBoot's wizard/SegmentedControl.tsx. Arrow keys move the selection and
- * skip disabled options; only the selected option is in the tab order.
+ * A compact single choice (a radio group) for a few short options: the
+ * docs' level picker (L1 Guided, L2 Automate, L3 Extend) and the console's
+ * architecture and output pickers. A raised track with the chosen option
+ * lifted to the surface, as the Foundations deck draws it. Arrow keys move
+ * the selection and skip disabled options; only the selected option is in
+ * the tab order.
  */
 export const SegmentedControl = React.forwardRef(SegmentedControlInner) as <T extends string>(
   props: SegmentedControlProps<T> & React.RefAttributes<HTMLDivElement>,

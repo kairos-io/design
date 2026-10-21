@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { KairosLogo, KairosMark, type LogoVariant } from "./Logo.tsx";
+import { HadronLogo, HadronMark, KairosLogo, KairosMark } from "./Logo.tsx";
 
 const meta = {
   title: "Components/Logo",
@@ -9,13 +9,13 @@ const meta = {
     docs: {
       description: {
         component:
-          "The Kairos mark and wordmark, inlined from the CNCF artwork (cncf/artwork/projects/kairos) with the paths and fills unchanged. Use the colour rendition on white and on the dark surfaces; white on navy and on photography; black only in print. Keep clear space of one rhombus around it, never recolour, rotate or add effects, and at under 24px use the icon alone. Use of the logo is subject to the Linux Foundation trademark policy.",
+          "The Kairos and Hadron marks and lockups, inlined with the shapes and fills unchanged. The marks do not change: pick the rendition by the surface (colour on light surfaces, the dark lockup on dark surfaces, white on a flat fill or photography, black for one-colour print), never recolour, and never place a mark on an orange or blue fill or over a tile field. Keep one mark-height of clear space around the horizontal logo and 24px as the minimum height on screen. Kairos is a CNCF project and its name and logos are trademarks of The Linux Foundation; Hadron is a separate Linux distribution with its own name and logo, maintained by the Kairos team.",
       },
     },
   },
   argTypes: {
     layout: { control: "radio", options: ["horizontal", "stacked"] },
-    variant: { control: "radio", options: ["color", "white", "black"] },
+    variant: { control: "radio", options: ["color", "dark", "white", "black"] },
     height: { control: { type: "number", min: 16, max: 240 } },
     decorative: { control: "boolean" },
   },
@@ -27,54 +27,89 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-const surfaces: { name: string; className: string; variant: LogoVariant }[] = [
-  { name: "On the page", className: "bg-bg text-ink", variant: "color" },
-  { name: "On navy", className: "bg-side text-ink", variant: "white" },
-  { name: "On a card", className: "bg-surface text-ink", variant: "color" },
-];
-
-export const AllVariants: Story = {
-  name: "Every rendition",
+export const Kairos: Story = {
+  name: "Kairos: every rendition",
   render: () => (
     <div className="grid gap-4">
-      {(["color", "white", "black"] as const).map((variant) => (
-        <div
-          key={variant}
-          className={
-            variant === "white"
-              ? "grid items-center gap-6 rounded-base bg-side p-6 text-ink sm:grid-cols-[auto_1fr_1fr]"
-              : "grid items-center gap-6 rounded-base border bg-surface p-6 text-ink sm:grid-cols-[auto_1fr_1fr]"
-          }
-        >
-          <KairosMark variant={variant} height={64} label={`Kairos icon, ${variant}`} />
-          <KairosLogo variant={variant} height={64} label={`Kairos horizontal logo, ${variant}`} />
-          <KairosLogo
-            variant={variant}
-            layout="stacked"
-            height={96}
-            label={`Kairos stacked logo, ${variant}`}
-          />
-        </div>
-      ))}
+      <div className="grid items-center gap-6 rounded-base border bg-surface p-6 text-ink sm:grid-cols-[auto_1fr_1fr]">
+        <KairosMark height={64} label="Kairos mark, colour" />
+        <KairosLogo height={64} label="Kairos horizontal logo, colour" />
+        <KairosLogo layout="stacked" height={96} label="Kairos stacked logo, colour" />
+      </div>
+      <div
+        className="grid items-center gap-6 rounded-base p-6 sm:grid-cols-[auto_1fr_1fr]"
+        data-theme="dark"
+        style={{ background: "var(--bg)", color: "var(--ink)" }}
+      >
+        <KairosMark variant="dark" height={64} label="Kairos mark on a dark surface" />
+        <KairosLogo variant="dark" height={64} label="Kairos horizontal logo, dark surface" />
+        <KairosLogo variant="white" layout="stacked" height={96} label="Kairos stacked logo, white" />
+      </div>
+      <div className="grid items-center gap-6 rounded-base bg-ink p-6 text-bg sm:grid-cols-[auto_1fr_1fr]">
+        <KairosMark variant="white" height={64} label="Kairos mark, white" />
+        <KairosLogo variant="white" height={64} label="Kairos horizontal logo, white" />
+        <KairosLogo variant="white" layout="stacked" height={96} label="Kairos stacked logo, white" />
+      </div>
+      <div className="grid items-center gap-6 rounded-base border bg-surface p-6 text-ink sm:grid-cols-[auto_1fr_1fr]">
+        <KairosMark variant="black" height={64} label="Kairos mark, black" />
+        <KairosLogo variant="black" height={64} label="Kairos horizontal logo, black" />
+        <KairosLogo variant="black" layout="stacked" height={96} label="Kairos stacked logo, black" />
+      </div>
     </div>
   ),
 };
 
-export const OnSurfaces: Story = {
-  name: "Which rendition where",
+export const Hadron: Story = {
+  name: "Hadron: every rendition",
   render: () => (
-    <div className="grid gap-4 sm:grid-cols-3">
-      {surfaces.map((s) => (
-        <figure
-          key={s.name}
-          className={`flex flex-col items-center gap-3 rounded-base border p-6 ${s.className}`}
-        >
-          <KairosLogo variant={s.variant} height={48} />
-          <figcaption className="text-xs opacity-70">
-            {s.name}: {s.variant}
-          </figcaption>
-        </figure>
-      ))}
+    <div className="grid gap-4">
+      <div className="grid items-center gap-6 rounded-base border bg-surface p-6 text-ink sm:grid-cols-[auto_1fr]">
+        <HadronMark height={64} label="Hadron mark, colour" />
+        <HadronLogo height={64} label="Hadron horizontal logo, light surface" />
+      </div>
+      <div
+        className="grid items-center gap-6 rounded-base p-6 sm:grid-cols-[auto_1fr]"
+        data-theme="dark"
+        style={{ background: "var(--bg)", color: "var(--ink)" }}
+      >
+        <HadronMark height={64} label="Hadron mark on a dark surface" />
+        <HadronLogo variant="dark" height={64} label="Hadron horizontal logo, dark surface" />
+      </div>
+      <div className="grid items-center gap-6 rounded-base bg-ink p-6 text-bg sm:grid-cols-[auto_1fr]">
+        <HadronMark variant="white" height={64} label="Hadron mark, white" />
+        <span className="text-sm opacity-70">
+          The lockup has no one-colour rendition; use the mark alone.
+        </span>
+      </div>
+    </div>
+  ),
+};
+
+export const Together: Story = {
+  name: "Kairos and Hadron together",
+  render: () => (
+    <div className="grid gap-4">
+      <div className="flex flex-wrap items-center gap-8 rounded-base border bg-surface p-6 text-ink">
+        <KairosLogo height={36} />
+        <span className="text-muted" aria-hidden="true">
+          ·
+        </span>
+        <HadronLogo height={36} />
+      </div>
+      <div className="flex flex-wrap items-center gap-6 rounded-base border bg-surface p-6 text-ink">
+        <span className="inline-flex items-center gap-2 text-lg">
+          <KairosMark height={20} decorative />
+          Kairos <b className="font-bold">Installer</b>
+        </span>
+        <span className="inline-flex items-center gap-2 text-lg">
+          <KairosMark height={20} decorative />
+          <b className="font-bold">Kairos</b>
+        </span>
+        <span className="inline-flex items-center gap-2 text-lg">
+          <HadronMark height={20} decorative />
+          <b className="font-bold">Hadron</b>
+        </span>
+      </div>
     </div>
   ),
 };
@@ -82,12 +117,13 @@ export const OnSurfaces: Story = {
 export const Sizes: Story = {
   render: () => (
     <div className="flex flex-wrap items-end gap-6">
-      <KairosMark height={16} label="Kairos, 16px" />
-      <KairosMark height={24} label="Kairos, 24px" />
+      <KairosMark height={16} label="Kairos, 16px favicon size" />
+      <KairosMark height={24} label="Kairos, 24px minimum" />
       <KairosMark height={32} label="Kairos, 32px" />
-      <KairosLogo height={28} label="Kairos, top bar size" />
-      <KairosLogo height={44} label="Kairos, sidebar size" />
-      <KairosLogo layout="stacked" height={96} label="Kairos, stacked" />
+      <KairosLogo height={24} label="Kairos lockup at the 24px minimum" />
+      <KairosLogo height={36} label="Kairos, top bar size" />
+      <HadronMark height={24} label="Hadron, 24px minimum" />
+      <HadronLogo height={36} label="Hadron, top bar size" />
     </div>
   ),
 };
@@ -95,13 +131,16 @@ export const Sizes: Story = {
 export const ClearSpace: Story = {
   name: "Clear space",
   render: () => (
-    <div className="inline-block rounded-base border border-dashed border-accent p-12">
-      <div className="relative">
+    <div className="flex flex-wrap gap-6">
+      <div className="inline-block rounded-base border border-dashed border-accent p-16">
         <KairosLogo height={64} />
-        <span className="absolute -top-10 left-0 text-xs text-muted">
-          one rhombus of clear space on every side
-        </span>
       </div>
+      <div className="inline-block rounded-base border border-dashed border-hadron-blue p-16">
+        <HadronLogo height={64} />
+      </div>
+      <p className="max-w-xs self-center text-sm text-muted">
+        One mark-height of clear space around the horizontal logo, on every side.
+      </p>
     </div>
   ),
 };

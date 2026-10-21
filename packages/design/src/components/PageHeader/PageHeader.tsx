@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { ChevronRight } from "lucide-react";
 import { cn } from "../../lib/cn.ts";
 
 export interface BreadcrumbItem {
@@ -17,7 +16,11 @@ export interface BreadcrumbItem {
 
 export interface PageHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "title"> {
   title: string;
+  /** The title in the mono face: a hostname, an image reference. */
+  mono?: boolean;
   description?: React.ReactNode;
+  /** A mono line over the title in place of a breadcrumb: "fleet / nodes". */
+  eyebrow?: React.ReactNode;
   breadcrumb?: BreadcrumbItem[];
   /** A status badge shown next to the title. */
   status?: React.ReactNode;
@@ -27,23 +30,25 @@ export interface PageHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   children?: React.ReactNode;
 }
 
-const linkClass = "truncate hover:text-ink hover:underline";
+const linkClass = "truncate font-semibold text-link no-underline hover:text-accent hover:underline";
 
 /**
- * The top of every page: an optional breadcrumb, the h1 with an optional
- * status badge, a description or meta line, and the actions on the right.
- * Breadcrumb items are plain anchors unless the host passes its own link
- * `element`, which keeps the component free of any router.
+ * The top of every page, as the console decks set it: an optional
+ * breadcrumb or mono eyebrow, the 30px h1 with an optional status beside
+ * it, a description or meta line in the sub ink, and the actions on the
+ * right. Breadcrumb items are plain anchors unless the host passes its own
+ * link `element`, which keeps the component free of any router.
  */
 export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
-  ({ title, description, breadcrumb, status, meta, children, className, ...props }, ref) => (
-    <div ref={ref} className={cn("mb-8", className)} {...props}>
+  ({ title, mono = false, description, eyebrow, breadcrumb, status, meta, children, className, ...props }, ref) => (
+    <div ref={ref} className={cn("mb-6", className)} {...props}>
+      {eyebrow && !breadcrumb && <div className="mb-1 font-mono text-xs text-muted">{eyebrow}</div>}
       {breadcrumb && breadcrumb.length > 0 && (
-        <nav aria-label="Breadcrumb" className="mb-2">
-          <ol className="flex flex-wrap items-center gap-1 text-sm text-muted">
+        <nav aria-label="Breadcrumb" className="mb-1.5">
+          <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted">
             {breadcrumb.map((item, i) => (
-              <li key={`${i}-${item.label}`} className="flex min-w-0 items-center gap-1">
-                {i > 0 && <ChevronRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />}
+              <li key={`${i}-${item.label}`} className="flex min-w-0 items-center gap-1.5">
+                {i > 0 && <span aria-hidden="true">/</span>}
                 {item.element ? (
                   <Slot className={linkClass}>{item.element}</Slot>
                 ) : item.href ? (
@@ -60,15 +65,22 @@ export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
           </ol>
         </nav>
       )}
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="min-w-0 break-words text-3xl font-bold tracking-tight">{title}</h1>
+          <div className="flex flex-wrap items-center gap-3.5">
+            <h1
+              className={cn(
+                "m-0 min-w-0 break-words text-[30px] leading-tight text-ink",
+                mono ? "font-mono font-medium tracking-[-0.02em]" : "font-semibold tracking-[-0.03em]",
+              )}
+            >
+              {title}
+            </h1>
             {status}
           </div>
-          {description && <p className="mt-1 text-muted">{description}</p>}
+          {description && <p className="mt-1.5 text-sm text-sub">{description}</p>}
           {meta && (
-            <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">{meta}</div>
+            <div className="mt-1.5 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-sm text-sub">{meta}</div>
           )}
         </div>
         {children && <div className="flex flex-wrap items-center gap-2">{children}</div>}

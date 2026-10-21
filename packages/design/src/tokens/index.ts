@@ -46,6 +46,24 @@ export const themeTokens = Object.keys(data.themes.light) as ThemeToken[];
 export const variants = data.variants;
 export type Variant = keyof typeof variants;
 
+export type ThemeMode = keyof typeof data.themes;
+
+/**
+ * The effective token values for a theme, with a variant's values laid over
+ * it: what an element under data-theme="dark" data-variant="hadron" reads.
+ * Names the variant does not set keep the theme's value, as tokens.css does.
+ */
+export function resolveTheme(mode: ThemeMode, variant?: Variant): Record<ThemeToken, string> {
+  const base = { ...data.themes[mode] } as Record<ThemeToken, string>;
+  if (!variant) return base;
+  const over = data.variants[variant][mode] as Partial<Record<ThemeToken, string>>;
+  for (const name of themeTokens) {
+    const v = over[name];
+    if (v) base[name] = v;
+  }
+  return base;
+}
+
 export const font = data.font;
 export const fonts = { sans: data.font.family.sans, mono: data.font.family.mono } as const;
 export type TypeStep = keyof typeof data.font.size;

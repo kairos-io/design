@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Download, Plus, Rocket, Trash2 } from "lucide-react";
+import { Download, Plus, RotateCcw } from "lucide-react";
 import { Button } from "./Button.tsx";
 
 const meta = {
@@ -10,23 +10,14 @@ const meta = {
     docs: {
       description: {
         component:
-          "The action control. One primary button per view; outline and ghost for the rest; destructive only for actions that lose data. Icon-only sizes need an `aria-label`.",
+          "The buttons of the Foundations deck. `default` is the accent with dark ink on it, for the one action that matters on a view (“Download ISO”). `dark` (also `secondary`) is the ink button (“Read the docs”). `outline` is a 1.5px ink hairline (“GitHub”). `link` is an inline action in the link colour (“Learn more →”). `destructive` is the recovery red for anything that loses data (“Reset node”). `ghost` has no chrome until hovered, for toolbars. Focus is a 2px ink outline; disabled is the raised fill with muted ink. Icon-only sizes need an `aria-label`.",
       },
     },
   },
   argTypes: {
     variant: {
       control: "select",
-      options: [
-        "default",
-        "outline",
-        "secondary",
-        "ghost",
-        "destructive",
-        "destructive-outline",
-        "link",
-        "on-navy",
-      ],
+      options: ["default", "dark", "outline", "ghost", "link", "destructive", "destructive-outline"],
     },
     size: { control: "select", options: ["sm", "default", "lg", "icon", "icon-sm"] },
     loading: { control: "boolean" },
@@ -34,7 +25,7 @@ const meta = {
     asChild: { table: { disable: true } },
   },
   args: {
-    children: "Build ISO",
+    children: "Download ISO",
     variant: "default",
     size: "default",
     loading: false,
@@ -48,29 +39,40 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 export const Variants: Story = {
+  name: "The deck's row",
   render: (args) => (
-    <div className="flex flex-wrap items-center gap-3">
-      <Button {...args} variant="default">
-        Primary
-      </Button>
-      <Button {...args} variant="outline">
-        Outline
-      </Button>
-      <Button {...args} variant="secondary">
-        Secondary
-      </Button>
-      <Button {...args} variant="ghost">
-        Ghost
-      </Button>
-      <Button {...args} variant="destructive">
-        Destructive
-      </Button>
-      <Button {...args} variant="destructive-outline">
-        Destructive outline
-      </Button>
-      <Button {...args} variant="link">
-        Link
-      </Button>
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <Button {...args} variant="default">
+          Download ISO
+        </Button>
+        <Button {...args} variant="dark">
+          Read the docs
+        </Button>
+        <Button {...args} variant="outline">
+          GitHub
+        </Button>
+        <Button {...args} variant="link">
+          Learn more →
+        </Button>
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <Button {...args} size="sm">
+          Small
+        </Button>
+        <Button {...args} disabled>
+          Disabled
+        </Button>
+        <Button {...args} variant="destructive">
+          Reset node
+        </Button>
+        <Button {...args} variant="ghost">
+          Ghost
+        </Button>
+        <Button {...args} variant="destructive-outline">
+          Decommission
+        </Button>
+      </div>
     </div>
   ),
 };
@@ -87,10 +89,10 @@ export const Sizes: Story = {
       <Button {...args} size="lg">
         Large
       </Button>
-      <Button {...args} size="icon" aria-label="Add">
+      <Button {...args} size="icon" aria-label="Add node">
         <Plus />
       </Button>
-      <Button {...args} size="icon-sm" aria-label="Add">
+      <Button {...args} size="icon-sm" aria-label="Add node">
         <Plus />
       </Button>
     </div>
@@ -101,13 +103,13 @@ export const WithIcon: Story = {
   render: (args) => (
     <div className="flex flex-wrap items-center gap-3">
       <Button {...args}>
-        <Rocket /> Deploy
+        <Download /> Download ISO
       </Button>
       <Button {...args} variant="outline">
         <Download /> Download logs
       </Button>
       <Button {...args} variant="destructive-outline">
-        <Trash2 /> Decommission
+        <RotateCcw /> Reset node
       </Button>
     </div>
   ),
@@ -124,7 +126,7 @@ export const Disabled: Story = {
 export const AsLink: Story = {
   name: "As a link (asChild)",
   render: (args) => (
-    <Button {...args} asChild>
+    <Button {...args} variant="dark" asChild>
       <a href="https://kairos.io/docs" target="_blank" rel="noreferrer">
         Read the docs
       </a>
@@ -132,16 +134,21 @@ export const AsLink: Story = {
   ),
 };
 
-export const OnNavy: Story = {
-  name: "On the navy sidebar",
-  parameters: { backgrounds: { disable: true } },
+export const OnDark: Story = {
+  name: "In the dark theme",
   render: (args) => (
-    <div className="flex items-center gap-2 rounded-base bg-side p-4">
-      <Button {...args} variant="on-navy">
-        Logout
+    <div data-theme="dark" className="flex flex-wrap items-center gap-2 rounded-base bg-bg p-6">
+      <Button {...args} variant="default">
+        Download ISO
       </Button>
-      <Button {...args} variant="on-navy" size="icon" aria-label="Collapse sidebar">
-        <Plus />
+      <Button {...args} variant="dark">
+        Read the docs
+      </Button>
+      <Button {...args} variant="outline">
+        GitHub
+      </Button>
+      <Button {...args} variant="link">
+        Learn more →
       </Button>
     </div>
   ),

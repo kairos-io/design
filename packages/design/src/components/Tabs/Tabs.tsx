@@ -4,21 +4,20 @@ import { cn } from "../../lib/cn.ts";
 
 export const Tabs = TabsPrimitive.Root;
 
+/** The tab strip of the Foundations deck: a row on a hairline, 20px apart. Give it an `aria-label`. */
 export const TabsList = React.forwardRef<
   React.ComponentRef<typeof TabsPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.List
     ref={ref}
-    className={cn(
-      "inline-flex h-9 items-center justify-center rounded-base bg-inner p-1 text-muted",
-      className,
-    )}
+    className={cn("flex flex-wrap items-end gap-5 border-b border-line", className)}
     {...props}
   />
 ));
 TabsList.displayName = TabsPrimitive.List.displayName;
 
+/** 15px semibold; the active tab is ink with a 2px accent line under it, the rest are muted. */
 export const TabsTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
@@ -26,7 +25,7 @@ export const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-base px-3 py-1 text-sm font-medium ring-offset-bg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-bg data-[state=active]:text-ink",
+      "-mb-px inline-flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent py-2 text-[15px] font-semibold leading-tight text-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-accent-line data-[state=active]:text-ink",
       className,
     )}
     {...props}
@@ -41,7 +40,7 @@ export const TabsContent = React.forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     className={cn(
-      "mt-2 ring-offset-bg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2",
+      "mt-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink",
       className,
     )}
     {...props}

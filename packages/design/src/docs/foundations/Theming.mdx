@@ -53,6 +53,157 @@ The attribute works on any element, so one section of a page can be dark on a li
 
 A few screens change a few values. `data-variant="hadron"` is the one most projects need: the Hadron blue accent, white ink on it, and the Hadron links. `console`, `site`, `installer` and `foundations` record the small differences the decks of those screens carry. Put `data-variant` on the element that carries `data-theme`, or below it. A variant never changes a component, only the values it reads.
 
+In code, `applyBrand("hadron")` sets the attribute on `<html>` and `applyBrand("kairos")` removes it (other variants are left alone); `getBrand()` reads it back. The tokens as data have the same view: `resolveTheme("dark", "hadron")` is the map an element under `data-theme="dark" data-variant="hadron"` reads. In the Storybook, the toolbar's **Brand** switch sets the attribute on the preview, for stories and for these pages.
+
+### Every component under Hadron
+
+What each component shows with `data-variant="hadron"`, in light and dark, read from its classes against the resolved tokens. White on Hadron blue is 4.47:1, which passes for large or bold text (3:1) and for icons and controls, and misses AA for normal text (4.5:1) by a hair; the Foundations deck draws its buttons with it all the same. "Stays orange" marks the names the variant does not set.
+
+<table className="w-full text-sm">
+  <thead>
+    <tr className="border-b border-line text-left text-muted">
+      <th className="py-2 pr-3 font-medium">Component</th>
+      <th className="py-2 pr-3 font-medium">Under Hadron</th>
+      <th className="py-2 font-medium">Verdict</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">Button, default</td>
+      <td className="py-2 pr-3">
+        Blue fill, white 14px medium label. Hover goes to <code>accentSoft</code>, which stays orange.
+      </td>
+      <td className="py-2">
+        Large text only. Hover needs a fix: it should darken or lighten the accent, not reach for the soft
+        orange.
+      </td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">Button, link</td>
+      <td className="py-2 pr-3">
+        Text in <code>accent</code>: 4.47:1 on white, 3.9:1 as Kairos orange.
+      </td>
+      <td className="py-2">
+        Needs a fix in both brands: links are <code>link</code>, not <code>accent</code>.
+      </td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">Button, outline, secondary, ghost, destructive</td>
+      <td className="py-2 pr-3">No accent. Destructive is the recovery red in both brands.</td>
+      <td className="py-2">Fine.</td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">Badge, default</td>
+      <td className="py-2 pr-3">Blue fill, white 12px semibold text.</td>
+      <td className="py-2">
+        Needs a decision: 12px on blue is under AA. The decks' tags are <code>raised</code> chips in mono, not
+        accent pills.
+      </td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">Alert, info</td>
+      <td className="py-2 pr-3">
+        Blue tint at 12% with <code>link</code> ink.
+      </td>
+      <td className="py-2">Fine.</td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">Checkbox</td>
+      <td className="py-2 pr-3">
+        <code>accent-color</code> is blue; the check is white on blue.
+      </td>
+      <td className="py-2">Fine (a control, 3:1).</td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">Chip, selected</td>
+      <td className="py-2 pr-3">Blue 1px border on the raised fill, ink text.</td>
+      <td className="py-2">Fine.</td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">SegmentedControl, active</td>
+      <td className="py-2 pr-3">Blue 1px ring on the surface segment, ink text.</td>
+      <td className="py-2">Fine.</td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">Sidebar item, active; SidebarSteps, current</td>
+      <td className="py-2 pr-3">Blue fill, white 14px medium label.</td>
+      <td className="py-2">
+        Large text only. Semibold labels, as the deck's buttons are, or the deep blue for the fill.
+      </td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">Steps, active marker</td>
+      <td className="py-2 pr-3">Blue fill, white number.</td>
+      <td className="py-2">Large text only; the number is bold and short, so it reads.</td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">Tabs</td>
+      <td className="py-2 pr-3">
+        The active tab is a surface step, no accent. (The deck's underline is <code>accentLine</code>, which
+        stays orange.)
+      </td>
+      <td className="py-2">
+        Fine as built. If the underline is adopted, Hadron needs an <code>accentLine</code> value.
+      </td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">StatusBadge, StatusDot, StatTile, Steps: the info tone</td>
+      <td className="py-2 pr-3">The "upgrading" and "installing" diamond takes the accent, so it is blue.</td>
+      <td className="py-2">Fine: the Foundations deck says upgrading uses the accent.</td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">InfoTooltip</td>
+      <td className="py-2 pr-3">
+        Links inside the panel are <code>accent</code>, hover <code>accentSoft</code> (orange, 2:1 on white).
+      </td>
+      <td className="py-2">
+        Needs a fix in both brands: <code>link</code>, hover <code>accent</code>.
+      </td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">ThemeToggle, active segment</td>
+      <td className="py-2 pr-3">Blue fill behind a white icon.</td>
+      <td className="py-2">Fine (an icon, 3:1).</td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">
+        Input, Select, Textarea, Dialog, Toast, Card, Table, Terminal, Separator, Label, Field, EmptyState,
+        PageHeader
+      </td>
+      <td className="py-2 pr-3">
+        No accent. Focus rings are <code>ink</code> in both brands.
+      </td>
+      <td className="py-2">Fine.</td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">Terminal prompt, code keys</td>
+      <td className="py-2 pr-3">
+        <code>codeKey</code> stays the light orange.
+      </td>
+      <td className="py-2">
+        Stays orange by the decks' choice; the hadron-linux.io deck shows no code block, so there is no value
+        to take.
+      </td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">TileField, TileUnit, TileBar, TileMarker</td>
+      <td className="py-2 pr-3">
+        Paint the Kairos oranges unless <code>palette="hadron"</code> is passed; the variant does not reach
+        them.
+      </td>
+      <td className="py-2">
+        Needs a token: tile tones the variant can set, so a Hadron page gets blue tiles with no prop. Until
+        then, pass the palette.
+      </td>
+    </tr>
+    <tr className="border-b border-line align-top">
+      <td className="py-2 pr-3">Logo</td>
+      <td className="py-2 pr-3">The Kairos mark. Hadron pages use the Hadron logos.</td>
+      <td className="py-2">See Brand and Hadron.</td>
+    </tr>
+  </tbody>
+</table>
+
 ## Cascade layers
 
 `styles.css` imports Tailwind's theme, preflight and utilities in named layers (`theme`, `base`, `utilities`). Layered styles lose to unlayered ones regardless of specificity, which is the property this system relies on: Docusaurus' Infima, the installer's layout CSS and any host stylesheet keep winning for the elements they already style. The package only takes over what nothing else claims.

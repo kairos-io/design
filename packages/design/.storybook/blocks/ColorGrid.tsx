@@ -1,13 +1,12 @@
 import type { ReactNode } from "react";
 import {
   brand,
+  resolveTheme,
   status,
   themeDark,
   themeLight,
-  themes,
   toneTokens,
   tones,
-  variants,
   type ThemeToken,
   type Tone,
   type Variant,
@@ -209,7 +208,7 @@ function Level({ result }: { result: ContrastResult | null }) {
   );
 }
 
-type Pair = { label: string; ink: ThemeToken | "status-ink"; surface: ThemeToken; variant?: Variant };
+type Pair = { label: string; ink: ThemeToken | "status-ink"; surface: ThemeToken; large?: boolean };
 
 const pairs: Pair[] = [
   { label: "Primary text on the page", ink: "ink", surface: "bg" },
@@ -217,26 +216,39 @@ const pairs: Pair[] = [
   { label: "Labels and metadata on the page", ink: "muted", surface: "bg" },
   { label: "Labels and metadata on a surface", ink: "muted", surface: "surface" },
   { label: "Links on the page", ink: "link", surface: "bg" },
+  { label: "Links on a surface", ink: "link", surface: "surface" },
   { label: "Primary button label", ink: "onAccent", surface: "accent" },
+  { label: "Accent as a line or large text on the page", ink: "accent", surface: "bg", large: true },
   { label: "Dark button label (bg on ink)", ink: "bg", surface: "ink" },
   { label: "Healthy text on the page", ink: "ok", surface: "bg" },
   { label: "Terminal text", ink: "codeInk", surface: "code" },
   { label: "Terminal bar text", ink: "codeMuted", surface: "codeBar" },
-  { label: "Hadron: primary button label", ink: "onAccent", surface: "accent", variant: "hadron" },
-  { label: "Hadron: links on the page", ink: "link", surface: "bg", variant: "hadron" },
 ];
 
-function value(mode: "light" | "dark", name: ThemeToken | "status-ink", variant?: Variant): string {
+type Column = { label: string; mode: "light" | "dark"; variant?: Variant };
+
+const columns: Column[] = [
+  { label: "Kairos light", mode: "light" },
+  { label: "Kairos dark", mode: "dark" },
+  { label: "Hadron light", mode: "light", variant: "hadron" },
+  { label: "Hadron dark", mode: "dark", variant: "hadron" },
+];
+
+function value(col: Column, name: ThemeToken | "status-ink"): string {
   if (name === "status-ink") return status.ink;
-  const v = variant ? (variants[variant][mode] as Partial<Record<ThemeToken, string>>)[name] : undefined;
-  return v ?? themes[mode][name];
+  return resolveTheme(col.mode, col.variant)[name];
 }
 
-function measure(mode: "light" | "dark", p: Pair): ContrastResult | null {
-  return contrastOn(value(mode, p.ink, p.variant), value(mode, p.surface, p.variant), value(mode, "bg"));
+function measure(col: Column, p: Pair): ContrastResult | null {
+  return contrastOn(value(col, p.ink), value(col, p.surface), value(col, "bg"));
 }
 
-/** Computed WCAG ratios for the pairs the components actually put together, in both themes. */
+/**
+ * Computed WCAG ratios for the pairs the components actually put together,
+ * in both themes, as Kairos and as Hadron (data-variant="hadron"). The one
+ * pair that changes between the brands is the accent: dark ink on Kairos
+ * orange passes AA, white on Hadron blue passes only for large or bold text.
+ */
 export function ContrastTable() {
   return (
     <div className="overflow-x-auto">
@@ -244,8 +256,11 @@ export function ContrastTable() {
         <thead>
           <tr className="border-b border-line text-left text-muted">
             <th className="py-2 pr-3 font-medium">Pair</th>
-            <th className="py-2 pr-3 font-medium">Light</th>
-            <th className="py-2 font-medium">Dark</th>
+            {columns.map((c) => (
+              <th key={c.label} className="py-2 pr-3 font-medium">
+                {c.label}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -255,15 +270,14 @@ export function ContrastTable() {
                 {p.label}
                 <div className="font-mono text-xs text-muted">
                   --{p.ink} on --{p.surface}
-                  {p.variant ? ` · data-variant="${p.variant}"` : ""}
+                  {p.large ? " · 3:1 is enough" : ""}
                 </div>
               </td>
-              <td className="py-2 pr-3">
-                <Level result={measure("light", p)} />
-              </td>
-              <td className="py-2">
-                <Level result={measure("dark", p)} />
-              </td>
+              {columns.map((c) => (
+                <td key={c.label} className="py-2 pr-3">
+                  <Level result={measure(c, p)} />
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>

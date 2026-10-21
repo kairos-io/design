@@ -9,29 +9,33 @@ export interface ChipProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "
   onRemove?: () => void;
   /** The accessible name of the remove button; defaults to "Remove <text>" when children is a string. */
   removeLabel?: string;
-  /** A selected filter: primary border and soft fill. */
+  /** A selected filter: the accent hairline on the raised fill. */
   selected?: boolean;
   /** Mono text (labels, paths) or the sans face (plain words). */
   mono?: boolean;
+  /** A hairline instead of the raised fill: "group: retail-eu". */
+  outline?: boolean;
 }
 
 /**
  * A compact token: a node label, an active filter, an uploaded file name.
- * The installer's `.chip` and AuroraBoot's FilterChip and LabelChips. A chip
- * with `onRemove` gets a labelled remove button; the chip itself is not a
- * button, so set `selected` and wrap it in one for toggling filters.
+ * The tag of the Foundations deck (mono, 12px, a raised fill or a hairline,
+ * a 2px radius) with an optional remove button. A chip with `onRemove` gets
+ * a labelled remove button; the chip itself is not a button, so set
+ * `selected` and wrap it in one for toggling filters.
  */
 export const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(
-  ({ children, onRemove, removeLabel, selected = false, mono = true, className, ...props }, ref) => {
+  ({ children, onRemove, removeLabel, selected = false, mono = true, outline = false, className, ...props }, ref) => {
     const name = removeLabel ?? (typeof children === "string" ? `Remove ${children}` : "Remove");
     return (
       <span
         ref={ref}
         className={cn(
-          "inline-flex max-w-full items-center gap-1.5 rounded-base border py-0.5 pl-2.5 text-xs",
-          onRemove ? "pr-1" : "pr-2.5",
+          "inline-flex max-w-full items-center gap-1.5 rounded-sm border text-xs leading-4 text-ink",
+          onRemove ? "py-[3px] pl-[7px] pr-0.5" : "px-[7px] py-[3px]",
           mono && "font-mono",
-          selected ? "border-accent bg-raised text-ink" : "border-line bg-raised text-ink",
+          outline ? "bg-transparent" : "bg-raised",
+          selected ? "border-accent-line" : outline ? "border-line" : "border-transparent",
           className,
         )}
         {...props}
@@ -42,7 +46,7 @@ export const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(
             type="button"
             aria-label={name}
             onClick={onRemove}
-            className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-sm text-muted transition-colors hover:bg-hover hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+            className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-sm text-muted transition-colors hover:bg-hover hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ink"
           >
             <X className="h-3 w-3" aria-hidden="true" />
           </button>

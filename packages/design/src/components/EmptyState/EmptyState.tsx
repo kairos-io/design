@@ -11,7 +11,7 @@ export interface EmptyStateProps extends React.HTMLAttributes<HTMLDivElement> {
   action?: React.ReactNode;
 }
 
-/** What a list shows when it has nothing to list. AuroraBoot's fleet/EmptyState.tsx. */
+/** What a list shows when it has nothing to list: an icon in the muted ink, a sentence, one way out. */
 export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
   ({ icon: Icon, title, description, action, className, ...props }, ref) => (
     <div
@@ -20,8 +20,8 @@ export const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
       {...props}
     >
       <Icon className="h-10 w-10 text-muted" aria-hidden="true" />
-      <p className="font-medium">{title}</p>
-      {description && <p className="max-w-sm text-sm text-muted">{description}</p>}
+      <p className="font-semibold text-ink">{title}</p>
+      {description && <p className="max-w-sm text-sm text-sub">{description}</p>}
       {action && <div className="mt-2">{action}</div>}
     </div>
   ),

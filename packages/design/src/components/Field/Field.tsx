@@ -26,7 +26,8 @@ export interface FieldControlProps {
 
 /**
  * A labelled form control with optional help and error text, as the
- * installer's `.field`. It wires the ids: the control is described by its
+ * Foundations deck stacks "Hostname", the input and "Lowercase, digits and
+ * dashes." It wires the ids: the control is described by its
  * help and error text, and an error marks it invalid.
  */
 export const Field = React.forwardRef<HTMLDivElement, FieldProps>(

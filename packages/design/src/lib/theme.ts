@@ -70,6 +70,31 @@ export function inlineThemeScript(storageKey: string = DEFAULT_THEME_KEY): strin
   );
 }
 
+/**
+ * The brand a page carries. Kairos is the default; Hadron is the same system
+ * with the Hadron blue accent, white ink on it and the Hadron links, which
+ * tokens.css applies under data-variant="hadron". A page sets it once on
+ * <html> (hadron-linux.io), or on a section that belongs to Hadron.
+ */
+export type Brand = "kairos" | "hadron";
+
+export const BRAND_ATTRIBUTE = "data-variant";
+
+export function isBrand(v: unknown): v is Brand {
+  return v === "kairos" || v === "hadron";
+}
+
+/** Sets data-variant="hadron" on the root for Hadron, and removes it for Kairos. */
+export function applyBrand(brand: Brand, root: HTMLElement = document.documentElement): void {
+  if (brand === "hadron") root.setAttribute(BRAND_ATTRIBUTE, "hadron");
+  else if (root.getAttribute(BRAND_ATTRIBUTE) === "hadron") root.removeAttribute(BRAND_ATTRIBUTE);
+}
+
+/** The brand the root carries: "hadron" under data-variant="hadron", otherwise "kairos". */
+export function getBrand(root: HTMLElement = document.documentElement): Brand {
+  return root.getAttribute(BRAND_ATTRIBUTE) === "hadron" ? "hadron" : "kairos";
+}
+
 export interface Theme {
   storageKey: string;
   get(): ThemeMode;

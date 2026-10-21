@@ -3,8 +3,8 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { cn } from "../../lib/cn.ts";
 
-// AuroraBoot's ui/dialog.tsx, with the system's own entrance animation in
-// place of the tailwindcss-animate classes the source relied on.
+// A modal on the surface tone with the 8px corner the Foundations deck
+// gives dialogs, scrimmed by the overlay token, entering with fade-up.
 
 export const Dialog = DialogPrimitive.Root;
 export const DialogTrigger = DialogPrimitive.Trigger;
@@ -32,7 +32,7 @@ export const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 border bg-bg p-6 animate-fade-up sm:max-w-lg sm:rounded-base",
+        "fixed left-[50%] top-[50%] z-50 grid w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border border-line bg-surface p-6 text-ink animate-fade-up sm:max-w-lg",
         className,
       )}
       {...props}
@@ -75,7 +75,7 @@ export const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn("text-lg font-semibold leading-none tracking-tight", className)}
+    className={cn("text-lg font-bold leading-none tracking-tight", className)}
     {...props}
   />
 ));

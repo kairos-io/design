@@ -5,28 +5,44 @@ import { Loader2 } from "lucide-react";
 import { cn } from "../../lib/cn.ts";
 
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-base text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-base leading-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-accent text-on-accent hover:bg-accent-soft",
-        outline: "border border-line bg-bg hover:bg-hover hover:text-ink",
-        secondary: "bg-raised text-ink hover:bg-raised/80",
-        ghost: "hover:bg-hover hover:text-ink",
-        destructive: "bg-status-recovery text-status-ink hover:bg-status-recovery/90",
-        "destructive-outline": "border border-line bg-bg text-status-recovery hover:bg-status-recovery/10",
-        link: "text-accent underline-offset-4 hover:underline",
-        /** For the navy sidebar and top bar: sidebar ink, brighter on hover. */
-        "on-navy": "text-ink opacity-70 hover:bg-raised hover:text-ink hover:opacity-100",
+        /** The one action that matters: the accent with dark ink on it. "Download ISO". */
+        default: "bg-accent font-bold text-on-accent hover:bg-accent-soft disabled:bg-raised disabled:text-muted",
+        /** The dark button: ink with the page colour on it. "Read the docs". */
+        dark: "bg-ink font-semibold text-bg hover:bg-deep disabled:bg-raised disabled:text-muted",
+        /** The same as dark; the name the first release used. */
+        secondary: "bg-ink font-semibold text-bg hover:bg-deep disabled:bg-raised disabled:text-muted",
+        /** A 1.5px ink hairline, no fill. "GitHub". */
+        outline: "border-[1.5px] border-ink bg-transparent font-semibold text-ink hover:bg-hover disabled:border-line disabled:text-muted",
+        /** No chrome until hovered: toolbars, table rows. */
+        ghost: "font-semibold text-ink hover:bg-hover disabled:text-muted",
+        /** An inline action in the link colour. "Learn more →". */
+        link: "px-1.5 font-semibold text-link hover:text-accent disabled:text-muted",
+        /** Loses data: the recovery red with white on it. "Reset node". */
+        destructive: "bg-status-recovery font-semibold text-status-ink hover:bg-status-recovery/90 disabled:bg-raised disabled:text-muted",
+        "destructive-outline":
+          "border-[1.5px] border-status-recovery bg-transparent font-semibold text-status-recovery hover:bg-hover disabled:border-line disabled:text-muted",
+        /** @deprecated The sidebar is no longer navy; use ghost. Kept for callers of the first release. */
+        "on-navy": "font-semibold text-ink opacity-70 hover:bg-raised hover:opacity-100 disabled:text-muted",
       },
       size: {
-        sm: "h-7 rounded-base px-3 text-xs",
-        default: "h-8 px-3 py-1.5",
-        lg: "h-10 rounded-base px-6",
-        icon: "h-8 w-8",
-        "icon-sm": "h-7 w-7",
+        sm: "px-3 py-[7px] text-[13px]",
+        default: "px-[18px] py-[11px] text-[15px]",
+        lg: "px-[22px] py-[13px] text-[17px]",
+        icon: "h-10 w-10 text-[15px]",
+        "icon-sm": "h-8 w-8 text-[13px]",
       },
     },
+    compoundVariants: [
+      // The outline's 1.5px border is inside the same box as the filled buttons.
+      { variant: ["outline", "destructive-outline"], size: "sm", className: "px-[10.5px] py-[5.5px]" },
+      { variant: ["outline", "destructive-outline"], size: "default", className: "px-[16.5px] py-[9.5px]" },
+      { variant: ["outline", "destructive-outline"], size: "lg", className: "px-[20.5px] py-[11.5px]" },
+      { variant: "link", size: ["sm", "default", "lg"], className: "px-1.5" },
+    ],
     defaultVariants: {
       variant: "default",
       size: "default",
@@ -43,8 +59,11 @@ export interface ButtonProps
 }
 
 /**
- * The Kairos button, as AuroraBoot's ui/button.tsx defines it. Icon-only
- * sizes need an aria-label; a development build warns when one is missing.
+ * The button of the Foundations deck: the accent for the one action that
+ * matters, the dark ink button and the outline for the rest, the link colour
+ * for an inline action, the recovery red for anything that loses data. The
+ * focus state is a 2px ink outline, offset 2px. Icon-only sizes need an
+ * aria-label; a development build warns when one is missing.
  */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, loading = false, children, ...props }, ref) => {

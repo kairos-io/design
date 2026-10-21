@@ -3,11 +3,22 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Slot } from "@radix-ui/react-slot";
 import { Check, ExternalLink, Menu, PanelLeftClose, PanelLeftOpen, X, type LucideIcon } from "lucide-react";
 import { cn } from "../../lib/cn.ts";
+import { tilePoints } from "../../lib/tiles.ts";
 import { Button } from "../Button/Button.tsx";
 
-// The navy application shell AuroraBoot's Layout.tsx and the web installer
-// share, as composable pieces with no router and no app state: the host
-// decides what is active and where links go.
+// The application shell of the Kairos console decks: a column on the side
+// surface with mono section labels, the active item on the raised tone with
+// an accent tile before it and its count after it. Composable pieces with no
+// router and no app state: the host decides what is active and where links go.
+
+/** The accent tile that marks the active item, and the dim one on the rail. */
+function TileMark({ active }: { active: boolean }) {
+  return (
+    <svg width="12" height="8" viewBox="0 0 22 14" aria-hidden="true" focusable="false" className="shrink-0">
+      <polygon points={tilePoints} className={active ? "fill-accent" : "fill-raised"} />
+    </svg>
+  );
+}
 
 /** "full" and "rail" are stored choices; "auto" follows the screen width (rail between md and lg, full at lg). */
 export type SidebarMode = "full" | "rail" | "auto";
@@ -19,9 +30,9 @@ export const sidebarModeClasses = {
   fullOnly: { full: "", rail: "hidden", auto: "hidden lg:block" } as Record<SidebarMode, string>,
   railOnly: { full: "hidden", rail: "", auto: "lg:hidden" } as Record<SidebarMode, string>,
   linkLayout: {
-    full: "justify-start px-3",
+    full: "justify-start px-2.5",
     rail: "justify-center px-0",
-    auto: "justify-center px-0 lg:justify-start lg:px-3",
+    auto: "justify-center px-0 lg:justify-start lg:px-2.5",
   } as Record<SidebarMode, string>,
 };
 
@@ -49,12 +60,12 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
 // lg overlays the content: the slot stays 64px and the sidebar floats over
 // the page.
 const slotWidth: Record<SidebarMode, string> = {
-  full: "md:w-16 lg:w-60",
+  full: "md:w-16 lg:w-58",
   rail: "w-16",
-  auto: "w-16 lg:w-60",
+  auto: "w-16 lg:w-58",
 };
 
-/** The desktop sidebar (md and wider): a navy column that is full width, an icon rail, or responsive. */
+/** The desktop sidebar (md and wider): a column on the side surface that is full width, an icon rail, or responsive. */
 export const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
   ({ mode = "auto", onModeChange, className, children, ...props }, ref) => (
     <SidebarContext.Provider value={{ mode, setMode: onModeChange }}>
@@ -62,8 +73,8 @@ export const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
         <aside
           ref={ref}
           className={cn(
-            "flex h-full flex-col bg-side text-ink",
-            mode === "full" ? "w-60 md:absolute md:inset-y-0 md:left-0 md:z-40 lg:static" : "w-full",
+            "flex h-full flex-col border-r border-line bg-side text-ink",
+            mode === "full" ? "w-58 md:absolute md:inset-y-0 md:left-0 md:z-40 lg:static" : "w-full",
             className,
           )}
           {...props}
@@ -85,7 +96,7 @@ export interface SidebarHeaderProps extends Omit<React.HTMLAttributes<HTMLDivEle
   title: React.ReactNode;
 }
 
-/** Logo and product name at the top of the sidebar, with the collapse and expand controls when the host handles them. */
+/** The mark and the product name in one line at the top of the sidebar ("Kairos console"), with the collapse and expand controls when the host handles them. */
 export const SidebarHeader = React.forwardRef<HTMLDivElement, SidebarHeaderProps>(function SidebarHeader(
   { logo, railLogo, title, className, ...props },
   ref,
@@ -118,41 +129,24 @@ export const SidebarHeader = React.forwardRef<HTMLDivElement, SidebarHeaderProps
   return (
     <div
       ref={ref}
-      className={cn("relative flex flex-col items-center gap-3 px-3 pt-6 pb-4", className)}
+      className={cn("relative flex items-center gap-2.5 px-5 pt-6 pb-4", sidebarModeClasses.linkLayout[mode], className)}
       {...props}
     >
       {railLogo ? (
         <>
-          <div
-            className={cn(
-              "h-11 justify-center",
-              mode === "full" ? "flex" : mode === "rail" ? "hidden" : "hidden lg:flex",
-            )}
-          >
+          <div className={cn("h-[26px] shrink-0", mode === "full" ? "flex" : mode === "rail" ? "hidden" : "hidden lg:flex")}>
             {logo}
           </div>
-          <div
-            className={cn(
-              "h-8 justify-center",
-              mode === "rail" ? "flex" : mode === "full" ? "hidden" : "flex lg:hidden",
-            )}
-          >
+          <div className={cn("h-[26px] shrink-0", mode === "rail" ? "flex" : mode === "full" ? "hidden" : "flex lg:hidden")}>
             {railLogo}
           </div>
         </>
       ) : (
-        <div
-          className={cn(
-            "flex justify-center",
-            mode === "full" ? "h-11" : mode === "rail" ? "h-8" : "h-8 lg:h-11",
-          )}
-        >
-          {logo}
-        </div>
+        <div className="flex h-[26px] shrink-0">{logo}</div>
       )}
-      <div className={cn("text-center", sidebarModeClasses.fullOnly[mode])}>
-        <span className="block text-base font-bold leading-tight text-bg">{title}</span>
-      </div>
+      <span className={cn("min-w-0 truncate text-[19px] leading-none text-ink", sidebarModeClasses.label[mode])}>
+        {title}
+      </span>
       {setMode && mode === "full" && collapse("absolute right-2 top-2")}
       {setMode && mode === "rail" && expand()}
       {setMode && mode === "auto" && (
@@ -168,7 +162,7 @@ SidebarHeader.displayName = "SidebarHeader";
 
 /** The thin line between the header, the navigation and the footer. */
 export function SidebarDivider({ className }: { className?: string }) {
-  return <div className={cn("mx-4 border-t border-raised", className)} />;
+  return <div className={cn("mx-3.5 border-t border-line", className)} />;
 }
 
 export interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
@@ -185,7 +179,7 @@ export const SidebarNav = React.forwardRef<HTMLElement, SidebarNavProps>(functio
     <nav
       ref={ref}
       aria-label={label}
-      className={cn("flex-1 overflow-y-auto overflow-x-hidden p-3", className)}
+      className={cn("flex flex-1 flex-col gap-3 overflow-y-auto overflow-x-hidden px-3.5 py-2", className)}
       {...props}
     >
       {children}
@@ -200,7 +194,7 @@ export interface SidebarSectionProps extends React.HTMLAttributes<HTMLDivElement
   children: React.ReactNode;
 }
 
-/** A labelled group of items. */
+/** A labelled group of items: the label in the mono face, as the console decks set "Fleet" and "Factory". */
 export const SidebarSection = React.forwardRef<HTMLDivElement, SidebarSectionProps>(function SidebarSection(
   { label, children, className, ...props },
   ref,
@@ -211,26 +205,26 @@ export const SidebarSection = React.forwardRef<HTMLDivElement, SidebarSectionPro
       {label && (
         <>
           <span
-            className={cn(
-              "block px-3 pt-4 pb-1 text-[10px] uppercase tracking-wider text-muted",
-              sidebarModeClasses.label[mode],
-            )}
+            className={cn("block px-2.5 pb-1.5 font-mono text-xs text-muted", sidebarModeClasses.label[mode])}
           >
             {label}
           </span>
-          <div className={cn("mx-2 my-2 border-t border-raised", sidebarModeClasses.railOnly[mode])} />
+          <div className={cn("mx-2 my-2 border-t border-line", sidebarModeClasses.railOnly[mode])} />
         </>
       )}
-      <div className="space-y-1">{children}</div>
+      <div className="space-y-px">{children}</div>
     </div>
   );
 });
 SidebarSection.displayName = "SidebarSection";
 
 export interface SidebarItemProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "children"> {
-  icon: LucideIcon;
+  /** An icon before the label. The console decks use none: the active item carries an accent tile instead. */
+  icon?: LucideIcon;
   label: string;
-  /** Marks the current page: accent fill and aria-current. */
+  /** A count after the label, in the mono face: "1,284" nodes, "18" groups. */
+  count?: React.ReactNode;
+  /** Marks the current page: the raised tone, bold, an accent tile, and aria-current. */
   active?: boolean;
   /** Opens in a new tab with an external-link mark; for server-rendered pages outside the app. */
   external?: boolean;
@@ -239,12 +233,13 @@ export interface SidebarItemProps extends Omit<React.AnchorHTMLAttributes<HTMLAn
   children?: React.ReactNode;
 }
 
-/** One navigation entry: icon and label, with the label spoken only on the rail. */
+/** One navigation entry: label and count, an accent tile when active, with the label spoken only on the rail. */
 export const SidebarItem = React.forwardRef<HTMLAnchorElement, SidebarItemProps>(
   (
     {
       icon: Icon,
       label,
+      count,
       active = false,
       external = false,
       asChild = false,
@@ -257,15 +252,37 @@ export const SidebarItem = React.forwardRef<HTMLAnchorElement, SidebarItemProps>
   ) => {
     const { mode, onNavigate } = useSidebar();
     const classes = cn(
-      "flex items-center gap-3 rounded-base py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
+      "flex items-center gap-2.5 rounded-base py-[9px] text-[15px] no-underline transition-colors hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
       sidebarModeClasses.linkLayout[mode],
-      active ? "bg-accent text-on-accent" : "text-ink opacity-80 hover:bg-raised hover:opacity-100",
+      active ? "bg-raised font-bold text-ink" : "text-sub hover:bg-hover hover:text-ink",
       className,
     );
     const content = (
       <>
-        <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
-        <span className={cn("flex-1", sidebarModeClasses.label[mode])}>{label}</span>
+        {Icon ? (
+          <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+        ) : (
+          <span
+            className={cn(
+              "flex w-3 shrink-0 justify-center",
+              !active && (mode === "full" ? "invisible" : mode === "auto" ? "lg:invisible" : ""),
+            )}
+          >
+            <TileMark active={active} />
+          </span>
+        )}
+        <span className={cn("flex-1 truncate", sidebarModeClasses.label[mode])}>{label}</span>
+        {count !== undefined && count !== "" && (
+          <span
+            className={cn(
+              "font-mono text-xs",
+              active ? "text-accent-soft" : "text-muted",
+              sidebarModeClasses.fullOnly[mode],
+            )}
+          >
+            {count}
+          </span>
+        )}
         {external && (
           <ExternalLink
             className={cn("h-3 w-3 opacity-60", sidebarModeClasses.fullOnly[mode])}
@@ -301,11 +318,11 @@ export const SidebarItem = React.forwardRef<HTMLAnchorElement, SidebarItemProps>
 );
 SidebarItem.displayName = "SidebarItem";
 
-/** The bottom of the sidebar: the theme switch, logout, a backend chip. */
+/** The bottom of the sidebar: the backend and version in mono, the theme switch, logout. */
 export const SidebarFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   function SidebarFooter({ className, children, ...props }, ref) {
     return (
-      <div ref={ref} className={cn("space-y-2 p-3 pb-5", className)} {...props}>
+      <div ref={ref} className={cn("mt-auto space-y-1.5 px-6 py-3 text-[13px] text-muted", className)} {...props}>
         {children}
       </div>
     );
@@ -331,9 +348,9 @@ export interface SidebarStepsProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 /**
- * The web installer's step rail: numbered markers in the navy sidebar, the
- * current step in the accent, done steps with a check. Steps not yet set
- * stay disabled so a user cannot skip ahead.
+ * The web installer's step rail in the sidebar: the current step on the
+ * raised tone with an accent tile, done steps with a check, the rest muted.
+ * Steps not yet set stay disabled so a user cannot skip ahead.
  */
 export const SidebarSteps = React.forwardRef<HTMLElement, SidebarStepsProps>(function SidebarSteps(
   { steps, current, onStepChange, label = "Steps", className, ...props },
@@ -343,10 +360,10 @@ export const SidebarSteps = React.forwardRef<HTMLElement, SidebarStepsProps>(fun
     <nav
       ref={ref}
       aria-label={label}
-      className={cn("grid flex-1 content-start gap-1 overflow-y-auto overflow-x-hidden p-3", className)}
+      className={cn("grid flex-1 content-start gap-px overflow-y-auto overflow-x-hidden px-3.5 py-2", className)}
       {...props}
     >
-      <span className="block px-3 py-1 text-[10px] uppercase tracking-wider text-muted">{label}</span>
+      <span className="block px-2.5 pb-1.5 font-mono text-xs text-muted">{label}</span>
       {steps.map((step, i) => {
         const isCurrent = step.id === current;
         const done = step.state === "done";
@@ -359,26 +376,19 @@ export const SidebarSteps = React.forwardRef<HTMLElement, SidebarStepsProps>(fun
             aria-current={isCurrent ? "step" : undefined}
             onClick={() => onStepChange?.(step.id)}
             className={cn(
-              "flex w-full items-start gap-2.5 rounded-base px-3 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink disabled:cursor-not-allowed",
+              "flex w-full items-center gap-2.5 rounded-base px-2.5 py-[9px] text-left text-[15px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink disabled:cursor-not-allowed",
               isCurrent
-                ? "bg-accent text-on-accent"
-                : "text-ink opacity-80 enabled:hover:bg-raised enabled:hover:opacity-100",
+                ? "bg-raised font-bold text-ink"
+                : done
+                  ? "text-sub enabled:hover:bg-hover enabled:hover:text-ink"
+                  : "text-muted",
             )}
           >
-            <span
-              aria-hidden="true"
-              className={cn(
-                "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-xs font-semibold tabular-nums",
-                isCurrent
-                  ? "border-surface bg-surface text-ink"
-                  : done
-                    ? "border-transparent bg-raised"
-                    : "border-ink/25",
-              )}
-            >
-              {done && !isCurrent ? <Check className="h-3.5 w-3.5" /> : i + 1}
+            <span aria-hidden="true" className="flex w-3 shrink-0 items-center justify-center font-mono text-xs">
+              {isCurrent ? <TileMark active /> : done ? <Check className="h-3.5 w-3.5" /> : <TileMark active={false} />}
             </span>
-            <span className="min-w-0 pt-0.5 leading-5 break-words">{step.label}</span>
+            <span className="min-w-0 flex-1 truncate">{step.label}</span>
+            <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, "0")}</span>
           </button>
         );
       })}
@@ -398,22 +408,22 @@ export interface TopbarProps extends Omit<React.HTMLAttributes<HTMLElement>, "ti
 }
 
 /**
- * The navy top bar: the app shell shows it below md in place of the
- * sidebar, and the installer's progress and message pages at every width.
+ * The top bar on the side surface: the app shell shows it below md in place
+ * of the sidebar, and the installer's progress and message pages at every width.
  */
 export const Topbar = React.forwardRef<HTMLElement, TopbarProps>(
   ({ logo, title, actions, href, className, children, ...props }, ref) => {
     const brand = (
       <>
         {logo}
-        {title && <span className="text-base font-bold text-bg">{title}</span>}
+        {title && <span className="text-[19px] leading-none text-ink">{title}</span>}
       </>
     );
     return (
       <header
         ref={ref}
         className={cn(
-          "flex h-14 shrink-0 items-center justify-between gap-3 bg-side px-4 text-ink",
+          "flex h-14 shrink-0 items-center justify-between gap-3 border-b border-line bg-side px-4 text-ink",
           className,
         )}
         {...props}
@@ -455,7 +465,7 @@ export interface AppShellProps {
 }
 
 /**
- * Sidebar on the left from md up, a navy top bar with a drawer below. The
+ * Sidebar on the left from md up, a top bar with a drawer below. The
  * drawer is a dialog: it traps focus, closes on Escape, and closes when an
  * item inside it is activated.
  */
@@ -492,7 +502,7 @@ export function AppShell({
                   <div className="flex items-center justify-between px-4 pt-4 pb-3">
                     <div className="flex items-center gap-2">
                       {logo}
-                      <DialogPrimitive.Title className="text-base font-bold text-bg">
+                      <DialogPrimitive.Title className="text-[19px] leading-none text-ink">
                         {title}
                       </DialogPrimitive.Title>
                     </div>
@@ -513,7 +523,7 @@ export function AppShell({
         </div>
       </Topbar>
       {sidebar}
-      <main className="min-w-0 flex-1 overflow-auto">
+      <main className="min-w-0 flex-1 overflow-auto bg-bg text-ink">
         {padded ? <div className="p-4 md:p-6 lg:p-8">{children}</div> : children}
       </main>
     </div>

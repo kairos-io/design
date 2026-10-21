@@ -1,11 +1,16 @@
 /* @kairos-io/design/components.css: the framework-free component layer.
-   It is the Kairos web installer's style.css with every value replaced by a
-   tokens.css custom property, and the class names kept, so a page with no
-   build step (the installer, packages.kairos.io) uses the same components as
-   the React apps. Import tokens.css first; this file never fetches a font.
-   Page-specific layout (the installer's review grid and editor) stays in the
-   page. The element rules under "Base" are a reset for whole pages: scope
-   them yourself if you only want the classes. */
+   The Kairos Installer's class names over the tokens.css custom properties,
+   drawn as the Foundations and Kairos Installer decks draw them: one 4px
+   radius (2px for tags, 8px for dialogs), no shadows, elevation as a tone
+   step (canvas, surface, raised), 1.5px input borders, status as a diamond
+   beside ink text, a 2px ink focus ring. A page with no build step (the
+   installer on :8080, packages.kairos.io) links tokens.css and this file and
+   needs nothing else. Import tokens.css first; this file never fetches a
+   font (fonts.css does, if the page wants the brand faces). Page-specific
+   layout (the installer's review grid and editor) stays in the page. The
+   element rules under "Base" are a reset for whole pages: scope them yourself
+   if you only want the classes. Only custom properties from tokens.css are
+   used here, never a colour of its own. */
 
 /* Base */
 *,
@@ -22,8 +27,9 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: 0.012em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -35,6 +41,13 @@ dl,
 dd,
 ul {
   margin: 0;
+}
+h1,
+h2,
+h3 {
+  line-height: 1.1;
+  font-weight: 600;
+  text-wrap: balance;
 }
 ul {
   padding: 0;
@@ -48,12 +61,17 @@ textarea {
   color: inherit;
 }
 a {
-  color: var(--accent);
+  color: var(--link);
   text-decoration: none;
-  text-underline-offset: 4px;
 }
 a:hover {
-  text-decoration: underline;
+  color: var(--accent);
+}
+code,
+kbd,
+.mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
 }
 [hidden] {
   display: none !important;
@@ -75,143 +93,183 @@ a:hover {
   flex-shrink: 0;
   pointer-events: none;
 }
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
 
-/* Buttons: the Button component's variants and sizes. */
+/* Buttons: the Foundations deck's row. Primary is the accent with ink on it,
+   secondary is ink with the canvas on it, outline is a 1.5px ink hairline. */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 32px;
-  padding: 6px 12px;
+  padding: 11px 18px;
   white-space: nowrap;
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
   border-radius: var(--radius-base);
   background: var(--accent);
   color: var(--onAccent);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0;
   text-decoration: none;
   cursor: pointer;
   transition:
     background-color var(--duration-fast),
     color var(--duration-fast),
-    opacity var(--duration-fast);
+    border-color var(--duration-fast);
 }
 .btn:hover {
   background: var(--accentSoft);
-  text-decoration: none;
+  color: var(--onAccent);
 }
 .btn:focus-visible {
-  outline: none;
   outline: 2px solid var(--ink);
   outline-offset: 2px;
 }
-.btn:disabled {
-  opacity: 0.5;
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  background: var(--raised);
+  color: var(--muted);
+  border-color: transparent;
+  cursor: not-allowed;
   pointer-events: none;
 }
+.btn.secondary {
+  background: var(--ink);
+  color: var(--bg);
+  font-weight: 600;
+}
+.btn.secondary:hover {
+  background: var(--deep);
+  color: var(--bg);
+}
 .btn.outline {
-  border-color: var(--line);
-  background: var(--bg);
+  border-color: var(--ink);
+  background: transparent;
   color: var(--ink);
+  font-weight: 600;
 }
 .btn.outline:hover {
   background: var(--hover);
   color: var(--ink);
 }
-.btn.secondary {
-  background: var(--raised);
-  color: var(--ink);
-}
-.btn.secondary:hover {
-  background: color-mix(in srgb, var(--raised) 80%, transparent);
-}
 .btn.ghost {
   background: transparent;
   color: var(--ink);
+  font-weight: 600;
 }
 .btn.ghost:hover {
-  background: var(--hover);
+  background: var(--raised);
   color: var(--ink);
 }
 .btn.destructive {
   background: var(--status-recovery);
   color: var(--status-ink);
+  font-weight: 600;
 }
 .btn.destructive:hover {
-  background: color-mix(in srgb, var(--status-recovery) 90%, transparent);
+  background: color-mix(in srgb, var(--status-recovery) 85%, var(--ink));
+  color: var(--status-ink);
 }
 .btn.destructive-outline {
-  border-color: var(--line);
-  background: var(--bg);
+  border-color: var(--status-recovery);
+  background: transparent;
   color: var(--status-recovery);
+  font-weight: 600;
 }
 .btn.destructive-outline:hover {
   background: color-mix(in srgb, var(--status-recovery) 10%, transparent);
+  color: var(--status-recovery);
 }
 .btn.link {
+  padding-left: 6px;
+  padding-right: 6px;
   background: transparent;
-  color: var(--accent);
+  color: var(--link);
+  font-weight: 600;
 }
 .btn.link:hover {
-  text-decoration: underline;
+  color: var(--accent);
 }
 .btn.sm {
-  height: 28px;
-  padding: 0 12px;
-  font-size: 12px;
+  padding: 7px 12px;
+  font-size: 13px;
 }
 .btn.lg {
-  height: 40px;
-  padding: 0 24px;
+  padding: 13px 22px;
+  font-size: 16px;
 }
 .btn.icon-btn {
-  width: 32px;
+  width: 40px;
+  height: 40px;
   padding: 0;
 }
 .btn.icon-sm {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   padding: 0;
 }
-/* On the navy sidebar and top bar. */
+/* On the top bar: a ghost button. The name is the installer's; "navy" is history. */
 .btn.on-navy {
   background: transparent;
   color: var(--ink);
-  opacity: 0.7;
+  font-weight: 600;
 }
 .btn.on-navy:hover {
   background: var(--raised);
   color: var(--ink);
-  opacity: 1;
 }
 
-/* Card */
+/* Card: a surface on the canvas. No border, no shadow. */
 .card {
   background: var(--surface);
   color: var(--ink);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-base);
   padding: 24px;
 }
+.card.raised {
+  background: var(--raised);
+}
 .card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-top: 20px;
 }
 .card-title {
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
   letter-spacing: -0.01em;
 }
 .card-description {
   margin-top: 6px;
-  font-size: 14px;
-  color: var(--inner);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--sub);
+}
+/* A stat: a muted label over a large figure. */
+.stat-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+.stat-value {
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
 }
 
-/* Inputs */
+/* Inputs: a surface with a 1.5px hairline, ink when focused, mono for the
+   values an operator types (hostnames, disks, keys). */
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -223,52 +281,108 @@ textarea,
 .input {
   display: flex;
   width: 100%;
-  height: 36px;
-  padding: 4px 12px;
-  border: 1px solid var(--line);
+  padding: 10px 12px;
+  border: 1.5px solid var(--line);
   border-radius: var(--radius-base);
-  background: transparent;
+  background: var(--surface);
   color: var(--ink);
-  font-size: 14px;
-  transition:
-    box-shadow var(--duration-fast),
-    border-color var(--duration-fast);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  transition: border-color var(--duration-fast);
+}
+select {
+  appearance: none;
+  padding-right: 32px;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 17px) 55%,
+    calc(100% - 12px) 55%;
+  background-size:
+    5px 5px,
+    5px 5px;
+  background-repeat: no-repeat;
 }
 textarea {
-  height: auto;
-  min-height: 60px;
-  padding: 8px 12px;
+  min-height: 120px;
+  line-height: 1.85;
 }
 input::placeholder,
 textarea::placeholder {
-  color: var(--inner);
+  color: var(--muted);
 }
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 .input:focus-visible {
   outline: none;
-  outline: 2px solid var(--ink);
-  outline-offset: 2px;
   border-color: var(--ink);
 }
 input:disabled,
 select:disabled,
 textarea:disabled {
+  background: var(--inner);
+  color: var(--muted);
   cursor: not-allowed;
-  opacity: 0.5;
-}
-input[type="checkbox"],
-input[type="radio"] {
-  accent-color: var(--accent);
-  width: 16px;
-  height: 16px;
-  margin: 0;
 }
 input[aria-invalid="true"],
 select[aria-invalid="true"],
 textarea[aria-invalid="true"] {
   border-color: var(--status-recovery);
+}
+/* Checkboxes and radios are diamonds, the system's status shape. */
+input[type="checkbox"],
+input[type="radio"] {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  margin: 2px 3px;
+  border: 1.5px solid var(--ink);
+  border-radius: 1px;
+  background: transparent;
+  transform: rotate(45deg);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color var(--duration-fast);
+}
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  background: var(--accent);
+}
+input[type="checkbox"]:focus-visible,
+input[type="radio"]:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+/* A switch: raised track, accent when on, a square knob. */
+input[type="checkbox"].toggle {
+  width: 34px;
+  height: 20px;
+  margin: 0;
+  padding: 2px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--raised);
+  transform: none;
+  position: relative;
+}
+input[type="checkbox"].toggle::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+input[type="checkbox"].toggle:checked {
+  background: var(--accent);
+}
+input[type="checkbox"].toggle:checked::after {
+  transform: translateX(14px);
 }
 
 /* Field: a label, the control, help and error text. */
@@ -279,16 +393,19 @@ textarea[aria-invalid="true"] {
 }
 .field > label,
 .field > .flabel {
-  font-weight: 500;
+  font-weight: 600;
   font-size: 14px;
+  line-height: 1.4;
 }
 .fhelp {
   font-size: 13px;
-  color: var(--inner);
+  line-height: 1.5;
+  color: var(--muted);
 }
 .field .err {
-  color: var(--status-recovery);
   font-size: 13px;
+  line-height: 1.5;
+  color: var(--status-recovery);
 }
 .form-card {
   display: grid;
@@ -296,7 +413,7 @@ textarea[aria-invalid="true"] {
 }
 .row {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
   align-items: center;
 }
@@ -305,154 +422,220 @@ textarea[aria-invalid="true"] {
   min-width: 0;
 }
 .checkbox-group {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-weight: 500;
-  font-size: 14px;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-base);
+  background: var(--surface);
+  font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
 }
+/* A two-column key and value line: label muted, value mono. */
+.kv {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+.kv > :first-child {
+  color: var(--muted);
+}
+.kv > :last-child {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
 
-/* Choice cards: a radio list where each option is a card. */
+/* Choice cards: a radio list where each option is a surface with a diamond. */
 .choices {
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 .choice {
   display: grid;
-  grid-template-columns: 16px minmax(0, 1fr) auto;
-  gap: 12px;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  gap: 14px;
   align-items: center;
-  padding: 12px 16px;
-  border: 1px solid var(--line);
+  padding: 18px;
+  border: 1.5px solid var(--line);
   border-radius: var(--radius-base);
   background: var(--surface);
   cursor: pointer;
-  transition:
-    background-color var(--duration-fast),
-    border-color var(--duration-fast);
+  transition: border-color var(--duration-fast);
 }
 .choice:hover {
-  background: var(--hover);
+  border-color: var(--muted);
 }
-.choice.sel {
-  border-color: var(--accent);
-  background: var(--raised);
+.choice.sel,
+.choice:has(input:checked) {
+  border-color: var(--ink);
 }
-.choice:focus-visible {
-  outline: none;
+.choice:focus-within {
   outline: 2px solid var(--ink);
   outline-offset: 2px;
 }
+.choice input {
+  width: 13px;
+  height: 13px;
+  margin: 0 4px;
+}
+.choice input:focus-visible {
+  outline: none;
+}
 .choice .cl {
-  font-weight: 500;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  overflow-wrap: anywhere;
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 .choice .cd {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-mono);
   font-size: 12px;
-  color: var(--inner);
+  color: var(--muted);
+  overflow-wrap: anywhere;
 }
-.choice input {
-  pointer-events: none;
+.choice .cm {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
 }
 
-/* Badge, status tones, pill, chip */
-.badge {
+/* Status: a diamond beside ink text on a surface chip. The tone sets the
+   diamond; the text stays ink. `.outline` draws the diamond as an outline
+   (installing, offline). */
+.badge,
+.status {
+  --dot: var(--muted);
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-base);
-  padding: 2px 10px;
-  font-size: 12px;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 14px;
   font-weight: 600;
-  line-height: 16px;
+  line-height: 1.2;
   white-space: nowrap;
 }
-.badge.primary {
-  border-color: transparent;
-  background: var(--accent);
-  color: var(--onAccent);
-}
-.badge.secondary {
-  border-color: transparent;
-  background: var(--raised);
-  color: var(--ink);
-}
-/* The tone at 15% behind its -foreground ink, with a 25% border. */
-.tone-success {
-  background: color-mix(in srgb, var(--status-healthy) 15%, transparent);
-  color: var(--ok);
-  border-color: color-mix(in srgb, var(--status-healthy) 25%, transparent);
-}
-.tone-warning {
-  background: color-mix(in srgb, var(--status-warning) 15%, transparent);
-  color: var(--status-warning);
-  border-color: color-mix(in srgb, var(--status-warning) 25%, transparent);
-}
-.tone-danger {
-  background: color-mix(in srgb, var(--status-recovery) 15%, transparent);
-  color: var(--status-recovery);
-  border-color: color-mix(in srgb, var(--status-recovery) 25%, transparent);
-}
-.tone-info {
-  background: color-mix(in srgb, var(--accent) 15%, transparent);
-  color: var(--link);
-  border-color: color-mix(in srgb, var(--accent) 25%, transparent);
-}
-.tone-neutral {
-  background: color-mix(in srgb, var(--muted) 15%, transparent);
-  color: var(--muted);
-  border-color: color-mix(in srgb, var(--muted) 25%, transparent);
-}
+.badge::before,
+.status::before,
 .dot {
+  content: "";
   display: inline-block;
   width: 8px;
   height: 8px;
   flex-shrink: 0;
-  border-radius: var(--radius-full);
-  background: currentColor;
+  border: 1.5px solid var(--dot);
+  border-radius: 1px;
+  background: var(--dot);
+  transform: rotate(45deg);
 }
-.pill {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid color-mix(in srgb, var(--muted) 25%, transparent);
-  border-radius: var(--radius-base);
-  padding: 2px 10px;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-  background: color-mix(in srgb, var(--muted) 15%, transparent);
-  color: var(--muted);
+.badge.outline::before,
+.status.outline::before,
+.dot.outline {
+  background: transparent;
 }
-.pill:empty {
+.badge.primary {
+  background: var(--accent);
+  color: var(--onAccent);
+}
+.badge.primary::before {
   display: none;
 }
-.pill.live {
-  background: color-mix(in srgb, var(--status-healthy) 15%, transparent);
+.badge.secondary {
+  background: var(--raised);
+}
+.badge.secondary::before {
+  display: none;
+}
+.tone-success,
+.status.completed {
+  --dot: var(--status-healthy);
+}
+.tone-warning,
+.status.connecting {
+  --dot: var(--status-warning);
+}
+.tone-danger,
+.status.disconnected {
+  --dot: var(--status-recovery);
+}
+.tone-info,
+.status.connected {
+  --dot: var(--accent);
+}
+.tone-neutral {
+  --dot: var(--muted);
+}
+.dot {
+  --dot: var(--muted);
+}
+.dot.tone-success {
+  --dot: var(--status-healthy);
+}
+.dot.tone-warning {
+  --dot: var(--status-warning);
+}
+.dot.tone-danger {
+  --dot: var(--status-recovery);
+}
+.dot.tone-info {
+  --dot: var(--accent);
+}
+/* Tone as text: for a line that carries the state itself ("valid cloud-config"). */
+.text-ok {
   color: var(--ok);
-  border-color: color-mix(in srgb, var(--status-healthy) 25%, transparent);
 }
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 8px;
+.text-danger {
+  color: var(--status-recovery);
 }
+
+/* Tags: mono metadata on a raised chip, 2px radius; `.outline` is a hairline. */
+.tag,
+.pill,
 .chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   max-width: 100%;
-  padding: 2px 4px 2px 10px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-base);
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
   background: var(--raised);
   color: var(--ink);
   font-family: var(--font-mono);
   font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.tag.outline,
+.pill.outline {
+  background: transparent;
+  border-color: var(--line);
+}
+.tag.surface,
+.pill.surface {
+  background: var(--surface);
+}
+.pill:empty {
+  display: none;
+}
+.pill.live {
+  color: var(--ok);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  padding-right: 4px;
 }
 .chip span {
   overflow: hidden;
@@ -463,12 +646,12 @@ textarea[aria-invalid="true"] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--inner);
+  color: var(--muted);
   cursor: pointer;
 }
 .chip button:hover {
@@ -476,123 +659,74 @@ textarea[aria-invalid="true"] {
   color: var(--ink);
 }
 
-/* Status: a tone badge with a leading dot (the progress page's connection state). */
-.status {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid;
-  border-radius: var(--radius-base);
-  padding: 2px 10px;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 16px;
-}
-.status::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: var(--radius-full);
-  background: currentColor;
-}
-.status.connecting {
-  background: color-mix(in srgb, var(--status-warning) 15%, transparent);
-  color: var(--status-warning);
-  border-color: color-mix(in srgb, var(--status-warning) 25%, transparent);
-}
-.status.connected {
-  background: color-mix(in srgb, var(--accent) 15%, transparent);
-  color: var(--link);
-  border-color: color-mix(in srgb, var(--accent) 25%, transparent);
-}
-.status.completed {
-  background: color-mix(in srgb, var(--status-healthy) 15%, transparent);
-  color: var(--ok);
-  border-color: color-mix(in srgb, var(--status-healthy) 25%, transparent);
-}
-.status.disconnected {
-  background: color-mix(in srgb, var(--status-recovery) 15%, transparent);
-  color: var(--status-recovery);
-  border-color: color-mix(in srgb, var(--status-recovery) 25%, transparent);
-}
-
-/* Banners and alerts, in the tones, with a leading dot on the banner. */
-.banner {
-  display: flex;
-  gap: 10px;
-  align-items: baseline;
-  padding: 10px 14px;
-  border: 1px solid color-mix(in srgb, var(--status-warning) 25%, transparent);
-  border-radius: var(--radius-base);
-  background: color-mix(in srgb, var(--status-warning) 12%, transparent);
-  color: var(--status-warning);
-  font-size: 13px;
-  overflow-wrap: anywhere;
-}
-.banner::before {
-  content: "";
-  flex-shrink: 0;
-  width: 8px;
-  height: 8px;
-  border-radius: var(--radius-full);
-  background: var(--status-warning);
-  transform: translateY(-1px);
-}
-.banner.ok {
-  border-color: color-mix(in srgb, var(--status-healthy) 25%, transparent);
-  background: color-mix(in srgb, var(--status-healthy) 12%, transparent);
-  color: var(--ok);
-}
-.banner.ok::before {
-  background: var(--status-healthy);
-}
-.banner[role="alert"] {
-  border-color: color-mix(in srgb, var(--status-recovery) 25%, transparent);
-  background: color-mix(in srgb, var(--status-recovery) 12%, transparent);
-  color: var(--status-recovery);
-}
-.banner[role="alert"]::before {
-  background: var(--status-recovery);
-}
-.alert {
-  padding: 12px 14px;
-  border: 1px solid color-mix(in srgb, var(--status-warning) 25%, transparent);
-  border-radius: var(--radius-base);
-  background: color-mix(in srgb, var(--status-warning) 12%, transparent);
-  color: var(--status-warning);
-  overflow-wrap: anywhere;
-}
-.alert-danger {
-  border-color: color-mix(in srgb, var(--status-recovery) 25%, transparent);
-  background: color-mix(in srgb, var(--status-recovery) 12%, transparent);
-  color: var(--status-recovery);
-}
-.alert-success {
-  border-color: color-mix(in srgb, var(--status-healthy) 25%, transparent);
-  background: color-mix(in srgb, var(--status-healthy) 12%, transparent);
-  color: var(--ok);
-}
-.alert-info {
-  border-color: color-mix(in srgb, var(--accent) 25%, transparent);
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-  color: var(--link);
-}
-.inline-warn {
+/* Callouts: a surface with a diamond in the margin and ink text. The tone
+   sets the diamond. The installer's banner, alert and inline-warn classes
+   all draw this one shape. */
+.banner,
+.alert,
+.inline-warn,
+.callout,
+.confirm {
+  --dot: var(--accent);
   display: grid;
+  grid-template-columns: 18px 1fr;
   gap: 10px;
-  padding: 12px 14px;
-  border: 1px solid color-mix(in srgb, var(--status-warning) 25%, transparent);
+  align-items: start;
+  padding: 14px 16px;
   border-radius: var(--radius-base);
-  background: color-mix(in srgb, var(--status-warning) 12%, transparent);
-  color: var(--status-warning);
-  font-size: 13px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.banner::before,
+.alert::before,
+.inline-warn::before,
+.callout::before,
+.confirm::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  margin: 7px 0 0 2px;
+  border-radius: 1px;
+  background: var(--dot);
+  transform: rotate(45deg);
+}
+.banner,
+.inline-warn,
+.alert {
+  --dot: var(--status-warning);
+}
+.banner.ok,
+.alert-success {
+  --dot: var(--status-healthy);
+}
+.banner[role="alert"],
+.alert-danger,
+.confirm {
+  --dot: var(--status-recovery);
+}
+.banner.info,
+.alert-info,
+.callout {
+  --dot: var(--accent);
+}
+.confirm {
+  cursor: pointer;
+}
+.confirm input {
+  margin-top: 5px;
+}
+.confirm::before {
+  display: none;
 }
 
-/* Page header and eyebrow */
+/* Page header: an eyebrow in mono, the title, a lead line. */
 .page-header {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
 }
@@ -606,19 +740,20 @@ textarea[aria-invalid="true"] {
   gap: 12px;
 }
 .page-header h1 {
-  font-size: 30px;
-  line-height: 36px;
-  font-weight: 700;
-  letter-spacing: -0.025em;
+  font-size: clamp(32px, 4vw, 44px);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
   overflow-wrap: anywhere;
-  text-wrap: balance;
 }
 .page-header .help,
 .page-header .description {
-  color: var(--inner);
-  margin-top: 4px;
-  font-size: 16px;
+  margin-top: 6px;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--sub);
   max-width: 70ch;
+  text-wrap: pretty;
 }
 .page-actions {
   display: flex;
@@ -627,23 +762,29 @@ textarea[aria-invalid="true"] {
   gap: 8px;
 }
 .eyebrow {
-  font-size: 14px;
-  color: var(--inner);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--link);
 }
 
-/* Brand: the mark and the product name on navy. */
+/* Brand: the mark, "Kairos" in regular and the product name in bold. */
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: var(--surface);
+  color: var(--ink);
   text-decoration: none;
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1;
 }
 .brand:hover {
-  text-decoration: none;
+  color: var(--ink);
+}
+.brand b,
+.brand strong {
+  font-weight: 700;
 }
 .brand img,
 .brand svg {
@@ -652,229 +793,230 @@ textarea[aria-invalid="true"] {
   width: auto;
 }
 
-/* Theme switch: the ThemeToggle component, full and compact. */
+/* Segmented control: a raised track with the selected segment on a surface.
+   The theme switch is one. */
+.segmented,
 .theme-toggle {
-  display: flex;
-  width: 100%;
+  display: inline-flex;
   gap: 4px;
   padding: 4px;
   border-radius: var(--radius-base);
   background: var(--raised);
 }
+.segmented button,
 .theme-toggle button {
   display: inline-flex;
   flex: 1;
   align-items: center;
   justify-content: center;
-  height: 28px;
-  min-width: 32px;
+  min-width: 36px;
+  padding: 7px 14px;
   border: 0;
-  border-radius: var(--radius-sm);
+  border-radius: 3px;
   background: transparent;
-  color: var(--ink);
-  opacity: 0.7;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
   cursor: pointer;
   transition:
     background-color var(--duration-fast),
-    opacity var(--duration-fast);
+    color var(--duration-fast);
 }
+.segmented button:hover,
 .theme-toggle button:hover {
-  opacity: 1;
+  color: var(--ink);
 }
+.segmented button[aria-pressed="true"],
+.segmented button[aria-current="true"],
 .theme-toggle button[aria-pressed="true"] {
-  background: var(--accent);
-  color: var(--surface);
-  opacity: 1;
+  background: var(--surface);
+  color: var(--ink);
 }
-.theme-toggle button:focus-visible,
-.theme-cycle:focus-visible {
-  outline: none;
-  outline: 2px solid var(--ink);
-  outline-offset: 2px;
+.theme-toggle {
+  width: 100%;
+}
+.theme-toggle button {
+  padding: 5px 10px;
+  font-size: 14px;
 }
 .theme-cycle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border: 0;
   border-radius: var(--radius-base);
   background: transparent;
-  color: var(--ink);
-  opacity: 0.7;
+  color: var(--muted);
   cursor: pointer;
 }
 .theme-cycle:hover {
-  opacity: 1;
+  color: var(--ink);
   background: var(--raised);
 }
 
-/* Navy top bar */
+/* Top bar: the brand on the left, mono meta chips on the right, a hairline below. */
 .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  min-height: 56px;
-  padding: 8px 16px;
-  background: var(--side);
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px 28px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
   color: var(--ink);
 }
-.topbar-actions {
+.topbar-actions,
+.meta {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
+}
+.meta .tag {
+  background: var(--surface);
 }
 .topbar .theme-toggle {
   width: auto;
 }
 .topbar .theme-toggle button {
   flex: none;
-  width: 36px;
 }
 
-/* The shell: a navy sidebar (the app shell or the wizard's step rail) and the content. */
+/* The shell: the step rail beside the content, as the installer lays it out. */
 .shell {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
 }
-.shell > .topbar {
+.shell-body {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+}
+.shell > .topbar .menu {
   display: none;
 }
 .sidebar {
-  position: sticky;
-  top: 0;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
-  width: 240px;
-  height: 100vh;
-  background: var(--side);
+  flex: none;
+  width: 300px;
+  padding: 28px 20px;
+  gap: 6px;
+  border-right: 1px solid var(--line);
+  background: var(--bg);
   color: var(--ink);
 }
 .sidebar-head {
-  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 24px 12px 16px;
-}
-.sidebar-head img,
-.sidebar-head svg {
-  height: 44px;
-  width: auto;
-}
-.sidebar-head .product {
-  font-weight: 700;
-  font-size: 16px;
-  color: var(--surface);
-  line-height: 1.25;
+  padding: 0 12px 16px;
 }
 .sidebar-head .close {
-  position: absolute;
-  right: 8px;
-  top: 8px;
   display: none;
 }
 .divider {
-  margin: 0 16px;
-  border-top: 1px solid var(--raised);
+  border-top: 1px solid var(--line);
 }
 .rail {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 12px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-content: start;
-  gap: 4px;
+  gap: 6px;
 }
 .rail-label {
   display: block;
-  padding: 4px 12px 4px;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  padding: 0 12px 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
   color: var(--muted);
 }
 .rail button,
 .rail a {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 12px;
+  align-items: start;
   width: 100%;
-  padding: 8px 12px;
+  padding: 12px;
   border: 0;
   border-radius: var(--radius-base);
   background: transparent;
-  color: var(--ink);
-  opacity: 0.8;
+  color: var(--muted);
   text-align: left;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
   text-decoration: none;
   cursor: pointer;
-  transition:
-    background-color var(--duration-fast),
-    opacity var(--duration-fast);
+  transition: background-color var(--duration-fast);
 }
 .rail button:hover,
 .rail a:hover {
-  opacity: 1;
-  background: var(--raised);
-  text-decoration: none;
+  background: var(--hover);
+  color: var(--ink);
 }
 .rail button:disabled {
   cursor: not-allowed;
 }
 .rail button[aria-current="step"],
+.rail a[aria-current="page"],
+.rail .done {
+  color: var(--ink);
+}
+.rail button[aria-current="step"],
 .rail a[aria-current="page"] {
-  background: var(--accent);
-  color: var(--onAccent);
-  opacity: 1;
+  background: var(--surface);
 }
-.rail button:focus-visible,
-.rail a:focus-visible {
-  outline: none;
-  outline: 2px solid var(--ink);
-  outline-offset: 2px;
-}
+/* The step marker is a tile: raised to come, accent now, ink done. */
 .rail .marker {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-  /* A quarter-strength white ring; an alpha, not a colour of its own. */
-  border: 1px solid color-mix(in srgb, var(--surface) 25%, transparent);
-  border-radius: var(--radius-full);
+  width: 30px;
+  height: 20px;
+  margin-top: 1px;
+  clip-path: polygon(30% 0, 100% 0, 70% 100%, 0 100%);
+  background: var(--raised);
+  color: var(--muted);
+  font-family: var(--font-mono);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 400;
   font-variant-numeric: tabular-nums;
 }
-.rail .marker.done {
-  background: color-mix(in srgb, var(--surface) 12%, transparent);
-  border-color: transparent;
+.rail .marker.done,
+.rail .done .marker {
+  background: var(--ink);
+  color: var(--bg);
 }
-.rail button[aria-current="step"] .marker {
-  background: var(--surface);
-  border-color: var(--ink);
-  color: var(--accent);
+.rail button[aria-current="step"] .marker,
+.rail a[aria-current="page"] .marker {
+  background: var(--accent);
+  color: var(--onAccent);
 }
 .rail .step-title {
+  display: block;
   min-width: 0;
   overflow-wrap: anywhere;
-  line-height: 20px;
-  padding-top: 2px;
+}
+.rail .step-desc {
+  display: block;
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted);
 }
 .sidebar-foot {
-  padding: 12px 12px 20px;
+  margin-top: auto;
+  padding-top: 20px;
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 .backdrop {
   position: fixed;
@@ -885,21 +1027,21 @@ textarea[aria-invalid="true"] {
 
 .content {
   flex: 1;
-  min-width: 0;
+  min-width: 320px;
   display: flex;
   flex-direction: column;
-  padding: 32px 32px 0;
+  padding: 36px clamp(24px, 4vw, 56px);
 }
 .main {
   display: grid;
   align-content: start;
   gap: 24px;
   width: 100%;
-  max-width: 1080px;
+  max-width: 960px;
   flex: 1;
 }
 
-/* The sticky step footer */
+/* The step footer: back on the left, the one call to action on the right. */
 .actions {
   position: sticky;
   bottom: 0;
@@ -907,93 +1049,235 @@ textarea[aria-invalid="true"] {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   flex-wrap: wrap;
-  padding: 12px 0;
-  border-top: 1px solid var(--line);
-  background: color-mix(in srgb, var(--bg) 95%, transparent);
+  margin-top: auto;
+  padding: 16px 0;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
 
-/* Progress: the step checklist and the log panel. */
+/* Progress: the tile bar, the checklist and the log. */
+.tilebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.tilebar > * {
+  display: block;
+  width: 18px;
+  height: 12px;
+  clip-path: polygon(32% 0, 100% 0, 68% 100%, 0 100%);
+  background: var(--raised);
+}
+.tilebar > .done:nth-child(3n + 1) {
+  background: var(--kairos-light);
+}
+.tilebar > .done:nth-child(3n + 2) {
+  background: var(--kairos-mid);
+}
+.tilebar > .done:nth-child(3n) {
+  background: var(--kairos-orange);
+}
+[data-variant="hadron"] .tilebar > .done:nth-child(3n + 1) {
+  background: var(--hadron-sky);
+}
+[data-variant="hadron"] .tilebar > .done:nth-child(3n + 2) {
+  background: var(--hadron-blue);
+}
+[data-variant="hadron"] .tilebar > .done:nth-child(3n) {
+  background: var(--hadron-deep);
+}
+.progress-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.progress-head .pct {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 400;
+}
 .steps {
   display: grid;
   gap: 4px;
 }
 .steps li {
+  --dot: var(--muted);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   padding: 6px 4px;
-  color: var(--inner);
-  font-size: 14px;
+  color: var(--muted);
+  font-size: 15px;
 }
 .steps li .marker {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin: 0 4px;
   flex-shrink: 0;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-full);
-  background: var(--bg);
-  font-size: 12px;
-  font-weight: 600;
-}
-.steps li:not(.active):not(.done):not(.failed) .marker {
+  border: 1.5px solid var(--dot);
+  border-radius: 1px;
+  background: transparent;
   font-size: 0;
+  transform: rotate(45deg);
 }
 .steps li.active {
+  --dot: var(--accent);
   color: var(--ink);
-  font-weight: 500;
+  font-weight: 600;
 }
 .steps li.active .marker {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: var(--onAccent);
-  font-size: 10px;
+  background: var(--dot);
 }
 .steps li.done {
+  --dot: var(--status-healthy);
   color: var(--ink);
 }
 .steps li.done .marker {
-  border-color: color-mix(in srgb, var(--status-healthy) 30%, transparent);
-  background: color-mix(in srgb, var(--status-healthy) 15%, transparent);
-  color: var(--ok);
+  background: var(--dot);
 }
 .steps li.failed {
+  --dot: var(--status-recovery);
   color: var(--status-recovery);
-  font-weight: 500;
+  font-weight: 600;
 }
 .steps li.failed .marker {
-  border-color: color-mix(in srgb, var(--status-recovery) 30%, transparent);
-  background: color-mix(in srgb, var(--status-recovery) 15%, transparent);
-  color: var(--status-recovery);
+  background: var(--dot);
 }
-.output-box {
-  max-height: 70vh;
-  overflow-y: auto;
-  padding: 16px;
-  border-radius: var(--radius-lg);
+/* The install log: mono lines, done ones muted, the current one ink. */
+.log {
+  display: grid;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.log .now {
+  color: var(--ink);
+}
+
+/* Terminal and code: the dark ground in both themes, a bar on top. */
+.output-box,
+.terminal,
+.code {
+  border-radius: var(--radius-base);
   background: var(--code);
   color: var(--codeInk);
   font-family: var(--font-mono);
   font-size: 13px;
+  line-height: 1.8;
+  overflow: hidden;
+}
+.output-box {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 14px;
+}
+.output-head,
+.terminal-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  background: var(--codeBar);
+  color: var(--codeMuted);
+  font-family: var(--font-mono);
+  font-size: 12px;
   line-height: 1.5;
 }
-.output-box pre {
+.terminal-body {
+  padding: 14px;
+}
+.output-box pre,
+.terminal pre,
+.code pre {
   margin: 0;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   font: inherit;
 }
-.output-box .error {
-  color: var(--status-recovery);
+.prompt,
+.code .key {
+  color: var(--codeKey);
+}
+.code .comment,
+.code .muted,
+.output-box .muted,
+.terminal .muted {
+  color: var(--codeMuted);
+}
+.output-box .error,
+.terminal .error {
+  color: var(--kairos-light);
+}
+/* A code editor: a numbered gutter on the bar colour beside the lines. */
+.code.editor {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  font-size: 14px;
+  line-height: 1.85;
+}
+.code.editor .gutter {
+  padding: 16px 10px;
+  text-align: right;
+  background: var(--codeBar);
+  color: var(--codeMuted);
+  user-select: none;
+}
+.code.editor .lines {
+  padding: 16px 18px;
+  white-space: pre;
+  overflow-x: auto;
 }
 
-/* Pages without a sidebar: the progress and message pages. */
+/* The disk layout: one bar, a segment per partition, in the tile order. */
+.disk-layout {
+  display: flex;
+  height: 40px;
+  border-radius: var(--radius-base);
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink);
+}
+.disk-layout > * {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.disk-layout .efi {
+  flex: 1;
+  background: var(--ink);
+  color: var(--bg);
+}
+.disk-layout .state {
+  flex: 3;
+  background: var(--kairos-light);
+}
+.disk-layout .recovery {
+  flex: 2;
+  background: var(--kairos-mid);
+}
+.disk-layout .persistent {
+  flex: 6;
+  background: var(--kairos-orange);
+}
+.disk-layout .state,
+.disk-layout .recovery,
+.disk-layout .persistent {
+  color: var(--onAccent);
+}
+
+/* Pages without a rail: the progress and message pages. */
 .page {
   display: flex;
   flex-direction: column;
@@ -1003,7 +1287,7 @@ textarea[aria-invalid="true"] {
   width: 100%;
   max-width: 1080px;
   margin: 0 auto;
-  padding: 32px;
+  padding: 36px 32px;
   display: grid;
   gap: 24px;
   flex: 1;
@@ -1018,76 +1302,107 @@ textarea[aria-invalid="true"] {
   gap: 16px;
   flex-wrap: wrap;
 }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
 .footer {
   padding: 24px 16px;
   text-align: center;
-  color: var(--inner);
+  color: var(--muted);
   font-size: 13px;
 }
 .footer a {
   margin: 0 8px;
 }
 
+/* Review step: the summary list and the edited tag. */
+.sumlist {
+  display: grid;
+  gap: 12px;
+}
+.sumlist div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.sumlist dt {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+.sumlist dd {
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+.edited {
+  --dot: var(--status-warning);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--raised);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.edited::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+  background: var(--dot);
+  transform: rotate(45deg);
+}
+
 /* Below 1024px the content tightens. */
 @media (max-width: 1023px) {
   .content {
-    padding: 24px 24px 0;
+    padding: 24px;
   }
 }
 
-/* Below 768px the sidebar becomes a drawer behind the navy top bar. */
+/* Below 768px the rail becomes a drawer behind the top bar. */
 @media (max-width: 767px) {
-  .shell {
-    display: block;
-  }
-  .shell > .topbar {
-    display: flex;
-    position: sticky;
-    top: 0;
-    z-index: 30;
+  .shell > .topbar .menu {
+    display: inline-flex;
   }
   .sidebar {
     position: fixed;
     inset: 0 auto 0 0;
     z-index: 50;
-    width: 288px;
+    width: 300px;
     max-width: 85vw;
     height: 100%;
+    overflow-y: auto;
+    border-right: 1px solid var(--line);
+    background: var(--bg);
     transform: translateX(-100%);
     visibility: hidden;
     transition:
-      transform var(--duration-base) ease-out,
+      transform var(--duration-base) var(--ease-out),
       visibility 0s linear var(--duration-base);
   }
   .shell.drawer-open .sidebar {
     transform: none;
     visibility: visible;
-    transition: transform var(--duration-base) ease-out;
-  }
-  .sidebar-head {
-    flex-direction: row;
-    justify-content: flex-start;
-    padding: 16px 16px 12px;
-  }
-  .sidebar-head img,
-  .sidebar-head svg {
-    height: 28px;
+    transition: transform var(--duration-base) var(--ease-out);
   }
   .sidebar-head .close {
     display: inline-flex;
   }
   .content {
-    padding: 16px 16px 0;
+    padding: 16px;
   }
   .container {
     padding: 16px;
   }
-  .page-header h1 {
-    font-size: 24px;
-    line-height: 32px;
-  }
   .card {
     padding: 16px;
+  }
+  .topbar {
+    padding: 12px 16px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1096,54 +1411,4 @@ textarea[aria-invalid="true"] {
   *::after {
     transition: none !important;
   }
-}
-
-/* Review step: the summary list, the warning badge on an edited config and
-   the danger confirm box (installer style.css). */
-.sumlist {
-  display: grid;
-  gap: 10px;
-}
-.sumlist div {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
-}
-.sumlist dt {
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--inner);
-}
-.sumlist dd {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  overflow-wrap: anywhere;
-}
-.edited {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid color-mix(in srgb, var(--status-warning) 25%, transparent);
-  border-radius: var(--radius-base);
-  padding: 2px 10px;
-  font-size: 12px;
-  font-weight: 600;
-  background: color-mix(in srgb, var(--status-warning) 15%, transparent);
-  color: var(--status-warning);
-}
-.confirm {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  padding: 10px 12px;
-  border: 1px solid color-mix(in srgb, var(--status-recovery) 35%, transparent);
-  border-radius: var(--radius-base);
-  background: color-mix(in srgb, var(--status-recovery) 8%, transparent);
-  color: var(--ink);
-  font-size: 13px;
-  cursor: pointer;
-}
-.confirm input {
-  margin-top: 2px;
 }

@@ -13,12 +13,12 @@ export interface InfoTooltipProps extends Omit<React.HTMLAttributes<HTMLSpanElem
 }
 
 /**
- * A small info button next to a label that opens a high-contrast panel with
+ * A small info button next to a label that opens a surface panel with
  * help text. The panel stays open while the pointer moves from the button
  * into it, so links inside it are clickable; it also toggles on click for
  * keyboard and touch users, and closes on Escape or a click outside. The
  * panel is a disclosure (`aria-expanded` + `aria-controls`), not a tooltip,
- * because it holds interactive content. AuroraBoot's components/InfoTooltip.tsx.
+ * because it holds interactive content.
  */
 export const InfoTooltip = React.forwardRef<HTMLSpanElement, InfoTooltipProps>(
   ({ children, label = "More information", defaultOpen = false, className, ...props }, ref) => {
@@ -84,7 +84,7 @@ export const InfoTooltip = React.forwardRef<HTMLSpanElement, InfoTooltipProps>(
         <button
           ref={buttonRef}
           type="button"
-          className="ml-1 inline-flex rounded-sm align-middle text-muted hover:text-ink focus:outline-none focus-visible:text-ink focus-visible:ring-2 focus-visible:ring-ink"
+          className="ml-1 inline-flex rounded-sm align-middle text-muted hover:text-ink focus:outline-none focus-visible:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
           aria-label={label}
           aria-expanded={open}
           aria-controls={open ? panelId : undefined}
@@ -108,15 +108,15 @@ export const InfoTooltip = React.forwardRef<HTMLSpanElement, InfoTooltipProps>(
             // Anchored to the button's left edge so it never runs off the
             // viewport when the label sits at the left margin; it grows
             // rightward into the form.
-            className="absolute bottom-full left-0 z-50 mb-2 w-max max-w-sm -translate-x-2 rounded-base border bg-surface px-3 py-2.5 text-xs leading-relaxed text-ink"
+            className="absolute bottom-full left-0 z-50 mb-2 w-max max-w-sm -translate-x-2 rounded-base border-[1.5px] border-line bg-surface px-3 py-2.5 text-[13px] leading-relaxed text-ink"
             onMouseEnter={cancelClose}
             onMouseLeave={scheduleClose}
           >
-            <div className="[&_a]:text-accent [&_a]:underline [&_a]:underline-offset-2 [&_a:hover]:text-accent-soft [&_code]:rounded-base [&_code]:bg-inner [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[11px]">
+            <div className="[&_a]:font-semibold [&_a]:text-link [&_a:hover]:text-accent [&_code]:rounded-sm [&_code]:bg-raised [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-xs">
               {children}
             </div>
             <div
-              className="absolute left-3 top-full -mt-px border-4 border-transparent border-t-surface"
+              className="absolute left-3 top-full -mt-px border-[5px] border-transparent border-t-line"
               aria-hidden="true"
             />
           </div>

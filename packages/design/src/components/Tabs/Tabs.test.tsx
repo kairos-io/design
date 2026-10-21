@@ -22,6 +22,7 @@ describe("Tabs", () => {
     await userEvent.click(screen.getByRole("tab", { name: "Logs" }));
     expect(screen.getByRole("tabpanel")).toHaveTextContent("Logs panel");
     expect(screen.getByRole("tab", { name: "Logs" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tab", { name: "Logs" }).className).toContain("data-[state=active]:border-accent-line");
   });
 
   it("moves between tabs with the arrow keys", async () => {

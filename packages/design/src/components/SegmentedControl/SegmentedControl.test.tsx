@@ -37,6 +37,24 @@ describe("SegmentedControl", () => {
     expect(amd).toHaveAccessibleDescription("x86-64 servers");
   });
 
+  it("shows the code over the label and reads the hint as the description", () => {
+    render(
+      <SegmentedControl
+        value="l1"
+        onChange={() => {}}
+        options={[
+          { value: "l1", label: "Guided", code: "L1" },
+          { value: "l2", label: "Automate", code: "L2", hint: "Scripts and the CLI" },
+        ]}
+        aria-label="Docs level"
+      />,
+    );
+    const l1 = screen.getByRole("radio", { name: "Guided" });
+    expect(l1).toHaveTextContent("L1");
+    expect(l1.querySelector("span")?.className).toContain("text-link");
+    expect(screen.getByRole("radio", { name: "Automate" })).toHaveAccessibleDescription("Scripts and the CLI");
+  });
+
   it("selects on click", async () => {
     const onChange = vi.fn();
     render(<Example onChange={onChange} />);

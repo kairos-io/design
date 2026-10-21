@@ -1,0 +1,91 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { DoDont, HadronPalette } from "../../../.storybook/blocks/index.ts";
+import { BrandCompare, HadronVariantTable } from "../../../.storybook/blocks/HadronBlocks.tsx";
+import { HadronLogo } from "../../components/Logo/index.ts";
+import { TileField, TileUnit } from "../../components/Tiles/index.ts";
+
+<Meta title="Foundations/Hadron" />
+
+# Hadron
+
+<div className="flex flex-wrap items-center gap-6">
+  <HadronLogo height={48} />
+</div>
+
+Hadron is a separate Linux distribution: a minimal, upstream-aligned Linux built from scratch with musl, systemd and vanilla kernels, with no package manager, designed for predictable cloud and edge environments. It is engineered by the Kairos team and ships with every Kairos release, never alone. It keeps its own name and its own logo, and it lives at hadron-linux.io. Topped with Kairos, it becomes immutable with the full Kairos lifecycle.
+
+In the design system Hadron is the **secondary brand**: the same system, blue where Kairos is orange. The Foundations deck says it in one line, and everything on this page follows from it:
+
+> Hadron swaps the accent, nothing else.
+
+## What the variant changes
+
+Set `data-variant="hadron"` on the element that carries `data-theme`, or below it, and three tokens take the Hadron values from `tokens.json`: the accent, the ink on it, and the link colour. Everything else stays exactly as it is: the canvas and surfaces, the inks, the hairlines, the status colours, the type, the spacing, the radius, the tile geometry. A Hadron screen and a Kairos screen are the same screen.
+
+<HadronVariantTable />
+
+Three tokens stay orange on purpose. `accentLine` (the active-tab underline), `accentSoft` and `codeKey` (the prompt in a terminal) have no Hadron value because no deck defines one. They are left alone rather than guessed; if a Hadron screen needs them, the deck decides first and `tokens.json` follows.
+
+## The three blues
+
+<HadronPalette />
+
+- **Sky** `#1BAAFF` is the light tile of the Hadron unit, and the link colour in the dark theme. Ink on Sky is dark, as on the oranges.
+- **Hadron blue** `#0275E7` is the accent: the primary button, the active state, the hero. Ink on it is white. The light-theme link is the darker `#0258B0`.
+- **Deep** `#004CCE` is the dark tile of the unit, and the fill for small text on blue, where white reaches 7.2:1.
+
+## Contrast
+
+White on Hadron blue is 4.47:1, just under the 4.5:1 that WCAG AA asks of normal-size text (the Foundations deck rounds it to 4.6:1). So the accent carries large text and bold labels, as the primary button does at 15px bold, but not small or regular-weight text. Where small white text must sit on blue, the fill is Deep (`bg-hadron-deep text-status-ink`, 7.18:1). Dark ink on Sky passes for any size. The Color page computes both themes' pairs under the variant.
+
+## The tiles
+
+The tile unit and the fields come in the Hadron palette with the same geometry and the same order: the light tone on top, the mid tone on the left, the deep tone on the right. The hadron-linux.io hero is a field fading from the right edge, as the kairos.io hero is in orange.
+
+<div className="flex flex-wrap items-center gap-8">
+  <TileUnit size={120} palette="hadron" />
+  <div className="relative h-48 min-w-[280px] flex-1 overflow-hidden rounded-base border border-line bg-bg">
+    <TileField fade="right" seed={7} radius={32} palette="hadron" />
+  </div>
+</div>
+
+## The same components, both brands
+
+The right column is wrapped in `data-variant="hadron"` and nothing else changes. Switch the toolbar theme to see both in dark.
+
+<BrandCompare />
+
+## When a screen is Hadron
+
+- **Hadron**: hadron-linux.io, and any surface that is the Hadron product itself. The whole page takes the variant, from the hero to the footer, and the Hadron lockup is in the chrome.
+- **Kairos**: the console, the docs, kairos.io and the installer, even when they talk about Hadron, show a Hadron image or list Hadron component versions. There, Hadron appears as its name in text, as a chip (`hadron v0.5.1`) or as its mark next to its name, never as a change of accent.
+- **Both**: the Foundations hero and the hadron-linux.io header set the two lockups side by side at the same height, Kairos first: "Kairos · Hadron", "Hadron v0.5.1 · by Kairos".
+
+<DoDont
+  do={
+    <ul>
+      <li>
+        Put <code>data-variant="hadron"</code> on the root of a Hadron page and leave the components alone.
+      </li>
+      <li>Use the Hadron mark and lockup from the package, at the same sizes and clear space as Kairos.</li>
+      <li>Keep white text on Hadron blue large or bold; use Deep behind small text.</li>
+      <li>Use the Hadron tile palette for a Hadron hero or empty state.</li>
+    </ul>
+  }
+  dont={
+    <ul>
+      <li>
+        Change a neutral, a status colour or a radius for Hadron. The variant is the accent, nothing else.
+      </li>
+      <li>
+        Mix the palettes on one screen: an orange button and a blue link, or an orange field under a Hadron
+        hero.
+      </li>
+      <li>
+        Invent a Hadron value for <code>accentLine</code>, <code>accentSoft</code> or <code>codeKey</code>.
+      </li>
+      <li>Turn a Kairos screen blue because it mentions Hadron.</li>
+      <li>Write "Kairos Hadron". Hadron is Hadron, by Kairos.</li>
+    </ul>
+  }
+/>

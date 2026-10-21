@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import {
   brand,
+  resolveTheme,
   status,
   themeDark,
   themeLight,
@@ -85,6 +86,28 @@ describe("design tokens", () => {
     ]);
     expect(known.has(toneTokens[tone].fill)).toBe(true);
     expect(known.has(toneTokens[tone].ink)).toBe(true);
+  });
+
+  it("resolves a variant over a theme, name by name", () => {
+    expect(resolveTheme("light")).toEqual(themeLight);
+    expect(resolveTheme("dark")).toEqual(themeDark);
+    const hadronLight = resolveTheme("light", "hadron");
+    expect(hadronLight.accent).toBe(brand["hadron-blue"]);
+    expect(hadronLight.onAccent).toBe("#FFFFFF");
+    expect(hadronLight.link).toBe(variants.hadron.light.link);
+    // Names the variant does not set keep the theme's value: these stay Kairos orange on purpose.
+    expect(hadronLight.accentSoft).toBe(themeLight.accentSoft);
+    expect(hadronLight.accentLine).toBe(themeLight.accentLine);
+    expect(hadronLight.codeKey).toBe(themeLight.codeKey);
+    expect(hadronLight.bg).toBe(themeLight.bg);
+    const hadronDark = resolveTheme("dark", "hadron");
+    expect(hadronDark.link).toBe(brand["hadron-sky"]);
+    expect(hadronDark.bg).toBe(themeDark.bg);
+    expect(resolveTheme("light", "console").line).toBe(variants.console.light.line);
+    expect(resolveTheme("dark", "console").line).toBe(themeDark.line);
+    // The result is a copy; the source is untouched.
+    hadronLight.bg = "#000000";
+    expect(themeLight.bg).not.toBe("#000000");
   });
 
   it("has no shadows and one radius family", () => {

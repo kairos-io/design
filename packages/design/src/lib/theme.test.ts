@@ -1,6 +1,9 @@
 import {
+  applyBrand,
   applyTheme,
   createTheme,
+  getBrand,
+  isBrand,
   getStoredTheme,
   inlineThemeScript,
   resolveTheme,
@@ -12,7 +15,32 @@ describe("theme helpers", () => {
   afterEach(() => {
     localStorage.clear();
     document.documentElement.removeAttribute("data-theme");
+    document.documentElement.removeAttribute("data-variant");
     vi.restoreAllMocks();
+  });
+
+  it("sets data-variant for Hadron and removes it for Kairos, leaving other variants alone", () => {
+    expect(getBrand()).toBe("kairos");
+    applyBrand("hadron");
+    expect(document.documentElement.getAttribute("data-variant")).toBe("hadron");
+    expect(getBrand()).toBe("hadron");
+    applyBrand("kairos");
+    expect(document.documentElement.hasAttribute("data-variant")).toBe(false);
+    document.documentElement.setAttribute("data-variant", "console");
+    applyBrand("kairos");
+    expect(document.documentElement.getAttribute("data-variant")).toBe("console");
+    expect(getBrand()).toBe("kairos");
+    expect(isBrand("hadron")).toBe(true);
+    expect(isBrand("blue")).toBe(false);
+  });
+
+  it("keeps the brand independent of the theme", () => {
+    applyBrand("hadron");
+    applyTheme("dark");
+    expect(document.documentElement.getAttribute("data-variant")).toBe("hadron");
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
+    applyTheme("system");
+    expect(document.documentElement.getAttribute("data-variant")).toBe("hadron");
   });
 
   it("falls back to system when nothing valid is stored", () => {

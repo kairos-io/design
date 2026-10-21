@@ -27,6 +27,6 @@ describe("Chip", () => {
 
   it("shows the selected state", () => {
     render(<Chip selected>online</Chip>);
-    expect(screen.getByText("online").parentElement?.className).toContain("border-accent");
+    expect(screen.getByText("online").parentElement?.className).toContain("border-accent-line");
   });
 });

@@ -16,6 +16,11 @@ describe("Input", () => {
     expect(screen.getByRole("textbox")).toBeDisabled();
   });
 
+  it("sets the mono face for technical values", () => {
+    render(<Input aria-label="Target disk" mono defaultValue="/dev/nvme0n1" />);
+    expect(screen.getByRole("textbox").className).toContain("font-mono");
+  });
+
   it("marks an invalid value", () => {
     render(<Input aria-label="Hostname" aria-invalid />);
     expect(screen.getByRole("textbox")).toHaveAttribute("aria-invalid", "true");

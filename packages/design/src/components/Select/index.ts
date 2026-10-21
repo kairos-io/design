@@ -9,4 +9,5 @@ export {
   SelectSeparator,
   SelectScrollUpButton,
   SelectScrollDownButton,
+  type SelectTriggerProps,
 } from "./Select.tsx";
