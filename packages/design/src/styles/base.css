@@ -1,0 +1,116 @@
+/* The base every Kairos surface shares. Deliberately small: a host app that
+   already resets its page loses nothing by including it twice. */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--line);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Links are the link token; on hover they take the accent, as the decks do. */
+  a {
+    color: var(--link);
+  }
+  a:hover {
+    color: var(--accent);
+  }
+
+  /* Tailwind v4's preflight dropped the pointer on buttons; the apps and docs keep it. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-up-delay-1,
+  .animate-fade-up-delay-2,
+  .animate-fade-up-delay-3 {
+    animation: none;
+  }
+}
+
+/* Entrance animation the onboarding wizard and banners use: transform and
+   opacity only, ease-out quint, with three stagger steps. */
+.animate-fade-up {
+  animation: fade-up var(--duration-slow) var(--ease-out) both;
+}
+.animate-fade-up-delay-1 {
+  animation: fade-up var(--duration-slow) var(--ease-out) 80ms both;
+}
+.animate-fade-up-delay-2 {
+  animation: fade-up var(--duration-slow) var(--ease-out) 160ms both;
+}
+.animate-fade-up-delay-3 {
+  animation: fade-up var(--duration-slow) var(--ease-out) 240ms both;
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Tile motion (TileField animate="in" | "live"). Filled tiles drop into
+   place one hexagon at a time, dense edge first; the component removes
+   .tile-in once they have landed, then puts .tile-live on a few. The
+   entrance is a fade with a short drop and no scaling, so a face is never
+   inset from its outlined cell; the delays are per cube, set inline. */
+.tile-in {
+  animation: tile-in var(--duration-slow) var(--ease-out) both;
+  animation-delay: var(--tile-delay, 0ms);
+}
+.tile-live {
+  animation: tile-live var(--tile-live-duration, 8000ms) ease-in-out infinite;
+  animation-delay: var(--tile-live-delay, 0ms);
+}
+@keyframes tile-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes tile-live {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tile-in,
+  .tile-live {
+    animation: none;
+  }
+}

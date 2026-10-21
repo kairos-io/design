@@ -1,0 +1,6 @@
+/* Urbanist and Martian Mono, self-hosted: the files ship in this package
+   under assets/fonts, so a page renders the same offline (the installer on
+   :8080), behind font blockers and without a third-party request. Optional:
+   tokens.css only names the faces first in the stacks and falls back to the
+   system face wherever they are not loaded. */
+@import url("./assets/fonts/fonts.css");

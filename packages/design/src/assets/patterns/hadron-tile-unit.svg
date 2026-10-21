@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 128" preserveAspectRatio="xMidYMid slice" stroke-linejoin="miter" stroke-linecap="butt" aria-hidden="true">
+  <g>
+    <polygon points="-110.85,-128 -55.43,-160 0,-128 -55.43,-96" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="-110.85,-128 -55.43,-96 -55.43,-32 -110.85,-64" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="-55.43,-96 0,-128 0,-64 -55.43,-32" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="0,-128 55.43,-160 110.85,-128 55.43,-96" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="0,-128 55.43,-96 55.43,-32 0,-64" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="55.43,-96 110.85,-128 110.85,-64 55.43,-32" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="110.85,-128 166.28,-160 221.7,-128 166.28,-96" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="110.85,-128 166.28,-96 166.28,-32 110.85,-64" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="166.28,-96 221.7,-128 221.7,-64 166.28,-32" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="-166.28,-32 -110.85,-64 -55.43,-32 -110.85,0" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="-166.28,-32 -110.85,0 -110.85,64 -166.28,32" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="-110.85,0 -55.43,-32 -55.43,32 -110.85,64" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="-55.43,-32 0,-64 55.43,-32 0,0" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="-55.43,-32 0,0 0,64 -55.43,32" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="0,0 55.43,-32 55.43,32 0,64" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="55.43,-32 110.85,-64 166.28,-32 110.85,0" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="55.43,-32 110.85,0 110.85,64 55.43,32" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="110.85,0 166.28,-32 166.28,32 110.85,64" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="-110.85,64 -55.43,32 0,64 -55.43,96" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="-110.85,64 -55.43,96 -55.43,160 -110.85,128" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="-55.43,96 0,64 0,128 -55.43,160" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="0,64 55.43,32 110.85,64 55.43,96" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="0,64 55.43,96 55.43,160 0,128" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="55.43,96 110.85,64 110.85,128 55.43,160" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="110.85,64 166.28,32 221.7,64 166.28,96" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="110.85,64 166.28,96 166.28,160 110.85,128" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+    <polygon points="166.28,96 221.7,64 221.7,128 166.28,160" fill="none" stroke="var(--line, #e2e8f0)" stroke-width="1"/>
+  </g>
+  <g>
+    <polygon points="-110.85,-128 -55.43,-160 0,-128 -55.43,-96" fill="var(--hadron-sky, #1BAAFF)" stroke="var(--hadron-sky, #1BAAFF)" stroke-width="1"/>
+    <polygon points="-110.85,-128 -55.43,-96 -55.43,-32 -110.85,-64" fill="var(--hadron-blue, #0275E7)" stroke="var(--hadron-blue, #0275E7)" stroke-width="1"/>
+    <polygon points="-55.43,-96 0,-128 0,-64 -55.43,-32" fill="var(--hadron-deep, #004CCE)" stroke="var(--hadron-deep, #004CCE)" stroke-width="1"/>
+    <polygon points="0,-128 55.43,-160 110.85,-128 55.43,-96" fill="var(--hadron-sky, #1BAAFF)" stroke="var(--hadron-sky, #1BAAFF)" stroke-width="1"/>
+    <polygon points="0,-128 55.43,-96 55.43,-32 0,-64" fill="var(--hadron-blue, #0275E7)" stroke="var(--hadron-blue, #0275E7)" stroke-width="1"/>
+    <polygon points="55.43,-96 110.85,-128 110.85,-64 55.43,-32" fill="var(--hadron-deep, #004CCE)" stroke="var(--hadron-deep, #004CCE)" stroke-width="1"/>
+    <polygon points="110.85,-128 166.28,-160 221.7,-128 166.28,-96" fill="var(--hadron-sky, #1BAAFF)" stroke="var(--hadron-sky, #1BAAFF)" stroke-width="1"/>
+    <polygon points="110.85,-128 166.28,-96 166.28,-32 110.85,-64" fill="var(--hadron-blue, #0275E7)" stroke="var(--hadron-blue, #0275E7)" stroke-width="1"/>
+    <polygon points="166.28,-96 221.7,-128 221.7,-64 166.28,-32" fill="var(--hadron-deep, #004CCE)" stroke="var(--hadron-deep, #004CCE)" stroke-width="1"/>
+    <polygon points="-166.28,-32 -110.85,-64 -55.43,-32 -110.85,0" fill="var(--hadron-sky, #1BAAFF)" stroke="var(--hadron-sky, #1BAAFF)" stroke-width="1"/>
+    <polygon points="-166.28,-32 -110.85,0 -110.85,64 -166.28,32" fill="var(--hadron-blue, #0275E7)" stroke="var(--hadron-blue, #0275E7)" stroke-width="1"/>
+    <polygon points="-110.85,0 -55.43,-32 -55.43,32 -110.85,64" fill="var(--hadron-deep, #004CCE)" stroke="var(--hadron-deep, #004CCE)" stroke-width="1"/>
+    <polygon points="-55.43,-32 0,-64 55.43,-32 0,0" fill="var(--hadron-sky, #1BAAFF)" stroke="var(--hadron-sky, #1BAAFF)" stroke-width="1"/>
+    <polygon points="-55.43,-32 0,0 0,64 -55.43,32" fill="var(--hadron-blue, #0275E7)" stroke="var(--hadron-blue, #0275E7)" stroke-width="1"/>
+    <polygon points="0,0 55.43,-32 55.43,32 0,64" fill="var(--hadron-deep, #004CCE)" stroke="var(--hadron-deep, #004CCE)" stroke-width="1"/>
+    <polygon points="55.43,-32 110.85,-64 166.28,-32 110.85,0" fill="var(--hadron-sky, #1BAAFF)" stroke="var(--hadron-sky, #1BAAFF)" stroke-width="1"/>
+    <polygon points="55.43,-32 110.85,0 110.85,64 55.43,32" fill="var(--hadron-blue, #0275E7)" stroke="var(--hadron-blue, #0275E7)" stroke-width="1"/>
+    <polygon points="110.85,0 166.28,-32 166.28,32 110.85,64" fill="var(--hadron-deep, #004CCE)" stroke="var(--hadron-deep, #004CCE)" stroke-width="1"/>
+    <polygon points="-110.85,64 -55.43,32 0,64 -55.43,96" fill="var(--hadron-sky, #1BAAFF)" stroke="var(--hadron-sky, #1BAAFF)" stroke-width="1"/>
+    <polygon points="-110.85,64 -55.43,96 -55.43,160 -110.85,128" fill="var(--hadron-blue, #0275E7)" stroke="var(--hadron-blue, #0275E7)" stroke-width="1"/>
+    <polygon points="-55.43,96 0,64 0,128 -55.43,160" fill="var(--hadron-deep, #004CCE)" stroke="var(--hadron-deep, #004CCE)" stroke-width="1"/>
+    <polygon points="0,64 55.43,32 110.85,64 55.43,96" fill="var(--hadron-sky, #1BAAFF)" stroke="var(--hadron-sky, #1BAAFF)" stroke-width="1"/>
+    <polygon points="0,64 55.43,96 55.43,160 0,128" fill="var(--hadron-blue, #0275E7)" stroke="var(--hadron-blue, #0275E7)" stroke-width="1"/>
+    <polygon points="55.43,96 110.85,64 110.85,128 55.43,160" fill="var(--hadron-deep, #004CCE)" stroke="var(--hadron-deep, #004CCE)" stroke-width="1"/>
+    <polygon points="110.85,64 166.28,32 221.7,64 166.28,96" fill="var(--hadron-sky, #1BAAFF)" stroke="var(--hadron-sky, #1BAAFF)" stroke-width="1"/>
+    <polygon points="110.85,64 166.28,96 166.28,160 110.85,128" fill="var(--hadron-blue, #0275E7)" stroke="var(--hadron-blue, #0275E7)" stroke-width="1"/>
+    <polygon points="166.28,96 221.7,64 221.7,128 166.28,160" fill="var(--hadron-deep, #004CCE)" stroke="var(--hadron-deep, #004CCE)" stroke-width="1"/>
+  </g>
+</svg>

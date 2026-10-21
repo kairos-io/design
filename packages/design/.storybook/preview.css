@@ -1,0 +1,93 @@
+/* Storybook's stylesheet: the same layers the package ships, plus the
+   utilities the docs blocks use. */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "../tailwind.css";
+@import "../src/styles/base.css";
+
+@source "../src/components";
+@source "../src/lib";
+@source "../src/docs";
+@source "./blocks";
+@source "./preview.tsx";
+
+html,
+body,
+.sb-show-main {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+.sb-show-main.sb-main-padded {
+  padding: 1.5rem;
+}
+
+/* Docs pages inherit the tokens too, so swatches and examples switch with the theme. */
+.sbdocs.sbdocs-content {
+  font-family: var(--font-sans);
+}
+
+/* Docs prose follows the tokens in the dark theme. */
+[data-theme="dark"] .sbdocs.sbdocs-wrapper,
+[data-theme="dark"] .sbdocs.sbdocs-content {
+  background: var(--bg);
+  color: var(--ink);
+}
+[data-theme="dark"] .sbdocs.sbdocs-content :is(h1, h2, h3, h4, h5, h6, p, li, td, th, dt, dd, blockquote) {
+  color: var(--ink);
+}
+[data-theme="dark"] .sbdocs.sbdocs-content :is(h1, h2, table, th, td) {
+  border-color: var(--line);
+}
+[data-theme="dark"] .sbdocs.sbdocs-content tr:nth-of-type(2n) {
+  background: var(--inner);
+}
+[data-theme="dark"] .sbdocs.sbdocs-content :not(pre) > code {
+  background: var(--inner);
+  color: var(--ink);
+  border-color: var(--line);
+}
+[data-theme="dark"] .sbdocs.sbdocs-content a {
+  color: var(--accent);
+}
+[data-theme="dark"] .sbdocs.sbdocs-content .toc-list a {
+  color: var(--inner);
+}
+
+/* Preflight strips list markers; docs prose wants them back. */
+.sbdocs.sbdocs-content ol {
+  list-style: decimal;
+  padding-left: 30px;
+}
+.sbdocs.sbdocs-content ul {
+  list-style: disc;
+  padding-left: 30px;
+}
+
+/* Docs pages fit a phone. */
+.sbdocs.sbdocs-wrapper {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+.sbdocs.sbdocs-content {
+  min-width: 0;
+  max-width: 100%;
+}
+.sbdocs .docblock-source,
+.sbdocs pre {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+}
+.sbdocs.sbdocs-content code {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+@media (max-width: 600px) {
+  .sbdocs.sbdocs-wrapper {
+    padding: 1.5rem 16px;
+  }
+}

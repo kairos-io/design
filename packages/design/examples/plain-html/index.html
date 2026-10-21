@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kairos design, no build step</title>
+    <!-- From npm: node_modules/@kairos-io/design/dist/{tokens,components}.css
+         From a CDN: https://cdn.jsdelivr.net/npm/@kairos-io/design/dist/tokens.css
+         Here: the local build, so this page works from a checkout. -->
+    <link rel="stylesheet" href="../../dist/tokens.css" />
+    <link rel="stylesheet" href="../../dist/components.css" />
+    <script>
+      // Optional. With no class on <html> the page follows the OS theme.
+      try {
+        var m = localStorage.getItem("kairos-theme");
+        if (m === "light" || m === "dark") document.documentElement.classList.add(m);
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#"
+        ><img src="../../dist/assets/logos/kairos-horizontal-white.svg" alt="Kairos" /><span
+          >Package browser</span
+        ></a
+      >
+    </header>
+    <main class="container narrow">
+      <header class="page-header">
+        <div>
+          <div class="title-row">
+            <h1>system/kairos-agent</h1>
+            <span class="badge tone-success">published</span>
+          </div>
+          <p class="description">Built from quay.io/kairos/packages, 2026-10-09.</p>
+        </div>
+      </header>
+      <section class="card">
+        <div class="form-card">
+          <div class="field">
+            <label for="ver">Version</label>
+            <input id="ver" type="text" value="v2.21.1" />
+            <p class="fhelp">The OCI tag the package was built from.</p>
+          </div>
+          <div class="alert alert-info">Packages are rebuilt on every release of kairos-io/packages.</div>
+          <p class="card-actions">
+            <a class="btn" href="#">Download</a>
+            <button class="btn outline" type="button">Copy pull command</button>
+          </p>
+        </div>
+      </section>
+    </main>
+    <footer class="footer"><p>Copyright &copy; Kairos authors 2022-2026</p></footer>
+  </body>
+</html>

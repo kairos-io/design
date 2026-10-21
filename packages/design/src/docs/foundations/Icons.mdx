@@ -1,0 +1,44 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { DoDont } from "../../../.storybook/blocks/index.ts";
+
+<Meta title="Foundations/Icons" />
+
+# Icons
+
+The apps use [Lucide](https://lucide.dev) through `lucide-react`: one stroke weight, a 24-unit grid, and a name for most things an infrastructure tool needs (`Server`, `Package`, `Rocket`, `KeyRound`). The package depends on it and the components use it for their own icons (the loading spinner, the dialog close, the select chevron).
+
+## Sizes
+
+- 16px (`size-4`) inside buttons, inputs, sidebar items, badges and table cells. The `Button` sets this on any SVG child.
+- 14px (`h-3.5 w-3.5`) for the info tooltip trigger and breadcrumb chevrons.
+- 40px (`h-10 w-10`) for the empty-state illustration, in muted ink.
+
+## Colour
+
+Icons take `currentColor`. Next to text they inherit; alone in a tile they take a tone (`text-ok`) through the `toneText` map.
+
+## Labelling
+
+An icon next to text is decorative: `aria-hidden="true"`. An icon that is the whole control needs a name: `aria-label` on the button, not on the icon. `Button` warns in development when an icon-only size has no label.
+
+<DoDont
+  do={
+    <ul>
+      <li>
+        Pick the Lucide icon that names the object (a server, a package) or the action (download, rocket).
+      </li>
+      <li>
+        Keep one icon per meaning across the apps: nodes are <code>Server</code>, artifacts are{" "}
+        <code>Package</code>.
+      </li>
+      <li>Pair an icon with a word wherever there is room.</li>
+    </ul>
+  }
+  dont={
+    <ul>
+      <li>Mix icon sets, filled styles or emoji with Lucide.</li>
+      <li>Scale an icon above 40px as decoration; use the mark or an illustration instead.</li>
+      <li>Colour an icon with a brand orange to draw attention. Use the primary button for that.</li>
+    </ul>
+  }
+/>

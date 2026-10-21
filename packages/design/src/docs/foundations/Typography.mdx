@@ -1,0 +1,35 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { FontStacks, TypeScale, Weights } from "../../../.storybook/blocks/index.ts";
+
+<Meta title="Foundations/Typography" />
+
+# Typography
+
+## Faces
+
+Noto Sans is the brand face: the docs site and AuroraBoot load it from Google Fonts, in weights 300 to 700. It was chosen for its coverage (Kairos is read in many scripts) and its neutral, open shapes at small sizes, which is where most of the interface lives. The installer cannot fetch it, so the stack falls back to the system face there; the interface must still read well in San Francisco, Segoe UI or Roboto.
+
+Logs, image references, node names and anything an operator might copy are set in the system monospace stack.
+
+<FontStacks />
+
+## Weights
+
+<Weights />
+
+Regular for body, medium for labels and buttons, semibold for titles inside components, bold for page titles. Light (300) is loaded for the docs' marketing pages and not used in the apps.
+
+## Scale
+
+The apps use 14px body; the docs site uses 16px. Every other step is shared.
+
+<TypeScale />
+
+## Rules
+
+- Page titles are 30/36 bold with -0.025em tracking, and wrap rather than truncate (`text-wrap: balance`, `overflow-wrap: anywhere`).
+- Card and dialog titles are 16 semibold with `leading-none` and -0.01em tracking.
+- A stat value is 24 semibold with tabular figures.
+- Section labels in the sidebar are 10px uppercase with 0.05em tracking at 40% opacity.
+- Nothing goes below 10px, and 10px is only ever uppercase labels.
+- Line length stays under about 70 characters for descriptions (`max-w-[70ch]`).

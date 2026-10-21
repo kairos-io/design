@@ -1,0 +1,155 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Getting started" />
+
+# Getting started
+
+```sh
+npm install @kairos-io/design
+```
+
+The package is ESM only. Vite, Docusaurus, Next and every other bundler resolve it; a CommonJS script would need a dynamic `import()`. React 18 or 19 is a peer dependency for the components; the stylesheets need nothing.
+
+## Pick your consumer
+
+Each block below has a working copy under `examples/` in the repository. The React components are React only; every other framework, and every page without one, uses the CSS layer: `tokens.css` for the values and `components.css` for the classes.
+
+### A React app
+
+[examples/react-vite](https://github.com/wcrum/kairos-design-system/tree/main/examples/react-vite). Import the compiled stylesheet once, then use the components.
+
+```tsx
+import "@kairos-io/design/styles.css";
+import { Button, Card, CardHeader, CardTitle, CardContent, StatusBadge } from "@kairos-io/design";
+
+export function Node({ name, phase }: { name: string; phase: string }) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{name}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex items-center gap-3">
+        <StatusBadge status={phase} />
+        <Button variant="outline">Open</Button>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+`styles.css` holds Tailwind's preflight and the utilities the components use, the tokens, and the theme mapping, all inside CSS cascade layers. A host page's own unlayered CSS wins over all of it, so adding the package to an existing app changes nothing the app already styles.
+
+### A React app that runs Tailwind v4
+
+AuroraBoot. Import the tokens and the theme mapping instead of the compiled stylesheet, and tell Tailwind to scan the package so the components' classes are generated with the app's own.
+
+```css
+@import "tailwindcss";
+@import "@kairos-io/design/tokens.css";
+@import "@kairos-io/design/theme.css";
+@source "../node_modules/@kairos-io/design/dist";
+```
+
+After that `bg-accent`, `text-muted`, `rounded-base` and the rest mean the same thing in the app as in the package, and `cn()` from the package merges classes the Tailwind way.
+
+### Docusaurus
+
+kairos-docs keeps Infima. Add the tokens to `src/css/custom.css` and the `--kairos-*` aliases it already uses resolve from the package. `fonts.css` replaces the Google Fonts import.
+
+```css
+/* src/css/custom.css */
+@import "@kairos-io/design/tokens.css";
+@import "@kairos-io/design/fonts.css";
+/* --kairos-orange, --kairos-primary (navy) and friends now come from the package. */
+```
+
+### A page with no build step
+
+[examples/plain-html](https://github.com/wcrum/kairos-design-system/tree/main/examples/plain-html). The tokens and the installer's class names, from the npm package:
+
+```html
+<link rel="stylesheet" href="node_modules/@kairos-io/design/dist/tokens.css" />
+<link rel="stylesheet" href="node_modules/@kairos-io/design/dist/components.css" />
+```
+
+or, with no npm at all, from a CDN:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kairos-io/design/dist/tokens.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@kairos-io/design/dist/components.css" />
+```
+
+Then the markup:
+
+```html
+<section class="card">
+  <h2 class="card-title">Installation progress</h2>
+  <span class="badge tone-success">Connected</span>
+  <a class="btn outline" href="/logs">Download logs</a>
+</section>
+```
+
+### A Go binary that embeds its UI
+
+[examples/go-embed](https://github.com/wcrum/kairos-design-system/tree/main/examples/go-embed), the way the web installer ships inside the ISO. Vendor `tokens.css` and `components.css` next to the Go file (a `go:generate` that copies them from `node_modules/@kairos-io/design/dist` keeps them current) and embed them. No network is needed at runtime, which is why `tokens.css` never loads a font.
+
+```go
+//go:embed tokens.css components.css index.html
+var assets embed.FS
+
+func main() {
+	http.Handle("/", http.FileServer(http.FS(assets)))
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+```
+
+## Dark mode
+
+The contract is one class or attribute on `<html>`:
+
+<table className="w-full text-sm">
+  <thead>
+    <tr className="border-b border-line text-left text-muted">
+      <th className="py-2 pr-3 font-medium">On the html element</th>
+      <th className="py-2 font-medium">Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr className="border-b border-line">
+      <td className="py-2 pr-3 font-mono text-xs">class="dark" or data-theme="dark"</td>
+      <td className="py-2">Dark theme.</td>
+    </tr>
+    <tr className="border-b border-line">
+      <td className="py-2 pr-3 font-mono text-xs">class="light" or data-theme="light"</td>
+      <td className="py-2">Light theme.</td>
+    </tr>
+    <tr className="border-b border-line">
+      <td className="py-2 pr-3 font-mono text-xs">nothing</td>
+      <td className="py-2">Follows the operating system through prefers-color-scheme.</td>
+    </tr>
+  </tbody>
+</table>
+
+The `useTheme` hook and the `ThemeToggle` component manage this, persist the choice in `localStorage`, and follow the OS while the mode is "system". To avoid a flash of the wrong theme before React loads, put the inline script in `<head>`:
+
+```tsx
+import { inlineThemeScript } from "@kairos-io/design";
+// <script>{inlineThemeScript("kairos-theme")}</script>
+```
+
+## Fonts
+
+`fonts.css` loads Noto Sans from Google Fonts. It is a separate, optional import because the installer must not fetch anything: `tokens.css` names Noto Sans first in the stack and falls back to the system face wherever it is not installed.
+
+```css
+@import "@kairos-io/design/fonts.css";
+```
+
+## The tokens as data
+
+Charts, canvases and config files sometimes need the values rather than the custom properties:
+
+```ts
+import { tokens, brand, semanticLight, semanticDark } from "@kairos-io/design/tokens";
+brand.orange; // "#EE5007"
+```

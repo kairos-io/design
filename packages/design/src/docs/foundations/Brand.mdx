@@ -1,0 +1,49 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { ClearSpace, DoDont, LogoGrid } from "../../../.storybook/blocks/index.ts";
+
+<Meta title="Foundations/Brand" />
+
+# Brand
+
+The Kairos mark is eighteen rhombi in three oranges, arranged as a ring of six cubes. The logos are the mark with the wordmark set beside it or under it. All of them come from the [CNCF artwork repository](https://github.com/cncf/artwork/tree/main/projects/kairos) and ship in this package unchanged, as SVG files under `assets/logos/` and as the `KairosMark` and `KairosLogo` components.
+
+## The files
+
+Three layouts, three variants. Use the colour version wherever the background is plain; white on navy and on photographs; black only for one-colour print.
+
+<LogoGrid />
+
+## Clear space and size
+
+<ClearSpace />
+
+The same rhombi, laid flat as a hexagon and tiled into fields, are the system's one decorative pattern. [Tiles](?path=/docs/foundations-tiles--docs) sets out the unit, the fields, the tile bar and the marker, and where each may go.
+
+## In the interface
+
+- The app shell shows the horizontal logo at 28px high in the top bar and 44px in the sidebar header, on navy, so it is the white variant there in both themes.
+- The docs navbar uses the mark at 30px beside the site name.
+- A favicon is the mark alone, colour variant.
+- Next to a product name ("Web Installer", "AuroraBoot") the name is set in the body face at 16px, weight 700, white on navy.
+
+<DoDont
+  do={
+    <ul>
+      <li>Use the files as they are, from the package or the CNCF repository.</li>
+      <li>Pick the variant by the surface: colour on plain, white on navy, black for one-colour print.</li>
+      <li>Keep one rhombus of clear space around the mark.</li>
+    </ul>
+  }
+  dont={
+    <ul>
+      <li>Recolour the rhombi, even with the brand oranges in a different order.</li>
+      <li>Rotate, outline, or animate the mark.</li>
+      <li>Rebuild the wordmark in a font. It is outlines.</li>
+      <li>Use the oranges of the mark to mean a status. Status has its own tones.</li>
+    </ul>
+  }
+/>
+
+## Trademark
+
+Kairos is a CNCF project and its name and logos are trademarks of The Linux Foundation. Use is subject to the [Linux Foundation trademark usage policy](https://www.linuxfoundation.org/trademark-usage), and the artwork repository's [LICENSE](https://github.com/cncf/artwork/blob/master/LICENSE.md) carries the key excerpts.
