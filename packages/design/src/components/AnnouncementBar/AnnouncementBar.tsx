@@ -11,9 +11,10 @@ export interface AnnouncementBarProps extends React.HTMLAttributes<HTMLDivElemen
 }
 
 /**
- * The strip above the site header for a release or an event: ink background,
- * the page canvas as text, a version tag in the soft accent. One line that
- * wraps and centres on phones.
+ * The strip above the site header for a release or an event: the deep
+ * surface, which stays dark in both themes, with the code ink as text and a
+ * version tag in the code key (the soft accent). One line that wraps and
+ * centres on phones.
  */
 export const AnnouncementBar = React.forwardRef<HTMLDivElement, AnnouncementBarProps>(
   ({ tag, action, className, children, ...props }, ref) => (
@@ -22,15 +23,17 @@ export const AnnouncementBar = React.forwardRef<HTMLDivElement, AnnouncementBarP
       role="region"
       aria-label="Announcement"
       className={cn(
-        "flex w-full flex-wrap items-center justify-center gap-2.5 bg-ink px-6 py-[9px] text-center text-sm text-bg",
+        "flex w-full flex-wrap items-center justify-center gap-2.5 bg-deep px-6 py-[9px] text-center text-sm text-code-ink",
         className,
       )}
       {...props}
     >
-      {tag && <span className="font-mono text-xs text-accent-soft">{tag}</span>}
+      {tag && <span className="font-mono text-xs text-code-key">{tag}</span>}
       <span>{children}</span>
       {action && (
-        <span className="font-bold [&_a]:text-bg [&_a]:no-underline [&_a:hover]:underline">{action}</span>
+        <span className="font-bold [&_a]:text-code-ink [&_a]:no-underline [&_a:hover]:underline">
+          {action}
+        </span>
       )}
     </div>
   ),

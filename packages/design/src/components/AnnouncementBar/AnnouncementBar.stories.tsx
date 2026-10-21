@@ -10,7 +10,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The release strip above the kairos.io header: ink on the page, a mono version tag in the soft accent, one sentence and a bold link.",
+          "The release strip above the kairos.io header: the deep surface, dark in both themes, with a mono version tag in the code key, one sentence and a bold link.",
       },
     },
   },

@@ -30,7 +30,9 @@ body,
   font-family: var(--font-sans);
 }
 
-/* Docs prose follows the tokens in the dark theme. */
+/* Docs prose follows the tokens in the dark theme. Storybook paints the docs
+   blocks from a static light theme (theme.ts), so every light background it
+   sets gets a token here; selectors stay one class above Storybook's own. */
 [data-theme="dark"] .sbdocs.sbdocs-wrapper,
 [data-theme="dark"] .sbdocs.sbdocs-content {
   background: var(--bg);
@@ -39,10 +41,19 @@ body,
 [data-theme="dark"] .sbdocs.sbdocs-content :is(h1, h2, h3, h4, h5, h6, p, li, td, th, dt, dd, blockquote) {
   color: var(--ink);
 }
-[data-theme="dark"] .sbdocs.sbdocs-content :is(h1, h2, table, th, td) {
+[data-theme="dark"] .sbdocs.sbdocs-content :is(h1, h2, hr, blockquote, table, th, td) {
   border-color: var(--line);
 }
-[data-theme="dark"] .sbdocs.sbdocs-content tr:nth-of-type(2n) {
+/* Markdown tables: Storybook paints odd rows white and even rows off-white; it
+   skips .sb-unstyled tables (and the inline canvases, which carry that class),
+   so this does too. */
+[data-theme="dark"] .sbdocs.sbdocs-content :where(table:not(.sb-unstyled, .sb-unstyled table)) tr {
+  background: var(--surface);
+}
+[data-theme="dark"]
+  .sbdocs.sbdocs-content
+  :where(table:not(.sb-unstyled, .sb-unstyled table))
+  tr:nth-of-type(2n) {
   background: var(--inner);
 }
 [data-theme="dark"] .sbdocs.sbdocs-content :not(pre) > code {
@@ -53,8 +64,58 @@ body,
 [data-theme="dark"] .sbdocs.sbdocs-content a {
   color: var(--accent);
 }
-[data-theme="dark"] .sbdocs.sbdocs-content .toc-list a {
-  color: var(--inner);
+
+/* ArgsTable: every body cell is opaque white for its drop-shadow filter, the
+   header is muted and the value chips are dark ink on a 1% tint. */
+[data-theme="dark"] .sbdocs .docblock-argstable {
+  color: var(--ink);
+}
+[data-theme="dark"] .sbdocs .docblock-argstable th {
+  color: var(--muted);
+}
+[data-theme="dark"] .sbdocs .docblock-argstable tbody {
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+}
+[data-theme="dark"] .sbdocs .docblock-argstable tbody > tr > * {
+  background: var(--surface);
+  border-color: var(--line);
+}
+/* Category rows (argTypes table.category) force the light app background. */
+[data-theme="dark"] .sbdocs .docblock-argstable tbody > tr:has(> td > button) > td {
+  background: var(--inner) !important;
+  color: var(--muted);
+}
+[data-theme="dark"] .sbdocs .docblock-argstable td > span:not([title]),
+[data-theme="dark"] .sbdocs .docblock-argstable td > div span:not(.sbdocs-expandable *) {
+  color: var(--ink);
+  background: var(--inner);
+  border-color: var(--line);
+}
+
+/* Inline canvases are white cards with a shadow; stories sit on the page
+   canvas instead, as they do in the standalone canvas. */
+[data-theme="dark"] .sbdocs.sbdocs-preview {
+  background: var(--bg);
+  border-color: var(--line);
+  box-shadow: none;
+}
+[data-theme="dark"] .sbdocs.sbdocs-preview-actions .docblock-code-toggle {
+  color: var(--muted);
+}
+
+/* The TOC is a sibling of .sbdocs-content inside the wrapper, so it scopes
+   there. tocbot names: .toc-list rail, .toc-list-item, .is-active-li. */
+[data-theme="dark"] .sbdocs.sbdocs-wrapper .toc-wrapper .toc-list {
+  border-left-color: var(--line);
+}
+[data-theme="dark"] .sbdocs.sbdocs-wrapper .toc-wrapper .toc-list-item > a {
+  color: var(--muted);
+}
+[data-theme="dark"] .sbdocs.sbdocs-wrapper .toc-wrapper .toc-list-item.is-active-li > a {
+  color: var(--ink);
+}
+[data-theme="dark"] .sbdocs.sbdocs-wrapper .toc-wrapper .toc-list-item::before {
+  border-left-color: var(--accent);
 }
 
 /* Preflight strips list markers; docs prose wants them back. */

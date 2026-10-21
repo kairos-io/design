@@ -32,7 +32,7 @@ const breakpointUse: Record<keyof typeof breakpoints, string> = {
 /** Min-width breakpoints, mobile first. Tailwind's defaults, which the components use through sm:, md:, lg:. */
 export function Breakpoints() {
   return (
-    <table className="w-full text-sm">
+    <table className="sb-unstyled w-full text-sm">
       <thead>
         <tr className="border-b border-line text-left text-muted">
           <th className="py-2 pr-3 font-medium">Prefix</th>
@@ -56,7 +56,7 @@ export function Breakpoints() {
 /** The fixed measures pages share. */
 export function LayoutMeasures() {
   return (
-    <table className="w-full text-sm">
+    <table className="sb-unstyled w-full text-sm">
       <thead>
         <tr className="border-b border-line text-left text-muted">
           <th className="py-2 pr-3 font-medium">Measure</th>

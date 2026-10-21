@@ -292,7 +292,7 @@ export const SidebarItem = React.forwardRef<HTMLAnchorElement, SidebarItemProps>
           <span
             className={cn(
               "font-mono text-xs",
-              active ? "text-accent-soft" : "text-muted",
+              active ? "text-link" : "text-muted",
               sidebarModeClasses.fullOnly[mode],
             )}
           >

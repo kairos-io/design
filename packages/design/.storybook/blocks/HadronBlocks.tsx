@@ -101,7 +101,7 @@ export function HadronVariantTable() {
   };
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-sm">
+      <table className="sb-unstyled w-full text-sm">
         <thead>
           <tr className="border-b border-line text-left text-muted">
             <th className="py-2 pr-3 font-medium">Token</th>

@@ -8,7 +8,7 @@ export interface TokenRow {
 export function TokenTable({ rows, valueLabel = "Value" }: { rows: TokenRow[]; valueLabel?: string }) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-sm">
+      <table className="sb-unstyled w-full text-sm">
         <thead>
           <tr className="border-b border-line text-left text-muted">
             <th className="py-2 pr-3 font-medium">Token</th>

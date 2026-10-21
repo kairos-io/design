@@ -216,9 +216,9 @@ export const Hadron: Story = {
 export const Dark: Story = {
   name: "On the navy surface",
   render: (args) => (
-    <div className="relative h-64 overflow-hidden rounded-lg bg-side">
+    <div data-theme="dark" className="relative h-64 overflow-hidden rounded-lg bg-side text-ink">
       <TileField {...args} fade="right" line="var(--raised)" />
-      <div className="relative flex h-full flex-col items-start justify-end gap-3 p-8 text-bg">
+      <div className="relative flex h-full flex-col items-start justify-end gap-3 p-8">
         <TileMarker tone={0}>04</TileMarker>
         <p className="text-3xl font-bold tracking-tight">Section divider</p>
       </div>

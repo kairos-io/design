@@ -47,7 +47,7 @@ export function ElevationSteps() {
 /** The durations and easing, with a live fade-up you can replay. */
 export function MotionTable() {
   return (
-    <table className="w-full text-sm">
+    <table className="sb-unstyled w-full text-sm">
       <thead>
         <tr className="border-b border-line text-left text-muted">
           <th className="py-2 pr-3 font-medium">Token</th>
