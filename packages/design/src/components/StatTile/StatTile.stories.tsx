@@ -10,7 +10,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "One cell of a summary band at the top of a dashboard or detail page: a label, one large number and a line of context. Four to six tiles in a row; a tone colours the icon when the number carries a status. MeterBar and StackBar are the two small bars the tiles and tables share.",
+          "One cell of a summary band at the top of a dashboard or detail page: a label in the muted ink, one large number and a line of context, on a surface with no border. Four to six tiles in a row. The `lg` size is the nodes page's band (34px); `sm` is the node detail's health strip (19px bold), where a tone draws a 3px bar along the top. MeterBar and StackBar are the two small bars the tiles and tables share; TileMeter is the full-width disk meter.",
       },
     },
   },
@@ -43,6 +43,19 @@ export const SummaryBand: Story = {
       <StatTile label="CPU" icon={Cpu} value="41%" sub="fleet average" tone="success" />
       <StatTile label="Memory" icon={MemoryStick} value="83%" sub="2 nodes above 90%" tone="warning" />
       <StatTile label="Disk" icon={HardDrive} value="94%" sub="edge-03: 2 GB free" tone="danger" />
+    </div>
+  ),
+};
+
+export const HealthStrip: Story = {
+  name: "The health strip",
+  render: () => (
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-2">
+      <StatTile size="sm" tone="success" label="Connection" value="Online" sub="Heartbeat 4s ago" />
+      <StatTile size="sm" tone="success" label="Boot" value="Active" sub="Booted from the active image" />
+      <StatTile size="sm" mono label="Image version" value="hadron-v0.5.2" sub="k3s 1.36.4" />
+      <StatTile size="sm" mono label="Kairos version" value="v4.3.0" sub="Hadron · standard" />
+      <StatTile size="sm" label="Reset" value="Never" sub="No reset pending" />
     </div>
   ),
 };

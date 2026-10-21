@@ -7,7 +7,14 @@ import { PageHeader } from "../../components/PageHeader/PageHeader.tsx";
 import { StatTile } from "../../components/StatTile/StatTile.tsx";
 import { StatusBadge } from "../../components/StatusBadge/StatusBadge.tsx";
 import { StatusDot } from "../../components/StatusDot/StatusDot.tsx";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../components/Table/Table.tsx";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../components/Table/Table.tsx";
 import { Tile } from "../../components/Tiles/Tile.tsx";
 import { tilePoints } from "../../lib/tiles.ts";
 import { phaseLook } from "../../lib/tone.ts";
@@ -21,7 +28,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Fleet › Nodes, from `Kairos Console - Nodes.dc.html`: the node list with its summary band, the rollout in progress as a tile bar, status filters, and the selected node's side panel. Built from AppShell and Sidebar, PageHeader, Input, Button, StatTile, Tile, FilterChip, Table, StatusBadge and StatusDot. The page sits in `data-variant=\"console\"`, which the decks use for a lighter hairline in the light theme. Pick a row or a filter: the panel and the list follow.",
+          'Fleet › Nodes, from `Kairos Console - Nodes.dc.html`: the node list with its summary band, the rollout in progress as a tile bar, status filters, and the selected node\'s side panel. Built from AppShell and Sidebar, PageHeader, Input, Button, StatTile, Tile, FilterChip, Table, StatusBadge and StatusDot. The page sits in `data-variant="console"`, which the decks use for a lighter hairline in the light theme. Pick a row or a filter: the panel and the list follow.',
       },
     },
   },
@@ -53,7 +60,14 @@ function RolloutBar({ total, done, inProgress }: { total: number; done: number; 
         i < done ? (
           <Tile key={i} size={15} tone={(i % 3) as 0 | 1 | 2} />
         ) : i < done + inProgress ? (
-          <svg key={i} width={15} height={(15 * 14) / 22} viewBox="0 0 22 14" aria-hidden="true" className="shrink-0">
+          <svg
+            key={i}
+            width={15}
+            height={(15 * 14) / 22}
+            viewBox="0 0 22 14"
+            aria-hidden="true"
+            className="shrink-0"
+          >
             <polygon points={tilePoints} className="fill-none stroke-accent" strokeWidth={2} />
           </svg>
         ) : (
@@ -86,7 +100,17 @@ function Legend() {
   );
 }
 
-function Partition({ name, value, tag, current }: { name: string; value: string; tag?: string; current?: boolean }) {
+function Partition({
+  name,
+  value,
+  tag,
+  current,
+}: {
+  name: string;
+  value: string;
+  tag?: string;
+  current?: boolean;
+}) {
   return (
     <div
       className={`grid grid-cols-[72px_1fr_auto] items-center gap-2.5 rounded-base bg-surface px-3 py-2.5 text-sm ${
@@ -185,7 +209,12 @@ function NodesPage() {
       <div className="flex min-h-full flex-col">
         <div className="border-b border-line px-7 pt-4">
           <PageHeader eyebrow="fleet / nodes" title="Nodes" className="mb-4">
-            <Input mono placeholder="search hostname, image, label" aria-label="Search nodes" className="w-[260px] py-2 text-xs" />
+            <Input
+              mono
+              placeholder="search hostname, image, label"
+              aria-label="Search nodes"
+              className="w-[260px] py-2 text-xs"
+            />
             <Button variant="outline" size="sm" className="text-[15px]">
               Build artifact
             </Button>
@@ -204,7 +233,8 @@ function NodesPage() {
             <section className="flex flex-col gap-3 rounded-base bg-surface px-[18px] py-4">
               <div className="flex flex-wrap justify-between gap-3 text-[15px]">
                 <span>
-                  <b>Rollout r-0412</b> <span className="text-sub">· retail-eu → hadron v0.5.2 · canary passed</span>
+                  <b>Rollout r-0412</b>{" "}
+                  <span className="text-sub">· retail-eu → hadron v0.5.2 · canary passed</span>
                 </span>
                 <span className="font-mono text-xs text-muted">766 / 812 nodes</span>
               </div>
@@ -254,7 +284,9 @@ function NodesPage() {
                     <TableCell className="whitespace-nowrap">
                       <StatusBadge bare status={n.status} className="text-[15px] font-medium" />
                     </TableCell>
-                    <TableCell className="max-w-[260px] truncate font-mono text-xs text-sub">{n.image}</TableCell>
+                    <TableCell className="max-w-[260px] truncate font-mono text-xs text-sub">
+                      {n.image}
+                    </TableCell>
                     <TableCell className="text-sm text-sub">{n.group}</TableCell>
                     <TableCell className="font-mono text-xs text-muted">{n.seen}</TableCell>
                   </TableRow>

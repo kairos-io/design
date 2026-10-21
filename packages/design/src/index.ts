@@ -8,6 +8,8 @@ export * from "./components/Button/index.ts";
 export * from "./components/Card/index.ts";
 export * from "./components/Checkbox/index.ts";
 export * from "./components/Chip/index.ts";
+export * from "./components/ChoiceCard/index.ts";
+export * from "./components/DescriptionList/index.ts";
 export { CommandSample, type CommandSampleProps } from "./components/CommandSample/index.ts";
 export * from "./components/Dialog/index.ts";
 export {
@@ -26,6 +28,8 @@ export {
   type FeatureGridProps,
 } from "./components/FeatureGrid/index.ts";
 export * from "./components/Field/index.ts";
+export * from "./components/FilterChip/index.ts";
+export * from "./components/Gauge/index.ts";
 export { Hero, type HeroProps } from "./components/Hero/index.ts";
 export * from "./components/InfoTooltip/index.ts";
 export * from "./components/Input/index.ts";
@@ -89,6 +93,7 @@ export * from "./components/StatTile/index.ts";
 export * from "./components/StatusBadge/index.ts";
 export * from "./components/StatusDot/index.ts";
 export * from "./components/Steps/index.ts";
+export * from "./components/Switch/index.ts";
 export * from "./components/Table/index.ts";
 export * from "./components/Tabs/index.ts";
 export * from "./components/Terminal/index.ts";

@@ -2,7 +2,10 @@ import * as React from "react";
 import { cn } from "../../lib/cn.ts";
 import { StatusDot } from "../StatusDot/StatusDot.tsx";
 
-export interface ChoiceCardProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "title" | "onSelect"> {
+export interface ChoiceCardProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  "title" | "onSelect"
+> {
   title: React.ReactNode;
   description?: React.ReactNode;
   selected?: boolean;
@@ -21,7 +24,21 @@ export interface ChoiceCardProps extends Omit<React.ButtonHTMLAttributes<HTMLBut
  * and the hover tint; a diamond, when asked for, fills with the accent.
  */
 export const ChoiceCard = React.forwardRef<HTMLButtonElement, ChoiceCardProps>(
-  ({ title, description, selected = false, multiple = false, diamond = false, meta, onSelect, className, onClick, ...props }, ref) => (
+  (
+    {
+      title,
+      description,
+      selected = false,
+      multiple = false,
+      diamond = false,
+      meta,
+      onSelect,
+      className,
+      onClick,
+      ...props
+    },
+    ref,
+  ) => (
     <button
       ref={ref}
       type="button"
@@ -40,9 +57,7 @@ export const ChoiceCard = React.forwardRef<HTMLButtonElement, ChoiceCardProps>(
     >
       <span className="flex items-center justify-between gap-2 text-base font-bold text-ink">
         <span className="flex min-w-0 items-center gap-2">
-          {diamond && (
-            <StatusDot size={11} tone="info" outline={!selected} className="stroke-ink" />
-          )}
+          {diamond && <StatusDot size={11} tone="info" outline={!selected} className="stroke-ink" />}
           <span className="min-w-0">{title}</span>
         </span>
         {meta}

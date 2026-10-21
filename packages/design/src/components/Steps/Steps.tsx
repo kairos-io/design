@@ -48,7 +48,15 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(({ items, cl
         >
           <StatusDot
             size={11}
-            tone={item.state === "done" ? "success" : item.state === "failed" ? "danger" : item.state === "active" ? "info" : "neutral"}
+            tone={
+              item.state === "done"
+                ? "success"
+                : item.state === "failed"
+                  ? "danger"
+                  : item.state === "active"
+                    ? "info"
+                    : "neutral"
+            }
             outline={item.state === "pending"}
           />
           <span>{item.label}</span>

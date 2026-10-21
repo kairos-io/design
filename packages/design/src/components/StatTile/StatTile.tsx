@@ -32,7 +32,10 @@ export interface StatTileProps extends React.HTMLAttributes<HTMLDivElement> {
  * StackBar. The stat tiles of the console decks: a surface, no border.
  */
 export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
-  ({ label, icon: Icon, value, sub, tone, size = "lg", mono = false, children, className, ...props }, ref) => (
+  (
+    { label, icon: Icon, value, sub, tone, size = "lg", mono = false, children, className, ...props },
+    ref,
+  ) => (
     <div
       ref={ref}
       className={cn(
@@ -49,7 +52,9 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
       <div
         className={cn(
           "truncate text-ink",
-          size === "lg" ? "text-[34px] font-semibold leading-none tracking-[-0.03em]" : "text-[19px] font-bold leading-tight",
+          size === "lg"
+            ? "text-[34px] font-semibold leading-none tracking-[-0.03em]"
+            : "text-[19px] font-bold leading-tight",
           mono && "font-mono font-medium",
         )}
       >
@@ -92,11 +97,7 @@ export const MeterBar = React.forwardRef<HTMLDivElement, MeterBarProps>(
     return (
       <div ref={ref} className={cn("flex items-center gap-2", className)} {...props}>
         <div className="h-1.5 w-16 overflow-hidden rounded-sm bg-raised" aria-hidden="true">
-          <div
-            data-tone={tone}
-            className={cn("h-full", toneBg[tone])}
-            style={{ width: `${v}%` }}
-          />
+          <div data-tone={tone} className={cn("h-full", toneBg[tone])} style={{ width: `${v}%` }} />
         </div>
         <span className="text-xs font-semibold tabular-nums">{v}%</span>
       </div>

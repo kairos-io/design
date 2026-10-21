@@ -40,7 +40,10 @@ const linkClass = "truncate font-semibold text-link no-underline hover:text-acce
  * link `element`, which keeps the component free of any router.
  */
 export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
-  ({ title, mono = false, description, eyebrow, breadcrumb, status, meta, children, className, ...props }, ref) => (
+  (
+    { title, mono = false, description, eyebrow, breadcrumb, status, meta, children, className, ...props },
+    ref,
+  ) => (
     <div ref={ref} className={cn("mb-6", className)} {...props}>
       {eyebrow && !breadcrumb && <div className="mb-1 font-mono text-xs text-muted">{eyebrow}</div>}
       {breadcrumb && breadcrumb.length > 0 && (
@@ -80,7 +83,9 @@ export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
           </div>
           {description && <p className="mt-1.5 text-sm text-sub">{description}</p>}
           {meta && (
-            <div className="mt-1.5 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-sm text-sub">{meta}</div>
+            <div className="mt-1.5 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-sm text-sub">
+              {meta}
+            </div>
           )}
         </div>
         {children && <div className="flex flex-wrap items-center gap-2">{children}</div>}

@@ -22,7 +22,9 @@ export const DescriptionList = React.forwardRef<HTMLDListElement, DescriptionLis
         <div
           key={i}
           className="grid gap-2 border-t border-line py-[7px] text-sm"
-          style={{ gridTemplateColumns: `${typeof termWidth === "number" ? `${termWidth}px` : termWidth} minmax(0, 1fr)` }}
+          style={{
+            gridTemplateColumns: `${typeof termWidth === "number" ? `${termWidth}px` : termWidth} minmax(0, 1fr)`,
+          }}
         >
           <dt className="text-muted">{item.term}</dt>
           <dd className={cn("m-0 min-w-0 wrap-anywhere", item.mono && "font-mono text-xs")}>{item.value}</dd>

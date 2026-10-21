@@ -129,22 +129,38 @@ export const SidebarHeader = React.forwardRef<HTMLDivElement, SidebarHeaderProps
   return (
     <div
       ref={ref}
-      className={cn("relative flex items-center gap-2.5 px-5 pt-6 pb-4", sidebarModeClasses.linkLayout[mode], className)}
+      className={cn(
+        "relative flex items-center gap-2.5 px-5 pt-6 pb-4",
+        sidebarModeClasses.linkLayout[mode],
+        className,
+      )}
       {...props}
     >
       {railLogo ? (
         <>
-          <div className={cn("h-[26px] shrink-0", mode === "full" ? "flex" : mode === "rail" ? "hidden" : "hidden lg:flex")}>
+          <div
+            className={cn(
+              "h-[26px] shrink-0",
+              mode === "full" ? "flex" : mode === "rail" ? "hidden" : "hidden lg:flex",
+            )}
+          >
             {logo}
           </div>
-          <div className={cn("h-[26px] shrink-0", mode === "rail" ? "flex" : mode === "full" ? "hidden" : "flex lg:hidden")}>
+          <div
+            className={cn(
+              "h-[26px] shrink-0",
+              mode === "rail" ? "flex" : mode === "full" ? "hidden" : "flex lg:hidden",
+            )}
+          >
             {railLogo}
           </div>
         </>
       ) : (
         <div className="flex h-[26px] shrink-0">{logo}</div>
       )}
-      <span className={cn("min-w-0 truncate text-[19px] leading-none text-ink", sidebarModeClasses.label[mode])}>
+      <span
+        className={cn("min-w-0 truncate text-[19px] leading-none text-ink", sidebarModeClasses.label[mode])}
+      >
         {title}
       </span>
       {setMode && mode === "full" && collapse("absolute right-2 top-2")}
@@ -322,7 +338,11 @@ SidebarItem.displayName = "SidebarItem";
 export const SidebarFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   function SidebarFooter({ className, children, ...props }, ref) {
     return (
-      <div ref={ref} className={cn("mt-auto space-y-1.5 px-6 py-3 text-[13px] text-muted", className)} {...props}>
+      <div
+        ref={ref}
+        className={cn("mt-auto space-y-1.5 px-6 py-3 text-[13px] text-muted", className)}
+        {...props}
+      >
         {children}
       </div>
     );
@@ -360,7 +380,10 @@ export const SidebarSteps = React.forwardRef<HTMLElement, SidebarStepsProps>(fun
     <nav
       ref={ref}
       aria-label={label}
-      className={cn("grid flex-1 content-start gap-px overflow-y-auto overflow-x-hidden px-3.5 py-2", className)}
+      className={cn(
+        "grid flex-1 content-start gap-px overflow-y-auto overflow-x-hidden px-3.5 py-2",
+        className,
+      )}
       {...props}
     >
       <span className="block px-2.5 pb-1.5 font-mono text-xs text-muted">{label}</span>
@@ -384,8 +407,17 @@ export const SidebarSteps = React.forwardRef<HTMLElement, SidebarStepsProps>(fun
                   : "text-muted",
             )}
           >
-            <span aria-hidden="true" className="flex w-3 shrink-0 items-center justify-center font-mono text-xs">
-              {isCurrent ? <TileMark active /> : done ? <Check className="h-3.5 w-3.5" /> : <TileMark active={false} />}
+            <span
+              aria-hidden="true"
+              className="flex w-3 shrink-0 items-center justify-center font-mono text-xs"
+            >
+              {isCurrent ? (
+                <TileMark active />
+              ) : done ? (
+                <Check className="h-3.5 w-3.5" />
+              ) : (
+                <TileMark active={false} />
+              )}
             </span>
             <span className="min-w-0 flex-1 truncate">{step.label}</span>
             <span className="font-mono text-xs text-muted">{String(i + 1).padStart(2, "0")}</span>

@@ -23,7 +23,13 @@ const rows: [string, NodeState, string, string, string][] = [
   ["dc-rack-a-12", "Healthy", "hadron-v0.5.1 · k3s 1.36", "dc-ams", "9s"],
 ];
 
-export const nodes: Node[] = rows.map(([name, status, image, group, seen]) => ({ name, status, image, group, seen }));
+export const nodes: Node[] = rows.map(([name, status, image, group, seen]) => ({
+  name,
+  status,
+  image,
+  group,
+  seen,
+}));
 
 export const nodeStateOrder: NodeState[] = ["Healthy", "Upgrading", "Recovery", "Installing", "Offline"];
 

@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { cn } from "../../lib/cn.ts";
-import { phaseTone, toneSoft } from "../../lib/tone.ts";
+import { StatusBadge } from "../StatusBadge/StatusBadge.tsx";
 import {
   Table,
   TableBody,
@@ -54,14 +53,7 @@ export const Nodes: Story = {
           <TableRow key={n.name}>
             <TableCell className="font-medium">{n.name}</TableCell>
             <TableCell>
-              <span
-                className={cn(
-                  "inline-flex items-center rounded-base border px-2.5 py-0.5 text-xs font-semibold",
-                  toneSoft[phaseTone(n.phase)],
-                )}
-              >
-                {n.phase}
-              </span>
+              <StatusBadge status={n.phase} bare />
             </TableCell>
             <TableCell className="font-mono text-xs">{n.version}</TableCell>
             <TableCell className="font-mono text-xs">{n.k8s}</TableCell>

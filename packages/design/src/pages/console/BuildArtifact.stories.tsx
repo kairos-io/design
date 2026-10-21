@@ -24,7 +24,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Factory › Artifacts › New build, from `Kairos Console - Build Artifact.dc.html`: the six-step wizard (Base, System, Extensions, Access, Output, Review) with the live build summary beside it and the equivalent CLI at the end. Built from AppShell and Sidebar, PageHeader, WizardSteps, ChoiceCard and ChoiceGroup, FilterChip, Field and Input, Checkbox, Badge, SegmentedControl, Switch, Tile, Terminal and Button, in `data-variant=\"console\"`. Every pick changes the summary and the command.",
+          'Factory › Artifacts › New build, from `Kairos Console - Build Artifact.dc.html`: the six-step wizard (Base, System, Extensions, Access, Output, Review) with the live build summary beside it and the equivalent CLI at the end. Built from AppShell and Sidebar, PageHeader, WizardSteps, ChoiceCard and ChoiceGroup, FilterChip, Field and Input, Checkbox, Badge, SegmentedControl, Switch, Tile, Terminal and Button, in `data-variant="console"`. Every pick changes the summary and the command.',
       },
     },
   },
@@ -137,7 +137,17 @@ const initial: Build = {
   fips: false,
   trusted: true,
   insecure: false,
-  out: { iso: true, uki: true, netboot: false, rawDisk: false, cloudImage: false, gce: false, vhd: false, maas: false, tar: false },
+  out: {
+    iso: true,
+    uki: true,
+    netboot: false,
+    rawDisk: false,
+    cloudImage: false,
+    gce: false,
+    vhd: false,
+    maas: false,
+    tar: false,
+  },
 };
 
 type Row = { k: string; v: string; mono?: boolean; warn?: string };
@@ -146,7 +156,14 @@ function summaryOf(b: Build): { title: string; step: string; rows: Row[] }[] {
     .filter(([k]) => b.out[k])
     .map(([, l]) => l);
   return [
-    { title: "Base", step: "base", rows: [{ k: "Name", v: "retail-eu-hadron" }, { k: "Image", v: BASES[b.base][1], mono: true }] },
+    {
+      title: "Base",
+      step: "base",
+      rows: [
+        { k: "Name", v: "retail-eu-hadron" },
+        { k: "Image", v: BASES[b.base][1], mono: true },
+      ],
+    },
     {
       title: "System",
       step: "system",
@@ -161,17 +178,37 @@ function summaryOf(b: Build): { title: string; step: string; rows: Row[] }[] {
     {
       title: "Extensions",
       step: "extensions",
-      rows: [{ k: "Bake in", v: EXT.filter(([n]) => b.ext[n]).map(([n]) => n).join(", ") || "None" }],
+      rows: [
+        {
+          k: "Bake in",
+          v:
+            EXT.filter(([n]) => b.ext[n])
+              .map(([n]) => n)
+              .join(", ") || "None",
+        },
+      ],
     },
     {
       title: "Access",
       step: "access",
       rows: [
-        { k: "User", v: b.user === "custom" ? "Custom user · ops" : b.user === "default" ? "Default user · kairos" : "No user" },
+        {
+          k: "User",
+          v:
+            b.user === "custom"
+              ? "Custom user · ops"
+              : b.user === "default"
+                ? "Default user · kairos"
+                : "No user",
+        },
         { k: "SSH keys", v: "2 SSH keys" },
         { k: "Install", v: b.autoInstall ? "Auto-install on first boot" : "Manual install" },
         { k: "Register", v: b.register ? "Yes · retail-eu" : "No" },
-        { k: "Commands", v: b.preset, warn: b.preset === "Full" ? "destructive commands allowed" : undefined },
+        {
+          k: "Commands",
+          v: b.preset,
+          warn: b.preset === "Full" ? "destructive commands allowed" : undefined,
+        },
       ],
     },
     { title: "Output", step: "output", rows: [{ k: "Formats", v: outLabels.join(", ") || "None" }] },
@@ -181,7 +218,11 @@ function summaryOf(b: Build): { title: string; step: string; rows: Row[] }[] {
       rows: [
         { k: "FIPS", v: b.fips ? "Yes" : "No" },
         { k: "Trusted boot", v: b.trusted ? "Yes" : "No" },
-        { k: "Insecure registries", v: b.insecure ? "Yes" : "No", warn: b.insecure ? "insecure registries allowed" : undefined },
+        {
+          k: "Insecure registries",
+          v: b.insecure ? "Yes" : "No",
+          warn: b.insecure ? "insecure registries allowed" : undefined,
+        },
       ],
     },
   ];
@@ -200,19 +241,34 @@ function cliOf(b: Build): string[] {
   ];
 }
 
-function Summary({ build, onEdit, compact }: { build: Build; onEdit: (step: string) => void; compact?: boolean }) {
+function Summary({
+  build,
+  onEdit,
+  compact,
+}: {
+  build: Build;
+  onEdit: (step: string) => void;
+  compact?: boolean;
+}) {
   return (
     <>
       {summaryOf(build).map((s) => (
         <div key={s.title} className="flex flex-col gap-1">
           <div className="flex items-baseline justify-between">
             <span className="font-mono text-xs text-muted">{s.title}</span>
-            <Button variant="link" className={`h-auto p-0 font-bold ${compact ? "text-xs" : "text-[13px]"}`} onClick={() => onEdit(s.step)}>
+            <Button
+              variant="link"
+              className={`h-auto p-0 font-bold ${compact ? "text-xs" : "text-[13px]"}`}
+              onClick={() => onEdit(s.step)}
+            >
               Edit
             </Button>
           </div>
           {s.rows.map((r) => (
-            <div key={r.k} className={`grid gap-2 ${compact ? "grid-cols-[100px_1fr] text-[13px]" : "grid-cols-[120px_1fr] py-[3px] text-sm"}`}>
+            <div
+              key={r.k}
+              className={`grid gap-2 ${compact ? "grid-cols-[100px_1fr] text-[13px]" : "grid-cols-[120px_1fr] py-[3px] text-sm"}`}
+            >
               <span className="text-muted">{r.k}</span>
               <span className="flex flex-col gap-0.5">
                 <span className={`wrap-anywhere ${r.mono ? "font-mono text-xs" : ""}`}>{r.v}</span>
@@ -253,16 +309,31 @@ function BuildArtifactPage() {
               </Button>
             </span>
           </PageHeader>
-          <WizardSteps steps={STEPS} current={b.step} onStepChange={(id) => set({ step: id })} label="Build steps" />
+          <WizardSteps
+            steps={STEPS}
+            current={b.step}
+            onStepChange={(id) => set({ step: id })}
+            label="Build steps"
+          />
         </header>
 
         <div className="flex flex-wrap items-start gap-5 px-7 pt-3 pb-8">
           <main className="flex min-w-[320px] flex-1 flex-col gap-3.5 lg:min-w-[480px]">
             {b.step === "base" && (
               <Panel title="Image source" className="gap-4 p-[22px]">
-                <ChoiceGroup aria-label="Image source" className="sm:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+                <ChoiceGroup
+                  aria-label="Image source"
+                  className="sm:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]"
+                >
                   {SOURCES.map(([l, d], i) => (
-                    <ChoiceCard key={l} diamond title={l} description={d} selected={b.src === i} onSelect={() => set({ src: i })} />
+                    <ChoiceCard
+                      key={l}
+                      diamond
+                      title={l}
+                      description={d}
+                      selected={b.src === i}
+                      onSelect={() => set({ src: i })}
+                    />
                   ))}
                 </ChoiceGroup>
                 <div className="grid gap-3 sm:grid-cols-2">
@@ -288,25 +359,52 @@ function BuildArtifactPage() {
                 <Panel title="Architecture" className="p-[22px]">
                   <ChoiceGroup aria-label="Architecture">
                     {ARCH.map(([l, d], i) => (
-                      <ChoiceCard key={l} title={l} description={d} selected={b.arch === i} onSelect={() => set({ arch: i })} className="[&>span:first-child]:text-[17px]" />
+                      <ChoiceCard
+                        key={l}
+                        title={l}
+                        description={d}
+                        selected={b.arch === i}
+                        onSelect={() => set({ arch: i })}
+                        className="[&>span:first-child]:text-[17px]"
+                      />
                     ))}
                   </ChoiceGroup>
                 </Panel>
                 <Panel title="Model" className="p-[22px]">
-                  <ChoiceGroup aria-label="Model" className="sm:grid-cols-[repeat(auto-fit,minmax(150px,1fr))]">
+                  <ChoiceGroup
+                    aria-label="Model"
+                    className="sm:grid-cols-[repeat(auto-fit,minmax(150px,1fr))]"
+                  >
                     {MODELS.map((l, i) => (
-                      <ChoiceCard key={l} title={l} selected={b.model === i} onSelect={() => set({ model: i })} className="p-3 [&>span:first-child]:text-[15px]" />
+                      <ChoiceCard
+                        key={l}
+                        title={l}
+                        selected={b.model === i}
+                        onSelect={() => set({ model: i })}
+                        className="p-3 [&>span:first-child]:text-[15px]"
+                      />
                     ))}
                   </ChoiceGroup>
                 </Panel>
                 <Panel title="Variant and Kubernetes" className="p-[22px]">
                   <ChoiceGroup aria-label="Variant">
                     {VARIANTS.map(([l, d], i) => (
-                      <ChoiceCard key={l} title={l} description={d} selected={b.variant === i} onSelect={() => set({ variant: i })} className="[&>span:first-child]:text-[17px]" />
+                      <ChoiceCard
+                        key={l}
+                        title={l}
+                        description={d}
+                        selected={b.variant === i}
+                        onSelect={() => set({ variant: i })}
+                        className="[&>span:first-child]:text-[17px]"
+                      />
                     ))}
                   </ChoiceGroup>
                   {b.variant === 1 && (
-                    <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Kubernetes distribution">
+                    <div
+                      className="flex flex-wrap items-center gap-1.5"
+                      role="group"
+                      aria-label="Kubernetes distribution"
+                    >
                       {K8S.map((l, i) => (
                         <FilterChip key={l} selected={b.k8s === i} onSelect={() => set({ k8s: i })}>
                           {l}
@@ -321,9 +419,14 @@ function BuildArtifactPage() {
 
             {b.step === "extensions" && (
               <Panel title="Extensions" className="gap-3 p-[22px]">
-                <span className="text-[15px] text-sub">Bake into the image, or install after first boot.</span>
+                <span className="text-[15px] text-sub">
+                  Bake into the image, or install after first boot.
+                </span>
                 {EXT.map(([name, v, d, type]) => (
-                  <div key={name} className="grid grid-cols-[1fr_auto] items-center gap-3 rounded-base bg-inner p-3">
+                  <div
+                    key={name}
+                    className="grid grid-cols-[1fr_auto] items-center gap-3 rounded-base bg-inner p-3"
+                  >
                     <Checkbox
                       checked={b.ext[name]}
                       onChange={() => set({ ext: { ...b.ext, [name]: !b.ext[name] } })}
@@ -361,23 +464,52 @@ function BuildArtifactPage() {
                   </div>
                 </Panel>
                 <Panel title="Provisioning" className="p-[22px]">
-                  <Switch checked={b.autoInstall} onCheckedChange={(v) => set({ autoInstall: v })} label="Auto-install on first boot" description="No keyboard needed" />
-                  <Switch checked={b.register} onCheckedChange={(v) => set({ register: v })} label="Register with Fleet" description="Joins group retail-eu" />
+                  <Switch
+                    checked={b.autoInstall}
+                    onCheckedChange={(v) => set({ autoInstall: v })}
+                    label="Auto-install on first boot"
+                    description="No keyboard needed"
+                  />
+                  <Switch
+                    checked={b.register}
+                    onCheckedChange={(v) => set({ register: v })}
+                    label="Register with Fleet"
+                    description="Joins group retail-eu"
+                  />
                   <div className="flex flex-col gap-2">
                     <span className="text-sm font-semibold">Allowed commands</span>
                     <SegmentedControl<Build["preset"]>
                       aria-label="Allowed commands"
                       value={b.preset}
                       onChange={(preset) => set({ preset })}
-                      options={PRESETS.map(([value, hint]) => ({ value: value as Build["preset"], label: value, hint }))}
-                    fill
+                      options={PRESETS.map(([value, hint]) => ({
+                        value: value as Build["preset"],
+                        label: value,
+                        hint,
+                      }))}
+                      fill
                     />
                   </div>
                 </Panel>
                 <Panel title="Security" className="gap-3 p-[22px]">
-                  <Switch checked={b.trusted} onCheckedChange={(v) => set({ trusted: v })} label="Trusted boot" description="Signed UKI, TPM-sealed encryption" />
-                  <Switch checked={b.fips} onCheckedChange={(v) => set({ fips: v })} label="FIPS" description="FIPS 140 crypto modules" />
-                  <Switch checked={b.insecure} onCheckedChange={(v) => set({ insecure: v })} label="Allow insecure registries" description="Not recommended" />
+                  <Switch
+                    checked={b.trusted}
+                    onCheckedChange={(v) => set({ trusted: v })}
+                    label="Trusted boot"
+                    description="Signed UKI, TPM-sealed encryption"
+                  />
+                  <Switch
+                    checked={b.fips}
+                    onCheckedChange={(v) => set({ fips: v })}
+                    label="FIPS"
+                    description="FIPS 140 crypto modules"
+                  />
+                  <Switch
+                    checked={b.insecure}
+                    onCheckedChange={(v) => set({ insecure: v })}
+                    label="Allow insecure registries"
+                    description="Not recommended"
+                  />
                 </Panel>
               </>
             )}
@@ -385,7 +517,11 @@ function BuildArtifactPage() {
             {b.step === "output" &&
               OUT.map((g) => (
                 <Panel key={g.title} title={g.title} className="gap-3 p-[22px]">
-                  <ChoiceGroup multiple aria-label={g.title} className="sm:grid-cols-[repeat(auto-fit,minmax(170px,1fr))]">
+                  <ChoiceGroup
+                    multiple
+                    aria-label={g.title}
+                    className="sm:grid-cols-[repeat(auto-fit,minmax(170px,1fr))]"
+                  >
                     {g.items.map(([k, l, d]) => (
                       <ChoiceCard
                         key={k}
@@ -399,8 +535,18 @@ function BuildArtifactPage() {
                           b.out[k] ? (
                             <Tile size={20} tone={2} />
                           ) : (
-                            <svg width={20} height={13} viewBox="0 0 22 14" aria-hidden="true" className="shrink-0">
-                              <polygon points={tilePoints} className="fill-none stroke-muted" strokeWidth={1.5} />
+                            <svg
+                              width={20}
+                              height={13}
+                              viewBox="0 0 22 14"
+                              aria-hidden="true"
+                              className="shrink-0"
+                            >
+                              <polygon
+                                points={tilePoints}
+                                className="fill-none stroke-muted"
+                                strokeWidth={1.5}
+                              />
                             </svg>
                           )
                         }
@@ -421,7 +567,13 @@ function BuildArtifactPage() {
                     <Summary build={b} onEdit={(step) => set({ step })} />
                   </div>
                 </Panel>
-                <Terminal title="Equivalent CLI" copy lines={cliOf(b)} aria-label="Equivalent CLI" autoscroll={false} />
+                <Terminal
+                  title="Equivalent CLI"
+                  copy
+                  lines={cliOf(b)}
+                  aria-label="Equivalent CLI"
+                  autoscroll={false}
+                />
               </>
             )}
 

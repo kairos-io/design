@@ -1,22 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import {
-  BookOpen,
-  Download,
-  FolderTree,
-  KeyRound,
-  LayoutDashboard,
-  LogOut,
-  Package,
-  Puzzle,
-  Rocket,
-  Server,
-  ServerCog,
-  Settings,
-  type LucideIcon,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
 import { Button } from "../Button/Button.tsx";
-import { KairosLogo, KairosMark } from "../Logo/Logo.tsx";
+import { KairosMark } from "../Logo/Logo.tsx";
 import { PageHeader } from "../PageHeader/PageHeader.tsx";
 import { ThemeToggle } from "../ThemeToggle/ThemeToggle.tsx";
 import {
@@ -45,7 +31,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The navy application shell: a sidebar from md up (full at lg, an icon rail between md and lg, or the user's stored choice), and a top bar with a drawer below md. The pieces compose and carry no router: the host marks the active item and passes its own Link through `asChild`. `SidebarSteps` is the web installer's step rail.",
+          "The application shell of the Kairos console decks: a column on the side surface from md up (full at lg, an icon rail between md and lg, or the user's stored choice), and a top bar with a drawer below md. Section labels are mono; the active item sits on the raised tone with an accent tile before it and its count after it. The pieces compose and carry no router: the host marks the active item and passes its own Link through `asChild`. `SidebarSteps` is the installer's step rail.",
       },
     },
   },
@@ -54,39 +40,39 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-type NavItem = { to: string; icon: LucideIcon; label: string; external?: boolean };
+type NavItem = { to: string; label: string; count?: string; external?: boolean };
 const nav: { label?: string; items: NavItem[] }[] = [
-  { items: [{ to: "/", icon: LayoutDashboard, label: "Dashboard" }] },
+  { label: "Overview", items: [{ to: "/", label: "Dashboard" }] },
   {
     label: "Fleet",
     items: [
-      { to: "/nodes", icon: Server, label: "Nodes" },
-      { to: "/groups", icon: FolderTree, label: "Groups" },
+      { to: "/nodes", label: "Nodes", count: "1,284" },
+      { to: "/groups", label: "Groups", count: "18" },
     ],
   },
   {
-    label: "Build",
+    label: "Factory",
     items: [
-      { to: "/artifacts", icon: Package, label: "Artifacts" },
-      { to: "/extensions", icon: Puzzle, label: "Extensions" },
+      { to: "/artifacts", label: "Artifacts", count: "42" },
+      { to: "/extensions", label: "Extensions", count: "6" },
     ],
   },
   {
     label: "Deploy",
     items: [
-      { to: "/bmc", icon: ServerCog, label: "BMC Registration" },
-      { to: "/deployments", icon: Rocket, label: "Deployments" },
-      { to: "/import", icon: Download, label: "Import" },
+      { to: "/bmc", label: "BMC registration" },
+      { to: "/deployments", label: "Deployments", count: "3" },
+      { to: "/import", label: "Import" },
     ],
   },
   {
     label: "Admin",
     items: [
-      { to: "/certificates", icon: KeyRound, label: "Certificates" },
-      { to: "/settings", icon: Settings, label: "Settings" },
+      { to: "/certificates", label: "Certificates" },
+      { to: "/settings", label: "Settings" },
     ],
   },
-  { label: "Developer", items: [{ to: "/api/docs", icon: BookOpen, label: "API docs", external: true }] },
+  { label: "Developer", items: [{ to: "/api/docs", label: "API docs", external: true }] },
 ];
 
 function Nav({ active, onPick }: { active: string; onPick: (to: string) => void }) {
@@ -98,8 +84,8 @@ function Nav({ active, onPick }: { active: string; onPick: (to: string) => void 
             <SidebarItem
               key={item.to}
               href={item.to}
-              icon={item.icon}
               label={item.label}
+              count={item.count}
               active={item.to === active}
               external={item.external}
               onClick={(e) => {
@@ -115,11 +101,12 @@ function Nav({ active, onPick }: { active: string; onPick: (to: string) => void 
 }
 
 // The footer renders the full and the compact theme switch and lets the mode
-// classes show one, exactly as AuroraBoot's SidebarFooter does.
+// classes show one.
 function Footer() {
   const { mode } = useSidebar();
   return (
     <SidebarFooter>
+      <span className="block font-mono text-xs">platform.local · v4.3.0</span>
       {mode !== "rail" && (
         <div className={sidebarModeClasses.fullOnly[mode]}>
           <ThemeToggle />
@@ -131,10 +118,11 @@ function Footer() {
         </div>
       )}
       <Button
-        variant="on-navy"
+        variant="ghost"
+        size="sm"
         aria-label="Logout"
         title={mode === "full" ? undefined : "Logout"}
-        className={`w-full gap-3 ${sidebarModeClasses.linkLayout[mode]}`}
+        className={`-mx-2.5 w-[calc(100%+20px)] gap-3 ${sidebarModeClasses.linkLayout[mode]}`}
       >
         <LogOut className="h-4 w-4 shrink-0" />
         <span className={sidebarModeClasses.label[mode]}>Logout</span>
@@ -143,40 +131,46 @@ function Footer() {
   );
 }
 
+const title = (
+  <>
+    <b className="font-bold">Kairos</b> console
+  </>
+);
+
 function Shell({ initialMode = "auto" }: { initialMode?: SidebarMode }) {
   const [mode, setMode] = useState<SidebarMode>(initialMode);
   const [active, setActive] = useState("/nodes");
-  const logo = <KairosLogo variant="white" className="h-8 w-auto" />;
   return (
     <AppShell
-      logo={logo}
-      title="AuroraBoot"
+      logo={<KairosMark className="h-[26px] w-auto" />}
+      title={title}
       sidebar={
         <Sidebar mode={mode} onModeChange={setMode}>
           <SidebarHeader
-            logo={<KairosLogo variant="white" className="h-full w-auto" />}
-            railLogo={<KairosMark variant="white" className="h-full w-auto" />}
-            title="AuroraBoot"
+            logo={<KairosMark className="h-full w-auto" />}
+            railLogo={<KairosMark className="h-full w-auto" />}
+            title={title}
           />
-          <SidebarDivider />
           <Nav active={active} onPick={setActive} />
-          <SidebarDivider />
           <Footer />
         </Sidebar>
       }
       drawer={
         <>
           <Nav active={active} onPick={setActive} />
-          <SidebarDivider />
           <Footer />
         </>
       }
     >
-      <PageHeader title="Nodes" description="Every machine that has registered with this AuroraBoot.">
-        <Button variant="outline">Register token</Button>
-        <Button>Deploy</Button>
+      <PageHeader
+        eyebrow="fleet / nodes"
+        title="Nodes"
+        description="Every machine that has registered with this console."
+      >
+        <Button variant="outline">Build artifact</Button>
+        <Button>Roll out upgrade</Button>
       </PageHeader>
-      <div className="rounded-lg border bg-surface p-6 text-sm text-muted">
+      <div className="rounded-base bg-surface p-6 text-sm text-sub">
         Page content goes here. Resize the viewport: the sidebar becomes an icon rail below 1024px and a
         drawer below 768px.
       </div>
@@ -205,8 +199,12 @@ export const TopbarOnly: Story = {
   render: () => (
     <Topbar
       href="#"
-      logo={<KairosLogo variant="white" className="h-7 w-auto" decorative />}
-      title="Web Installer"
+      logo={<KairosMark className="h-[26px] w-auto" decorative />}
+      title={
+        <>
+          <b className="font-bold">Kairos</b> Installer
+        </>
+      }
       actions={<ThemeToggle compact />}
       className="rounded-base"
     />
@@ -221,21 +219,23 @@ const installerSteps: SidebarStep[] = [
   { id: "review", label: "Review and install", state: "pending" },
 ];
 
+const installerTitle = (
+  <>
+    <b className="font-bold">Kairos</b> Installer
+  </>
+);
+
 function Wizard() {
   const [current, setCurrent] = useState("network");
   const steps = <SidebarSteps steps={installerSteps} current={current} onStepChange={setCurrent} />;
   return (
     <AppShell
-      logo={<KairosLogo variant="white" className="h-7 w-auto" decorative />}
-      title="Web Installer"
+      logo={<KairosMark className="h-[26px] w-auto" decorative />}
+      title={installerTitle}
       className="h-[640px]"
       sidebar={
         <Sidebar mode="full">
-          <SidebarHeader
-            logo={<KairosLogo variant="white" className="h-full w-auto" />}
-            title="Web Installer"
-          />
-          <SidebarDivider />
+          <SidebarHeader logo={<KairosMark className="h-full w-auto" />} title={installerTitle} />
           {steps}
           <SidebarDivider />
           <SidebarFooter>
@@ -257,7 +257,7 @@ function Wizard() {
         title="Network"
         description="How this node reaches the registry and the rest of the cluster."
       />
-      <div className="rounded-lg border bg-surface p-6 text-sm text-muted">The step's form.</div>
+      <div className="rounded-base bg-surface p-6 text-sm text-sub">The step's form.</div>
     </AppShell>
   );
 }

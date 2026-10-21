@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { Steps, type StepItem } from "./Steps.tsx";
+import { WizardSteps } from "./WizardSteps.tsx";
 
 const install = (through: number, failed = false): StepItem[] =>
   [
@@ -25,7 +27,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The checklist beside a long operation: every step the agent will run, with the current one highlighted and the ones behind it ticked. Steps the agent skips are simply never reached. For a form split into pages use the wizard rail instead.",
+          "The checklist beside a long operation: every step the agent will run as a status diamond, the current one filled with the accent, the ones behind it healthy green, the ones ahead outlined. Steps the agent skips are simply never reached. For a form split into pages, WizardSteps is the horizontal rail of the build artifact deck.",
       },
     },
   },
@@ -43,8 +45,35 @@ export const Complete: Story = { args: { items: install(8) } };
 
 export const InACard: Story = {
   render: (args) => (
-    <section className="max-w-md rounded-lg border bg-surface p-6">
+    <section className="max-w-md rounded-base bg-surface p-6">
       <Steps {...args} />
     </section>
   ),
+};
+
+const wizard = [
+  { id: "base", label: "Base" },
+  { id: "system", label: "System" },
+  { id: "extensions", label: "Extensions" },
+  { id: "access", label: "Access" },
+  { id: "output", label: "Output" },
+  { id: "review", label: "Review" },
+];
+
+function WizardDemo() {
+  const [current, setCurrent] = useState("extensions");
+  return <WizardSteps steps={wizard} current={current} onStepChange={setCurrent} label="Build steps" />;
+}
+
+export const Wizard: Story = {
+  name: "WizardSteps",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The build wizard's rail: a tile bar per step, ink behind, the accent for the current step, the raised tone ahead. Every step is clickable, so a reader can go back to edit.",
+      },
+    },
+  },
+  render: () => <WizardDemo />,
 };

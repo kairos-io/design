@@ -20,7 +20,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Fleet › Nodes › edge-store-0143, from `Kairos Console - Node Detail.dc.html`: the health strip, live gauges for CPU, memory and temperature with sparklines, the disks as tile meters, the command history and the node's details, extensions and labels. Built from AppShell and Sidebar, PageHeader, StatusBadge, StatTile, Gauge, Sparkline, TileMeter, SegmentedControl, StatusDot, DescriptionList, Badge, Chip and Button, in `data-variant=\"console\"`. \"Show high load\" pushes the CPU over 85% and the gauges turn red, as the deck does.",
+          'Fleet › Nodes › edge-store-0143, from `Kairos Console - Node Detail.dc.html`: the health strip, live gauges for CPU, memory and temperature with sparklines, the disks as tile meters, the command history and the node\'s details, extensions and labels. Built from AppShell and Sidebar, PageHeader, StatusBadge, StatTile, Gauge, Sparkline, TileMeter, SegmentedControl, StatusDot, DescriptionList, Badge, Chip and Button, in `data-variant="console"`. "Show high load" pushes the CPU over 85% and the gauges turn red, as the deck does.',
       },
     },
   },
@@ -37,10 +37,22 @@ const disks = [
 ];
 
 const commands = [
-  { title: "Upgrade", detail: "image quay.io/kairos/hadron:v0.5.2-k3s · rollout r-0412", at: "20:44", tone: "success", outline: false },
+  {
+    title: "Upgrade",
+    detail: "image quay.io/kairos/hadron:v0.5.2-k3s · rollout r-0412",
+    at: "20:44",
+    tone: "success",
+    outline: false,
+  },
   { title: "Reboot", detail: "after upgrade", at: "20:45", tone: "success", outline: false },
   { title: "Run command", detail: "kubectl get nodes -o wide", at: "20:51", tone: "info", outline: true },
-  { title: "Apply config", detail: "cloud-config · 12 lines", at: "yesterday", tone: "danger", outline: false },
+  {
+    title: "Apply config",
+    detail: "cloud-config · 12 lines",
+    at: "yesterday",
+    tone: "danger",
+    outline: false,
+  },
   { title: "Upgrade recovery", detail: "hadron-v0.5.0", at: "3d", tone: "success", outline: false },
 ] as const;
 
@@ -76,7 +88,9 @@ function NodeDetailPage() {
   const cpuSeries = Array.from({ length: 30 }, (_, i) =>
     high ? (i < 20 ? 40 + Math.sin(i) * 8 : 88 + Math.sin(i) * 4) : 36 + Math.sin(i * 0.7 + tick) * 9,
   );
-  const memSeries = Array.from({ length: 30 }, (_, i) => (high ? Math.min(90, 60 + i) : 60 + Math.sin(i * 0.4) * 2));
+  const memSeries = Array.from({ length: 30 }, (_, i) =>
+    high ? Math.min(90, 60 + i) : 60 + Math.sin(i * 0.4) * 2,
+  );
   const shownCommands = commands.filter(
     (c) => commandFilter === "all" || (commandFilter === "running" ? c.outline : c.tone === "danger"),
   );
@@ -93,9 +107,7 @@ function NodeDetailPage() {
             { label: "retail-eu", href: "#" },
             { label: "edge-store-0143" },
           ]}
-          status={
-            <StatusBadge status="Online" />
-          }
+          status={<StatusBadge status="Online" />}
           meta={
             <>
               <span className="font-mono text-xs">10.40.12.143</span>
@@ -120,7 +132,10 @@ function NodeDetailPage() {
         </PageHeader>
 
         {high && (
-          <div role="alert" className="grid grid-cols-[18px_1fr] gap-2.5 rounded-base bg-warn-bg px-4 py-3 text-[15px]">
+          <div
+            role="alert"
+            className="grid grid-cols-[18px_1fr] gap-2.5 rounded-base bg-warn-bg px-4 py-3 text-[15px]"
+          >
             <StatusDot size={13} tone="warning" className="mt-1" />
             <span>
               <b>CPU above 85%</b> for the last 10 samples. Load {load1} on 8 vCPU.
@@ -161,7 +176,11 @@ function NodeDetailPage() {
                   <span>8 vCPU · x86_64</span>
                 </div>
               </div>
-              <Sparkline values={cpuSeries} tone={high ? "danger" : undefined} aria-label="CPU over the last minute" />
+              <Sparkline
+                values={cpuSeries}
+                tone={high ? "danger" : undefined}
+                aria-label="CPU over the last minute"
+              />
             </Meter>
             <Meter title="Memory">
               <div className="flex items-center gap-4">
@@ -173,7 +192,11 @@ function NodeDetailPage() {
                   <span>{(16 - (16 * mem) / 100).toFixed(1)} GiB available</span>
                 </div>
               </div>
-              <Sparkline values={memSeries} tone={high ? "warning" : undefined} aria-label="Memory over the last minute" />
+              <Sparkline
+                values={memSeries}
+                tone={high ? "warning" : undefined}
+                aria-label="Memory over the last minute"
+              />
             </Meter>
             <Meter title="Disk">
               {disks.map((d) => (
@@ -184,7 +207,11 @@ function NodeDetailPage() {
                       {d.used} / {d.total}
                     </span>
                   </div>
-                  <TileMeter value={d.p} aria-label={`${d.label} partition`} valueText={`${d.used} of ${d.total}`} />
+                  <TileMeter
+                    value={d.p}
+                    aria-label={`${d.label} partition`}
+                    valueText={`${d.used} of ${d.total}`}
+                  />
                 </div>
               ))}
             </Meter>
@@ -234,7 +261,10 @@ function NodeDetailPage() {
             />
             <ul className="m-0 list-none p-0">
               {shownCommands.map((c) => (
-                <li key={c.title + c.at} className="grid grid-cols-[16px_1fr_auto] items-start gap-3 border-t border-line py-2.5">
+                <li
+                  key={c.title + c.at}
+                  className="grid grid-cols-[16px_1fr_auto] items-start gap-3 border-t border-line py-2.5"
+                >
                   <StatusDot size={11} tone={c.tone} outline={c.outline} className="mt-1" />
                   <div className="flex min-w-0 flex-col gap-0.5">
                     <span className="text-[15px] font-bold">{c.title}</span>

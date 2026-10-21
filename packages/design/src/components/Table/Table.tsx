@@ -35,11 +35,7 @@ export const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tfoot
-    ref={ref}
-    className={cn("border-t bg-head font-semibold", className)}
-    {...props}
-  />
+  <tfoot ref={ref} className={cn("border-t bg-head font-semibold", className)} {...props} />
 ));
 TableFooter.displayName = "TableFooter";
 
@@ -89,6 +85,10 @@ export const TableCaption = React.forwardRef<
   HTMLTableCaptionElement,
   React.HTMLAttributes<HTMLTableCaptionElement>
 >(({ className, ...props }, ref) => (
-  <caption ref={ref} className={cn("px-4 py-3 text-left font-mono text-xs text-muted", className)} {...props} />
+  <caption
+    ref={ref}
+    className={cn("px-4 py-3 text-left font-mono text-xs text-muted", className)}
+    {...props}
+  />
 ));
 TableCaption.displayName = "TableCaption";

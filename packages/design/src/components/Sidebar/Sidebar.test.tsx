@@ -26,9 +26,22 @@ describe("Sidebar", () => {
     );
     const nodes = screen.getByRole("link", { name: "Nodes" });
     expect(nodes).toHaveAttribute("aria-current", "page");
-    expect(nodes.className).toContain("bg-accent");
+    expect(nodes.className).toContain("bg-raised");
     expect(screen.getByRole("link", { name: "Groups" })).not.toHaveAttribute("aria-current");
     expect(screen.getByRole("navigation", { name: "Main" })).toBeInTheDocument();
+  });
+
+  it("shows a count after the label and marks the active item with a tile", () => {
+    render(
+      <Sidebar mode="full">
+        <SidebarNav>
+          <SidebarItem href="/nodes" label="Nodes" count="1,284" active />
+        </SidebarNav>
+      </Sidebar>,
+    );
+    const link = screen.getByRole("link", { name: "Nodes" });
+    expect(link).toHaveTextContent("1,284");
+    expect(link.querySelector("svg polygon")?.getAttribute("class")).toContain("fill-accent");
   });
 
   it("hides labels on the rail but keeps them for assistive technology", () => {
@@ -98,9 +111,9 @@ describe("Sidebar", () => {
         onStepChange={onStepChange}
       />,
     );
-    expect(screen.getByRole("button", { name: "Network" })).toHaveAttribute("aria-current", "step");
-    expect(screen.getByRole("button", { name: "Review" })).toBeDisabled();
-    await userEvent.click(screen.getByRole("button", { name: "Device" }));
+    expect(screen.getByRole("button", { name: /Network/ })).toHaveAttribute("aria-current", "step");
+    expect(screen.getByRole("button", { name: /Review/ })).toBeDisabled();
+    await userEvent.click(screen.getByRole("button", { name: /Device/ }));
     expect(onStepChange).toHaveBeenCalledWith("a");
   });
 

@@ -24,7 +24,7 @@ describe("Table", () => {
     expect(screen.getAllByRole("columnheader")).toHaveLength(2);
     expect(screen.getByRole("cell", { name: "node-01" })).toBeInTheDocument();
     expect(screen.getByRole("row", { name: /node-01/ }).className).toContain(
-      "data-[state=selected]:bg-inner",
+      "data-[state=selected]:bg-hover",
     );
   });
 });

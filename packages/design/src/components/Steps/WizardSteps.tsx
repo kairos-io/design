@@ -22,9 +22,17 @@ export interface WizardStepsProps extends React.HTMLAttributes<HTMLElement> {
  */
 export const WizardSteps = React.forwardRef<HTMLElement, WizardStepsProps>(
   ({ steps, current, onStepChange, label = "Steps", className, ...props }, ref) => {
-    const at = Math.max(0, steps.findIndex((s) => s.id === current));
+    const at = Math.max(
+      0,
+      steps.findIndex((s) => s.id === current),
+    );
     return (
-      <nav ref={ref} aria-label={label} className={cn("flex gap-1 overflow-x-auto pb-0.5", className)} {...props}>
+      <nav
+        ref={ref}
+        aria-label={label}
+        className={cn("flex gap-1 overflow-x-auto pb-0.5", className)}
+        {...props}
+      >
         {steps.map((step, i) => {
           const done = i < at;
           const isCurrent = i === at;
@@ -46,7 +54,11 @@ export const WizardSteps = React.forwardRef<HTMLElement, WizardStepsProps>(
               <span
                 className={cn(
                   "flex items-center gap-2 text-[15px]",
-                  isCurrent ? "font-bold text-ink" : done ? "font-semibold text-ink" : "font-semibold text-muted",
+                  isCurrent
+                    ? "font-bold text-ink"
+                    : done
+                      ? "font-semibold text-ink"
+                      : "font-semibold text-muted",
                 )}
               >
                 <span className="font-mono text-xs">{done ? "✓" : String(i + 1).padStart(2, "0")}</span>

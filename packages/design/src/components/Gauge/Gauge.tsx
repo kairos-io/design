@@ -12,7 +12,11 @@ export const GAUGE_WARNING_PERCENT = 70;
 export const GAUGE_DANGER_PERCENT = 85;
 
 /** The tone of a percentage against the gauge thresholds: danger from 85, warning from 70. */
-export function gaugeTone(percent: number, warnAt = GAUGE_WARNING_PERCENT, dangerAt = GAUGE_DANGER_PERCENT): Tone {
+export function gaugeTone(
+  percent: number,
+  warnAt = GAUGE_WARNING_PERCENT,
+  dangerAt = GAUGE_DANGER_PERCENT,
+): Tone {
   if (percent >= dangerAt) return "danger";
   if (percent >= warnAt) return "warning";
   return "success";
@@ -75,7 +79,12 @@ export const Gauge = React.forwardRef<SVGSVGElement, GaugeProps>(
       const a = ((a0 + (span * (i + 0.5)) / segments) * Math.PI) / 180;
       const w = ((span / segments) * 0.62 * Math.PI) / 180;
       const p = (ang: number, rr: number) => `${c + rr * Math.cos(ang)},${c + rr * Math.sin(ang)}`;
-      const points = [p(a - w / 2, r - 7), p(a + w / 2 + 0.02, r - 7), p(a + w / 2, r + 7), p(a - w / 2 - 0.02, r + 7)].join(" ");
+      const points = [
+        p(a - w / 2, r - 7),
+        p(a + w / 2 + 0.02, r - 7),
+        p(a + w / 2, r + 7),
+        p(a - w / 2 - 0.02, r + 7),
+      ].join(" ");
       const on = i < lit;
       const third = Math.min(2, Math.floor((i / segments) * 3)) as 0 | 1 | 2;
       polys.push(
@@ -196,10 +205,18 @@ export const TileMeter = React.forwardRef<HTMLDivElement, TileMeterProps>(
         {...props}
       >
         {Array.from({ length: count }, (_, i) => (
-          <svg key={i} viewBox="0 0 22 14" preserveAspectRatio="none" className="h-2.5 min-w-0 flex-1" aria-hidden="true">
+          <svg
+            key={i}
+            viewBox="0 0 22 14"
+            preserveAspectRatio="none"
+            className="h-2.5 min-w-0 flex-1"
+            aria-hidden="true"
+          >
             <polygon
               points={tilePoints}
-              fill={i < lit ? (hot ? toneVar[tone] : tilePalettes.kairos[(i % 3) as 0 | 1 | 2]) : "var(--raised)"}
+              fill={
+                i < lit ? (hot ? toneVar[tone] : tilePalettes.kairos[(i % 3) as 0 | 1 | 2]) : "var(--raised)"
+              }
             />
           </svg>
         ))}
