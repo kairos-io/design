@@ -8,9 +8,14 @@ name: Publish to GitHub Pages
 # Source: GitHub Actions. To publish a branch, allow it on the github-pages
 # environment (Settings > Environments) and run this workflow on it.
 
+# A push to main publishes only once its "Design package" run is green, so a
+# red main never reaches the site. A run started by hand publishes the ref it
+# is run on as it is.
 on:
-  push:
+  workflow_run:
+    workflows: ["Design package"]
     branches: [main]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -24,12 +29,17 @@ concurrency:
 
 jobs:
   deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+        with:
+          # workflow_run runs against the default branch, so take the commit
+          # that CI actually checked.
+          ref: ${{ github.event.workflow_run.head_sha || github.ref }}
       - uses: actions/setup-node@v7
         with:
           node-version: 22

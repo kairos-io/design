@@ -7,9 +7,17 @@ name: Release
 # secret. It works after a maintainer has, by hand, published the first version
 # from a terminal and added a trusted publisher on the package's npm settings
 # page (organisation kairos-io, repository design, workflow file release.yml,
-# with `npm publish` allowed). Until then the publish job fails at `npm publish`;
-# the GitHub release with the tarball is still made, so the version can be
-# installed from it in the meantime.
+# with `npm publish` allowed).
+#
+# While packages/design/package.json carries `"private": true` the package
+# cannot go to the registry at all, so the publish job is skipped rather than
+# left to fail at `npm publish` with EPRIVATE. The GitHub release with the
+# tarball is still made, so the version can be installed from it in the
+# meantime; once the private flag is dropped, a failed publish holds the
+# release back, because github-release waits for publish.
+#
+# What verify checks is what gets published: the publish job takes the tarball
+# verify packed and uploaded, instead of building the tree a second time.
 #
 # A run started by hand (workflow_dispatch) is a dry run: it builds, checks and
 # packs, and never publishes.
@@ -32,8 +40,10 @@ jobs:
     defaults:
       run:
         working-directory: packages/design
+    outputs:
+      private: ${{ steps.manifest.outputs.private }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
       - uses: actions/setup-node@v7
@@ -43,6 +53,8 @@ jobs:
           cache-dependency-path: packages/design/package-lock.json
       - run: npm ci --no-audit --no-fund
       - run: npm run check:tokens
+      - run: npm run lint
+      - run: npm run typecheck
       - run: npm test
       - run: npm run build
       - name: Tag matches the package version
@@ -55,6 +67,14 @@ jobs:
             echo "Tag $TAG does not match packages/design/package.json version $version" >&2
             exit 1
           fi
+      - name: Can the package go to the registry?
+        id: manifest
+        run: |
+          private=$(node -p "require('./package.json').private === true")
+          echo "private=$private" >> "$GITHUB_OUTPUT"
+          if [ "$private" = "true" ]; then
+            echo "::notice::packages/design/package.json is private; the publish job will be skipped."
+          fi
       - name: Pack
         run: npm pack
       - uses: actions/upload-artifact@v7
@@ -63,15 +83,43 @@ jobs:
           path: packages/design/kairos-io-design-*.tgz
           retention-days: 14
 
+  publish:
+    name: Publish to npm
+    needs: verify
+    # A manual run can pick a tag as its ref, so check the event, not only the ref.
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && needs.verify.outputs.private != 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # npm trusted publishing and provenance
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      # Trusted publishing needs npm 11.5.1 or newer. Node 24 ships it.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - uses: actions/download-artifact@v7
+        with:
+          name: package
+      - name: Publish the tarball verify packed
+        run: |
+          tarball=$(ls kairos-io-design-*.tgz)
+          npm publish "$tarball" --provenance --access public
+
   github-release:
     name: GitHub release with the tarball
-    needs: verify
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [verify, publish]
+    # Runs when publish succeeded or was skipped because the package is private,
+    # never when it failed: no release for a version that npm rejected.
+    if: ${{ !cancelled() && !failure() && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
       - uses: actions/download-artifact@v7
@@ -81,30 +129,3 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-from-tag --verify-tag kairos-io-design-*.tgz
-
-  publish:
-    name: Publish to npm
-    needs: verify
-    # A manual run can pick a tag as its ref, so check the event, not only the ref.
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write # npm trusted publishing and provenance
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      # Trusted publishing needs npm 11.5.1 or newer. Node 24 ships it.
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 24
-          registry-url: https://registry.npmjs.org
-      - name: Build
-        working-directory: packages/design
-        run: |
-          npm ci --no-audit --no-fund
-          npm run build
-      - name: Publish
-        working-directory: packages/design
-        run: npm publish --provenance --access public
