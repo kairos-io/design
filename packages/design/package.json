@@ -30,6 +30,7 @@
   ],
   "files": [
     "dist",
+    "LICENSE",
     "tokens.json",
     "tokens.css",
     "tailwind.css"
@@ -42,11 +43,13 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./tokens": {
       "types": "./dist/tokens.d.ts",
-      "import": "./dist/tokens.js"
+      "import": "./dist/tokens.js",
+      "default": "./dist/tokens.js"
     },
     "./tokens.json": "./tokens.json",
     "./tokens.css": "./tokens.css",
@@ -65,7 +68,7 @@
     "build:js": "tsdown",
     "build:css": "node scripts/build-css.ts",
     "build": "npm run build:tokens && npm run build:js && npm run build:css",
-    "check:tokens": "node scripts/check.cjs && node scripts/build-logos.ts && git diff --exit-code -- src/components/Logo/logos.generated.ts",
+    "check:tokens": "node scripts/check.cjs && node scripts/build-logos.ts && node scripts/build-patterns.ts && git diff --exit-code -- src/components/Logo/logos.generated.ts src/assets/patterns",
     "dev": "storybook dev -p 6006",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
@@ -84,6 +87,14 @@
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.2.0",

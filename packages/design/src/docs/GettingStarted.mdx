@@ -18,10 +18,10 @@ Before that, or to try a branch, install the packed tarball that every Pages bui
 npm install https://kairos-io.github.io/design/packages/design/kairos-io-design.tgz
 ```
 
-Each GitHub release of a `vX.Y.Z` tag also carries the tarball as an asset, pinned to that version:
+Each GitHub release of a `vX.Y.Z` tag also carries the tarball as an asset, pinned to that version. There are no releases yet, so this is the shape, not a URL that resolves today:
 
 ```sh
-npm install https://github.com/kairos-io/design/releases/download/v0.1.0/kairos-io-design-0.1.0.tgz
+npm install https://github.com/kairos-io/design/releases/download/vX.Y.Z/kairos-io-design-X.Y.Z.tgz
 ```
 
 The package is ESM only. Vite, Docusaurus, Next and every other bundler resolve it; a CommonJS script would need a dynamic `import()`. React 18 or 19 is a peer dependency for the components; the stylesheets need nothing.

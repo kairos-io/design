@@ -39,7 +39,9 @@ describe("TileBar with a current step", () => {
   });
 
   it("loops the assemble on the tile at done, over a rest tile under every cell, in a padded box", () => {
-    const { container, rerender } = render(<TileBar total={8} done={3} current aria-label="Install" />);
+    const { container, rerender } = render(
+      <TileBar total={8} done={3} current aria-label="Install" enter="assemble" />,
+    );
     const bar = screen.getByRole("progressbar", { name: "Install" });
     expect(bar).toHaveAttribute("aria-valuenow", "3");
     expect(bar).toHaveAttribute("aria-valuetext", "3 of 8");
@@ -67,17 +69,17 @@ describe("TileBar with a current step", () => {
       "var(--kairos-light)",
     ]);
     // A number picks the running tile; false runs none, but the bar still steps.
-    rerender(<TileBar total={8} done={3} current={5} />);
+    rerender(<TileBar total={8} done={3} current={5} enter="assemble" />);
     expect(face(tiles(container)[3])).toBeNull();
     expect(face(tiles(container)[5])).toHaveClass("tile-loop-assemble");
-    rerender(<TileBar total={8} done={3} current={false} />);
+    rerender(<TileBar total={8} done={3} current={false} enter="assemble" />);
     expect(container.querySelectorAll(".tile-loop-assemble")).toHaveLength(0);
     expect(rests(container)).toHaveLength(8);
     expect(screen.getByRole("progressbar")).not.toHaveAttribute("aria-busy");
   });
 
-  it("unfolds when asked, the tile standing up from its bottom right corner", () => {
-    const { container } = render(<TileBar total={4} done={1} current enter="unfold" />);
+  it("unfolds by default, the tile standing up from its bottom right corner", () => {
+    const { container } = render(<TileBar total={4} done={1} current />);
     const running = face(tiles(container)[1])!;
     expect(running).toHaveClass("tile-loop-unfold");
     expect(prop(running, "--tile-vx")).toBe("15px");
@@ -88,10 +90,10 @@ describe("TileBar with a current step", () => {
 
   it("brings in only the tiles that have just become done, left to right, then rests clean", () => {
     vi.useFakeTimers();
-    const { container, rerender } = render(<TileBar total={8} done={3} current />);
+    const { container, rerender } = render(<TileBar total={8} done={3} current enter="assemble" />);
     // Mounting at 3 of 8 moves nothing: those three were done already.
     expect(container.querySelectorAll(".tile-step-assemble")).toHaveLength(0);
-    rerender(<TileBar total={8} done={4} current />);
+    rerender(<TileBar total={8} done={4} current enter="assemble" />);
     let landing = Array.from(container.querySelectorAll(".tile-step-assemble"));
     expect(landing).toHaveLength(1);
     expect(landing[0]).toBe(face(tiles(container)[3]));
@@ -109,7 +111,7 @@ describe("TileBar with a current step", () => {
     expect(container.querySelectorAll(".tile-step-assemble")).toHaveLength(0);
     expect(container.querySelectorAll(".tile-loop-assemble")).toHaveLength(1);
     // Two at once come in a step apart, the left one first.
-    rerender(<TileBar total={8} done={6} current />);
+    rerender(<TileBar total={8} done={6} current enter="assemble" />);
     landing = Array.from(container.querySelectorAll(".tile-step-assemble"));
     expect(landing).toHaveLength(2);
     expect(landing.map(delay)).toEqual([0, 60]);
@@ -118,15 +120,15 @@ describe("TileBar with a current step", () => {
     });
     expect(container.querySelectorAll(".tile-step-assemble")).toHaveLength(0);
     // Going back moves nothing; the last tile done shows nothing running.
-    rerender(<TileBar total={8} done={2} current />);
+    rerender(<TileBar total={8} done={2} current enter="assemble" />);
     expect(container.querySelectorAll(".tile-step-assemble")).toHaveLength(0);
-    rerender(<TileBar total={8} done={8} current />);
+    rerender(<TileBar total={8} done={8} current enter="assemble" />);
     expect(container.querySelectorAll(".tile-loop-assemble")).toHaveLength(0);
     expect(screen.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "8");
   });
 
   it("is indeterminate with current and no done: the loop travels the bar as a wave", () => {
-    const { container } = render(<TileBar total={12} current aria-label="Build" />);
+    const { container } = render(<TileBar total={12} current aria-label="Build" enter="assemble" />);
     const bar = screen.getByRole("progressbar", { name: "Build" });
     expect(bar).not.toHaveAttribute("aria-valuenow");
     expect(bar).not.toHaveAttribute("aria-valuetext");
@@ -142,11 +144,11 @@ describe("TileBar with a current step", () => {
 
   it("stands still under reduced motion: the running tile at half strength, the wave not at all", () => {
     stubReducedMotion(true);
-    const { container, rerender } = render(<TileBar total={8} done={3} current />);
+    const { container, rerender } = render(<TileBar total={8} done={3} current enter="assemble" />);
     expect(container.querySelectorAll("[class^='tile-']")).toHaveLength(0);
     expect(face(tiles(container)[3])).toHaveAttribute("fill-opacity", "0.5");
     expect(face(tiles(container)[2])).not.toHaveAttribute("fill-opacity");
-    rerender(<TileBar total={8} done={4} current />);
+    rerender(<TileBar total={8} done={4} current enter="assemble" />);
     expect(container.querySelectorAll("[class^='tile-']")).toHaveLength(0);
     expect(face(tiles(container)[3])).not.toHaveAttribute("fill-opacity");
     rerender(<TileBar total={8} current />);

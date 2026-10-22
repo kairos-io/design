@@ -9,5 +9,5 @@ export { Tile, type TileProps } from "./Tile.tsx";
 export { TileBar, type TileBarProps } from "./TileBar.tsx";
 export { TileLoader, type TileLoaderProps } from "./TileLoader.tsx";
 export { TileRing, tileRingFrame, type TileRingMode, type TileRingProps } from "./TileRing.tsx";
-export type { TileLoop } from "./loop.ts";
+export type { TileExit, TileLoop } from "./loop.ts";
 export { TileMarker, type TileMarkerProps } from "./TileMarker.tsx";

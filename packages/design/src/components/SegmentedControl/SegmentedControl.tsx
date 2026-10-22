@@ -57,6 +57,10 @@ function SegmentedControlInner<T extends string>(
   };
 
   const hasSelected = options.some((o) => o.value === value && !o.disabled);
+  // With nothing chosen the group needs exactly one tab stop, and a disabled
+  // option is not one: a disabled first option would leave the group
+  // unreachable by keyboard. -1 when every option is disabled, which is right.
+  const firstEnabled = options.findIndex((o) => !o.disabled);
 
   return (
     <div
@@ -71,7 +75,7 @@ function SegmentedControlInner<T extends string>(
     >
       {options.map((o, i) => {
         const selected = o.value === value;
-        const focusable = selected || (!hasSelected && i === 0);
+        const focusable = selected || (!hasSelected && i === firstEnabled);
         const hintId = o.hint ? `${id}-${i}-hint` : undefined;
         return (
           <button
@@ -82,7 +86,7 @@ function SegmentedControlInner<T extends string>(
             type="button"
             role="radio"
             aria-checked={selected}
-            aria-label={o.label}
+            aria-label={o.code ? `${o.code} ${o.label}` : o.label}
             aria-describedby={hintId}
             disabled={o.disabled}
             tabIndex={focusable ? 0 : -1}

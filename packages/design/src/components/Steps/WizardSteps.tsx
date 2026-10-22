@@ -23,10 +23,12 @@ export interface WizardStepsProps extends React.HTMLAttributes<HTMLElement> {
  */
 export const WizardSteps = React.forwardRef<HTMLElement, WizardStepsProps>(
   ({ steps, current, onStepChange, label = "Steps", className, ...props }, ref) => {
-    const at = Math.max(
-      0,
-      steps.findIndex((s) => s.id === current),
-    );
+    // -1 when `current` names no step: then no step is done and none is
+    // current, rather than the first step claiming to be where the user is.
+    const at = steps.findIndex((s) => s.id === current);
+    // A rail with no onStepChange is a read-out of where the wizard is, not a
+    // control: it takes no tab stops, because there is nothing to activate.
+    const picks = Boolean(onStepChange);
     return (
       <nav
         ref={ref}
@@ -39,17 +41,20 @@ export const WizardSteps = React.forwardRef<HTMLElement, WizardStepsProps>(
         {steps.map((step, i) => {
           const done = i < at;
           const isCurrent = i === at;
+          const Step = picks ? "button" : "div";
           return (
-            <button
+            <Step
               key={step.id}
-              type="button"
+              {...(picks ? { type: "button" as const, onClick: () => onStepChange?.(step.id) } : {})}
               aria-current={isCurrent ? "step" : undefined}
               data-state={done ? "done" : isCurrent ? "active" : "pending"}
-              onClick={() => onStepChange?.(step.id)}
               // Positioned, so the sr-only state text (absolute, 1px wide) is
               // placed inside this scroll container: unpositioned, it would sit
               // in the page's own overflow and give a phone a horizontal scroll.
-              className={`relative flex min-w-[120px] flex-1 cursor-pointer flex-col gap-2 rounded-base px-1 py-2.5 text-left ${focusRing}`}
+              className={cn(
+                "relative flex min-w-[120px] flex-1 flex-col gap-2 rounded-base px-1 py-2.5 text-left",
+                picks && `cursor-pointer ${focusRing}`,
+              )}
             >
               <svg viewBox="0 0 220 10" preserveAspectRatio="none" className="h-2 w-full" aria-hidden="true">
                 <polygon
@@ -71,7 +76,7 @@ export const WizardSteps = React.forwardRef<HTMLElement, WizardStepsProps>(
                 {step.label}
                 <span className="sr-only">{done ? ", done" : isCurrent ? ", current" : ", not started"}</span>
               </span>
-            </button>
+            </Step>
           );
         })}
       </nav>

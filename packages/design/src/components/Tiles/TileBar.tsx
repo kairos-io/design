@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn.ts";
+import { useMergedRef } from "../../hooks/useMergedRef.ts";
 import { parsePoints } from "../../lib/mark.ts";
 import { tilePalettes, tilePoints, type TileTone } from "../../lib/tiles.ts";
 import type { PaletteProp } from "./shared.ts";
@@ -8,6 +9,7 @@ import {
   ENTER_DURATION,
   LOOP_DURATION,
   REACH,
+  RESOLVE_CLASS,
   STATUS_LABEL,
   WAVE_TILES,
   cycleClass,
@@ -15,6 +17,7 @@ import {
   framePad,
   useReducedMotion,
   useSettle,
+  type TileExit,
   type TileLoop,
   type TileStatus,
 } from "./loop.ts";
@@ -33,7 +36,6 @@ const BAR_VERTEX = 2;
 const BAR_REACH = Math.round(REACH * 14 * 100) / 100;
 const BAR_PAD = framePad(BAR_REACH, 0);
 const WAVE_STEP = LOOP_DURATION / WAVE_TILES;
-const RUNNING_FACE = [{ delay: 0 }];
 
 export interface TileBarProps extends React.HTMLAttributes<HTMLDivElement>, PaletteProp {
   /** Tiles in the bar: one per node, step or stage. */
@@ -55,17 +57,26 @@ export interface TileBarProps extends React.HTMLAttributes<HTMLDivElement>, Pale
    * tiles alone. A proposal on top of the deck.
    */
   current?: boolean | number;
-  /** The motion a tile makes: "assemble" (default), arriving along its own line, or "unfold", standing up from its bottom edge. */
+  /** The motion a tile makes: "unfold" (default, the system's motion), standing up from its bottom edge, or "assemble", arriving along its own line. */
   enter?: TileLoop;
   /**
-   * "loading" (default) runs the current step. "success" lets the running
-   * tile reach its next quiet moment, then every done tile crossfades to
-   * the success greens left to right and the running tile comes into place
-   * in them, and the bar rests green up to and including that step (set
-   * `done` to `total` for a complete green bar); "error" the same in the
-   * recovery reds. An indeterminate bar crossfades every tile. `onSettled`
-   * fires once the last tile has landed. Under prefers-reduced-motion the
-   * tiles simply turn.
+   * How the running tile leaves between loops: "disassemble" (default),
+   * the way it came, or "vanish", gone in one frame after one entrance at
+   * rest, its rest tile still there, and in again after one entrance; an
+   * indeterminate bar's wave does the same tile by tile.
+   */
+  exit?: TileExit;
+  /**
+   * "loading" (default) runs the current step. "success" stops the loop in
+   * the same frame: every done tile crossfades to the success greens over
+   * the fast token, a step apart left to right, and the running tile
+   * completes to its place from wherever it is over the base token (a
+   * transition, nothing jumps back) and turns green as it lands, so the bar
+   * rests green up to and including that step within about a third of a
+   * second (set `done` to `total` for a complete green bar); "error" the
+   * same in the recovery reds. An indeterminate bar turns every tile.
+   * `onSettled` fires once the last tile has turned. Under
+   * prefers-reduced-motion the tiles simply turn.
    */
   status?: TileStatus;
   /** Called once, when a "success" or "error" has landed and the bar is at rest. */
@@ -86,7 +97,8 @@ export const TileBar = React.forwardRef<HTMLDivElement, TileBarProps>(
       total,
       done,
       current,
-      enter = "assemble",
+      enter = "unfold",
+      exit = "disassemble",
       status = "loading",
       onSettled,
       size = 16,
@@ -108,6 +120,8 @@ export const TileBar = React.forwardRef<HTMLDivElement, TileBarProps>(
           ? filled
           : current;
     const reduced = useReducedMotion();
+    const root = React.useRef<HTMLDivElement | null>(null);
+    const setRefs = useMergedRef(root, ref);
     const tones = tilePalettes[palette];
 
     // The entrance runs on the tiles that have just become done, and only
@@ -117,81 +131,68 @@ export const TileBar = React.forwardRef<HTMLDivElement, TileBarProps>(
     // stagger, so the resting bar carries no motion class. Nothing moves
     // while stepping is off (the fill transition of the plain bar stays) or
     // under reduced motion.
-    const [landing, setLanding] = React.useState<Landing>(null);
+    const [landingDone, setLandingDone] = React.useState<Landing>(null);
     const previous = React.useRef(filled);
     React.useEffect(() => {
       const from = previous.current;
       previous.current = filled;
       if (!stepping || reduced || filled <= from) return;
-      setLanding({ from, to: filled });
+      setLandingDone({ from, to: filled });
       const timer = window.setTimeout(
-        () => setLanding(null),
+        () => setLandingDone(null),
         ENTER_DURATION + (filled - from - 1) * BAR_STEP,
       );
       return () => window.clearTimeout(timer);
     }, [filled, stepping, reduced]);
 
-    // The status: the running tile's loop reaches its quiet moment, then the
-    // status faces land: the done tiles crossfade left to right and the
-    // running one comes into place last; an indeterminate bar crossfades
-    // every tile. Those that land are the tiles up to `last`.
+    // The status: the tiles up to `last` turn, left to right; the running
+    // one completes to its place first if it was on its way.
     const last = indeterminate ? total - 1 : running >= 0 ? running : filled - 1;
-    const settle = useSettle({
-      status,
-      reduced,
-      faces: running >= 0 && !indeterminate ? RUNNING_FACE : [],
-      cycle: "loop",
-      landing: (last + 1) * BAR_STEP + ENTER_DURATION,
-      onSettled,
-    });
+    const keys = React.useMemo(() => Array.from({ length: last + 1 }, (_, i) => String(i)), [last]);
+    const settle = useSettle({ status, reduced, root, keys, onSettled });
     const looping = status === "loading" || settle.phase === "looping";
+    const landing = settle.phase === "landing";
     const landed = status !== "loading" && settle.phase !== "looping";
     const statusTones = landed ? tilePalettes[status as "success" | "error"] : null;
 
     const vars = React.useMemo(() => faceVars(enter, BAR_POINTS, BAR_VERTEX, BAR_REACH), [enter]);
 
     // The face a tile shows in a stepping bar, over its rest tile: done,
-    // coming in if it just became done; running, looping; or none.
+    // coming in if it just became done; running, looping; or none. Once a
+    // status has landed, every face up to `last` stands on its tile.
     const face = (i: number): React.SVGAttributes<SVGPolygonElement> | null => {
       const tone = (i % 3) as TileTone;
-      const base = { points: tilePoints, fill: tones[tone] };
+      const base = { points: tilePoints, fill: tones[tone], "data-face": String(i) };
+      if (landed) return i > last ? null : landing ? { ...base, className: RESOLVE_CLASS } : base;
       if (i < filled) {
-        if (!landing || i < landing.from || i >= landing.to) return base;
+        if (!landingDone || i < landingDone.from || i >= landingDone.to) return base;
         return {
           ...base,
           className: cycleClass("step", enter),
-          style: { "--tile-delay": `${(i - landing.from) * BAR_STEP}ms`, ...vars } as React.CSSProperties,
+          style: { "--tile-delay": `${(i - landingDone.from) * BAR_STEP}ms`, ...vars } as React.CSSProperties,
         };
       }
       if (i !== running && !indeterminate) return null;
-      if (landed) return i === running && settle.away[0] ? null : indeterminate ? null : base;
       if (reduced) return indeterminate ? null : { ...base, fillOpacity: 0.5 };
       if (!looping) return base;
       return {
         ...base,
-        className: cycleClass("loop", enter),
+        className: cycleClass("loop", enter, exit),
         style: {
           "--tile-delay": `${Math.round(indeterminate ? i * WAVE_STEP : 0)}ms`,
           ...vars,
         } as React.CSSProperties,
       };
     };
-    // The status face over a tile, while landing and after.
+    // The status face over a tile, fading in while landing, and after.
     const statusFace = (i: number): React.SVGAttributes<SVGPolygonElement> | null => {
       if (!statusTones || i > last) return null;
       const base = { points: tilePoints, fill: statusTones[(i % 3) as TileTone], "data-status-face": "" };
-      if (settle.phase !== "landing") return base;
-      if (i === running) {
-        return {
-          ...base,
-          className: cycleClass("step", enter),
-          style: { "--tile-delay": `${i * BAR_STEP}ms`, ...vars } as React.CSSProperties,
-        };
-      }
+      if (!landing) return base;
       return {
         ...base,
         className: "tile-settle",
-        style: { "--tile-delay": `${i * BAR_STEP}ms` } as React.CSSProperties,
+        style: { "--tile-delay": `${settle.delays[i]}ms` } as React.CSSProperties,
       };
     };
 
@@ -203,7 +204,7 @@ export const TileBar = React.forwardRef<HTMLDivElement, TileBarProps>(
 
     return (
       <div
-        ref={ref}
+        ref={setRefs}
         role="progressbar"
         aria-label={label}
         aria-valuemin={0}
@@ -213,6 +214,7 @@ export const TileBar = React.forwardRef<HTMLDivElement, TileBarProps>(
         aria-busy={status === "loading" && (indeterminate || running >= 0) ? true : undefined}
         data-current={running >= 0 ? running : indeterminate ? "" : undefined}
         data-enter={stepping ? enter : undefined}
+        data-exit={stepping ? exit : undefined}
         data-status={stepping ? status : undefined}
         className={cn("flex flex-wrap gap-1", className)}
         {...props}

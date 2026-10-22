@@ -13,6 +13,7 @@ export {
   type TileBarProps,
   type TileBias,
   type TileEnter,
+  type TileExit,
   type TileFade,
   type TileFieldProps,
   type TileIdle,

@@ -18,10 +18,10 @@ Until then, or to try a branch, every Pages build of this repository serves the 
 npm install https://kairos-io.github.io/design/packages/design/kairos-io-design.tgz
 ```
 
-Each GitHub release of a `vX.Y.Z` tag also carries the tarball as an asset, pinned to that version:
+Each GitHub release of a `vX.Y.Z` tag also carries the tarball as an asset, pinned to that version. There are no releases yet, so this is the shape, not a URL that resolves today:
 
 ```sh
-npm install https://github.com/kairos-io/design/releases/download/v0.1.0/kairos-io-design-0.1.0.tgz
+npm install https://github.com/kairos-io/design/releases/download/vX.Y.Z/kairos-io-design-X.Y.Z.tgz
 ```
 
 ESM only. React 18 or 19 is a peer dependency for the components. The stylesheets have no dependencies. From a checkout of this repository, the CSS files can be used by relative path (`./packages/design/tokens.css`) with no install at all.
@@ -146,6 +146,8 @@ npm run build            # tokens, logos and patterns, then dist/ (JS, types, CS
 npm run build-storybook  # storybook-static/
 ```
 
+The toolbar switches the theme (light, dark), the brand (Kairos, Hadron) and **Motion** (0.25x, 0.5x, 1x, 2x, off), which sets `--duration-scale` on the preview root so every duration token, and so every transition, entrance and tile loop, runs at that speed while a piece of motion is inspected; "off" pins it at zero. `prefers-reduced-motion` still zeroes the durations outright, whatever the scale. A host has the same control through `setMotionScale()` and `getMotionScale()`.
+
 The dev server listens on every interface, so another device on the LAN or the tailnet opens it by IP (`http://192.168.1.10:6006`). A hostname has to be allowed as well: `.ts.net`, `.local`, `.lan`, `.home.arpa` and `.internal` names are, `STORYBOOK_ALLOWED_HOSTS=studio.example.com npm run storybook` adds one (comma-separated for several), and `npm run storybook -- --host 0.0.0.0` allows any. Over plain http the copy chips use the legacy clipboard path, since `navigator.clipboard` only exists on https and localhost.
 
 Components follow [docs/CONVENTIONS.md](docs/CONVENTIONS.md). See [CONTRIBUTING.md](CONTRIBUTING.md). The decisions are in [docs/adr/](docs/adr/).
@@ -186,9 +188,9 @@ A run of the Release workflow started by hand is a dry run: it builds, checks an
 
 ## Roadmap
 
-- Radio cards, a skeleton loader, a Radix tooltip, the fleet gauge and sparkline from the Node Detail deck.
+- A skeleton loader and a Radix tooltip. Radio cards, the fleet gauge and the sparkline from the Node Detail deck have landed, as `ChoiceCard`, `Gauge` and `Sparkline`.
 - Web Components over the same tokens, if a non-React Kairos surface needs behaviour and not only styles.
 
 ## Licence and trademarks
 
-Apache-2.0, see [LICENSE](../../LICENSE). The Kairos name and logos are trademarks of The Linux Foundation; use follows the [Linux Foundation trademark policy](https://www.linuxfoundation.org/trademark-usage). The artwork is included unchanged from [cncf/artwork](https://github.com/cncf/artwork/tree/main/projects/kairos).
+Apache-2.0, see [LICENSE](../../LICENSE). The Kairos name and logos are trademarks of The Linux Foundation; use follows the [Linux Foundation trademark policy](https://www.linuxfoundation.org/trademark-usage). The Kairos mark and the light and colour lockups are included unchanged from [cncf/artwork](https://github.com/cncf/artwork/tree/main/projects/kairos); the dark-surface lockup and the Hadron artwork are derived from the decks, and Foundations/Brand in the Storybook says which is which.

@@ -97,11 +97,13 @@
 
   --container-page: 1280px;
 
-  /* Motion: one easing, three durations, zero under prefers-reduced-motion (see tokens.css). */
+  /* Motion: one easing, three durations, each times --duration-scale so one property retimes
+     everything; zero under prefers-reduced-motion, whatever the scale (see tokens.css). */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --duration-fast: 150ms;
-  --duration-base: 200ms;
-  --duration-slow: 360ms;
+  --duration-scale: 1;
+  --duration-fast: calc(150ms * var(--duration-scale));
+  --duration-base: calc(200ms * var(--duration-scale));
+  --duration-slow: calc(360ms * var(--duration-scale));
   --animate-fade-up: fade-up var(--duration-slow) var(--ease-out) both;
   --animate-fade-in: fade-in var(--duration-base) var(--ease-out) both;
 

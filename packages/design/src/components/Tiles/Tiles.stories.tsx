@@ -193,7 +193,7 @@ function FoldDemo(args: React.ComponentProps<typeof TileField>) {
 
 export const Fold: Story = {
   name: "Folds away",
-  args: { enter: "fall" },
+  args: { enter: "unfold" },
   parameters: {
     docs: {
       description: {
@@ -207,7 +207,7 @@ export const Fold: Story = {
 
 export const Live: Story = {
   name: "Live field",
-  args: { enter: "drop", idle: "live" },
+  args: { enter: "unfold", idle: "live" },
   parameters: {
     docs: {
       description: {
@@ -225,7 +225,7 @@ export const Live: Story = {
 
 export const Cursor: Story = {
   name: "Follows the cursor",
-  args: { enter: "drop", idle: "cursor" },
+  args: { enter: "unfold", idle: "cursor" },
   parameters: {
     docs: {
       description: {
@@ -243,7 +243,7 @@ export const Cursor: Story = {
 
 export const Wave: Story = {
   name: "Wave across the field",
-  args: { enter: "drop", idle: "wave" },
+  args: { enter: "unfold", idle: "wave" },
   parameters: {
     docs: {
       description: {
@@ -273,7 +273,7 @@ export const Wave: Story = {
 
 export const Working: Story = {
   name: "Working state",
-  args: { enter: "drop", idle: "wave" },
+  args: { enter: "unfold", idle: "wave" },
   parameters: {
     docs: {
       description: {
@@ -300,7 +300,7 @@ export const Working: Story = {
 
 export const Hero: Story = {
   name: "Hero with a field",
-  args: { enter: "drop" },
+  args: { enter: "unfold" },
   render: (args) => (
     <section className="relative overflow-hidden rounded-lg border bg-bg">
       <div className="absolute inset-y-0 right-0 w-[55%]">

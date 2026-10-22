@@ -32,9 +32,30 @@ describe("WizardSteps", () => {
   });
 
   it("keeps the hidden state text inside the scroll rail, so a phone gets no page-wide scroll", () => {
-    render(<WizardSteps steps={steps} current="base" />);
+    render(<WizardSteps steps={steps} current="base" onStepChange={() => {}} />);
     // The sr-only span is absolutely positioned; its containing block has to be
     // the step, inside the overflow-x-auto nav, or it lands in the page's overflow.
     for (const step of screen.getAllByRole("button")) expect(step).toHaveClass("relative");
+  });
+
+  it("is a read-out with no tab stops when no step can be picked", () => {
+    render(<WizardSteps steps={steps} current="system" />);
+    expect(screen.queryAllByRole("button")).toHaveLength(0);
+    const nav = screen.getByRole("navigation", { name: "Steps" });
+    const items = nav.querySelectorAll("[data-state]");
+    expect(items).toHaveLength(3);
+    for (const item of items) {
+      expect(item.tagName).toBe("DIV");
+      expect(item).toHaveClass("relative");
+    }
+    expect(nav.querySelector('[data-state="active"]')).toHaveAttribute("aria-current", "step");
+  });
+
+  it("marks no step current when the current id names no step", () => {
+    render(<WizardSteps steps={steps} current="nowhere" onStepChange={() => {}} />);
+    for (const step of screen.getAllByRole("button")) {
+      expect(step).toHaveAttribute("data-state", "pending");
+      expect(step).not.toHaveAttribute("aria-current");
+    }
   });
 });

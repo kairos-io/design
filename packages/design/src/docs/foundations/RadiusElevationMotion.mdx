@@ -24,3 +24,11 @@ One easing and three durations. Hover changes use `fast`; anything that opens us
 <MotionTable />
 
 <FadeUpDemo />
+
+### Slowing motion down
+
+Every duration is its token value times `--duration-scale`, which is 1 by default: `--duration-fast: calc(150ms * var(--duration-scale))`. Setting that one property on `<html>` retimes the whole system at once — components, the tile field's entrances and idles, the loaders — so nothing needs a prop of its own.
+
+The **Motion** control in the toolbar above does exactly that, for reviewing a piece of motion: 0.25x, 0.5x, 1x, 2x, and **Off**, which pins the scale at zero so every animation lands on its first frame. It applies to this page as it does to a story. A host sets it the same way, `setMotionScale(0.25)` or `setMotionScale(null)` to go back to the token's 1, and `getMotionScale()` reads it back; `motionDuration("fast")` resolves the scaled token to a number of ms for motion a script has to time (a toast leaving after its fade).
+
+Reduced motion still wins. `prefers-reduced-motion: reduce` sets each duration to a literal `0ms`, not a scaled one, so a slow scale cannot bring motion back for a reader who asked for none; the scale is a review and authoring control, never a way around that.

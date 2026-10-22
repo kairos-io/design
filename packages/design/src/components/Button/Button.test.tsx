@@ -28,7 +28,7 @@ describe("Button", () => {
     const loader = () => button.querySelector("svg.tile-loader")!;
     expect(loader()).toHaveAttribute("aria-hidden", "true");
     expect(loader()).toHaveAttribute("data-tone", "mono");
-    expect(loader().querySelectorAll(".tile-loop-assemble")).toHaveLength(3);
+    expect(loader().querySelectorAll(".tile-loop-unfold")).toHaveLength(3);
     rerender(
       <Button loading variant="outline">
         Saving

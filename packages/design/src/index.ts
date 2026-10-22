@@ -77,6 +77,15 @@ export {
 // Helpers.
 export { cn } from "./lib/cn.ts";
 export {
+  DEFAULT_MOTION_SCALE,
+  DURATION_FALLBACK_MS,
+  MOTION_SCALE_PROPERTY,
+  getMotionScale,
+  motionDuration,
+  setMotionScale,
+  type MotionDuration,
+} from "./lib/motion.ts";
+export {
   phaseLook,
   phaseTone,
   toneBg,

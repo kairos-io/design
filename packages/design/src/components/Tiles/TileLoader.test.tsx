@@ -103,7 +103,7 @@ describe("TileLoader", () => {
   it.each([16, 20, 24] as const)(
     "pads the %ipx box by the stroke's mitre and the reach on every side, and takes it back as margin",
     (size) => {
-      const { container } = render(<TileLoader size={size} />);
+      const { container } = render(<TileLoader size={size} enter="assemble" />);
       const svg = container.querySelector("svg")!;
       const vb = viewBox(svg);
       const b = bounds(svg);
@@ -129,7 +129,7 @@ describe("TileLoader", () => {
   );
 
   it("loops the assemble on each face in tone order, an eighth of a turn apart, along each face's own line", () => {
-    const { container } = render(<TileLoader />);
+    const { container } = render(<TileLoader enter="assemble" />);
     const cube = faces(container);
     expect(cube.every((p) => p.classList.contains("tile-loop-assemble"))).toBe(true);
     expect(outlines(container).some((p) => p.hasAttribute("class"))).toBe(false);
@@ -147,9 +147,11 @@ describe("TileLoader", () => {
     expect(cube.some((p) => prop(p, "--tile-vx"))).toBe(false);
   });
 
-  it("gives the unfold loop each face's hinge at the centre vertex, as exact coordinates", () => {
-    const { container } = render(<TileLoader enter="unfold" size={20} />);
+  it("unfolds by default, each face's hinge at the centre vertex as exact coordinates", () => {
+    const { container } = render(<TileLoader size={20} />);
     const cube = faces(container);
+    expect(container.querySelector("svg")).toHaveAttribute("data-enter", "unfold");
+    expect(container.querySelector("svg")).toHaveAttribute("data-exit", "disassemble");
     expect(cube.every((p) => p.classList.contains("tile-loop-unfold"))).toBe(true);
     // The centre of a 20px cube: half the hexagon's width across, the radius down.
     const w = Math.round(Math.sqrt(3) * 10 * 100) / 100;
@@ -187,6 +189,6 @@ describe("TileLoader", () => {
     expect(screen.getByRole("img", { name: "Loading" })).toBeInTheDocument();
     stubReducedMotion(false);
     const { container: moving } = render(<TileLoader />);
-    expect(moving.querySelectorAll(".tile-loop-assemble")).toHaveLength(3);
+    expect(moving.querySelectorAll(".tile-loop-unfold")).toHaveLength(3);
   });
 });

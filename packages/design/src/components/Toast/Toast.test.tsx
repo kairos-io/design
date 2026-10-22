@@ -8,10 +8,76 @@ describe("Toaster", () => {
     act(() => {
       toast("ISO queued", "success");
     });
-    const region = screen.getByRole("status", { name: "Notifications" });
-    expect(region).toHaveAttribute("aria-live", "polite");
+    const region = screen.getByRole("region", { name: "Notifications" });
     expect(region).toHaveTextContent("ISO queued");
     expect(region.querySelector("[data-tone]")).toHaveAttribute("data-tone", "success");
+    // The toast itself is the polite live region, not the stack around it.
+    expect(screen.getByRole("status")).toHaveTextContent("ISO queued");
+  });
+
+  it("interrupts for a danger toast and stays polite for the others", () => {
+    render(<Toaster />);
+    act(() => {
+      toast("ISO queued", "success");
+      toast("Build failed", "danger");
+    });
+    expect(screen.getByRole("alert")).toHaveTextContent("Build failed");
+    expect(screen.getByRole("status")).toHaveTextContent("ISO queued");
+    expect(screen.getByRole("status")).not.toHaveTextContent("Build failed");
+  });
+
+  it("holds a toast open while the pointer is over it, then gives it the time it had left", () => {
+    vi.useFakeTimers();
+    try {
+      render(<Toaster duration={1000} />);
+      act(() => {
+        toast("Hold me");
+      });
+      const toastEl = screen.getByRole("status");
+      fireEvent.pointerEnter(toastEl);
+      act(() => {
+        vi.advanceTimersByTime(5000);
+      });
+      expect(screen.queryByText("Hold me")).toBeInTheDocument();
+      fireEvent.pointerLeave(toastEl);
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+      // The stay has run out: the toast is fading, and gone after the fade.
+      act(() => {
+        vi.advanceTimersByTime(150);
+      });
+      expect(screen.queryByText("Hold me")).not.toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("holds a toast open while the keyboard is inside it", () => {
+    vi.useFakeTimers();
+    try {
+      render(<Toaster duration={1000} />);
+      act(() => {
+        toast("Reach the button");
+      });
+      const dismiss = screen.getByRole("button", { name: "Dismiss" });
+      act(() => {
+        dismiss.focus();
+      });
+      act(() => {
+        vi.advanceTimersByTime(5000);
+      });
+      expect(screen.queryByText("Reach the button")).toBeInTheDocument();
+      act(() => {
+        dismiss.blur();
+      });
+      act(() => {
+        vi.advanceTimersByTime(1150);
+      });
+      expect(screen.queryByText("Reach the button")).not.toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("fades a toast out over the fast duration before it leaves, on click and after the duration", () => {
@@ -83,7 +149,7 @@ describe("Toaster", () => {
         toast("Stays");
         toast("Leaves");
       });
-      region = screen.getByRole("status");
+      region = screen.getByRole("region", { name: "Notifications" });
       const stays = region.firstElementChild as HTMLElement;
       fireEvent.click(screen.getAllByRole("button", { name: "Dismiss" })[1]);
       act(() => {

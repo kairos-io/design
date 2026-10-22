@@ -11,7 +11,7 @@ const markerVariants = cva(
       palette: { kairos: "", hadron: "" },
       tone: { 0: "", 1: "", 2: "" },
       size: {
-        sm: "h-5 min-w-9 px-3 text-[11px]",
+        sm: "h-5 min-w-9 px-3 text-xs",
         default: "h-7 min-w-12 px-4 text-sm",
         lg: "h-10 min-w-16 px-5 text-lg",
       },

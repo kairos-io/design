@@ -29,20 +29,29 @@ export interface AlertProps
   icon?: React.ReactNode;
   /** Something to do about it: a link-style button or a link, shown after the text. */
   action?: React.ReactNode;
+  /**
+   * Announce the alert when it appears, for one the page adds in response to
+   * something (a failed install, a saved change). Off by default: a callout
+   * that is part of the page would otherwise make every page a live region,
+   * and a screen reader would read it again on any change inside it.
+   */
+  live?: boolean;
 }
 
 /**
  * A message about the state of the page, as the Foundations deck draws its
  * callout: a surface with a diamond in the tone, a bold lead running into
- * the text, and a link-coloured action. Danger alerts interrupt
- * (`role="alert"`); the other tones are announced politely
+ * the text, and a link-coloured action. A static callout carries no ARIA role,
+ * so a page of callouts is not a page of live regions; `live` marks one that
+ * appears in response to something, and then a danger alert interrupts
+ * (`role="alert"`) while the other tones are announced politely
  * (`role="status"`). Not for toasts.
  */
 export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
-  ({ className, tone = "info", variant, title, icon, action, children, ...props }, ref) => (
+  ({ className, tone = "info", variant, title, icon, action, live = false, children, ...props }, ref) => (
     <div
       ref={ref}
-      role={tone === "danger" ? "alert" : "status"}
+      role={live ? (tone === "danger" ? "alert" : "status") : undefined}
       data-tone={tone}
       className={cn(alertVariants({ variant }), className)}
       {...props}

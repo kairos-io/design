@@ -111,7 +111,7 @@ describe("TileRing", () => {
   it("keeps each cube turned as the mark turns it, clockwise from the top", () => {
     const mark = kairosMarkTiles();
     expect(mark.cubes.map((c) => c.bearing)).toEqual([-60, 0, 60, 120, 180, -120]);
-    const { container } = render(<TileRing />);
+    const { container } = render(<TileRing enter="assemble" />);
     // The cube groups follow that order, and each face's own line points from the cube's centre to its middle.
     cubes(container).forEach((g, i) => {
       expect(g).toHaveAttribute("data-cube", String(i));
@@ -127,8 +127,9 @@ describe("TileRing", () => {
   it("builds by default, one whole cube at a time clockwise, the faces timed as the loader's; chase is the other lap", () => {
     const { container, rerender } = render(<TileRing />);
     expect(container.querySelector("svg")).toHaveAttribute("data-mode", "build");
+    expect(container.querySelector("svg")).toHaveAttribute("data-enter", "unfold");
     const all = faces(container);
-    expect(all.every((p) => p.classList.contains("tile-build-assemble"))).toBe(true);
+    expect(all.every((p) => p.classList.contains("tile-build-unfold"))).toBe(true);
     // A cube takes 1080ms (its last face starts 540ms in and takes 540ms); the next starts exactly then.
     // Within a cube the faces go in tone order 270ms apart, as the inline loader's do.
     const CUBE = 1080;
@@ -140,7 +141,7 @@ describe("TileRing", () => {
     const starts = cubes(container).map((g) => Math.min(...Array.from(g.children).map(delay)));
     starts.forEach((s, i) => expect(s).toBe(i * CUBE));
     expect(outlines(container).some((p) => p.hasAttribute("class"))).toBe(false);
-    rerender(<TileRing mode="chase" />);
+    rerender(<TileRing mode="chase" enter="assemble" />);
     expect(faces(container).every((p) => p.classList.contains("tile-chase-assemble"))).toBe(true);
     rerender(<TileRing mode="chase" enter="unfold" />);
     const unfold = faces(container);

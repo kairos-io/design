@@ -66,9 +66,10 @@
   --radius-full: 9999px;
   --page-max: 1280px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --duration-fast: 150ms;
-  --duration-base: 200ms;
-  --duration-slow: 360ms;
+  --duration-scale: 1;
+  --duration-fast: calc(150ms * var(--duration-scale));
+  --duration-base: calc(200ms * var(--duration-scale));
+  --duration-slow: calc(360ms * var(--duration-scale));
   --bg: #F2F1F5;
   --side: #ECEBF0;
   --surface: #FFFFFF;

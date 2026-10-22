@@ -15,20 +15,22 @@ const meta = {
     docs: {
       description: {
         component:
-          'Loading built from the tile motion, where "fold" means coming into place: `TileLoader` is one cube whose faces assemble, rest and come apart, icon-sized, for buttons and rows; `TileBar` with `current` runs that loop on the step in progress and brings each tile into place as it is done; `TileRing` is the Kairos mark itself, its six cubes assembling one by one clockwise from the top, for empty states and first screens. All three keep the outline grid underneath so no cell is ever blank, and all stand still under prefers-reduced-motion. `enter="assemble"` is the default and `"unfold"` the alternative, to compare. Proposals on top of the deck; use one loader per surface, and a plain spinner nowhere.',
+          'Loading built from the tile motion, where "fold" means coming into place: `TileLoader` is one cube whose faces assemble, rest and come apart, icon-sized, for buttons and rows; `TileBar` with `current` runs that loop on the step in progress and brings each tile into place as it is done; `TileRing` is the Kairos mark itself, its six cubes assembling one by one clockwise from the top, for empty states and first screens. All three keep the outline grid underneath so no cell is ever blank, and all stand still under prefers-reduced-motion. `enter="unfold"` is the default, the system\'s motion, and `"assemble"` the alternative, to compare; `exit="vanish"` makes a cube go in one frame instead of coming apart. Proposals on top of the deck; use one loader per surface, and a plain spinner nowhere.',
       },
     },
   },
   argTypes: {
     size: { control: "inline-radio", options: [16, 20, 24] },
-    enter: { control: "inline-radio", options: ["assemble", "unfold"] },
+    enter: { control: "inline-radio", options: ["unfold", "assemble"] },
+    exit: { control: "inline-radio", options: ["disassemble", "vanish"] },
     tone: { control: "inline-radio", options: ["palette", "mono"] },
     palette: { control: "inline-radio", options: ["kairos", "hadron"] },
     decorative: { control: "boolean" },
   },
   args: {
     size: 20,
-    enter: "assemble",
+    enter: "unfold",
+    exit: "disassemble",
     tone: "palette",
     palette: "kairos",
     decorative: false,
@@ -39,7 +41,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const SIZES = [16, 20, 24] as const;
-const ENTRANCES = ["assemble", "unfold"] as const;
+const ENTRANCES = ["unfold", "assemble"] as const;
 
 export const Loader: Story = {
   render: (args) => (
@@ -86,7 +88,7 @@ export const Sizes: Story = {
     docs: {
       description: {
         story:
-          'The three icon sizes down the columns and the two motions down the rows: `"assemble"` brings each face in along the line from the cube\'s centre vertex through its middle, `"unfold"` hinges each open from that vertex along its own edges. The faces go in tone order an eighth of a turn apart, rest as the complete cube, leave the same way, and the last is still leaving as the first returns. Assemble is the default; one is to be picked.',
+          'The three icon sizes down the columns and the two motions down the rows: `"unfold"` hinges each face open from the cube\'s centre vertex along its own edges, `"assemble"` brings each in along the line from that vertex through its middle. The faces go in tone order an eighth of a turn apart, rest as the complete cube, leave the same way, and the last is still leaving as the first returns. Unfold is the default, the system\'s motion; assemble is the alternative. The `exit` control switches both rows to the vanish.',
       },
     },
   },
@@ -180,7 +182,7 @@ const INSTALL_STEPS = [
 ];
 
 /** A stepping bar: Next step marks the running step done and starts the next one. */
-function StepsDemo({ enter }: { enter: "assemble" | "unfold" }) {
+function StepsDemo({ enter, exit }: { enter: "assemble" | "unfold"; exit: "disassemble" | "vanish" }) {
   const [done, setDone] = React.useState(2);
   const running = done < INSTALL_STEPS.length;
   return (
@@ -196,13 +198,14 @@ function StepsDemo({ enter }: { enter: "assemble" | "unfold" }) {
         done={done}
         current={running}
         enter={enter}
+        exit={exit}
         size={24}
         aria-label="Install progress"
       />
       <p className="m-0 flex items-center gap-2 text-sm text-muted">
         {running ? (
           <>
-            <TileLoader size={16} enter={enter} decorative />
+            <TileLoader size={16} enter={enter} exit={exit} decorative />
             {INSTALL_STEPS[done]}
           </>
         ) : (
@@ -227,11 +230,11 @@ export const BarCurrent: Story = {
     docs: {
       description: {
         story:
-          "`TileBar` with `current` runs the loader's motion on the tile at index `done`, the step in progress, while the done tiles stand and the rest wait as outlines. Press Next step: the running tile comes into place as done and the next one starts looping; the tiles that were already done do not move. Reset drops it back to the start with no motion, since only a tile that becomes done moves. `enter` picks assemble (default) or unfold for the bar and the inline loader beside it.",
+          "`TileBar` with `current` runs the loader's motion on the tile at index `done`, the step in progress, while the done tiles stand and the rest wait as outlines. Press Next step: the running tile comes into place as done and the next one starts looping; the tiles that were already done do not move. Reset drops it back to the start with no motion, since only a tile that becomes done moves. `enter` picks unfold (default) or assemble for the bar and the inline loader beside it, `exit` how the running tile leaves between loops.",
       },
     },
   },
-  render: (args) => <StepsDemo enter={args.enter ?? "assemble"} />,
+  render: (args) => <StepsDemo enter={args.enter ?? "unfold"} exit={args.exit ?? "disassemble"} />,
 };
 
 export const BarIndeterminate: Story = {
@@ -276,7 +279,7 @@ export const Ring: Story = {
     docs: {
       description: {
         story:
-          '`TileRing` is the Kairos mark: its six cubes on the icon\'s own geometry (the mark turns some of them, so the same tone meets itself across a few neighbours, and the ring does too), 48 to 120px; the Kairos oranges here, `palette="hadron"` in the control for the blues. `mode="build"` (default) brings the cubes in one by one clockwise from the top, rests as the complete mark for a beat, takes them away in the same order and starts again, the first returning while the last is still going. `mode="chase"` builds the ring once and from then on one cube at a time goes and comes straight back, chasing round. `enter` picks assemble or unfold. For an empty state or a first screen that waits on something, one per surface.',
+          '`TileRing` is the Kairos mark: its six cubes on the icon\'s own geometry (the mark turns some of them, so the same tone meets itself across a few neighbours, and the ring does too), 48 to 120px; the Kairos oranges here, `palette="hadron"` in the control for the blues. `mode="build"` (default) brings the cubes in one by one clockwise from the top, rests as the complete mark for a beat, takes them away in the same order and starts again, the first returning while the last is still going. `mode="chase"` builds the ring once and from then on one cube at a time goes and comes straight back, chasing round. Each cube assembles fully, its three faces at the inline loader\'s timing, before the next starts, so one cube moves at a time (two in the chase, one going as one returns). `enter` picks unfold or assemble, `exit` whether a cube comes apart or vanishes. For an empty state or a first screen that waits on something, one per surface.',
       },
     },
   },
@@ -284,7 +287,7 @@ export const Ring: Story = {
     <div className="flex flex-wrap items-end gap-10">
       {RINGS.map(([size, mode]) => (
         <figure key={`${size}${mode}`} className="m-0 flex flex-col items-center gap-2">
-          <TileRing size={size} mode={mode} palette={args.palette} enter={args.enter} />
+          <TileRing size={size} mode={mode} palette={args.palette} enter={args.enter} exit={args.exit} />
           <figcaption className="font-mono text-xs text-muted">
             {size}, {mode}
           </figcaption>
@@ -335,7 +338,7 @@ export const RingOverlay: Story = {
       },
     },
   },
-  render: (args) => <OverlayDemo enter={args.enter ?? "assemble"} />,
+  render: (args) => <OverlayDemo enter={args.enter ?? "unfold"} />,
 };
 
 export const RingEmptyState: Story = {
@@ -356,7 +359,7 @@ export const RingEmptyState: Story = {
 };
 
 /** A loader that can be told it has finished: the loop lands in the status tones. */
-function SucceedsDemo({ enter }: { enter: "assemble" | "unfold" }) {
+function SucceedsDemo({ enter, exit }: { enter: "assemble" | "unfold"; exit: "disassemble" | "vanish" }) {
   const [status, setStatus] = React.useState<"loading" | "success" | "error">("loading");
   const [settled, setSettled] = React.useState<string | null>(null);
   const flip = (next: typeof status) => {
@@ -381,7 +384,7 @@ function SucceedsDemo({ enter }: { enter: "assemble" | "unfold" }) {
       </div>
       <div className="flex flex-wrap items-center gap-10">
         <div className="flex items-center gap-3 text-sm">
-          <TileLoader size={24} enter={enter} status={status} onSettled={setSettled} />
+          <TileLoader size={24} enter={enter} exit={exit} status={status} onSettled={setSettled} />
           <span className="text-muted">Pulling image</span>
         </div>
         <TileBar
@@ -389,11 +392,12 @@ function SucceedsDemo({ enter }: { enter: "assemble" | "unfold" }) {
           done={5}
           current
           enter={enter}
+          exit={exit}
           status={status}
           size={20}
           aria-label="Install progress"
         />
-        <TileRing size={96} enter={enter} status={status} />
+        <TileRing size={96} enter={enter} exit={exit} status={status} />
       </div>
     </div>
   );
@@ -405,11 +409,63 @@ export const Succeeds: Story = {
     docs: {
       description: {
         story:
-          '`status="success"` on any of the three: the loop runs to its next quiet moment (the cube that is coming in lands; nothing is cut mid-motion), then the faces come into place once more in the three success greens over the brand ones, opacity and transform only, and the loader rests green; `onSettled("success")` fires once the last face has landed, and the accessible name turns from "Loading" to "Done", announced politely. `"error"` is the same in the recovery reds, "Failed". The bar crossfades every done tile left to right and brings the current one in green; the ring builds a final green lap cube by cube. Under prefers-reduced-motion the tiles simply turn. Back to `"loading"` and the loop starts again.',
+          '`status="success"` on any of the three stops the loop in the same frame and resolves what is on screen in one quick pass: a face already on its outline crossfades to the three success greens over the fast token, a face on its way or away completes to its outline from wherever it is over the base token (a transition on the same transform and opacity, so nothing jumps back to the start of a keyframe) and turns green as it lands, the faces a step apart in tone and ring order, so the cube, the bar and the ring are green and still within about a third of a second, and never loop while the status stays. `onSettled("success")` fires once the last face has turned, and the accessible name goes from "Loading" to "Done", announced politely. `"error"` is the same in the recovery reds, "Failed". Press Succeed or Fail at any point of the loop to see it. Under prefers-reduced-motion the tiles simply turn. Back to `"loading"` and the loop starts again from empty.',
       },
     },
   },
-  render: (args) => <SucceedsDemo enter={args.enter ?? "assemble"} />,
+  render: (args) => <SucceedsDemo enter={args.enter ?? "unfold"} exit={args.exit ?? "disassemble"} />,
+};
+
+const EXITS = ["disassemble", "vanish"] as const;
+
+/** The two exits side by side on all three loaders; Replay remounts them so they start together. */
+function VanishesDemo({ enter }: { enter: "assemble" | "unfold" }) {
+  const [run, setRun] = React.useState(0);
+  return (
+    <div className="flex flex-col gap-4">
+      <div>
+        <Button variant="outline" onClick={() => setRun((n) => n + 1)}>
+          Replay
+        </Button>
+      </div>
+      <div className="grid w-fit grid-cols-[auto_auto_auto_auto] items-center gap-x-10 gap-y-6 text-sm">
+        {EXITS.map((exit) => (
+          <React.Fragment key={`${exit}:${run}`}>
+            <span className="font-mono text-xs text-muted">exit="{exit}"</span>
+            <div className="flex items-center gap-3">
+              <TileLoader size={24} enter={enter} exit={exit} />
+              <span className="text-muted">Pulling image</span>
+            </div>
+            <TileBar
+              total={8}
+              done={5}
+              current
+              enter={enter}
+              exit={exit}
+              size={20}
+              aria-label="Install progress"
+            />
+            <div className="flex items-end gap-6">
+              <TileRing size={64} enter={enter} exit={exit} />
+              <TileRing size={64} mode="chase" enter={enter} exit={exit} />
+            </div>
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export const Vanishes: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The default exit over the vanish, to compare. With `exit="vanish"` the faces come in as before and rest as the complete cube, then are gone in one frame: no motion, no fade, the outline still there, and after one entrance the cube comes in again. The bar\'s running tile does the same on its rest tile. The ring in `mode="build"` builds the whole mark, rests one cube\'s time, and all six go together; in `mode="chase"` one cube at a time comes in round the ring, each gone as the next begins, so no mark stands. The same keyframes are the entrance with an exit of zero length (`.tile-*-vanish` and the `.tile-*-gate` groups in `base.css`); under prefers-reduced-motion both exits are the static cube, tile or mark. `enter` in the controls switches the motion.',
+      },
+    },
+  },
+  render: (args) => <VanishesDemo enter={args.enter ?? "unfold"} />,
 };
 
 const NODE_STAGES = [

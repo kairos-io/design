@@ -27,15 +27,26 @@ interface ShownToast extends ToastMessage {
   exiting?: boolean;
 }
 
+/** What a toast has left to run, so a pause can give it back. */
+interface Countdown {
+  /** When the running stretch started, from `performance.now()`; null while paused. */
+  from: number | null;
+  /** How long was left when that stretch started. */
+  left: number;
+}
+
 /** Mounts once, near the app root, and shows what `toast()` sends. */
 export function Toaster({ duration = 3000, className }: ToasterProps) {
   const [toasts, setToasts] = useState<ShownToast[]>([]);
   const timers = useRef(new Map<string, ReturnType<typeof setTimeout>>());
   const nodes = useRef(new Map<string, HTMLDivElement>());
+  // How much of its stay each toast has left. A null `from` means paused.
+  const clocks = useRef(new Map<string, Countdown>());
   // Where every toast sat before the last removal, for the slide that follows it.
   const before = useRef<Map<string, number> | null>(null);
 
   const remove = useCallback((id: string) => {
+    clocks.current.delete(id);
     before.current = new Map(
       Array.from(nodes.current, ([key, node]) => [key, node.getBoundingClientRect().top] as const),
     );
@@ -49,6 +60,7 @@ export function Toaster({ duration = 3000, className }: ToasterProps) {
       const timer = timers.current.get(id);
       if (timer) clearTimeout(timer);
       timers.current.delete(id);
+      clocks.current.delete(id);
       const ms = motionDuration("fast");
       if (ms <= 0) {
         remove(id);
@@ -66,18 +78,51 @@ export function Toaster({ duration = 3000, className }: ToasterProps) {
     [remove],
   );
 
+  // Starts (or restarts) a toast's stay with `left` ms to run.
+  const run = useCallback(
+    (id: string, left: number) => {
+      const timer = timers.current.get(id);
+      if (timer) clearTimeout(timer);
+      clocks.current.set(id, { from: performance.now(), left });
+      timers.current.set(
+        id,
+        setTimeout(() => dismiss(id), left),
+      );
+    },
+    [dismiss],
+  );
+
   const handleToast = useCallback(
     (t: ToastMessage) => {
       setToasts((prev) => [...prev, t]);
-      timers.current.set(
-        t.id,
-        setTimeout(() => dismiss(t.id), duration),
-      );
+      run(t.id, duration);
     },
-    [dismiss, duration],
+    [duration, run],
   );
 
   useToastListener(handleToast);
+
+  // Pointer over a toast, or focus inside one, holds it open: a message that
+  // is being read or whose button is being reached must not go on its own
+  // (WCAG 2.2.1). It leaves with the time it had left once the pointer or the
+  // focus goes. A toast already fading out keeps going; its clock is gone.
+  const hold = useCallback((id: string) => {
+    const clock = clocks.current.get(id);
+    if (!clock || clock.from === null) return;
+    const timer = timers.current.get(id);
+    if (timer) clearTimeout(timer);
+    timers.current.delete(id);
+    clocks.current.set(id, { from: null, left: Math.max(0, clock.left - (performance.now() - clock.from)) });
+  }, []);
+
+  const release = useCallback(
+    (id: string) => {
+      const clock = clocks.current.get(id);
+      if (!clock || clock.from !== null) return;
+      run(id, clock.left);
+    },
+    [run],
+  );
 
   useEffect(() => {
     const pending = timers.current;
@@ -105,10 +150,13 @@ export function Toaster({ duration = 3000, className }: ToasterProps) {
     });
   });
 
+  // The stack itself is a plain labelled region, and each toast is its own
+  // live region in its own urgency: a danger toast interrupts (role="alert",
+  // assertive), the rest are announced politely, where one polite region
+  // around the stack read a failure as calmly as a success.
   return (
     <div
-      role="status"
-      aria-live="polite"
+      role="region"
       aria-label="Notifications"
       className={cn(
         "fixed bottom-4 right-4 z-50 flex w-[calc(100vw-2rem)] max-w-sm flex-col gap-2",
@@ -118,10 +166,15 @@ export function Toaster({ duration = 3000, className }: ToasterProps) {
       {toasts.map((t) => (
         <div
           key={t.id}
+          role={t.tone === "danger" ? "alert" : "status"}
           ref={(node) => {
             if (node) nodes.current.set(t.id, node);
             else nodes.current.delete(t.id);
           }}
+          onPointerEnter={() => hold(t.id)}
+          onPointerLeave={() => release(t.id)}
+          onFocus={() => hold(t.id)}
+          onBlur={() => release(t.id)}
         >
           <div
             data-tone={t.tone}

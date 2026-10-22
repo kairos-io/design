@@ -90,9 +90,11 @@ export interface TileFieldProps
    * above under gravity and settles. "assemble": each cube's three faces
    * arrive from their own directions and snap together at the centre
    * vertex. "unfold": the faces hinge open from that vertex onto their
-   * outlines. All but "drop" are proposals on top of the deck. The resting
-   * field is the static one either way, and under prefers-reduced-motion
-   * the field is simply there.
+   * outlines; it is the system's motion, the one a field with an `idle`
+   * mode and no `enter` uses, and the others are alternatives. Nothing by
+   * default: a field with no entrance is simply there. The resting field is
+   * the static one either way, and under prefers-reduced-motion the field
+   * is simply there.
    */
   enter?: TileEnter;
   /**
@@ -132,7 +134,9 @@ export interface TileFieldProps
   /**
    * @deprecated Use `enter` and `idle`: `"in"` is `enter="drop"`, `"live"`
    * is `enter="drop" idle="live"`, `"cursor"` is `enter="drop" idle="cursor"`.
-   * An explicit `enter` or `idle` wins over this. To be removed before 1.0.
+   * The shorthand keeps the drop so existing callers do not change, where
+   * `idle` on its own enters with the unfold. An explicit `enter` or `idle`
+   * wins over this. To be removed before 1.0.
    */
   animate?: "in" | "live" | "cursor" | false;
 }
@@ -194,8 +198,9 @@ export const TileField = React.forwardRef<SVGSVGElement, TileFieldProps>(
     React.useImperativeHandle(ref, () => svgRef.current as SVGSVGElement, []);
 
     // The deprecated shorthand maps onto the two new props; an explicit
-    // prop wins so a caller can migrate one at a time.
-    const enter: TileEnter = enterProp ?? (animate ? "drop" : false);
+    // prop wins so a caller can migrate one at a time. An idle mode with no
+    // entrance named enters with the system's motion, the unfold.
+    const enter: TileEnter = enterProp ?? (animate ? "drop" : idleProp ? "unfold" : false);
     const idle: TileIdle = idleProp ?? (animate === "live" || animate === "cursor" ? animate : false);
 
     // The drop and the fall run per hexagon, not per rhombus: while an

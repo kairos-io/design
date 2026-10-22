@@ -704,13 +704,376 @@
       translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
   }
 }
-/* The settle: a status face fading in over a landed face, opacity only,
-   one entrance long, for the done tiles of a bar when it succeeds or fails.
-   The status faces that come onto a moving cell assemble with .tile-step-*
-   instead. */
-.tile-settle {
+/* The vanish exit (exit="vanish" on the loaders): the same entrances, and
+   no exit at all. A face comes in as above, rests on its outline, and from
+   its away point is simply not there (the hold ends in a step, so there is
+   no frame between), until the cycle comes round and it comes in again;
+   the outline beneath never goes. The three faces of a cube come in an
+   eighth of a loop apart, so to be gone together each cube's group carries
+   a gate, a step on its opacity: open for the cube's rest, closed from the
+   vanish moment to the end of the period, when the first face is coming in
+   again and the others are already away by their own keyframes. The loop
+   is four entrances (two in, one as the cube, one gone); the chase twelve
+   (each cube in over two and gone as the next begins, one cube at a time
+   round the ring, no mark standing); the build sixteen (six cubes in over
+   twelve, two as the mark, two gone together). The build's six gates close
+   at the same moment of the lap, so each cube's closes earlier in its own
+   time by the cubes before it: tile-build-gate-0 at 14/16, -1 at 12/16,
+   and so on to -5 at 4/16. CYCLES in loop.ts holds the same numbers. */
+.tile-loop-assemble-vanish,
+.tile-loop-unfold-vanish,
+.tile-chase-assemble-vanish,
+.tile-chase-unfold-vanish,
+.tile-build-assemble-vanish,
+.tile-build-unfold-vanish,
+.tile-loop-gate,
+.tile-chase-gate,
+.tile-build-gate-0,
+.tile-build-gate-1,
+.tile-build-gate-2,
+.tile-build-gate-3,
+.tile-build-gate-4,
+.tile-build-gate-5 {
   --tile-enter-duration: calc(var(--duration-slow) * 1.5);
-  animation: tile-settle var(--tile-enter-duration) var(--ease-out) both;
+  animation-timing-function: var(--ease-out);
+  animation-fill-mode: both;
+  animation-iteration-count: infinite;
+  animation-delay: var(--tile-delay, 0ms);
+}
+.tile-loop-unfold-vanish,
+.tile-chase-unfold-vanish,
+.tile-build-unfold-vanish {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+.tile-loop-assemble-vanish {
+  animation-name: tile-loop-assemble-vanish;
+  animation-duration: calc(var(--tile-enter-duration) * 4);
+}
+.tile-loop-unfold-vanish {
+  animation-name: tile-loop-unfold-vanish;
+  animation-duration: calc(var(--tile-enter-duration) * 4);
+}
+.tile-chase-assemble-vanish {
+  animation-name: tile-chase-assemble-vanish;
+  animation-duration: calc(var(--tile-enter-duration) * 12);
+}
+.tile-chase-unfold-vanish {
+  animation-name: tile-chase-unfold-vanish;
+  animation-duration: calc(var(--tile-enter-duration) * 12);
+}
+.tile-build-assemble-vanish {
+  animation-name: tile-build-assemble-vanish;
+  animation-duration: calc(var(--tile-enter-duration) * 16);
+}
+.tile-build-unfold-vanish {
+  animation-name: tile-build-unfold-vanish;
+  animation-duration: calc(var(--tile-enter-duration) * 16);
+}
+.tile-loop-gate {
+  animation-name: tile-loop-gate;
+  animation-duration: calc(var(--tile-enter-duration) * 4);
+}
+.tile-chase-gate {
+  animation-name: tile-chase-gate;
+  animation-duration: calc(var(--tile-enter-duration) * 12);
+}
+.tile-build-gate-0,
+.tile-build-gate-1,
+.tile-build-gate-2,
+.tile-build-gate-3,
+.tile-build-gate-4,
+.tile-build-gate-5 {
+  animation-duration: calc(var(--tile-enter-duration) * 16);
+}
+.tile-build-gate-0 {
+  animation-name: tile-build-gate-0;
+}
+.tile-build-gate-1 {
+  animation-name: tile-build-gate-1;
+}
+.tile-build-gate-2 {
+  animation-name: tile-build-gate-2;
+}
+.tile-build-gate-3 {
+  animation-name: tile-build-gate-3;
+}
+.tile-build-gate-4 {
+  animation-name: tile-build-gate-4;
+}
+.tile-build-gate-5 {
+  animation-name: tile-build-gate-5;
+}
+@keyframes tile-loop-assemble-vanish {
+  0% {
+    opacity: 0;
+    transform: translate(
+      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
+      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
+    );
+  }
+  7.5% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 1;
+    transform: translate(0, 0);
+    animation-timing-function: step-end;
+  }
+  75%,
+  100% {
+    opacity: 0;
+    transform: translate(
+      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
+      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
+    );
+  }
+}
+@keyframes tile-loop-unfold-vanish {
+  0% {
+    opacity: 0;
+    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
+      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+  }
+  7.5% {
+    opacity: 1;
+    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
+      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+  }
+  25% {
+    opacity: 1;
+    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 1)
+      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    animation-timing-function: step-end;
+  }
+  75%,
+  100% {
+    opacity: 0;
+    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
+      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+  }
+}
+@keyframes tile-chase-assemble-vanish {
+  0% {
+    opacity: 0;
+    transform: translate(
+      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
+      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
+    );
+  }
+  2.5% {
+    opacity: 1;
+  }
+  8.3333% {
+    opacity: 1;
+    transform: translate(0, 0);
+    animation-timing-function: step-end;
+  }
+  16.6667%,
+  100% {
+    opacity: 0;
+    transform: translate(
+      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
+      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
+    );
+  }
+}
+@keyframes tile-chase-unfold-vanish {
+  0% {
+    opacity: 0;
+    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
+      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+  }
+  2.5% {
+    opacity: 1;
+    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
+      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+  }
+  8.3333% {
+    opacity: 1;
+    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 1)
+      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    animation-timing-function: step-end;
+  }
+  16.6667%,
+  100% {
+    opacity: 0;
+    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
+      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+  }
+}
+@keyframes tile-build-assemble-vanish {
+  0% {
+    opacity: 0;
+    transform: translate(
+      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
+      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
+    );
+  }
+  1.875% {
+    opacity: 1;
+  }
+  6.25% {
+    opacity: 1;
+    transform: translate(0, 0);
+    animation-timing-function: step-end;
+  }
+  87.5%,
+  100% {
+    opacity: 0;
+    transform: translate(
+      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
+      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
+    );
+  }
+}
+@keyframes tile-build-unfold-vanish {
+  0% {
+    opacity: 0;
+    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
+      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+  }
+  1.875% {
+    opacity: 1;
+    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
+      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+  }
+  6.25% {
+    opacity: 1;
+    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 1)
+      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    animation-timing-function: step-end;
+  }
+  87.5%,
+  100% {
+    opacity: 0;
+    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
+      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+  }
+}
+@keyframes tile-loop-gate {
+  0% {
+    opacity: 1;
+    animation-timing-function: step-end;
+  }
+  75%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes tile-chase-gate {
+  0% {
+    opacity: 1;
+    animation-timing-function: step-end;
+  }
+  16.6667%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes tile-build-gate-0 {
+  0% {
+    opacity: 1;
+    animation-timing-function: step-end;
+  }
+  87.5%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes tile-build-gate-1 {
+  0% {
+    opacity: 1;
+    animation-timing-function: step-end;
+  }
+  75%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes tile-build-gate-2 {
+  0% {
+    opacity: 1;
+    animation-timing-function: step-end;
+  }
+  62.5%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes tile-build-gate-3 {
+  0% {
+    opacity: 1;
+    animation-timing-function: step-end;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes tile-build-gate-4 {
+  0% {
+    opacity: 1;
+    animation-timing-function: step-end;
+  }
+  37.5%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes tile-build-gate-5 {
+  0% {
+    opacity: 1;
+    animation-timing-function: step-end;
+  }
+  25%,
+  100% {
+    opacity: 0;
+  }
+}
+/* The resolve, when a loader's status lands. The loop comes off in the
+   same frame. A face already on its outline is covered by its status face
+   fading in over the fast token (.tile-settle, opacity only, --tile-delay
+   the stagger in tone and ring order). A face on its way, or away, keeps
+   going to its outline from wherever it is: the component pins its live
+   transform and opacity inline for one style flush, swaps the cycle's
+   class for .tile-resolve, and lets the pins go, so the transition below
+   carries it home over the base token with no keyframe restarted; its
+   status face fades in once it is there. A gate (vanish exit) is carried
+   open the same way. Both come off once the loader rests. */
+.tile-resolve {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transition:
+    transform var(--duration-base) var(--ease-out),
+    opacity var(--duration-base) var(--ease-out);
+}
+.tile-settle {
+  animation: tile-settle var(--duration-fast) var(--ease-out) both;
   animation-delay: var(--tile-delay, 0ms);
 }
 @keyframes tile-settle {
@@ -733,8 +1096,25 @@
   .tile-build-unfold,
   .tile-step-assemble,
   .tile-step-unfold,
+  .tile-loop-assemble-vanish,
+  .tile-loop-unfold-vanish,
+  .tile-chase-assemble-vanish,
+  .tile-chase-unfold-vanish,
+  .tile-build-assemble-vanish,
+  .tile-build-unfold-vanish,
+  .tile-loop-gate,
+  .tile-chase-gate,
+  .tile-build-gate-0,
+  .tile-build-gate-1,
+  .tile-build-gate-2,
+  .tile-build-gate-3,
+  .tile-build-gate-4,
+  .tile-build-gate-5,
   .tile-settle {
     animation: none;
+  }
+  .tile-resolve {
+    transition: none;
   }
 }
 

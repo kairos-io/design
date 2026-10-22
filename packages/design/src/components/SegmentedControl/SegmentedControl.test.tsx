@@ -62,12 +62,32 @@ describe("SegmentedControl", () => {
         aria-label="Docs level"
       />,
     );
-    const l1 = screen.getByRole("radio", { name: "Guided" });
+    // The code is part of the option's name, not decoration beside it.
+    const l1 = screen.getByRole("radio", { name: "L1 Guided" });
     expect(l1).toHaveTextContent("L1");
     expect(l1.querySelector("span")?.className).toContain("text-link");
-    expect(screen.getByRole("radio", { name: "Automate" })).toHaveAccessibleDescription(
+    expect(screen.getByRole("radio", { name: "L2 Automate" })).toHaveAccessibleDescription(
       "Scripts and the CLI",
     );
+  });
+
+  it("puts the only tab stop on the first option that is not disabled", () => {
+    render(
+      <SegmentedControl
+        value="none"
+        onChange={() => {}}
+        options={[
+          { value: "l1", label: "Guided", disabled: true },
+          { value: "l2", label: "Automate" },
+          { value: "l3", label: "Declare" },
+        ]}
+        aria-label="Docs level"
+      />,
+    );
+    const [guided, automate, declare] = screen.getAllByRole("radio");
+    expect(guided).toHaveAttribute("tabindex", "-1");
+    expect(automate).toHaveAttribute("tabindex", "0");
+    expect(declare).toHaveAttribute("tabindex", "-1");
   });
 
   it("selects on click", async () => {

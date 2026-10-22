@@ -72,7 +72,11 @@ function loadTokens(file = path.join(root, 'tokens.json')) {
     space: Object.keys(doc.space).filter(k => !k.startsWith('$')).map(Number),
     radius: group(doc.radius),
     layout: group(doc.layout),
-    motion: { easing: Array.isArray(easing) ? `cubic-bezier(${easing.join(', ')})` : easing, duration: group(doc.motion.duration) },
+    motion: {
+      easing: Array.isArray(easing) ? `cubic-bezier(${easing.join(', ')})` : easing,
+      scale: value(doc.motion.scale.$value),
+      duration: group(doc.motion.duration),
+    },
     rules: ext.rules ?? {},
     untokenised: { colors: Object.fromEntries(Object.entries(ext.untokenised?.colors ?? {}).filter(([k]) => !k.startsWith('$'))) },
   };
@@ -101,7 +105,14 @@ function staticTokens(t) {
   for (const [k, v] of Object.entries(t.radius)) stat[`radius-${k}`] = v;
   for (const [k, v] of Object.entries(t.layout)) stat[k] = v;
   stat['ease-out'] = t.motion.easing;
-  for (const [k, v] of Object.entries(t.motion.duration)) stat[`duration-${k}`] = v;
+  // One scale retimes the whole system: every duration is its value times
+  // --duration-scale, so setting that one property on <html> (the Storybook's
+  // Motion toolbar, setMotionScale() in a host) slows every transition,
+  // animation and tile loop together, and 0 stops them. The
+  // prefers-reduced-motion block below sets the durations to a literal 0ms,
+  // later in the file, so reduced motion still wins at any scale.
+  stat['duration-scale'] = t.motion.scale;
+  for (const [k, v] of Object.entries(t.motion.duration)) stat[`duration-${k}`] = `calc(${v} * var(--duration-scale))`;
   return stat;
 }
 
@@ -174,9 +185,11 @@ function tailwindCss(t) {
   for (const [k, v] of Object.entries(t.radius)) out.push(`  --radius-${k}: ${v};`);
   out.push('', '  /* No shadows. Elevation is a tone step: canvas, surface, raised. */', '  --shadow-*: initial;', '  --drop-shadow-*: initial;', '  --inset-shadow-*: initial;', '');
   out.push(`  --container-page: ${t.layout['page-max']};`, '');
-  out.push('  /* Motion: one easing, three durations, zero under prefers-reduced-motion (see tokens.css). */');
+  out.push('  /* Motion: one easing, three durations, each times --duration-scale so one property retimes');
+  out.push('     everything; zero under prefers-reduced-motion, whatever the scale (see tokens.css). */');
   out.push(`  --ease-out: ${t.motion.easing};`);
-  for (const [k, v] of Object.entries(t.motion.duration)) out.push(`  --duration-${k}: ${v};`);
+  out.push(`  --duration-scale: ${t.motion.scale};`);
+  for (const [k, v] of Object.entries(t.motion.duration)) out.push(`  --duration-${k}: calc(${v} * var(--duration-scale));`);
   out.push('  --animate-fade-up: fade-up var(--duration-slow) var(--ease-out) both;');
   out.push('  --animate-fade-in: fade-in var(--duration-base) var(--ease-out) both;', '');
   out.push('  @keyframes fade-in {', '    from { opacity: 0; }', '    to { opacity: 1; }', '  }');

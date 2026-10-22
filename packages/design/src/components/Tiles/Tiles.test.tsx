@@ -61,7 +61,7 @@ function stubFrames() {
 function renderCursorField() {
   const result = render(
     <div className="relative">
-      <TileField idle="cursor" fade="ramp" width={400} height={200} radius={25} seed={4} />
+      <TileField enter={false} idle="cursor" fade="ramp" width={400} height={200} radius={25} seed={4} />
     </div>,
   );
   const svg = result.container.querySelector("svg")!;
@@ -229,6 +229,10 @@ describe("Tiles", () => {
       const attrs = (el: Element) => [el.getAttribute("data-enter"), el.getAttribute("data-idle")];
       const svg = (ui: React.ReactElement) => render(ui).container.querySelector("svg")!;
       expect(attrs(svg(<TileField {...small} animate="in" />))).toEqual(["drop", null]);
+      // An idle mode on its own enters with the system's motion, the unfold; no prop at all is still static.
+      expect(attrs(svg(<TileField {...small} idle="live" />))).toEqual(["unfold", "live"]);
+      expect(attrs(svg(<TileField {...small} idle="wave" />))).toEqual(["unfold", "wave"]);
+      expect(attrs(svg(<TileField {...small} />))).toEqual([null, null]);
       expect(attrs(svg(<TileField {...small} animate="live" />))).toEqual(["drop", "live"]);
       expect(attrs(svg(<TileField {...small} animate="cursor" />))).toEqual(["drop", "cursor"]);
       expect(attrs(svg(<TileField {...small} animate={false} />))).toEqual([null, null]);
@@ -453,7 +457,7 @@ describe("Tiles", () => {
         expect(stacked.length).toBeGreaterThan(3);
         for (const column of stacked) expect(new Set(column).size).toBe(column.length);
         // Same field, same wave.
-        const { container: again } = render(<TileField {...small} idle="wave" />);
+        const { container: again } = render(<TileField {...small} enter={false} idle="wave" />);
         expect(waving(again).map(share)).toEqual(shares);
         // Folded: the grid alone, not one cube and not one class.
         rerender(<TileField {...small} enter="drop" idle="wave" folded />);
@@ -477,11 +481,17 @@ describe("Tiles", () => {
           expect(right.length).toBeGreaterThan(3);
           return mean(left) < mean(right);
         };
-        expect(leftward(<TileField {...small} idle="wave" solid fade="left" />)).toBe(true);
-        expect(leftward(<TileField {...small} idle="wave" solid fade="right" />)).toBe(false);
-        expect(leftward(<TileField {...small} idle="wave" solid fade={(u) => 0.9 - u * 0.8} />)).toBe(true);
-        expect(leftward(<TileField {...small} idle="wave" solid fade={(u) => u * 0.9} />)).toBe(false);
-        const centred = waving(render(<TileField {...small} idle="wave" fade="center" solid />).container);
+        expect(leftward(<TileField {...small} enter={false} idle="wave" solid fade="left" />)).toBe(true);
+        expect(leftward(<TileField {...small} enter={false} idle="wave" solid fade="right" />)).toBe(false);
+        expect(
+          leftward(<TileField {...small} enter={false} idle="wave" solid fade={(u) => 0.9 - u * 0.8} />),
+        ).toBe(true);
+        expect(leftward(<TileField {...small} enter={false} idle="wave" solid fade={(u) => u * 0.9} />)).toBe(
+          false,
+        );
+        const centred = waving(
+          render(<TileField {...small} enter={false} idle="wave" fade="center" solid />).container,
+        );
         const middle = centred.filter((g) => Math.abs(x(g) - 200) < 40 && Math.abs(y(g) - 50) < 30);
         const edge = centred.filter((g) => x(g) < 60 || x(g) > 340);
         expect(middle.length).toBeGreaterThan(0);
@@ -490,7 +500,7 @@ describe("Tiles", () => {
 
       it("attaches nothing under reduced motion, and leaves the deprecated animate shorthand alone", () => {
         stubMedia({ reduced: true });
-        const { container } = render(<TileField {...small} idle="wave" />);
+        const { container } = render(<TileField {...small} enter={false} idle="wave" />);
         const svg = container.querySelector("svg")!;
         expect(svg).toHaveAttribute("data-idle", "wave");
         expect(container.querySelectorAll(".tile-wave")).toHaveLength(0);
@@ -636,7 +646,7 @@ describe("Tiles", () => {
         <>
           <div ref={target} />
           <div className="relative">
-            <TileField idle="cursor" target={target} width={400} height={200} radius={25} />
+            <TileField enter={false} idle="cursor" target={target} width={400} height={200} radius={25} />
           </div>
         </>,
       );

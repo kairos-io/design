@@ -204,6 +204,7 @@
   },
   "motion": {
     "easing": "cubic-bezier(0.22, 1, 0.36, 1)",
+    "scale": 1,
     "duration": {
       "fast": "150ms",
       "base": "200ms",
@@ -222,7 +223,7 @@
       "#8B889A": "Installer: comment color in the cloud-config sample",
       "#6A6879": "Installer: muted text in the code sample",
       "#E04848": "Node Detail: red, not the recovery red",
-      "#FFF0E8": "Index and Console: pale orange tint",
+      "#FFF0E8": "Console: pale orange tint",
       "#EEEDF2": "Foundations and Talk Deck: table row hairline"
     }
   }

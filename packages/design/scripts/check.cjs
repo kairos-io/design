@@ -75,6 +75,28 @@ for (const h of Object.keys(t.untokenised.colors)) {
   if (!usedHex.has(norm(h))) console.warn(`note: untokenised color ${h} is no longer used by any deck; remove it from tokens.json`);
 }
 
+// The npm tarball carries its own copy of the licence, because npm pack cannot
+// reach a parent directory's LICENSE. Nothing else keeps the two in step.
+{
+  const here = path.join(root, 'LICENSE');
+  const top = path.join(repo, 'LICENSE');
+  if (!fs.existsSync(here)) errors.push('packages/design/LICENSE is missing; the npm tarball would ship Apache-2.0 code with no licence text. Copy the repository root LICENSE.');
+  else if (fs.readFileSync(here, 'utf8') !== fs.readFileSync(top, 'utf8')) errors.push('packages/design/LICENSE differs from the repository root LICENSE; copy the root file over it.');
+}
+
+// The decks load assets/fonts/fonts.css and the package loads its own copy.
+// They are the same stylesheet over the same four files, so a face added to one
+// (the metric-matched fallbacks) has to be in the other, or deck text reflows on
+// the swap where Storybook's does not.
+{
+  const deckFonts = path.join(repo, 'assets', 'fonts', 'fonts.css');
+  const pkgFonts = path.join(root, 'src', 'assets', 'fonts', 'fonts.css');
+  for (const f of [deckFonts, pkgFonts]) if (!fs.existsSync(f)) errors.push(`${path.relative(repo, f)} is missing`);
+  if (fs.existsSync(deckFonts) && fs.existsSync(pkgFonts) && fs.readFileSync(deckFonts, 'utf8') !== fs.readFileSync(pkgFonts, 'utf8')) {
+    errors.push('assets/fonts/fonts.css and packages/design/src/assets/fonts/fonts.css differ; the decks and the package load the same faces, so copy one over the other.');
+  }
+}
+
 // Generated files must be current.
 for (const [file, content] of Object.entries(generate(t))) {
   const p = path.join(root, file);

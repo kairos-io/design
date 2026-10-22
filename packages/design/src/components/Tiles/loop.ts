@@ -222,7 +222,34 @@ export function resolveDelay(index: number, count: number, moving: boolean): num
 /** Where a loader is between its status changing and its status faces landing. */
 export type SettlePhase = "looping" | "landing" | "settled";
 
+type Reached = { status: TileStatus; phase: "landing" | "settled"; delays: number[] };
+
+/**
+ * The landing's state lives outside React, read through useSyncExternalStore:
+ * the handoff below is DOM work done in a layout effect, and a change here
+ * re-renders synchronously before the browser paints, which is what makes
+ * the loop's cancel and the resolve one frame.
+ */
+function createSettleStore() {
+  let state: Reached | null = null;
+  const listeners = new Set<() => void>();
+  return {
+    get: () => state,
+    set: (next: Reached | null) => {
+      state = next;
+      listeners.forEach((listen) => listen());
+    },
+    subscribe: (listen: () => void) => {
+      listeners.add(listen);
+      return () => {
+        listeners.delete(listen);
+      };
+    },
+  };
+}
+
 const IDENTITY = "matrix(1, 0, 0, 1, 0, 0)";
+const PINNED = "data-pinned";
 
 /**
  * Whether an element's live transform and opacity are its resting ones; a
@@ -261,18 +288,19 @@ export function useSettle(options: {
   onSettled?: (status: TileStatus) => void;
 }): { phase: SettlePhase; delays: number[] } {
   const { status, reduced, root, keys, onSettled } = options;
-  type Reached = { status: TileStatus; phase: "landing" | "settled"; delays: number[] };
-  const [reached, setReached] = React.useState<Reached | null>(null);
-  const pinned = React.useRef<HTMLElement[]>([]);
+  const [store] = React.useState(createSettleStore);
+  const reached = React.useSyncExternalStore(store.subscribe, store.get, store.get);
+  // The callback is kept current before the effects below run, so a loader
+  // that mounts in a status under reduced motion reports from its first commit.
   const settled = React.useRef<((status: TileStatus) => void) | undefined>(undefined);
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     settled.current = onSettled;
   });
 
   // The flip: pin the live values and hand over, before paint.
   React.useLayoutEffect(() => {
     if (status === "loading") {
-      setReached(null);
+      store.set(null);
       return;
     }
     if (reduced) {
@@ -280,7 +308,6 @@ export function useSettle(options: {
       return;
     }
     const moving = new Set<string>();
-    const pins: HTMLElement[] = [];
     const scope = root.current;
     if (scope && typeof getComputedStyle === "function") {
       for (const el of Array.from(scope.querySelectorAll<HTMLElement>("[data-face], [data-gate]"))) {
@@ -288,44 +315,44 @@ export function useSettle(options: {
         if (isLanded(live)) continue;
         el.style.transform = live.transform;
         el.style.opacity = live.opacity;
-        pins.push(el);
+        el.setAttribute(PINNED, "");
         if (el.hasAttribute("data-gate")) {
           for (const face of Array.from(el.querySelectorAll("[data-face]")))
             moving.add(face.getAttribute("data-face")!);
         } else moving.add(el.getAttribute("data-face")!);
       }
     }
-    pinned.current = pins;
-    setReached({
+    store.set({
       status,
       phase: "landing",
       delays: keys.map((key, i) => resolveDelay(i, keys.length, moving.has(key))),
     });
     // The keys are derived from props that do not change mid-status.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, reduced]);
+  }, [status, reduced, store]);
 
   // The landing: with the loop classes gone, let the pins go so the
   // transition runs from them, and settle once the last fade is done.
   React.useLayoutEffect(() => {
     if (!reached || reached.phase !== "landing") return;
-    const pins = pinned.current;
-    pinned.current = [];
+    const scope = root.current;
+    const pins = scope ? Array.from(scope.querySelectorAll<HTMLElement>(`[${PINNED}]`)) : [];
     if (pins.length) {
       // One read flushes the style with the pins in place and no animation.
       void getComputedStyle(pins[0]).opacity;
       for (const el of pins) {
         el.style.transform = "";
         el.style.opacity = "";
+        el.removeAttribute(PINNED);
       }
     }
     const span = Math.max(0, ...reached.delays) + RESOLVE_FADE;
     const timer = window.setTimeout(() => {
-      setReached({ ...reached, phase: "settled" });
+      store.set({ ...reached, phase: "settled" });
       settled.current?.(reached.status);
     }, span);
     return () => window.clearTimeout(timer);
-  }, [reached]);
+  }, [reached, root, store]);
 
   if (status === "loading") return { phase: "looping", delays: [] };
   if (reduced) return { phase: "settled", delays: keys.map(() => 0) };

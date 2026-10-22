@@ -35,6 +35,17 @@ describe("@kairos-io/design without a DOM", () => {
     expect(getBrand()).toBe("kairos");
   });
 
+  it("reads the motion helpers as the unscaled tokens with no document", async () => {
+    const { DEFAULT_MOTION_SCALE, getMotionScale, motionDuration, setMotionScale } =
+      await import("../index.ts");
+    expect(getMotionScale()).toBe(DEFAULT_MOTION_SCALE);
+    // No <html> to write the scale on, and no computed style to read a
+    // duration from: the stylesheet's own numbers stand.
+    expect(() => setMotionScale(0.25)).not.toThrow();
+    expect(getMotionScale()).toBe(1);
+    expect(motionDuration("slow")).toBe(360);
+  });
+
   it("renders the interactive and theme-aware components to a string", async () => {
     const d = await import("../index.ts");
     const html = renderToString(

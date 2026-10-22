@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cn } from "../../lib/cn.ts";
 import { parsePoints } from "../../lib/mark.ts";
+import { useMergedRef } from "../../hooks/useMergedRef.ts";
 import {
   tileFaceOrder,
   tileFaceStroke,
@@ -11,16 +12,18 @@ import {
 } from "../../lib/tiles.ts";
 import type { PaletteProp } from "./shared.ts";
 import {
-  ENTER_DURATION,
   LOOP_FACE_STEP,
   REACH,
+  RESOLVE_CLASS,
   STATUS_LABEL,
   STROKE,
   cycleClass,
   faceVars,
   framePad,
+  gateClass,
   useReducedMotion,
   useSettle,
+  type TileExit,
   type TileLoop,
   type TileStatus,
 } from "./loop.ts";
@@ -39,9 +42,10 @@ const MONO_LINE = 0.3;
 const CENTRE_INDEX: Record<TileTone, number> = { 0: 3, 1: 1, 2: 0 };
 
 // The faces start an eighth of a loop apart in tone order, so a whole cube
-// comes in over one entrance plus two steps.
-const FACE_DELAYS = [0, 1, 2].map((tone) => ({ delay: Math.round(tone * LOOP_FACE_STEP) }));
-const CUBE_LANDING = ENTER_DURATION + 2 * LOOP_FACE_STEP;
+// comes in over one entrance plus two steps. The status faces stagger in
+// the same order.
+const FACE_DELAYS = [0, 1, 2].map((tone) => Math.round(tone * LOOP_FACE_STEP));
+const FACE_KEYS = ["0", "1", "2"];
 
 export interface TileLoaderProps
   extends Omit<React.SVGAttributes<SVGSVGElement>, "width" | "height">, PaletteProp {
@@ -51,12 +55,22 @@ export interface TileLoaderProps
    * The motion that loops: the three faces come into place one at a time in
    * tone order, rest as a complete cube, leave the same way and come again,
    * with the last face still leaving as the first returns, so a face is
-   * always showing over the outline. "assemble" (default): each face
-   * arrives along its own line and the three meet at the centre vertex.
-   * "unfold": each face hinges open from that vertex. The same motion as
-   * the field's entrances, laid end to end; both are proposals, to compare.
+   * always showing over the outline. "unfold" (default, the system's
+   * motion): each face hinges open from the cube's centre vertex along its
+   * own two edges. "assemble", the alternative: each face arrives along its
+   * own line and the three meet at that vertex. The same motion as the
+   * field's entrances, laid end to end.
    */
   enter?: TileLoop;
+  /**
+   * How the cube leaves between cycles. "disassemble" (default): the faces
+   * leave the way they came, the last still leaving as the first returns.
+   * "vanish": the cube rests one entrance complete, then is gone in one
+   * frame, no motion and no fade, the outline still there, and comes in
+   * again after one entrance. Under prefers-reduced-motion both are the
+   * static cube.
+   */
+  exit?: TileExit;
   /**
    * "palette" (default) paints the brand tones. "mono" paints the three
    * faces in currentColor at three strengths, for an accent button or any
@@ -64,12 +78,15 @@ export interface TileLoaderProps
    */
   tone?: "palette" | "mono";
   /**
-   * "loading" (default) loops. "success" lets the loop reach its next quiet
-   * moment, then the three faces come into place once more in the success
-   * greens over the cube, opacity and transform only, and it rests as a
-   * green cube; "error" the same in the recovery reds. `onSettled` fires
-   * once the last face has landed. Under prefers-reduced-motion the cube
-   * simply turns. Back to "loading" and the loop starts again.
+   * "loading" (default) loops. "success" stops the loop in the same frame:
+   * a face already on its outline crossfades to the success greens over
+   * the fast token, a face on its way or away completes to its outline
+   * from wherever it is over the base token (a transition, nothing jumps
+   * back) and turns green as it lands, the three a step apart in tone
+   * order, so the cube is green and still within about a third of a
+   * second; "error" the same in the recovery reds. `onSettled` fires once
+   * the last face has turned. Under prefers-reduced-motion the cube simply
+   * turns. Back to "loading" and the loop starts again from empty.
    */
   status?: TileStatus;
   /** Called once, when a "success" or "error" has landed and the loader is at rest. */
@@ -90,7 +107,8 @@ export const TileLoader = React.forwardRef<SVGSVGElement, TileLoaderProps>(
   (
     {
       size = 20,
-      enter = "assemble",
+      enter = "unfold",
+      exit = "disassemble",
       tone = "palette",
       palette = "kairos",
       status = "loading",
@@ -104,6 +122,8 @@ export const TileLoader = React.forwardRef<SVGSVGElement, TileLoaderProps>(
     ref,
   ) => {
     const reduced = useReducedMotion();
+    const root = React.useRef<SVGSVGElement | null>(null);
+    const setRefs = useMergedRef(root, ref);
     // The viewBox is in px, so the 1 unit strokes are 1px hairlines; `size`
     // is the cube's height. The box is padded by the stroke's mitre plus the
     // reach a face assembles from, so nothing is ever clipped, and the
@@ -120,26 +140,21 @@ export const TileLoader = React.forwardRef<SVGSVGElement, TileLoaderProps>(
     const tones = tilePalettes[palette];
     const paint = (face: TileTone) => (mono ? "currentColor" : tones[face]);
 
-    // The status: the loop runs until its next quiet moment, then the
-    // status faces land over the brand ones and the loader rests.
-    const settle = useSettle({
-      status,
-      reduced,
-      faces: FACE_DELAYS,
-      cycle: "loop",
-      landing: CUBE_LANDING,
-      onSettled,
-    });
+    // The status: the loop stops in the same frame and the faces resolve
+    // to their outlines, then the status faces fade in over them.
+    const settle = useSettle({ status, reduced, root, keys: FACE_KEYS, onSettled });
     const looping = status === "loading" || settle.phase === "looping";
+    const landing = settle.phase === "landing";
     const landed = status !== "loading" && settle.phase !== "looping";
+    const vanish = exit === "vanish";
 
     // The cycle's class and inline values on a face, with the geometry its
     // keyframes read from the face's own points. Nothing under reduced
     // motion: the faces are simply there.
-    const motion = (p: (typeof faces)[number], cycle: "loop" | "step") => ({
-      className: cycleClass(cycle, enter),
+    const motion = (p: (typeof faces)[number]) => ({
+      className: cycleClass("loop", enter, exit),
       style: {
-        "--tile-delay": `${FACE_DELAYS[p.tone].delay}ms`,
+        "--tile-delay": `${FACE_DELAYS[p.tone]}ms`,
         ...faceVars(enter, parsePoints(p.points), CENTRE_INDEX[p.tone], reach),
       } as React.CSSProperties,
     });
@@ -162,7 +177,7 @@ export const TileLoader = React.forwardRef<SVGSVGElement, TileLoaderProps>(
     return (
       <>
         <svg
-          ref={ref}
+          ref={setRefs}
           viewBox={`${-pad} ${-pad} ${w + 2 * pad} ${size + 2 * pad}`}
           width={w + 2 * pad}
           height={size + 2 * pad}
@@ -171,6 +186,7 @@ export const TileLoader = React.forwardRef<SVGSVGElement, TileLoaderProps>(
           aria-hidden={decorative ? "true" : undefined}
           focusable="false"
           data-enter={enter}
+          data-exit={exit}
           data-tone={tone}
           data-status={status}
           strokeLinejoin="miter"
@@ -195,31 +211,46 @@ export const TileLoader = React.forwardRef<SVGSVGElement, TileLoaderProps>(
               strokeOpacity={mono ? MONO_LINE : undefined}
             />
           ))}
-          {/* The faces on the same point strings, sides first and top last,
-              each with the face stroke: a thin bevelled stroke in its own fill
-              under the fill, which covers the anti-aliased seam against its
-              neighbour while it moves on its own layer, with no pin at a
+          {/* The cube: its faces on the same point strings, sides first and top
+              last, each with the face stroke: a thin bevelled stroke in its own
+              fill under the fill, which covers the anti-aliased seam against
+              its neighbour while it moves on its own layer, with no pin at a
               corner and no overshoot onto the outline. Mono faces carry their
               strength as fill and stroke opacity, so the cycle's opacity is
-              free. Once a status has landed, a face that was away at the quiet
-              moment stays away rather than snap back. */}
-          {tileFaceOrder
-            .map((t) => faces[t])
-            .map((p) =>
-              React.cloneElement(face(p, paint(p.tone), mono ? MONO_FACE[p.tone] : undefined), {
-                ...(looping && !reduced ? motion(p, "loop") : {}),
-                ...(landed && settle.away[p.tone] ? { opacity: 0 } : {}),
-              }),
-            )}
-          {/* The status faces, over the brand ones: they come into place once
-              as the loop's faces do, in the status tones, and stay. */}
+              free. The group is the vanish exit's gate. While a status lands,
+              the faces carry the resolve instead of the loop. */}
+          <g
+            data-cube="0"
+            {...(vanish ? { "data-gate": "" } : {})}
+            {...(vanish && looping && !reduced
+              ? { className: gateClass("loop"), style: { "--tile-delay": "0ms" } as React.CSSProperties }
+              : vanish && landing
+                ? { className: RESOLVE_CLASS }
+                : {})}
+          >
+            {tileFaceOrder
+              .map((t) => faces[t])
+              .map((p) =>
+                React.cloneElement(face(p, paint(p.tone), mono ? MONO_FACE[p.tone] : undefined), {
+                  "data-face": FACE_KEYS[p.tone],
+                  ...(looping && !reduced ? motion(p) : landing ? { className: RESOLVE_CLASS } : {}),
+                }),
+              )}
+          </g>
+          {/* The status faces, over the brand ones: each fades in once its
+              brand face is on the outline, in tone order, and stays. */}
           {landed &&
             tileFaceOrder
               .map((t) => faces[t])
               .map((p) =>
                 React.cloneElement(face(p, tilePalettes[status as "success" | "error"][p.tone]), {
                   "data-status-face": "",
-                  ...(settle.phase === "landing" ? motion(p, "step") : {}),
+                  ...(landing
+                    ? {
+                        className: "tile-settle",
+                        style: { "--tile-delay": `${settle.delays[p.tone]}ms` } as React.CSSProperties,
+                      }
+                    : {}),
                 }),
               )}
         </svg>
