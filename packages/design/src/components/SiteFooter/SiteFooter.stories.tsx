@@ -11,14 +11,14 @@ const meta = {
     docs: {
       description: {
         component:
-          'The footer of the site pages. It is the dark canvas in both themes: the component nests `data-theme="dark"`, so everything inside reads the dark tokens. Columns for kairos.io, one row (`compact`) for hadron-linux.io.',
+          'The footer of the site pages. It is the dark canvas in both themes: the component nests `data-theme="dark"`, so everything inside reads the dark tokens. Columns for kairos.io, one row (`compact`) for hadron-linux.io. The brand block sits on the left and takes the dark-surface lockup (`KairosLogo` or `HadronLogo` with `variant="dark"`: the colour mark with the white wordmark), not the one-colour white rendition.',
       },
     },
   },
   args: {
     brand: (
       <>
-        <KairosLogo variant="white" height={32} />
+        <KairosLogo variant="dark" height={32} />
         <span>A Cloud Native Computing Foundation sandbox project.</span>
       </>
     ),
@@ -63,7 +63,7 @@ export const Compact: Story = {
     note: undefined,
     brand: (
       <>
-        <KairosLogo variant="white" height={36} />
+        <KairosLogo variant="dark" height={36} />
         <span>Engineered by the Kairos team · ships with every Kairos release</span>
       </>
     ),

@@ -38,7 +38,8 @@ export const SiteFooter = React.forwardRef<HTMLElement, SiteFooterProps>(
           </div>
         ) : (
           <div className="grid gap-8 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))]">
-            <div className="flex flex-col gap-3.5 text-sm leading-normal">{brand}</div>
+            {/* items-start, or the stretched cross axis widens the logo's box and the lockup drifts to the centre of the cell. */}
+            <div className="flex flex-col items-start gap-3.5 text-sm leading-normal">{brand}</div>
             {columns.map((c, i) => (
               <div key={i} className="flex flex-col gap-2.5 text-[15px]">
                 <span className="font-bold text-ink">{c.title}</span>

@@ -48,7 +48,7 @@ export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
       {eyebrow && !breadcrumb && <div className="mb-1 font-mono text-xs text-muted">{eyebrow}</div>}
       {breadcrumb && breadcrumb.length > 0 && (
         <nav aria-label="Breadcrumb" className="mb-1.5">
-          <ol className="flex flex-wrap items-center gap-1.5 text-sm text-muted">
+          <ol className="m-0 flex list-none flex-wrap items-center gap-1.5 p-0 text-sm text-muted">
             {breadcrumb.map((item, i) => (
               <li key={`${i}-${item.label}`} className="flex min-w-0 items-center gap-1.5">
                 {i > 0 && <span aria-hidden="true">/</span>}

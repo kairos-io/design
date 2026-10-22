@@ -15,7 +15,7 @@ They are the hero of the Foundations deck and of the homepages in this repositor
 
 <div className="flex flex-wrap items-center gap-8">
   <TileUnit size={120} />
-  <ul className="m-0 text-sm">
+  <ul className="m-0 list-disc pl-5 text-sm">
     <li>
       Top: <code>--brand-orange-softer</code> (#FB9E70)
     </li>
@@ -40,7 +40,7 @@ The homepages put a field at the right edge of the hero, dense at that edge and 
   <TileField fade="right" seed={5} radius={38} />
 </div>
 
-A field tiles the plane with units and fills each rhombus with a seeded probability. A **bias** sets that probability by position, so the field is dense at one edge and falls away to outlines at the other, and a few tiles always fall away even where it is densest. Three knobs:
+A field tiles the plane with units and fills each rhombus with a seeded probability. A **bias** sets that probability by position, so the field is dense at one edge and falls away to outlines at the other, and a few tiles always fall away even where it is densest. The outlines fade with it: each hairline is as opaque as its cell's weight relative to the field's densest cell, so the grid thins out at the same rate as the fills and the sparse edge dissolves into the surface instead of stopping in a line. A cell with a filled face keeps a full outline underneath, so an animated cube always lands on one, and a flat bias draws the complete grid. Three knobs:
 
 <table className="sb-unstyled w-full text-sm">
   <thead>
@@ -105,7 +105,9 @@ The presets:
     </tr>
     <tr className="border-b border-line align-top">
       <td className="py-2 pr-3 font-mono text-xs">ramp</td>
-      <td className="py-2">A linear fade from outlines to solid, for a progress or rollout illustration.</td>
+      <td className="py-2">
+        A linear fade from nothing through outlines to solid, for a progress or rollout illustration.
+      </td>
     </tr>
   </tbody>
 </table>
@@ -114,7 +116,7 @@ The component is decorative: it is `aria-hidden`, it fills its positioned parent
 
 ## Where it goes
 
-Dense at one edge, fading to outlines. Hero and empty states only, never behind text.
+Dense at one edge, fading through outlines to nothing. Hero and empty states only, never behind text. Let the field's sparse edge sit inside the container: it dissolves on its own, so it needs no mask or gradient over it.
 
 <DoDont
   do={
@@ -205,6 +207,8 @@ A field can arrive instead of being there. `animate="in"` drops the filled tiles
 - Never two live fields on one page, and never on content that reflows, because the tiles are positioned by the SVG and a reflow would restart them.
 
 The stories [Tiles into place](?path=/story/components-tiles--animated) and [Live field](?path=/story/components-tiles--live) under Components/Tiles show both.
+
+`animate="cursor"` is a proposal on top of the deck, not part of it, and nothing turns it on by default. The tiles enter as with `"in"`, then follow the pointer over the field's parent (or a `target` element, which `Hero` sets to the whole hero): the cubes around it light up, an empty cell with a faint fill of its tone and a filled cube a shade brighter, falling off with distance and settling back over the slow duration once the pointer leaves. It is opacity only, on a glow layer that shares the grid's points and rests at zero, so the resting field is the static one, no face scales, and a lit cube is still exactly its outline. The field itself stays `pointer-events-none`; the parent is listened to, one animation frame per move, with no React re-render. It only runs on a device that can hover with a fine pointer: touch gets the static field, and so does `prefers-reduced-motion`. See [Follows the cursor](?path=/story/components-tiles--cursor).
 
 ## In a hero
 

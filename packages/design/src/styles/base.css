@@ -108,9 +108,30 @@
     opacity: 0.35;
   }
 }
+
+/* The cursor (TileField animate="cursor"). Every cube has a glow group on
+   top of the field, on its own cell's points: the cell's tone where it is
+   empty, white where it is filled. The group rests at opacity 0, so the
+   resting field paints exactly as the static one; the component writes
+   --tile-lit (0 to 1) on the groups near the pointer from one animation
+   frame per move and removes it from the rest, and the opacity follows
+   through this transition, so a cube eases up as the pointer arrives and
+   settles back over the slow duration once it has gone. Opacity alone,
+   never a scale or a filter, so a lit cube is still exactly its outline.
+   Devices without a fine hovering pointer never get the property written;
+   reduced motion pins the glow down here as well, so a stray value cannot
+   light anything. */
+.tile-glow {
+  opacity: calc(var(--tile-lit, 0) * 0.45);
+  transition: opacity var(--duration-slow) var(--ease-out);
+}
 @media (prefers-reduced-motion: reduce) {
   .tile-in,
   .tile-live {
     animation: none;
+  }
+  .tile-glow {
+    opacity: 0;
+    transition: none;
   }
 }

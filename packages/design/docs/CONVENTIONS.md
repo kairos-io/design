@@ -77,4 +77,7 @@ The tile geometry is hard-edged: mitre joins, square caps, no rounded-base
 corners anywhere on a rhombus. Filled faces and grid outlines share the
 exact same points so they coincide at every zoom. Motion never leaves a
 blank cell: the grid is always complete underneath, and an animated cube
-must land exactly on its outline.
+must land exactly on its outline. The outlines fade with the field: a cell's
+hairline is as opaque as its bias weight relative to the densest cell, so the
+sparse edge dissolves instead of cutting, while a filled face always sits on a
+fully drawn outline.

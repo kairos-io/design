@@ -19,7 +19,7 @@ No drop shadows anywhere. Elevation is a tone step: the canvas (`--bg`), a surfa
 
 ## Motion
 
-One easing and three durations. Hover changes use `fast`; anything that opens uses `base`; the one entrance animation, `fade-up`, uses `slow`, as does a tile landing. All of it is transform and opacity only, and `prefers-reduced-motion: reduce` sets every duration to zero and turns the animations off.
+One easing and three durations. Hover changes use `fast`; anything that opens uses `base`; the one entrance animation, `fade-up`, uses `slow`, as does a tile landing. All of it is transform and opacity only, and `prefers-reduced-motion: reduce` sets every duration to zero and turns the animations off. The one thing that follows the pointer, the opt-in cursor mode of the [tile field](?path=/docs/foundations-tiles--docs#motion), is opacity alone over `slow` as well, only on a device that can hover, and off under reduced motion.
 
 <MotionTable />
 

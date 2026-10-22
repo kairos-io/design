@@ -47,6 +47,13 @@ export interface TilePolygon {
   v: number;
   /** The bias at that position: how dense the field is there, 0..1. */
   weight: number;
+  /**
+   * Opacity of the cell's outline, 0..1: the weight relative to the densest
+   * cell in the field, so the hairlines thin out where the fills do and the
+   * sparse edge dissolves instead of stopping in a line. A filled face is
+   * always 1, so an animated cube lands on a fully drawn outline.
+   */
+  outline: number;
   /** Index of the hexagon the rhombus belongs to; three rhombi share one. */
   hex: number;
 }
@@ -142,12 +149,30 @@ export function tileField({
           u: round(cx / width),
           v: round(cy / height),
           weight: round(Math.min(1, Math.max(0, t))),
+          outline: 1,
           hex,
         });
       });
     }
   }
+  // The outlines fade with the field, measured against its own densest cell
+  // rather than an absolute scale, so a bias that peaks at 0.6 still draws a
+  // full grid where it is densest and a custom bias needs no calibration. A
+  // flat bias (every cell the same weight, or no weight at all) has no sparse
+  // edge to dissolve, so it keeps the complete grid at full strength.
+  const peak = Math.max(0, ...out.map((p) => p.weight));
+  for (const p of out) p.outline = tileOutlineOpacity(p, peak);
   return out;
+}
+
+/**
+ * How opaque a cell's outline is, given the field's peak weight: the cell's
+ * share of the peak, or 1 under a filled face so the cube that lands there
+ * sits on a complete outline. Exported for callers that draw their own grid.
+ */
+export function tileOutlineOpacity(p: Pick<TilePolygon, "weight" | "filled">, peak: number): number {
+  if (p.filled || peak <= 0) return 1;
+  return round(Math.min(1, p.weight / peak));
 }
 
 function round(n: number): number {
@@ -188,6 +213,7 @@ export function tileHexagon(cx: number, cy: number, r: number): TilePolygon[] {
     u: 0.5,
     v: 0.5,
     weight: 1,
+    outline: 1,
     hex: 0,
   }));
 }
@@ -220,10 +246,14 @@ export function tileFieldSvg(
   // top with a stroke in their own colour: the stroke hides the anti-aliased
   // seam between neighbours and covers the hairline beneath, and nothing is
   // drawn over a filled face afterwards, so its edges stay hard and clean.
+  // Each hairline carries its cell's outline opacity, so the grid thins out
+  // with the fills; a full-strength outline omits the attribute.
   const grid = polygons
     .map(
       (p) =>
-        `<polygon points="${p.points}" fill="none" stroke="var(--line, ${line})" stroke-width="${strokeWidth}"/>`,
+        `<polygon points="${p.points}" fill="none" stroke="var(--line, ${line})" stroke-width="${strokeWidth}"${
+          p.outline < 1 ? ` stroke-opacity="${p.outline}"` : ""
+        }/>`,
     )
     .join("\n    ");
   const faces = polygons

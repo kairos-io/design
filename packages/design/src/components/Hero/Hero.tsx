@@ -10,7 +10,11 @@ export interface HeroProps extends Omit<React.HTMLAttributes<HTMLElement>, "titl
   title: React.ReactNode;
   /** The paragraph under the title, capped at 560px. */
   lede?: React.ReactNode;
-  /** The tile field at the right edge: props for it, or false for none. */
+  /**
+   * The tile field at the right edge: props for it, or false for none.
+   * `animate` passes through; with `"cursor"` the field follows the pointer
+   * over the whole hero, not only its own right-hand strip.
+   */
   tiles?: Partial<TileFieldProps> | false;
   /** A hairline under the hero, as hadron-linux.io has. */
   bordered?: boolean;
@@ -26,42 +30,49 @@ export const Hero = React.forwardRef<HTMLElement, HeroProps>(
   (
     { eyebrow, title, lede, tiles = {}, palette = "kairos", bordered = false, className, children, ...props },
     ref,
-  ) => (
-    <section
-      ref={ref}
-      className={cn("relative w-full overflow-hidden", bordered && "border-b border-line", className)}
-      {...props}
-    >
-      {tiles !== false && (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(52%,720px)] md:block"
-        >
-          <TileField
-            fade={(u, v) => Math.max(0, 1.05 - Math.hypot(u - 1, v - 0.45) * 1.35)}
-            seed={3}
-            radius={40}
-            width={720}
-            height={620}
-            palette={palette}
-            preserveAspectRatio="xMaxYMid slice"
-            {...tiles}
-          />
-        </div>
-      )}
-      <div className="relative mx-auto flex w-full max-w-(--page-max) flex-col gap-6 px-4 py-14 sm:px-8 md:py-[clamp(56px,9vw,120px)]">
-        {eyebrow && <span className="font-mono text-xs text-muted">{eyebrow}</span>}
-        <h1 className="m-0 max-w-[760px] text-[clamp(48px,7.4vw,96px)] leading-[0.96] font-semibold tracking-[-0.05em] text-balance">
-          {title}
-        </h1>
-        {lede && (
-          <p className="m-0 max-w-[560px] text-[clamp(17px,1.6vw,20px)] leading-relaxed text-sub text-pretty">
-            {lede}
-          </p>
+  ) => {
+    // The field's wrapper is pointer-events-none and the copy column sits
+    // over it, so a cursor-driven field listens on the section itself.
+    const section = React.useRef<HTMLElement>(null);
+    React.useImperativeHandle(ref, () => section.current as HTMLElement, []);
+    return (
+      <section
+        ref={section}
+        className={cn("relative w-full overflow-hidden", bordered && "border-b border-line", className)}
+        {...props}
+      >
+        {tiles !== false && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(52%,720px)] md:block"
+          >
+            <TileField
+              fade={(u, v) => Math.max(0, 1.05 - Math.hypot(u - 1, v - 0.45) * 1.35)}
+              seed={3}
+              radius={40}
+              width={720}
+              height={620}
+              palette={palette}
+              preserveAspectRatio="xMaxYMid slice"
+              target={section}
+              {...tiles}
+            />
+          </div>
         )}
-        {children && <div className="flex max-w-[560px] flex-col gap-2.5">{children}</div>}
-      </div>
-    </section>
-  ),
+        <div className="relative mx-auto flex w-full max-w-(--page-max) flex-col gap-6 px-4 py-14 sm:px-8 md:py-[clamp(56px,9vw,120px)]">
+          {eyebrow && <span className="font-mono text-xs text-muted">{eyebrow}</span>}
+          <h1 className="m-0 max-w-[760px] text-[clamp(48px,7.4vw,96px)] leading-[0.96] font-semibold tracking-[-0.05em] text-balance">
+            {title}
+          </h1>
+          {lede && (
+            <p className="m-0 max-w-[560px] text-[clamp(17px,1.6vw,20px)] leading-relaxed text-sub text-pretty">
+              {lede}
+            </p>
+          )}
+          {children && <div className="flex max-w-[560px] flex-col gap-2.5">{children}</div>}
+        </div>
+      </section>
+    );
+  },
 );
 Hero.displayName = "Hero";

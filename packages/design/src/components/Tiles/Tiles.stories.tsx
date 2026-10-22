@@ -15,7 +15,7 @@ const meta = {
     },
   },
   argTypes: {
-    animate: { control: "inline-radio", options: [false, "in", "live"] },
+    animate: { control: "inline-radio", options: [false, "in", "live", "cursor"] },
     palette: { control: "inline-radio", options: ["kairos", "hadron"] },
     fade: {
       control: "select",
@@ -67,6 +67,24 @@ export const Live: Story = {
       description: {
         story:
           'With `animate="live"` the tiles enter the same way and then a few keep breathing on long, uneven cycles, so a hero or an empty state feels switched on without pulling the eye. CSS only; no timers.',
+      },
+    },
+  },
+  render: (args) => (
+    <div className="relative h-80 overflow-hidden rounded-lg border bg-bg">
+      <TileField {...args} />
+    </div>
+  ),
+};
+
+export const Cursor: Story = {
+  name: "Follows the cursor",
+  args: { animate: "cursor" },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'With `animate="cursor"` the tiles enter as with `"in"`, then follow the pointer: move it over the field and the cubes around it light up, empty cells with a faint fill of their tone and filled cubes a shade brighter, fading with distance and settling back over the slow duration once the pointer leaves. The resting field is the static one, and the effect only runs on a device that can hover with a fine pointer; touch and prefers-reduced-motion get the static field. Opt-in, and a proposal on top of the deck rather than part of it: nothing turns it on by default.',
       },
     },
   },
@@ -179,7 +197,7 @@ export const Marker: Story = {
         <TileMarker tone={1}>02</TileMarker>
         <TileMarker tone={2}>03</TileMarker>
       </div>
-      <ol className="flex flex-col gap-3">
+      <ol className="m-0 flex list-none flex-col gap-3 p-0">
         {["Why immutable", "Build an image", "Deploy to the edge", "Upgrade and roll back"].map((t, i) => (
           <li key={t} className="flex items-center gap-4">
             <TileMarker>{String(i + 1).padStart(2, "0")}</TileMarker>

@@ -30,7 +30,7 @@ export const Default: Story = {};
 export const NodeStates: Story = {
   name: "The deck's five node states",
   render: () => (
-    <ul className="grid gap-2 text-sm font-semibold">
+    <ul className="m-0 grid list-none gap-2 p-0 text-sm font-semibold">
       {(
         [
           ["success", false, "Healthy"],

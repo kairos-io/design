@@ -38,7 +38,7 @@ const stateText: Record<StepState, string> = {
  */
 export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(({ items, className, ...props }, ref) => {
   return (
-    <ol ref={ref} className={cn("grid list-none gap-1 p-0", className)} {...props}>
+    <ol ref={ref} className={cn("m-0 grid list-none gap-1 p-0", className)} {...props}>
       {items.map((item) => (
         <li
           key={item.id}

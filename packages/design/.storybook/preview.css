@@ -118,15 +118,11 @@ body,
   border-left-color: var(--accent);
 }
 
-/* Preflight strips list markers; docs prose wants them back. */
-.sbdocs.sbdocs-content ol {
-  list-style: decimal;
-  padding-left: 30px;
-}
-.sbdocs.sbdocs-content ul {
-  list-style: disc;
-  padding-left: 30px;
-}
+/* Docs prose lists keep their markers without a rule here: Storybook's own
+   typography restores disc and decimal under .sbdocs-content and skips the
+   .sb-unstyled subtree it wraps every story canvas in. A list rule of our own
+   would not skip it, and would paint a bullet or a number in front of a nav
+   item or a numbered tile inside a story on a docs page. */
 
 /* Docs pages fit a phone. */
 .sbdocs.sbdocs-wrapper {
