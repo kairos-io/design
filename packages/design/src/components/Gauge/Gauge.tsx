@@ -112,7 +112,7 @@ export const Gauge = React.forwardRef<SVGSVGElement, GaugeProps>(
         <text x={c} y={c + 6} textAnchor="middle" className="fill-ink font-sans text-2xl font-bold">
           {shown}
         </text>
-        <text x={c} y={c + 22} textAnchor="middle" className="fill-muted font-sans text-[11px] font-semibold">
+        <text x={c} y={c + 22} textAnchor="middle" className="fill-muted font-sans text-xs font-semibold">
           {sub ?? label}
         </text>
       </svg>

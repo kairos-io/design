@@ -8,11 +8,37 @@ import { focusRing } from "../../lib/focus.ts";
 // accent bar on its left.
 
 export const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
-  ({ className, ...props }, ref) => (
-    <div className="relative w-full overflow-auto rounded-base bg-surface">
-      <table ref={ref} className={cn("w-full caption-bottom text-[15px]", className)} {...props} />
-    </div>
-  ),
+  ({ className, ...props }, ref) => {
+    // A region that scrolls must be reachable by keyboard, or the rows past
+    // its edge cannot be read without a mouse. A tab stop on every table
+    // would be noise, so the wrapper takes one only while the table is
+    // actually wider than it is, which is the narrow viewport case.
+    const scroller = React.useRef<HTMLDivElement | null>(null);
+    const [scrollable, setScrollable] = React.useState(false);
+    React.useEffect(() => {
+      const box = scroller.current;
+      if (!box) return;
+      const measure = () => setScrollable(box.scrollWidth > box.clientWidth);
+      measure();
+      if (typeof ResizeObserver !== "function") return;
+      const observer = new ResizeObserver(measure);
+      observer.observe(box);
+      if (box.firstElementChild) observer.observe(box.firstElementChild);
+      return () => observer.disconnect();
+    }, []);
+    return (
+      <div
+        ref={scroller}
+        tabIndex={scrollable ? 0 : undefined}
+        className={cn(
+          "relative w-full overflow-auto rounded-base bg-surface",
+          scrollable && `${focusRing} focus-visible:ring-inset`,
+        )}
+      >
+        <table ref={ref} className={cn("w-full caption-bottom text-[15px]", className)} {...props} />
+      </div>
+    );
+  },
 );
 Table.displayName = "Table";
 
