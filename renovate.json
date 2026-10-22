@@ -2,5 +2,17 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "npm dependencies"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["/^@storybook//", "storybook", "eslint-plugin-storybook"],
+      "groupName": "storybook"
+    }
   ]
 }

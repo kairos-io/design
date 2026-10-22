@@ -1,0 +1,29 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { Breakpoints, LayoutMeasures, SpacingScale } from "../../../.storybook/blocks/index.ts";
+
+<Meta title="Foundations/Spacing & layout" />
+
+# Spacing and layout
+
+## The scale
+
+A 4px base: 4, 8, 12, 16, 24, 32, 48 and 80. `tokens.css` exposes them as `--space-4` to `--space-80`; in Tailwind the step is 4px, so `p-1` is 4px, `p-4` is 16px and `p-20` is 80px. The steps the screens reach for most are 8 between controls, 16 inside a tile, 24 inside a card and between cards, 32 for page padding and 80 between page sections.
+
+<SpacingScale />
+
+## Breakpoints
+
+Min-width, mobile first. The console makes two decisions: below `md` the sidebar is a drawer behind a top bar, and from `lg` it shows its labels.
+
+<Breakpoints />
+
+## Measures
+
+<LayoutMeasures />
+
+## Page layout
+
+- Content is padded 32px on desktop, 24px below `lg`, 16px below `md`, and capped at `--page-max` (1280px).
+- A form field is capped at 640px so a text input never spans a wide screen.
+- A page never scrolls sideways; the render check fails one that does on desktop.
+- Tile fields sit in heroes and empty states only, never behind text.

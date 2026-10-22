@@ -1,8 +1,21 @@
 name: Publish to GitHub Pages
 
+# The Pages site of whichever repository this runs in: the design decks at the
+# root (served as they are in the checkout), the Storybook of the design
+# package under /storybook/, and the packed package under /packages/design/
+# so a branch or fork build can be installed with npm before it is on the
+# registry. One-time setting: Settings > Pages > Build and deployment >
+# Source: GitHub Actions. To publish a branch, allow it on the github-pages
+# environment (Settings > Environments) and run this workflow on it.
+
+# A push to main publishes only once its "Design package" run is green, so a
+# red main never reaches the site. A run started by hand publishes the ref it
+# is run on as it is.
 on:
-  push:
+  workflow_run:
+    workflows: ["Design package"]
     branches: [main]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -16,15 +29,40 @@ concurrency:
 
 jobs:
   deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+        with:
+          # workflow_run runs against the default branch, so take the commit
+          # that CI actually checked.
+          ref: ${{ github.event.workflow_run.head_sha || github.ref }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: packages/design/package-lock.json
+      - name: Build the design package and its Storybook
+        working-directory: packages/design
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          npm run build-storybook
+          npm pack
+      - name: Assemble the site
+        run: |
+          mkdir -p _site/storybook _site/packages/design
+          rsync -a --exclude .git --exclude _site --exclude node_modules --exclude storybook-static --exclude dist --exclude '*.tgz' ./ _site/
+          rsync -a packages/design/storybook-static/ _site/storybook/
+          cp packages/design/kairos-io-design-*.tgz _site/packages/design/
+          cp packages/design/kairos-io-design-*.tgz _site/packages/design/kairos-io-design.tgz
+          touch _site/.nojekyll _site/storybook/.nojekyll
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: .
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v5

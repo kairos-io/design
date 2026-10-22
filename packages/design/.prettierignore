@@ -1,0 +1,14 @@
+dist/
+storybook-static/
+node_modules/
+package-lock.json
+tokens.css
+tailwind.css
+src/components/Logo/logos.generated.ts
+examples/react-vite/dist
+examples/react-vite/node_modules
+src/assets/patterns
+scripts/*.cjs
+src/assets/fonts/
+src/tokens/resolved.json
+tokens.json

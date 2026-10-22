@@ -2,21 +2,142 @@
   "name": "@kairos-io/design",
   "version": "0.1.0",
   "private": true,
-  "description": "Kairos design tokens as CSS custom properties and a Tailwind 4 theme.",
+  "description": "The Kairos design system: design tokens, React components, framework-free styles and a Storybook, shared by the Kairos web projects.",
+  "license": "Apache-2.0",
+  "keywords": [
+    "kairos",
+    "design-system",
+    "design-tokens",
+    "css",
+    "css-custom-properties",
+    "react",
+    "storybook",
+    "tailwindcss",
+    "tailwind"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kairos-io/design.git",
     "directory": "packages/design"
   },
   "homepage": "https://kairos-io.github.io/design/",
-  "files": ["tokens.json", "tokens.css", "tailwind.css", "README.md"],
+  "bugs": {
+    "url": "https://github.com/kairos-io/kairos/issues"
+  },
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist",
+    "LICENSE",
+    "tokens.json",
+    "tokens.css",
+    "tailwind.css"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/styles.css",
+  "jsdelivr": "./dist/styles.css",
   "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./tokens": {
+      "types": "./dist/tokens.d.ts",
+      "import": "./dist/tokens.js",
+      "default": "./dist/tokens.js"
+    },
+    "./tokens.json": "./tokens.json",
     "./tokens.css": "./tokens.css",
     "./tailwind.css": "./tailwind.css",
-    "./tokens.json": "./tokens.json"
+    "./styles.css": "./dist/styles.css",
+    "./components.css": "./dist/components.css",
+    "./fonts.css": "./dist/fonts.css",
+    "./assets/*": "./dist/assets/*",
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=22.18"
   },
   "scripts": {
-    "build": "node scripts/build.js",
-    "check:tokens": "node scripts/check.js"
+    "build:tokens": "node scripts/build.cjs && node scripts/build-logos.ts && node scripts/build-patterns.ts",
+    "build:js": "tsdown",
+    "build:css": "node scripts/build-css.ts",
+    "build": "npm run build:tokens && npm run build:js && npm run build:css",
+    "check:tokens": "node scripts/check.cjs && node scripts/build-logos.ts && node scripts/build-patterns.ts && git diff --exit-code -- src/components/Logo/logos.generated.ts src/assets/patterns",
+    "dev": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.2.0",
+    "@radix-ui/react-label": "^2.1.16",
+    "@radix-ui/react-select": "^2.3.8",
+    "@radix-ui/react-separator": "^1.1.16",
+    "@radix-ui/react-slot": "^1.4.0",
+    "@radix-ui/react-tabs": "^1.1.22",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.54.0",
+    "tailwind-merge": "^3.7.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "@storybook/addon-a11y": "^10.6.1",
+    "@storybook/addon-docs": "^10.6.1",
+    "@storybook/addon-themes": "^10.6.1",
+    "@storybook/react-vite": "^10.6.1",
+    "@tailwindcss/cli": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^25.5.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "eslint": "^10.0.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-storybook": "^10.6.1",
+    "globals": "^17.0.0",
+    "jsdom": "^30.1.2",
+    "prettier": "^3.9.9",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remark-gfm": "^4.0.1",
+    "storybook": "^10.6.1",
+    "tailwindcss": "^4.3.3",
+    "tsdown": "^0.23.0",
+    "typescript": "~5.9.0",
+    "typescript-eslint": "^8.71.1",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3"
   }
 }

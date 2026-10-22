@@ -1,0 +1,84 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import {
+  BrandPalette,
+  ColorGrid,
+  ContrastTable,
+  DoDont,
+  HadronPalette,
+  StatusPalette,
+  ToneRow,
+} from "../../../.storybook/blocks/index.ts";
+
+<Meta title="Foundations/Color" />
+
+# Color
+
+Brand colours come straight from the logos. Light mode sits on a violet-tinted mist, dark mode on violet ink: one cool neutral family across both themes, never navy, never brown. Orange takes dark ink text; Hadron blue takes white.
+
+Two layers. The **brand and status colours** are fixed: the three oranges, the three blues, the node-state greens, amber and red. The **theme tokens** are what components refer to: a role (`surface`, `sub`, `accent`, `line`) with a value per theme. Switch the theme and every component follows, because nothing in a component names a colour.
+
+## Kairos, from the logo
+
+<BrandPalette />
+
+## Hadron, from the logo
+
+The secondary brand. Hadron swaps the accent and nothing else: the same neutrals, the same status colours, the same components, with the three blues where the three oranges were. Set `data-variant="hadron"` on the element that carries `data-theme` and the accent, the ink on it and the links change; the tiles take `palette="hadron"`. [Hadron](?path=/docs/foundations-hadron--docs) has the rules.
+
+<HadronPalette />
+
+### What changes under Hadron
+
+The variant sets three names and nothing else: `accent` becomes Hadron blue in both themes, `on-accent` becomes white, and `link` becomes the deep blue in light and Sky in dark. Every component that paints with `bg-accent`, `text-on-accent` or `text-link` follows, which is why components never name a brand colour (the tests fail the build if one does). `accent-soft`, `accent-line` and `code-key` are not set by the variant and stay Kairos orange, because no deck defines Hadron values for them; the audit table on the [Theming](?path=/docs/foundations-theming--docs) page lists where that shows.
+
+Switch the toolbar's **Brand** to Hadron and read every story and swatch under it. The contrast table below has a column for each brand and theme.
+
+## Status
+
+<StatusPalette />
+
+## Theme tokens
+
+Every swatch is live: switch the toolbar theme and it changes. The two values are light and dark. The names are the ones the design decks use, so a value in a deck and a value in a component are the same token.
+
+<ColorGrid />
+
+## Tones
+
+Five tones carry every status in the system. `StatusBadge`, `StatusDot`, `Alert`, `Steps` and `StatTile` take a tone, and `phaseTone()` maps a node, build or deployment phase string onto one so that "Healthy" is the same green on every screen. The decks draw a status as a coloured diamond beside ink text on a surface, not as a tinted pill: a tone has a fill for the diamond, the dot and the bar, and an ink for the rare text that must carry the tone itself.
+
+<ToneRow />
+
+## Contrast
+
+Computed from the token values, not promised. Normal text needs 4.5:1 for AA; large text and interface parts need 3:1. The decks state two of these: ink on Kairos orange and white on Hadron blue.
+
+<ContrastTable />
+
+White on Hadron blue sits just under 4.5:1, so keep text on it at 14px bold or 18px and larger, or use `--hadron-deep`, where white reaches 7.2:1. The warning amber is a fill, not an ink: put it in a diamond or a bar beside ink text, never as small text on a light surface.
+
+<DoDont
+  do={
+    <ul>
+      <li>
+        Use <code>accent</code> for the one action that matters on a view, the dark <code>ink</code> button
+        and the outline button for the rest.
+      </li>
+      <li>
+        Put body copy on a surface in <code>sub</code>, labels and metadata in <code>muted</code>, and the
+        headline in <code>ink</code>.
+      </li>
+      <li>
+        Read a status through <code>phaseTone()</code> so every screen agrees on what colour "pending" is.
+      </li>
+    </ul>
+  }
+  dont={
+    <ul>
+      <li>Write a hex value or a Tailwind palette class in a component. The tests fail the build.</li>
+      <li>Use orange to mean a status, or a status colour to decorate.</li>
+      <li>Put white text on Kairos orange. The ink on orange is dark in both themes.</li>
+      <li>Reach for navy or brown. The neutrals are one violet family in both themes.</li>
+    </ul>
+  }
+/>

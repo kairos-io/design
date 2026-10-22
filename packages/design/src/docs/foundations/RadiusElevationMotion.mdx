@@ -1,0 +1,34 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { ElevationSteps, FadeUpDemo, MotionTable, RadiusScale } from "../../../.storybook/blocks/index.ts";
+
+<Meta title="Foundations/Radius, elevation & motion" />
+
+# Radius, elevation and motion
+
+## Radius
+
+One radius, 4px, and two neighbours: 2px for tags and chips, 8px for dialogs. The Tailwind `rounded-sm`, `rounded-base` and `rounded-lg` utilities map onto them through `tailwind.css`; every other `rounded-*` step is removed so a component cannot reach for a 10px corner. `rounded-full` stays for dots.
+
+<RadiusScale />
+
+## Elevation
+
+No drop shadows anywhere. Elevation is a tone step: the canvas (`--bg`), a surface on it (`--surface`), and a raised element on the surface (`--raised`). Cards have no border; the step is the edge. Borders are 1px hairlines in `--line`, or 1.5px for inputs, the select and the outline button. The Tailwind `shadow-*` utilities are removed by `tailwind.css`, so a component cannot cast one.
+
+<ElevationSteps />
+
+## Motion
+
+One easing and three durations. Hover changes use `fast`; anything that opens uses `base`; the one entrance animation, `fade-up`, uses `slow`, as does a tile dropping into place. All of it is transform and opacity only, and `prefers-reduced-motion: reduce` sets every duration to zero and turns the animations off. The [tile field](?path=/docs/foundations-tiles--docs#motion) adds proposals on top of the deck, all opt-in: three more entrances (a fall under gravity, faces assembling, faces unfolding from the cube's centre), each transform and opacity only over `slow` stretched by a half (`calc(var(--duration-slow) * 1.5)`, never a literal) and reversible through `folded`, and the cursor mode, which lights the cubes near the pointer with opacity alone over `slow`, only on a device that can hover. The fall's gravity is its keyframes sampled with linear segments, not a second easing. All are off under reduced motion, and the resting field is always the static one.
+
+<MotionTable />
+
+<FadeUpDemo />
+
+### Slowing motion down
+
+Every duration is its token value times `--duration-scale`, which is 1 by default: `--duration-fast: calc(150ms * var(--duration-scale))`. Setting that one property on `<html>` retimes the whole system at once — components, the tile field's entrances and idles, the loaders — so nothing needs a prop of its own.
+
+The **Motion** control in the toolbar above does exactly that, for reviewing a piece of motion: 0.25x, 0.5x, 1x, 2x, and **Off**, which pins the scale at zero so every animation lands on its first frame. It applies to this page as it does to a story. A host sets it the same way, `setMotionScale(0.25)` or `setMotionScale(null)` to go back to the token's 1, and `getMotionScale()` reads it back; `motionDuration("fast")` resolves the scaled token to a number of ms for motion a script has to time (a toast leaving after its fade).
+
+Reduced motion still wins. `prefers-reduced-motion: reduce` sets each duration to a literal `0ms`, not a scaled one, so a slow scale cannot bring motion back for a reader who asked for none; the scale is a review and authoring control, never a way around that.

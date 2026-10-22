@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html>
+<!-- Light only: the navy wordmark and the light-surface panels. Without data-theme the page
+     follows the OS dark preference, because tokens.css applies the dark values under
+     @media (prefers-color-scheme: dark) :root:not([data-theme="light"]). It is set here for
+     the page itself (body paints var(--bg)) and on the root div below, which is all that a
+     deck embedded from its x-dc template carries. -->
+<html data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,23 +13,24 @@
 <body>
 <x-dc>
 <helmet>
+<link href="packages/design/tokens.css" rel="stylesheet">
 <link href="assets/fonts/fonts.css" rel="stylesheet">
-<style>body{margin:0;background:#F2F1F5;font-family:Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif;color:#1C1B24;-webkit-font-smoothing:antialiased}a{color:#A33600;text-decoration:none}a:hover{color:#EE5007}*{box-sizing:border-box}</style>
+<style>body{margin:0;background:var(--bg);font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antialiased}a{color:var(--link);text-decoration:none}a:hover{color:var(--accent)}*{box-sizing:border-box}</style>
 </helmet>
-<div style="min-height:100vh;background:#F2F1F5">
-  <div style="position:sticky;top:0;z-index:5;background:#F2F1F5;border-bottom:1px solid #D8D5E0">
+<div data-theme="light" style="min-height:100vh;background:var(--bg)">
+  <div style="position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)">
     <div style="max-width:1240px;margin:0 auto;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
-      <div style="display:flex;align-items:center;gap:16px"><img src="assets/kairos-horizontal-light.svg" style="height:30px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#5C596A">Design system · Tessellate · v0.1</span></div>
-      <div style="display:flex;gap:20px;font-size:15px;font-weight:600;flex-wrap:wrap"><a href="#logos" style="color:#1C1B24">Logos</a><a href="#color" style="color:#1C1B24">Color</a><a href="#type" style="color:#1C1B24">Type</a><a href="#tiles" style="color:#1C1B24">Tiles</a><a href="#components" style="color:#1C1B24">Components</a><a href="#naming" style="color:#1C1B24">Naming</a><a href="#voice" style="color:#1C1B24">Voice</a></div>
+      <div style="display:flex;align-items:center;gap:16px"><img src="assets/kairos-horizontal-light.svg" style="height:30px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">Design system · Tessellate · v0.1</span></div>
+      <div style="display:flex;gap:20px;font-size:15px;font-weight:600;flex-wrap:wrap"><a href="#logos" style="color:var(--ink)">Logos</a><a href="#color" style="color:var(--ink)">Color</a><a href="#type" style="color:var(--ink)">Type</a><a href="#tiles" style="color:var(--ink)">Tiles</a><a href="#components" style="color:var(--ink)">Components</a><a href="#naming" style="color:var(--ink)">Naming</a><a href="#voice" style="color:var(--ink)">Voice</a></div>
     </div>
   </div>
 
-  <div style="position:relative;overflow:hidden;border-bottom:1px solid #D8D5E0">
+  <div style="position:relative;overflow:hidden;border-bottom:1px solid var(--line)">
     <div style="position:absolute;inset:0 0 0 45%">{{ heroTiles }}</div>
     <div style="position:relative;max-width:1240px;margin:0 auto;padding:88px 32px 96px;display:flex;flex-direction:column;gap:22px">
-      <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#5C596A">Kairos · Hadron</span>
+      <span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">Kairos · Hadron</span>
       <h1 style="margin:0;font-size:clamp(48px,7vw,84px);line-height:.98;font-weight:600;letter-spacing:-.045em;max-width:720px">One system for all of Kairos.</h1>
-      <p style="margin:0;font-size:19px;line-height:1.6;color:#494656;max-width:560px;text-wrap:pretty">Foundations and components shared by kairos.io, the docs, Kairos Installer, the Kairos console and hadron-linux.io. Light and dark are equal citizens. Hadron swaps the accent, nothing else.</p>
+      <p style="margin:0;font-size:19px;line-height:1.6;color:var(--sub);max-width:560px;text-wrap:pretty">Foundations and components shared by kairos.io, the docs, Kairos Installer, the Kairos console and hadron-linux.io. Light and dark are equal citizens. Hadron swaps the accent, nothing else.</p>
     </div>
   </div>
 
@@ -32,60 +38,60 @@
 
     <!-- LOGOS -->
     <section id="logos" style="padding:80px 0;display:flex;flex-direction:column;gap:28px">
-      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A33600">01</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Logos</h2><p style="margin:0;font-size:17px;line-height:1.6;color:#494656;max-width:640px;text-wrap:pretty">The marks do not change. Pick the variant by surface, never recolor, never place on orange or on a tile field.</p></div>
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">01</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Logos</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:640px;text-wrap:pretty">The marks do not change. Pick the variant by surface, never recolor, never place on orange or on a tile field.</p></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
-        <div style="background:#fff;border-radius:4px;padding:32px;min-height:180px;display:flex;flex-direction:column;justify-content:space-between;gap:20px"><img src="assets/kairos-horizontal-light.svg" style="height:52px;width:max-content;max-width:100%"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#5C596A">kairos-horizontal · light surfaces</span></div>
-        <div style="background:#15141C;border-radius:4px;padding:32px;min-height:180px;display:flex;flex-direction:column;justify-content:space-between;gap:20px"><img src="assets/kairos-horizontal-dark.svg" style="height:52px;width:max-content;max-width:100%"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A9A6B8">kairos-horizontal-dark · dark surfaces</span></div>
-        <div style="background:#fff;border-radius:4px;padding:32px;min-height:180px;display:flex;flex-direction:column;justify-content:space-between;gap:20px"><img src="assets/hadron-horizontal-light.svg" style="height:56px;width:max-content;max-width:100%"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#5C596A">hadron-horizontal · light surfaces</span></div>
-        <div style="background:#15141C;border-radius:4px;padding:32px;min-height:180px;display:flex;flex-direction:column;justify-content:space-between;gap:20px"><img src="assets/hadron-horizontal-dark.svg" style="height:56px;width:max-content;max-width:100%"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A9A6B8">hadron-horizontal-dark · dark surfaces</span></div>
+        <div style="background:var(--surface);border-radius:4px;padding:32px;min-height:180px;display:flex;flex-direction:column;justify-content:space-between;gap:20px"><img src="assets/kairos-horizontal-light.svg" style="height:52px;width:max-content;max-width:100%"><span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">kairos-horizontal · light surfaces</span></div>
+        <div data-theme="dark" style="background:var(--bg);border-radius:4px;padding:32px;min-height:180px;display:flex;flex-direction:column;justify-content:space-between;gap:20px"><img src="assets/kairos-horizontal-dark.svg" style="height:52px;width:max-content;max-width:100%"><span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">kairos-horizontal-dark · dark surfaces</span></div>
+        <div style="background:var(--surface);border-radius:4px;padding:32px;min-height:180px;display:flex;flex-direction:column;justify-content:space-between;gap:20px"><img src="assets/hadron-horizontal-light.svg" style="height:56px;width:max-content;max-width:100%"><span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">hadron-horizontal · light surfaces</span></div>
+        <div data-theme="dark" style="background:var(--bg);border-radius:4px;padding:32px;min-height:180px;display:flex;flex-direction:column;justify-content:space-between;gap:20px"><img src="assets/hadron-horizontal-dark.svg" style="height:56px;width:max-content;max-width:100%"><span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">hadron-horizontal-dark · dark surfaces</span></div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
-        <div style="background:#fff;border-radius:4px;padding:24px;display:flex;align-items:center;gap:16px"><img src="assets/kairos-mark.svg" style="height:44px"><img src="assets/hadron-mark.svg" style="height:48px"><span style="font-size:15px;line-height:1.5;color:#494656">Marks: favicons, product lockups, app chrome.</span></div>
-        <div style="background:#E6E4EC;border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:8px"><span style="font-size:17px;font-weight:700">Clear space</span><span style="font-size:15px;line-height:1.5;color:#494656">One mark-height of space around the horizontal logo. Min height 24px on screen.</span></div>
-        <div style="background:#E6E4EC;border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:8px"><span style="font-size:17px;font-weight:700">Never</span><span style="font-size:15px;line-height:1.5;color:#494656">On orange or blue fills, over tiles, recolored, outlined or rotated.</span></div>
+        <div style="background:var(--surface);border-radius:4px;padding:24px;display:flex;align-items:center;gap:16px"><img src="assets/kairos-mark.svg" style="height:44px"><img src="assets/hadron-mark.svg" style="height:48px"><span style="font-size:15px;line-height:1.5;color:var(--sub)">Marks: favicons, product lockups, app chrome.</span></div>
+        <div style="background:var(--raised);border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:8px"><span style="font-size:17px;font-weight:700">Clear space</span><span style="font-size:15px;line-height:1.5;color:var(--sub)">One mark-height of space around the horizontal logo. Min height 24px on screen.</span></div>
+        <div style="background:var(--raised);border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:8px"><span style="font-size:17px;font-weight:700">Never</span><span style="font-size:15px;line-height:1.5;color:var(--sub)">On orange or blue fills, over tiles, recolored, outlined or rotated.</span></div>
       </div>
     </section>
 
     <!-- COLOR -->
-    <section id="color" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid #D8D5E0">
-      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A33600">02</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Color</h2><p style="margin:0;font-size:17px;line-height:1.6;color:#494656;max-width:680px;text-wrap:pretty">Brand colors come straight from the logos. Light mode sits on warm stone; dark mode on violet ink, a low-chroma blue-violet that complements the orange. Never navy, never brown. Orange takes dark ink text; Hadron blue takes white.</p></div>
+    <section id="color" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">02</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Color</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:680px;text-wrap:pretty">Brand colors come straight from the logos. Light mode sits on warm stone; dark mode on violet ink, a low-chroma blue-violet that complements the orange. Never navy, never brown. Orange takes dark ink text; Hadron blue takes white.</p></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px">
         <div style="display:flex;flex-direction:column;gap:10px">
           <span style="font-size:15px;font-weight:700">Kairos · from the logo</span>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
-            <sc-for list="{{ kairosBrand }}" as="c" hint-placeholder-count="3"><div style="height:120px;border-radius:4px;background:{{ c.hex }};padding:12px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;color:#1C1B24"><span style="font-size:15px;font-weight:700">{{ c.name }}</span><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px">{{ c.hex }}</span></div></sc-for>
+            <sc-for list="{{ kairosBrand }}" as="c" hint-placeholder-count="3"><div style="height:120px;border-radius:4px;background:{{ c.bg }};padding:12px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;color:var(--ink)"><span style="font-size:15px;font-weight:700">{{ c.name }}</span><span style="font-family:var(--font-mono);font-size:12px">{{ c.hex }}</span></div></sc-for>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <span style="font-size:15px;font-weight:700">Hadron · from the logo</span>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
-            <sc-for list="{{ hadronBrand }}" as="c" hint-placeholder-count="3"><div style="height:120px;border-radius:4px;background:{{ c.hex }};padding:12px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;color:{{ c.fg }}"><span style="font-size:15px;font-weight:700">{{ c.name }}</span><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px">{{ c.hex }}</span></div></sc-for>
+            <sc-for list="{{ hadronBrand }}" as="c" hint-placeholder-count="3"><div style="height:120px;border-radius:4px;background:{{ c.bg }};padding:12px;display:flex;flex-direction:column;justify-content:flex-end;gap:2px;color:{{ c.fg }}"><span style="font-size:15px;font-weight:700">{{ c.name }}</span><span style="font-family:var(--font-mono);font-size:12px">{{ c.hex }}</span></div></sc-for>
           </div>
         </div>
       </div>
-      <div style="background:#fff;border-radius:4px;overflow-x:auto">
+      <div style="background:var(--surface);border-radius:4px;overflow-x:auto">
         <div style="min-width:760px">
-          <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr 2fr;padding:12px 20px;font-size:13px;font-weight:700;background:#E6E4EC"><span>Semantic token</span><span>Light</span><span>Dark</span><span>Use</span></div>
+          <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr 2fr;padding:12px 20px;font-size:13px;font-weight:700;background:var(--raised)"><span>Semantic token</span><span>Light</span><span>Dark</span><span>Use</span></div>
           <sc-for list="{{ tokens }}" as="t" hint-placeholder-count="12">
             <div style="display:grid;grid-template-columns:1.3fr 1fr 1fr 2fr;padding:10px 20px;font-size:14px;border-top:1px solid #EEEDF2;align-items:center">
-              <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px">{{ t.name }}</span>
-              <span style="display:flex;align-items:center;gap:8px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px"><span style="width:22px;height:22px;border-radius:3px;border:1px solid #D8D5E0;background:{{ t.light }}"></span>{{ t.light }}</span>
-              <span style="display:flex;align-items:center;gap:8px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px"><span style="width:22px;height:22px;border-radius:3px;border:1px solid #D8D5E0;background:{{ t.dark }}"></span>{{ t.dark }}</span>
-              <span style="color:#494656">{{ t.use }}</span>
+              <span style="font-family:var(--font-mono);font-size:12px">{{ t.name }}</span>
+              <span style="display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px"><span style="width:22px;height:22px;border-radius:3px;border:1px solid var(--line);background:{{ t.lightBg }}"></span>{{ t.light }}</span>
+              <span style="display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12px"><span style="width:22px;height:22px;border-radius:3px;border:1px solid var(--line)"><span data-theme="dark" data-variant="foundations" style="display:block;width:100%;height:100%;border-radius:2px;background:{{ t.darkBg }}"></span></span>{{ t.dark }}</span>
+              <span style="color:var(--sub)">{{ t.use }}</span>
             </div>
           </sc-for>
         </div>
       </div>
-      <span style="font-size:14px;line-height:1.5;color:#5C596A;max-width:720px">Contrast: ink on orange #EE5007 is 5.3:1, white on Hadron #0275E7 is 4.6:1. Links use #A33600 on light (5.6:1) and #FF7442 on dark. Never white text on Kairos orange.</span>
+      <span style="font-size:14px;line-height:1.5;color:var(--muted);max-width:720px">Contrast: ink on orange #EE5007 is 5.3:1, white on Hadron #0275E7 is 4.6:1. Links use #A33600 on light (5.6:1) and #FF7442 on dark. Never white text on Kairos orange.</span>
     </section>
 
     <!-- TYPE -->
-    <section id="type" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid #D8D5E0">
-      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A33600">03</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Type</h2><p style="margin:0;font-size:17px;line-height:1.6;color:#494656;max-width:680px;text-wrap:pretty">Urbanist, a geometric sans, for everything people read. Martian Mono, set narrow, for commands, versions, hostnames and metadata. Sentence case everywhere.</p></div>
-      <div style="background:#fff;border-radius:4px;display:flex;flex-direction:column">
+    <section id="type" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">03</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Type</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:680px;text-wrap:pretty">Urbanist, a geometric sans, for everything people read. Martian Mono, set narrow, for commands, versions, hostnames and metadata. Sentence case everywhere.</p></div>
+      <div style="background:var(--surface);border-radius:4px;display:flex;flex-direction:column">
         <sc-for list="{{ typeScale }}" as="t" hint-placeholder-count="8">
           <div style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px;padding:18px 24px;border-top:1px solid #EEEDF2;align-items:baseline">
-            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">{{ t.name }}</span><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#5C596A">{{ t.spec }}</span></div>
+            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">{{ t.name }}</span><span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">{{ t.spec }}</span></div>
             <span style="font-family:{{ t.family }};font-size:{{ t.size }};font-weight:{{ t.weight }};letter-spacing:{{ t.track }};line-height:1.15;overflow-wrap:anywhere">{{ t.sample }}</span>
           </div>
         </sc-for>
@@ -93,58 +99,58 @@
     </section>
 
     <!-- TILES -->
-    <section id="tiles" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid #D8D5E0">
-      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A33600">04</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Tiles, spacing and shape</h2><p style="margin:0;font-size:17px;line-height:1.6;color:#494656;max-width:680px;text-wrap:pretty">The Kairos mark is built from rhombi in three tones. Tessellate lays them flat: a hexagon split into three rhombi, each in its logo tone. Fields fade in density, so a few tiles always fall away.</p></div>
+    <section id="tiles" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">04</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Tiles, spacing and shape</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:680px;text-wrap:pretty">The Kairos mark is built from rhombi in three tones. Tessellate lays them flat: a hexagon split into three rhombi, each in its logo tone. Fields fade in density, so a few tiles always fall away.</p></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">
-        <div style="background:#fff;border-radius:4px;overflow:hidden;display:flex;flex-direction:column"><div style="position:relative;height:220px">{{ tileUnit }}</div><div style="padding:18px 20px;display:flex;flex-direction:column;gap:4px"><span style="font-size:17px;font-weight:700">The unit</span><span style="font-size:15px;line-height:1.5;color:#494656">Top #FB9E70, left #FF7442, right #EE5007. Always that order, like the logo.</span></div></div>
-        <div style="background:#fff;border-radius:4px;overflow:hidden;display:flex;flex-direction:column"><div style="position:relative;height:220px">{{ tileField }}</div><div style="padding:18px 20px;display:flex;flex-direction:column;gap:4px"><span style="font-size:17px;font-weight:700">The field</span><span style="font-size:15px;line-height:1.5;color:#494656">Dense at one edge, fading to outlines. Hero and empty states only, never behind text.</span></div></div>
-        <div style="background:#fff;border-radius:4px;overflow:hidden;display:flex;flex-direction:column"><div style="height:220px;display:flex;align-items:center;justify-content:center;gap:4px;padding:20px;flex-wrap:wrap;align-content:center">{{ tileBar }}</div><div style="padding:18px 20px;display:flex;flex-direction:column;gap:4px"><span style="font-size:17px;font-weight:700">The tile bar</span><span style="font-size:15px;line-height:1.5;color:#494656">One parallelogram per node or step. Used for rollouts, install progress and stage markers.</span></div></div>
+        <div style="background:var(--surface);border-radius:4px;overflow:hidden;display:flex;flex-direction:column"><div style="position:relative;height:220px">{{ tileUnit }}</div><div style="padding:18px 20px;display:flex;flex-direction:column;gap:4px"><span style="font-size:17px;font-weight:700">The unit</span><span style="font-size:15px;line-height:1.5;color:var(--sub)">Top #FB9E70, left #FF7442, right #EE5007. Always that order, like the logo.</span></div></div>
+        <div style="background:var(--surface);border-radius:4px;overflow:hidden;display:flex;flex-direction:column"><div style="position:relative;height:220px">{{ tileField }}</div><div style="padding:18px 20px;display:flex;flex-direction:column;gap:4px"><span style="font-size:17px;font-weight:700">The field</span><span style="font-size:15px;line-height:1.5;color:var(--sub)">Dense at one edge, fading to outlines. Hero and empty states only, never behind text.</span></div></div>
+        <div style="background:var(--surface);border-radius:4px;overflow:hidden;display:flex;flex-direction:column"><div style="height:220px;display:flex;align-items:center;justify-content:center;gap:4px;padding:20px;flex-wrap:wrap;align-content:center">{{ tileBar }}</div><div style="padding:18px 20px;display:flex;flex-direction:column;gap:4px"><span style="font-size:17px;font-weight:700">The tile bar</span><span style="font-size:15px;line-height:1.5;color:var(--sub)">One parallelogram per node or step. Used for rollouts, install progress and stage markers.</span></div></div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px">
-        <div style="background:#fff;border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:14px">
+        <div style="background:var(--surface);border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:14px">
           <span style="font-size:17px;font-weight:700">Spacing · 4px base</span>
-          <sc-for list="{{ spacing }}" as="s" hint-placeholder-count="8"><div style="display:grid;grid-template-columns:52px 1fr;align-items:center;gap:12px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#5C596A">{{ s.n }}</span><span style="height:12px;background:#FF7442;border-radius:2px;width:{{ s.w }}"></span></div></sc-for>
+          <sc-for list="{{ spacing }}" as="s" hint-placeholder-count="8"><div style="display:grid;grid-template-columns:52px 1fr;align-items:center;gap:12px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">{{ s.n }}</span><span style="height:12px;background:var(--kairos-mid);border-radius:2px;width:{{ s.w }}"></span></div></sc-for>
         </div>
-        <div style="background:#fff;border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:16px">
+        <div style="background:var(--surface);border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:16px">
           <span style="font-size:17px;font-weight:700">Shape</span>
           <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap">
-            <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="width:72px;height:72px;background:#E6E4EC;border-radius:2px"></span><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px">2 · tags</span></div>
-            <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="width:72px;height:72px;background:#E6E4EC;border-radius:4px"></span><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px">4 · default</span></div>
-            <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="width:72px;height:72px;background:#E6E4EC;border-radius:8px"></span><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px">8 · dialogs</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="width:72px;height:72px;background:var(--raised);border-radius:2px"></span><span style="font-family:var(--font-mono);font-size:12px">2 · tags</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="width:72px;height:72px;background:var(--raised);border-radius:4px"></span><span style="font-family:var(--font-mono);font-size:12px">4 · default</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px;align-items:center"><span style="width:72px;height:72px;background:var(--raised);border-radius:8px"></span><span style="font-family:var(--font-mono);font-size:12px">8 · dialogs</span></div>
           </div>
-          <span style="font-size:15px;line-height:1.5;color:#494656">No drop shadows. Elevation is a tone step: canvas → surface → raised. Borders are 1px hairlines or 1.5px for inputs.</span>
+          <span style="font-size:15px;line-height:1.5;color:var(--sub)">No drop shadows. Elevation is a tone step: canvas → surface → raised. Borders are 1px hairlines or 1.5px for inputs.</span>
         </div>
       </div>
     </section>
 
     <!-- COMPONENTS -->
-    <section id="components" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid #D8D5E0">
-      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A33600">05</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Components</h2><p style="margin:0;font-size:17px;line-height:1.6;color:#494656;max-width:680px;text-wrap:pretty">Every component in light and dark, side by side. Swap the accent pair and the same set serves Hadron.</p></div>
+    <section id="components" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">05</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Components</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:680px;text-wrap:pretty">Every component in light and dark, side by side. Swap the accent pair and the same set serves Hadron.</p></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(480px,1fr));gap:12px">
         <sc-for list="{{ themes }}" as="th" hint-placeholder-count="2">
-          <div style="{{ th.vars }}">
+          <div data-theme="{{ th.name }}" data-variant="foundations">
             <div style="background:var(--bg);color:var(--ink);border-radius:4px;padding:28px;display:flex;flex-direction:column;gap:26px;height:100%">
-              <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted)">{{ th.name }}</span><span><sc-if value="{{ th.isLight }}"><img src="assets/kairos-horizontal-light.svg" style="height:22px"></sc-if><sc-if value="{{ th.isDark }}"><img src="assets/kairos-horizontal-dark.svg" style="height:22px"></sc-if></span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">{{ th.name }}</span><span><sc-if value="{{ th.isLight }}"><img src="assets/kairos-horizontal-light.svg" style="height:22px"></sc-if><sc-if value="{{ th.isDark }}"><img src="assets/kairos-horizontal-dark.svg" style="height:22px"></sc-if></span></div>
 
               <div style="display:flex;flex-direction:column;gap:10px">
                 <span style="font-size:13px;font-weight:700;color:var(--muted)">Buttons</span>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-                  <span style="background:var(--accent);color:var(--onAccent);font-weight:700;font-size:15px;padding:11px 18px;border-radius:4px">Download ISO</span>
+                  <span style="background:var(--accent);color:var(--on-accent);font-weight:700;font-size:15px;padding:11px 18px;border-radius:4px">Download ISO</span>
                   <span style="background:var(--ink);color:var(--bg);font-weight:600;font-size:15px;padding:11px 18px;border-radius:4px">Read the docs</span>
                   <span style="border:1.5px solid var(--ink);font-weight:600;font-size:15px;padding:9.5px 16.5px;border-radius:4px">GitHub</span>
                   <span style="font-weight:600;font-size:15px;padding:11px 6px;color:var(--link)">Learn more →</span>
                 </div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-                  <span style="background:var(--accent);color:var(--onAccent);font-weight:700;font-size:13px;padding:7px 12px;border-radius:4px">Small</span>
+                  <span style="background:var(--accent);color:var(--on-accent);font-weight:700;font-size:13px;padding:7px 12px;border-radius:4px">Small</span>
                   <span style="background:var(--raised);color:var(--muted);font-weight:600;font-size:15px;padding:11px 18px;border-radius:4px">Disabled</span>
-                  <span style="background:#C62B2B;color:#fff;font-weight:600;font-size:15px;padding:11px 18px;border-radius:4px">Reset node</span>
-                  <span style="background:var(--accent);color:var(--onAccent);font-weight:700;font-size:15px;padding:11px 18px;border-radius:4px;outline:2px solid var(--ink);outline-offset:2px">Focus</span>
+                  <span style="background:var(--status-recovery);color:var(--white);font-weight:600;font-size:15px;padding:11px 18px;border-radius:4px">Reset node</span>
+                  <span style="background:var(--accent);color:var(--on-accent);font-weight:700;font-size:15px;padding:11px 18px;border-radius:4px;outline:2px solid var(--ink);outline-offset:2px">Focus</span>
                 </div>
               </div>
 
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">Hostname</span><div style="background:var(--surface);border:1.5px solid var(--line);border-radius:4px;padding:10px 12px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px">edge-store-0142</div><span style="font-size:13px;color:var(--muted)">Lowercase, digits and dashes.</span></div>
-                <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">Target disk</span><div style="background:var(--surface);border:1.5px solid var(--ink);border-radius:4px;padding:10px 12px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px;display:flex;justify-content:space-between">/dev/nvme0n1<span>▾</span></div><span style="font-size:13px;color:#C62B2B">Disk will be wiped.</span></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">Hostname</span><div style="background:var(--surface);border:1.5px solid var(--line);border-radius:4px;padding:10px 12px;font-family:var(--font-mono);font-size:13px">edge-store-0142</div><span style="font-size:13px;color:var(--muted)">Lowercase, digits and dashes.</span></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">Target disk</span><div style="background:var(--surface);border:1.5px solid var(--ink);border-radius:4px;padding:10px 12px;font-family:var(--font-mono);font-size:13px;display:flex;justify-content:space-between">/dev/nvme0n1<span>▾</span></div><span style="font-size:13px;color:var(--status-recovery)">Disk will be wiped.</span></div>
               </div>
 
               <div style="display:flex;flex-direction:column;gap:10px">
@@ -152,18 +158,18 @@
                 <div style="display:flex;gap:6px;flex-wrap:wrap;font-size:14px;font-weight:600">
                   <sc-for list="{{ statuses }}" as="s" hint-placeholder-count="5"><span style="display:flex;align-items:center;gap:7px;background:var(--surface);padding:6px 10px;border-radius:2px"><svg width="11" height="11" viewBox="0 0 12 12"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="{{ s.fill }}" stroke="{{ s.stroke }}" stroke-width="1.5"></polygon></svg>{{ s.label }}</span></sc-for>
                 </div>
-                <div style="display:flex;gap:6px;flex-wrap:wrap;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px">
+                <div style="display:flex;gap:6px;flex-wrap:wrap;font-family:var(--font-mono);font-size:12px">
                   <span style="background:var(--raised);padding:4px 8px;border-radius:2px">hadron v0.5.1</span><span style="background:var(--raised);padding:4px 8px;border-radius:2px">k3s 1.36</span><span style="border:1px solid var(--line);padding:3px 7px;border-radius:2px">group: retail-eu</span>
                 </div>
               </div>
 
               <div style="display:flex;flex-direction:column;gap:10px">
                 <span style="font-size:13px;font-weight:700;color:var(--muted)">Tabs and level picker</span>
-                <div style="display:flex;gap:20px;border-bottom:1px solid var(--line);font-size:15px;font-weight:600"><span style="padding:8px 0;box-shadow:inset 0 -2px 0 var(--accentLine)">Overview</span><span style="padding:8px 0;color:var(--muted)">Nodes</span><span style="padding:8px 0;color:var(--muted)">Keys</span></div>
+                <div style="display:flex;gap:20px;border-bottom:1px solid var(--line);font-size:15px;font-weight:600"><span style="padding:8px 0;box-shadow:inset 0 -2px 0 var(--accent-line)">Overview</span><span style="padding:8px 0;color:var(--muted)">Nodes</span><span style="padding:8px 0;color:var(--muted)">Keys</span></div>
                 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--raised);padding:4px;border-radius:4px">
-                  <div style="background:var(--surface);border-radius:3px;padding:8px 10px;display:flex;flex-direction:column"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--link)">L1</span><span style="font-size:15px;font-weight:700">Guided</span></div>
-                  <div style="padding:8px 10px;display:flex;flex-direction:column;color:var(--muted)"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px">L2</span><span style="font-size:15px;font-weight:600">Automate</span></div>
-                  <div style="padding:8px 10px;display:flex;flex-direction:column;color:var(--muted)"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px">L3</span><span style="font-size:15px;font-weight:600">Extend</span></div>
+                  <div style="background:var(--surface);border-radius:3px;padding:8px 10px;display:flex;flex-direction:column"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">L1</span><span style="font-size:15px;font-weight:700">Guided</span></div>
+                  <div style="padding:8px 10px;display:flex;flex-direction:column;color:var(--muted)"><span style="font-family:var(--font-mono);font-size:12px">L2</span><span style="font-size:15px;font-weight:600">Automate</span></div>
+                  <div style="padding:8px 10px;display:flex;flex-direction:column;color:var(--muted)"><span style="font-family:var(--font-mono);font-size:12px">L3</span><span style="font-size:15px;font-weight:600">Extend</span></div>
                 </div>
               </div>
 
@@ -178,11 +184,11 @@
               </div>
 
               <div style="background:var(--code);border-radius:4px;overflow:hidden">
-                <div style="display:flex;justify-content:space-between;padding:8px 14px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A9A6B8;background:var(--codeBar)"><span>terminal</span><span>copy</span></div>
-                <div style="padding:14px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px;line-height:1.8;color:#F2F1F5"><span style="color:var(--codeKey)">$</span> kairos artifacts create --iso \<br>&nbsp;&nbsp;--image quay.io/kairos/hadron:v0.5.1</div>
+                <div style="display:flex;justify-content:space-between;padding:8px 14px;font-family:var(--font-mono);font-size:12px;color:var(--code-muted);background:var(--code-bar)"><span>terminal</span><span>copy</span></div>
+                <div style="padding:14px;font-family:var(--font-mono);font-size:13px;line-height:1.8;color:var(--code-ink)"><span style="color:var(--code-key)">$</span> kairos artifacts create --iso \<br>&nbsp;&nbsp;--image quay.io/kairos/hadron:v0.5.1</div>
               </div>
 
-              <div style="background:var(--surface);border-radius:4px;padding:14px 16px;display:grid;grid-template-columns:18px 1fr;gap:10px;font-size:15px;line-height:1.5"><svg width="14" height="14" viewBox="0 0 12 12" style="margin-top:4px"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="var(--accent)"></polygon></svg><span><b>Ready to automate?</b> Every console action maps to a <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px">kairos</span> command. <span style="color:var(--link);font-weight:600">Go to L2 →</span></span></div>
+              <div style="background:var(--surface);border-radius:4px;padding:14px 16px;display:grid;grid-template-columns:18px 1fr;gap:10px;font-size:15px;line-height:1.5"><svg width="14" height="14" viewBox="0 0 12 12" style="margin-top:4px"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="var(--accent)"></polygon></svg><span><b>Ready to automate?</b> Every console action maps to a <span style="font-family:var(--font-mono);font-size:13px">kairos</span> command. <span style="color:var(--link);font-weight:600">Go to L2 →</span></span></div>
             </div>
           </div>
         </sc-for>
@@ -190,16 +196,16 @@
     </section>
 
     <!-- NAMING -->
-    <section id="naming" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid #D8D5E0">
-      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A33600">06</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Naming and lockups</h2><p style="margin:0;font-size:17px;line-height:1.6;color:#494656;max-width:700px;text-wrap:pretty">Names, lockups and writing rules live on one page: <a href="Kairos - Naming.dc.html" style="font-weight:700">Naming</a>.</p></div>
+    <section id="naming" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">06</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Naming and lockups</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:700px;text-wrap:pretty">Names, lockups and writing rules live on one page: <a href="Kairos - Naming.dc.html" style="font-weight:700">Naming</a>.</p></div>
     </section>
 
     <!-- VOICE -->
-    <section id="voice" style="padding:80px 0 120px;display:flex;flex-direction:column;gap:28px;border-top:1px solid #D8D5E0">
-      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A33600">07</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Voice</h2></div>
+    <section id="voice" style="padding:80px 0 120px;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">07</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Voice</h2></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
         <sc-for list="{{ voice }}" as="v" hint-placeholder-count="4">
-          <div style="background:#fff;border-radius:4px;padding:22px;display:flex;flex-direction:column;gap:10px"><span style="font-size:18px;font-weight:700">{{ v.t }}</span><span style="font-size:15px;line-height:1.55;color:#494656">{{ v.d }}</span><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#2F7A4C">✓ {{ v.yes }}</span><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A33600">✕ {{ v.no }}</span></div>
+          <div style="background:var(--surface);border-radius:4px;padding:22px;display:flex;flex-direction:column;gap:10px"><span style="font-size:18px;font-weight:700">{{ v.t }}</span><span style="font-size:15px;line-height:1.55;color:var(--sub)">{{ v.d }}</span><span style="font-family:var(--font-mono);font-size:12px;color:var(--ok)">✓ {{ v.yes }}</span><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">✕ {{ v.no }}</span></div>
         </sc-for>
       </div>
     </section>
@@ -230,38 +236,39 @@ class Component extends DCLogic {
     return out;
   }
   renderVals() {
-    const O = ['#FB9E70', '#FF7442', '#EE5007'];
-    const light = { '--bg': '#F2F1F5', '--surface': '#FFFFFF', '--raised': '#E6E4EC', '--line': '#D8D5E0', '--ink': '#1C1B24', '--sub': '#494656', '--muted': '#5C596A', '--accent': '#EE5007', '--onAccent': '#1C1B24', '--accentLine': '#EE5007', '--link': '#A33600', '--code': '#1C1B24', '--codeBar': '#272632', '--codeKey': '#FB9E70' };
-    const dark = { '--bg': '#15141C', '--surface': '#1F1E28', '--raised': '#33313F', '--line': '#3C3A49', '--ink': '#F2F1F5', '--sub': '#CBC8D6', '--muted': '#A9A6B8', '--accent': '#FF7442', '--onAccent': '#1C1B24', '--accentLine': '#FF7442', '--link': '#FF7442', '--code': '#0F0E15', '--codeBar': '#1F1E28', '--codeKey': '#FB9E70' };
+    // The colours come from packages/design/tokens.css (linked in the helmet). The page is light; the dark
+    // panels and swatches are data-theme="dark" scopes of the same tokens. The hex strings below are printed
+    // as text in the colour tables; the swatches paint with the tokens.
+    const O = ['var(--kairos-light)', 'var(--kairos-mid)', 'var(--kairos-orange)'];
     return {
-      heroTiles: this.field(700, 460, 38, O, (u, v) => Math.max(0, 0.95 - Math.hypot(u - 0.9, v - 0.5) * 1.25), '#D8D5E0', 5),
-      tileUnit: this.field(300, 220, 64, O, () => 1, '#D8D5E0', 1, true),
-      tileField: this.field(360, 220, 26, O, u => u * 0.9, '#D8D5E0', 9),
-      tileBar: this.bar(40, 33, O, '#E6E4EC'),
-      kairosBrand: [{ name: 'Light', hex: '#FB9E70' }, { name: 'Mid', hex: '#FF7442' }, { name: 'Kairos orange', hex: '#EE5007' }],
-      hadronBrand: [{ name: 'Sky', hex: '#1BAAFF', fg: '#1C1B24' }, { name: 'Hadron blue', hex: '#0275E7', fg: '#fff' }, { name: 'Deep', hex: '#004CCE', fg: '#fff' }],
+      heroTiles: this.field(700, 460, 38, O, (u, v) => Math.max(0, 0.95 - Math.hypot(u - 0.9, v - 0.5) * 1.25), 'var(--line)', 5),
+      tileUnit: this.field(300, 220, 64, O, () => 1, 'var(--line)', 1, true),
+      tileField: this.field(360, 220, 26, O, u => u * 0.9, 'var(--line)', 9),
+      tileBar: this.bar(40, 33, O, 'var(--raised)'),
+      kairosBrand: [{ name: 'Light', hex: '#FB9E70', bg: 'var(--kairos-light)' }, { name: 'Mid', hex: '#FF7442', bg: 'var(--kairos-mid)' }, { name: 'Kairos orange', hex: '#EE5007', bg: 'var(--kairos-orange)' }],
+      hadronBrand: [{ name: 'Sky', hex: '#1BAAFF', bg: 'var(--hadron-sky)', fg: 'var(--ink)' }, { name: 'Hadron blue', hex: '#0275E7', bg: 'var(--hadron-blue)', fg: 'var(--white)' }, { name: 'Deep', hex: '#004CCE', bg: 'var(--hadron-deep)', fg: 'var(--white)' }],
       tokens: [
-        ['bg', '#F2F1F5', '#15141C', 'Page canvas'], ['surface', '#FFFFFF', '#1F1E28', 'Cards, inputs, tables'], ['raised', '#E6E4EC', '#33313F', 'Headers, segmented tracks, tags'], ['line', '#D8D5E0', '#3C3A49', 'Hairlines, input borders'],
+        ['bg', '#F2F1F5', '#15141C', 'Page canvas'], ['surface', '#FFFFFF', '#1F1E28', 'Cards, inputs, tables'], ['raised', '#E6E4EC', '#33313F', 'Headers, segmented tracks, tags'], ['line', '#D8D5E0', '#3C3A49', 'Hairlines, input borders', 'var(--line)', 'var(--line)'],
         ['ink', '#1C1B24', '#F2F1F5', 'Primary text'], ['sub', '#494656', '#CBC8D6', 'Body copy on surfaces'], ['muted', '#5C596A', '#A9A6B8', 'Labels, metadata'],
         ['accent', '#EE5007', '#FF7442', 'Primary action, active state'], ['on-accent', '#1C1B24', '#1C1B24', 'Text on accent'], ['link', '#A33600', '#FF7442', 'Links'],
-        ['hadron.accent', '#0275E7', '#1BAAFF', 'Hadron primary action'], ['ok / warn / err', '#2F8F57', '#3FAF6E', 'Healthy · upgrading uses accent · #C62B2B recovery']
-      ].map(([name, l, d, use]) => ({ name: '--k-' + name, light: l, dark: d, use })),
+        ['hadron.accent', '#0275E7', '#1BAAFF', 'Hadron primary action', 'var(--hadron-blue)', 'var(--hadron-sky)'], ['ok / warn / err', '#2F8F57', '#3FAF6E', 'Healthy · upgrading uses accent · #C62B2B recovery', 'var(--status-healthy)', 'var(--ok)']
+      ].map(([name, l, d, use, lightBg, darkBg]) => ({ name: '--k-' + name, light: l, dark: d, use, lightBg: lightBg || `var(--${name})`, darkBg: darkBg || `var(--${name})` })),
       typeScale: [
-        ['Display', '84 / 600 / −4.5%', "Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif", '84px', 600, '-.045em', 'Bring any Linux.'],
-        ['H1', '56 / 600 / −3.5%', "Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif", '56px', 600, '-.035em', 'Run it immutable'],
-        ['H2', '40 / 600 / −3%', "Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif", '40px', 600, '-.03em', 'One platform, every stage'],
-        ['H3', '24 / 600 / −2%', "Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif", '24px', 600, '-.02em', 'A/B atomic upgrades'],
-        ['Body L', '19 / 400 / 1.6', "Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif", '19px', 400, '0', 'Kairos builds, boots, upgrades and recovers machines.'],
-        ['Body', '16 / 400 / 1.6', "Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif", '16px', 400, '0', 'Every action in the dashboard maps to a CLI command and an API call.'],
-        ['Label', '14 / 600', "Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif", '14px', 600, '0', 'Target disk'],
-        ['Mono', '13 / 400 · narrow', "'Martian Mono'", '13px', 400, '0', 'kairos fleet rollout --group retail-eu']
+        ['Display', '84 / 600 / −4.5%', 'var(--font-sans)', '84px', 600, '-.045em', 'Bring any Linux.'],
+        ['H1', '56 / 600 / −3.5%', 'var(--font-sans)', '56px', 600, '-.035em', 'Run it immutable'],
+        ['H2', '40 / 600 / −3%', 'var(--font-sans)', '40px', 600, '-.03em', 'One platform, every stage'],
+        ['H3', '24 / 600 / −2%', 'var(--font-sans)', '24px', 600, '-.02em', 'A/B atomic upgrades'],
+        ['Body L', '19 / 400 / 1.6', 'var(--font-sans)', '19px', 400, '0', 'Kairos builds, boots, upgrades and recovers machines.'],
+        ['Body', '16 / 400 / 1.6', 'var(--font-sans)', '16px', 400, '0', 'Every action in the dashboard maps to a CLI command and an API call.'],
+        ['Label', '14 / 600', 'var(--font-sans)', '14px', 600, '0', 'Target disk'],
+        ['Mono', '13 / 400 · narrow', 'var(--font-mono)', '13px', 400, '0', 'kairos fleet rollout --group retail-eu']
       ].map(([name, spec, family, size, weight, track, sample]) => ({ name, spec, family, size, weight, track, sample })),
       spacing: [4, 8, 12, 16, 24, 32, 48, 80].map(n => ({ n: n + 'px', w: (n / 80 * 100) + '%' })),
       themes: [
-        { name: 'light', vars: light, isLight: true, isDark: false, bar: this.bar(36, 28, O, '#E6E4EC') },
-        { name: 'dark', vars: dark, isLight: false, isDark: true, bar: this.bar(36, 28, O, '#33313F') }
+        { name: 'light', isLight: true, isDark: false, bar: this.bar(36, 28, O, 'var(--raised)') },
+        { name: 'dark', isLight: false, isDark: true, bar: this.bar(36, 28, O, 'var(--raised)') }
       ],
-      statuses: [{ label: 'Healthy', fill: '#2F8F57', stroke: '#2F8F57' }, { label: 'Upgrading', fill: 'var(--accent)', stroke: 'var(--accent)' }, { label: 'Recovery', fill: '#C62B2B', stroke: '#C62B2B' }, { label: 'Installing', fill: 'none', stroke: 'var(--accent)' }, { label: 'Offline', fill: 'none', stroke: 'var(--muted)' }],
+      statuses: [{ label: 'Healthy', fill: 'var(--status-healthy)', stroke: 'var(--status-healthy)' }, { label: 'Upgrading', fill: 'var(--accent)', stroke: 'var(--accent)' }, { label: 'Recovery', fill: 'var(--status-recovery)', stroke: 'var(--status-recovery)' }, { label: 'Installing', fill: 'none', stroke: 'var(--accent)' }, { label: 'Offline', fill: 'none', stroke: 'var(--muted)' }],
       voice: [
         { t: 'Name the job', d: 'Lead with what the reader is trying to do, then the product.', yes: 'Install machines at scale', no: 'Leverage AuroraBoot' },
         { t: 'Show the command', d: 'If it can be typed, show it in mono. Commands are the proof.', yes: 'kairos artifacts create', no: 'Easily build images!' },

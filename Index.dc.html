@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html>
+<!-- Light only: the navy wordmark and the light-surface panels. Without data-theme the page
+     follows the OS dark preference, because tokens.css applies the dark values under
+     @media (prefers-color-scheme: dark) :root:not([data-theme="light"]). It is set here for
+     the page itself (body paints var(--bg)) and on the root div below, which is all that a
+     deck embedded from its x-dc template carries. -->
+<html data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,17 +13,18 @@
 <body>
 <x-dc>
 <helmet>
+<link href="packages/design/tokens.css" rel="stylesheet">
 <link href="assets/fonts/fonts.css" rel="stylesheet">
-<style>body{margin:0;background:#F2F1F5;font-family:Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif;color:#1C1B24;-webkit-font-smoothing:antialiased}a{color:#1C1B24;text-decoration:none}a:hover{color:#A33600}*{box-sizing:border-box}</style>
+<style>body{margin:0;background:var(--bg);font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antialiased}a{color:var(--ink);text-decoration:none}a:hover{color:var(--link)}*{box-sizing:border-box}</style>
 </helmet>
-<div style="max-width:1080px;margin:0 auto;padding:64px 32px 96px;display:flex;flex-direction:column;gap:36px">
-  <div style="display:flex;flex-direction:column;gap:14px"><img src="assets/kairos-horizontal-light.svg" style="height:36px;width:max-content"><h1 style="margin:0;font-size:clamp(36px,5vw,56px);font-weight:600;letter-spacing:-.04em;line-height:1">Kairos design system</h1><p style="margin:0;font-size:18px;line-height:1.6;color:#494656;max-width:640px;text-wrap:pretty">Direction: Tessellate. Each screen has a light/dark theme tweak.</p></div>
+<div data-theme="light" style="max-width:1080px;margin:0 auto;padding:64px 32px 96px;display:flex;flex-direction:column;gap:36px">
+  <div style="display:flex;flex-direction:column;gap:14px"><img src="assets/kairos-horizontal-light.svg" style="height:36px;width:max-content" alt="Kairos"><h1 style="margin:0;font-size:clamp(36px,5vw,56px);font-weight:600;letter-spacing:-.04em;line-height:1">Kairos design system</h1><p style="margin:0;font-size:18px;line-height:1.6;color:var(--sub);max-width:640px;text-wrap:pretty">Direction: Tessellate. Each screen has a light/dark theme tweak.</p></div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px">
     <sc-for list="{{ files }}" as="f" hint-placeholder-count="6">
-      <a href="{{ f.href }}" style="background:#fff;border-radius:4px;padding:22px;display:flex;flex-direction:column;gap:8px" style-hover="background:#FFF0E8">
-        <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A33600">{{ f.n }}</span>
+      <a href="{{ f.href }}" style="background:var(--surface);border-radius:var(--radius-base);padding:22px;display:flex;flex-direction:column;gap:8px" style-hover="background:var(--raised)">
+        <span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">{{ f.n }}</span>
         <span style="font-size:22px;font-weight:700">{{ f.t }}</span>
-        <span style="font-size:15px;line-height:1.5;color:#494656">{{ f.d }}</span>
+        <span style="font-size:15px;line-height:1.5;color:var(--sub)">{{ f.d }}</span>
       </a>
     </sc-for>
   </div>
@@ -38,7 +44,8 @@ class Component extends DCLogic {
       ['06', 'hadron-linux.io', 'Same system, Hadron blue.', 'hadron-linux.io Homepage.dc.html'],
       ['07', 'Naming', 'What stays a product, what became functionality, and what changed.', 'Kairos - Naming.dc.html'],
       ['08', 'Talk deck', 'Conference slide template: titles, dividers, light terminal, code, lifecycle, demo.', 'Kairos - Talk Deck.dc.html'],
-      ['09', 'Presentations', 'How to present, export to PDF and make your own talk from the deck.', 'Kairos - Presentations.dc.html']
+      ['09', 'Presentations', 'How to present, export to PDF and make your own talk from the deck.', 'Kairos - Presentations.dc.html'],
+      ['10', 'Storybook', 'The design package: tokens, React components and framework-free styles, with every screen above as a live example.', 'storybook/']
     ].map(([n, t, d, href]) => ({ n, t, d, href })) };
   }
 }

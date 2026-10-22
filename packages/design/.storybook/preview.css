@@ -1,0 +1,227 @@
+/* Storybook's stylesheet: the same layers the package ships, plus the
+   utilities the docs blocks use. */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "../tailwind.css";
+@import "../src/styles/base.css";
+
+@source "../src/components";
+@source "../src/lib";
+@source "../src/docs";
+@source "../src/pages";
+@source "./blocks";
+@source "./preview.tsx";
+
+html,
+body,
+.sb-show-main {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/* Storybook covers the canvas with a white "preparing" overlay for the hundred
+   or so milliseconds between selecting a story and rendering it, on every
+   navigation, which in the dark theme is a white flash. The overlay takes the
+   canvas colour instead, so only its spinner shows. */
+.sb-preparing-story,
+.sb-preparing-docs {
+  background-color: var(--bg);
+}
+/* The docs overlay also sketches a white canvas and a white args table. */
+.sb-preparing-docs .sb-previewBlock,
+.sb-preparing-docs .sb-argstableBlock-body td {
+  background: var(--surface);
+  border-color: var(--line);
+}
+.sb-preparing-docs .sb-argstableBlock-body tr:not(:first-child) {
+  border-top-color: var(--line);
+}
+.sb-preparing-docs .sb-previewBlock_icon,
+.sb-preparing-docs .sb-argstableBlock :is(th, td) span {
+  background-color: var(--inner);
+}
+
+.sb-show-main.sb-main-padded {
+  padding: 1.5rem;
+}
+
+/* Docs pages inherit the tokens too, so swatches and examples switch with the theme. */
+.sbdocs.sbdocs-content {
+  font-family: var(--font-sans);
+}
+
+/* Docs prose follows the tokens in the dark theme. Storybook paints the docs
+   blocks from a static light theme (theme.ts), so every light background it
+   sets gets a token here; selectors stay one class above Storybook's own. */
+[data-theme="dark"] .sbdocs.sbdocs-wrapper,
+[data-theme="dark"] .sbdocs.sbdocs-content {
+  background: var(--bg);
+  color: var(--ink);
+}
+[data-theme="dark"] .sbdocs.sbdocs-content :is(h1, h2, h3, h4, h5, h6, p, li, td, th, dt, dd, blockquote) {
+  color: var(--ink);
+}
+[data-theme="dark"] .sbdocs.sbdocs-content :is(h1, h2, hr, blockquote, table, th, td) {
+  border-color: var(--line);
+}
+/* Markdown tables: Storybook paints odd rows white and even rows off-white; it
+   skips .sb-unstyled tables (and the inline canvases, which carry that class),
+   so this does too. */
+[data-theme="dark"] .sbdocs.sbdocs-content :where(table:not(.sb-unstyled, .sb-unstyled table)) tr {
+  background: var(--surface);
+}
+[data-theme="dark"]
+  .sbdocs.sbdocs-content
+  :where(table:not(.sb-unstyled, .sb-unstyled table))
+  tr:nth-of-type(2n) {
+  background: var(--inner);
+}
+[data-theme="dark"] .sbdocs.sbdocs-content :not(pre) > code {
+  background: var(--inner);
+  color: var(--ink);
+  border-color: var(--line);
+}
+[data-theme="dark"] .sbdocs.sbdocs-content a {
+  color: var(--accent);
+}
+
+/* ArgsTable: every body cell is opaque white for its drop-shadow filter, the
+   header is muted and the value chips are dark ink on a 1% tint. */
+[data-theme="dark"] .sbdocs .docblock-argstable {
+  color: var(--ink);
+}
+[data-theme="dark"] .sbdocs .docblock-argstable th {
+  color: var(--muted);
+}
+[data-theme="dark"] .sbdocs .docblock-argstable tbody {
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+}
+[data-theme="dark"] .sbdocs .docblock-argstable tbody > tr > * {
+  background: var(--surface);
+  border-color: var(--line);
+}
+/* Category rows (argTypes table.category) force the light app background. */
+[data-theme="dark"] .sbdocs .docblock-argstable tbody > tr:has(> td > button) > td {
+  background: var(--inner) !important;
+  color: var(--muted);
+}
+[data-theme="dark"] .sbdocs .docblock-argstable td > span:not([title]),
+[data-theme="dark"] .sbdocs .docblock-argstable td > div span:not(.sbdocs-expandable *) {
+  color: var(--ink);
+  background: var(--inner);
+  border-color: var(--line);
+}
+
+/* Inline canvases are white cards with a shadow; stories sit on the page
+   canvas instead, as they do in the standalone canvas. */
+[data-theme="dark"] .sbdocs.sbdocs-preview {
+  background: var(--bg);
+  border-color: var(--line);
+  box-shadow: none;
+}
+[data-theme="dark"] .sbdocs.sbdocs-preview-actions .docblock-code-toggle {
+  color: var(--muted);
+}
+/* The toolbar above an inline canvas (reload, zoom) is a white strip on the
+   dark canvas, its bottom hairline a blue-tinted inset shadow. */
+[data-theme="dark"] .sbdocs.sbdocs-preview [role="toolbar"] {
+  background: var(--inner);
+  color: var(--muted);
+  box-shadow: inset 0 -1px 0 0 var(--line);
+}
+[data-theme="dark"] .sbdocs.sbdocs-preview [role="toolbar"] button {
+  color: var(--muted);
+}
+
+/* The controls' own inputs in the ArgsTable: the select, the text area and the
+   number field are white fields with dark text; the boolean toggle is a light
+   blue strip with a white pill on the chosen side. */
+[data-theme="dark"]
+  .sbdocs
+  .docblock-argstable
+  :is(select, textarea, input:not([type="checkbox"], [type="radio"], [type="range"])) {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line);
+}
+[data-theme="dark"] .sbdocs .docblock-argstable label:has(> input[type="checkbox"]) {
+  background: var(--inner);
+  border-color: var(--line);
+}
+[data-theme="dark"] .sbdocs .docblock-argstable label:has(> input[type="checkbox"]) > span {
+  background: transparent;
+  color: var(--muted);
+}
+[data-theme="dark"]
+  .sbdocs
+  .docblock-argstable
+  label:has(> input[type="checkbox"]:checked)
+  > span:last-of-type,
+[data-theme="dark"]
+  .sbdocs
+  .docblock-argstable
+  label:has(> input[type="checkbox"]:not(:checked))
+  > span:first-of-type {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+/* The TOC is a sibling of .sbdocs-content inside the wrapper, so it scopes
+   there. tocbot names: .toc-list rail, .toc-list-item, .is-active-li. */
+[data-theme="dark"] .sbdocs.sbdocs-wrapper .toc-wrapper .toc-list {
+  border-left-color: var(--line);
+}
+[data-theme="dark"] .sbdocs.sbdocs-wrapper .toc-wrapper .toc-list-item > a {
+  color: var(--muted);
+}
+[data-theme="dark"] .sbdocs.sbdocs-wrapper .toc-wrapper .toc-list-item.is-active-li > a {
+  color: var(--ink);
+}
+[data-theme="dark"] .sbdocs.sbdocs-wrapper .toc-wrapper .toc-list-item::before {
+  border-left-color: var(--accent);
+}
+
+/* Docs prose lists keep their markers without a rule here: Storybook's own
+   typography restores disc and decimal under .sbdocs-content and skips the
+   .sb-unstyled subtree it wraps every story canvas in. A list rule of our own
+   would not skip it, and would paint a bullet or a number in front of a nav
+   item or a numbered tile inside a story on a docs page. */
+
+/* Docs pages fit a phone. */
+.sbdocs.sbdocs-wrapper {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+.sbdocs.sbdocs-content {
+  min-width: 0;
+  max-width: 100%;
+}
+.sbdocs .docblock-source,
+.sbdocs pre {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+}
+.sbdocs.sbdocs-content code {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+@media (max-width: 600px) {
+  .sbdocs.sbdocs-wrapper {
+    padding: 1.5rem 16px;
+  }
+}
+/* The ArgsTable is as wide as its name column plus its control column (about
+   660px) and sits in no scroll wrapper, so on a phone the whole page scrolled
+   sideways. As a block it keeps its rows and columns (they form one anonymous
+   table inside it) and scrolls on its own. */
+@media (max-width: 768px) {
+  .sbdocs .docblock-argstable {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
