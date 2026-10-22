@@ -23,4 +23,18 @@ describe("WizardSteps", () => {
     await userEvent.click(screen.getByRole("button", { name: /Base/ }));
     expect(onStepChange).toHaveBeenCalledWith("base");
   });
+
+  it("leaves the steps' focus ring room inside the scroll container", () => {
+    render(<WizardSteps steps={steps} current="base" />);
+    const nav = screen.getByRole("navigation", { name: "Steps" });
+    expect(nav).toHaveClass("overflow-x-auto", "p-0.5", "-m-0.5");
+    expect(nav).not.toHaveClass("pb-0.5");
+  });
+
+  it("keeps the hidden state text inside the scroll rail, so a phone gets no page-wide scroll", () => {
+    render(<WizardSteps steps={steps} current="base" />);
+    // The sr-only span is absolutely positioned; its containing block has to be
+    // the step, inside the overflow-x-auto nav, or it lands in the page's overflow.
+    for (const step of screen.getAllByRole("button")) expect(step).toHaveClass("relative");
+  });
 });

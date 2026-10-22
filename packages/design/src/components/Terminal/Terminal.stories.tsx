@@ -81,3 +81,84 @@ export const NoBar: Story = {
 export const Empty: Story = {
   args: { "aria-label": "Installation log", lines: [], maxHeight: 120, copy: false },
 };
+
+const cloudConfig: Array<string | TerminalLine> = [
+  "#cloud-config",
+  "hostname: edge-store-{{ trunc 4 .MachineID }}",
+  "users:",
+  "  - name: kairos",
+  "    passwd: kairos",
+  "    ssh_authorized_keys:",
+  "      - github:mauromorales",
+  "      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl operator@edge-store-0142.fleet.example.internal",
+  "k3s:",
+  "  enabled: true",
+  "install:",
+  "  device: auto",
+  "  reboot: true",
+];
+
+const upgradeSnippet: Array<string | TerminalLine> = [
+  { text: "kairos upgrade --source oci:quay.io/kairos/hadron:v0.5.2", prompt: true },
+  "INFO Pulling quay.io/kairos/hadron:v0.5.2",
+  "INFO Writing passive system",
+  "[ERROR] bootloader: efibootmgr: EFI variables are not supported on this system",
+];
+
+function StreamingNumbered(props: React.ComponentProps<typeof Terminal>) {
+  const [lines, setLines] = useState<TerminalLine[]>([]);
+  useEffect(() => {
+    let i = 0;
+    const id = setInterval(() => {
+      setLines((prev) => [...prev, installLog[i % installLog.length]]);
+      i++;
+      if (i > 120) clearInterval(id);
+    }, 400);
+    return () => clearInterval(id);
+  }, []);
+  return <Terminal {...props} lines={lines} />;
+}
+
+export const LineNumbers: Story = {
+  name: "Line numbers",
+  args: { lineNumbers: true },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "`lineNumbers` adds the installer editor's gutter: right-aligned numbers in the muted ink, sized to the largest number and never narrower than two digits, hidden from assistive technology and not selectable, so the copy action and a manual selection take the text alone. A long line wraps under its own number. `firstLine` numbers a snippet from mid-file and `highlight` marks rows on the bar colour. A streamed log keeps numbering as lines arrive.",
+      },
+    },
+  },
+  render: (args) => (
+    <div className="grid max-w-3xl gap-6">
+      <Terminal
+        {...args}
+        aria-label="Cloud config"
+        title="cloud-config.yaml"
+        copy
+        autoscroll={false}
+        maxHeight="none"
+        lines={cloudConfig}
+        highlight={[2]}
+      />
+      <Terminal
+        {...args}
+        aria-label="Upgrade log excerpt"
+        title="upgrade.log · from line 118"
+        copy={false}
+        autoscroll={false}
+        maxHeight="none"
+        firstLine={118}
+        lines={upgradeSnippet}
+      />
+      <StreamingNumbered
+        {...args}
+        aria-label="Installation log"
+        title="install.log"
+        copy={false}
+        maxHeight={200}
+      />
+    </div>
+  ),
+};

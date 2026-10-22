@@ -92,8 +92,10 @@ function Homepage() {
             </a>
           </div>
         </div>
-        <div className="overflow-hidden rounded-base bg-surface">
-          <div className="flex justify-between bg-raised px-5 py-3.5 text-sm font-bold">
+        {/* No overflow clip on the card: it would cut the last link's focus ring.
+            The header rounds its own top corners instead. */}
+        <div className="rounded-base bg-surface">
+          <div className="flex justify-between rounded-t-base bg-raised px-5 py-3.5 text-sm font-bold">
             <span>Component</span>
             <span className="font-mono text-xs font-normal">v0.5.1</span>
           </div>

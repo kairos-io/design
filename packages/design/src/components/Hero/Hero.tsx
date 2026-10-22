@@ -11,9 +11,11 @@ export interface HeroProps extends Omit<React.HTMLAttributes<HTMLElement>, "titl
   /** The paragraph under the title, capped at 560px. */
   lede?: React.ReactNode;
   /**
-   * The tile field at the right edge: props for it, or false for none.
-   * `animate` passes through; with `"cursor"` the field follows the pointer
-   * over the whole hero, not only its own right-hand strip.
+   * The tile field at the right edge: props for it, or false for none. The
+   * motion props pass through: `enter` ("drop" or "unfold"), `idle` ("live"
+   * or "cursor") and `folded`; with `idle="cursor"` the field follows the
+   * pointer over the whole hero, not only its own right-hand strip. The
+   * deprecated `animate` shorthand still maps onto `enter` and `idle`.
    */
   tiles?: Partial<TileFieldProps> | false;
   /** A hairline under the hero, as hadron-linux.io has. */

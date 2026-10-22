@@ -60,7 +60,7 @@ function loadTokens(file = path.join(root, 'tokens.json')) {
   }
   const easing = value(doc.motion.easing.$value);
   return {
-    color: { base: group(doc.color.base), brand: group(doc.color.brand), status: group(doc.color.status) },
+    color: { base: group(doc.color.base), brand: group(doc.color.brand), tile: group(doc.color.tile ?? {}), status: group(doc.color.status) },
     themes: { light: group(doc.themes.light), dark: group(doc.themes.dark) },
     variants,
     font: {
@@ -85,6 +85,7 @@ function staticTokens(t) {
   const stat = {};
   for (const [k, v] of Object.entries(t.color.base)) stat[k] = v;
   for (const [k, v] of Object.entries(t.color.brand)) stat[k] = v;
+  for (const [k, v] of Object.entries(t.color.tile)) stat[`tile-${k}`] = v;
   for (const [k, v] of Object.entries(t.color.status)) stat[`status-${k}`] = v;
   stat['font-sans'] = t.font.family.sans;
   stat['font-mono'] = t.font.family.mono;
@@ -157,6 +158,7 @@ function tailwindCss(t) {
   out.push('  /* Brand and status colors do not change with the theme. */');
   for (const [k, v] of Object.entries(t.color.base)) out.push(`  --color-${k}: ${v};`);
   for (const [k, v] of Object.entries(t.color.brand)) out.push(`  --color-${k}: ${v};`);
+  for (const [k, v] of Object.entries(t.color.tile)) out.push(`  --color-tile-${k}: ${v};`);
   for (const [k, v] of Object.entries(t.color.status)) out.push(`  --color-status-${k}: ${v};`);
   out.push('', `  --font-sans: ${t.font.family.sans};`);
   out.push(`  --font-mono: ${t.font.family.mono};`, '');

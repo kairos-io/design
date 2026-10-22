@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { DIAMOND_POINTS, DIAMOND_VIEWBOX } from "../../src/lib/diamond.ts";
 
 function Column({ kind, children }: { kind: "do" | "dont"; children: ReactNode }) {
   const isDo = kind === "do";
@@ -7,8 +8,8 @@ function Column({ kind, children }: { kind: "do" | "dont"; children: ReactNode }
       <div
         className={`mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider ${isDo ? "text-ok" : "text-status-recovery"}`}
       >
-        <svg width="11" height="11" viewBox="0 0 12 12" aria-hidden="true" className="fill-current">
-          <polygon points="6,0.8 11.2,6 6,11.2 0.8,6" />
+        <svg width="11" height="11" viewBox={DIAMOND_VIEWBOX} aria-hidden="true" className="fill-current">
+          <polygon points={DIAMOND_POINTS} />
         </svg>
         {isDo ? "Do" : "Don't"}
       </div>

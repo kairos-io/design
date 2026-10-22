@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn.ts";
+import { focusOutline } from "../../lib/focus.ts";
 
 export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
   /** A label rendered next to the box, so the whole row is the click target. */
@@ -28,7 +29,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         disabled={disabled}
         aria-describedby={descriptionId}
         className={cn(
-          "m-0 h-4 w-4 shrink-0 cursor-pointer rounded-sm accent-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-not-allowed disabled:opacity-50",
+          `m-0 h-4 w-4 shrink-0 cursor-pointer rounded-sm accent-accent ${focusOutline} disabled:cursor-not-allowed disabled:opacity-50`,
           !label && className,
         )}
         {...props}

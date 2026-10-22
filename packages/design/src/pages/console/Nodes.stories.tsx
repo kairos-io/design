@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "../../components/Table/Table.tsx";
 import { Tile } from "../../components/Tiles/Tile.tsx";
+import { focusRing } from "../../lib/focus.ts";
 import { tilePoints } from "../../lib/tiles.ts";
 import { phaseLook } from "../../lib/tone.ts";
 import { ConsoleShell } from "./ConsoleShell.tsx";
@@ -278,7 +279,7 @@ function NodesPage() {
                         setSelected(n.name);
                       }
                     }}
-                    className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ink"
+                    className={`cursor-pointer ${focusRing} focus-visible:ring-inset`}
                   >
                     <TableCell className="font-mono text-xs whitespace-nowrap">{n.name}</TableCell>
                     <TableCell className="whitespace-nowrap">

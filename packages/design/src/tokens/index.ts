@@ -31,6 +31,9 @@ export const hadron = {
 /** Node-state colours and the ink that sits on them. The same in both themes. */
 export const status = data.color.status;
 
+/** The tiles' status tones: three greens and three reds for a loader that has succeeded or failed. */
+export const tile = data.color.tile;
+
 /** The semantic colours: one value per theme, under the names the decks use (bg, ink, line, accent, ...). */
 export const themes = data.themes;
 export const themeLight = data.themes.light;

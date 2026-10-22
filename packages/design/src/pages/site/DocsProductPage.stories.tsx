@@ -79,7 +79,8 @@ function ProductPage() {
           }}
         />
 
-        <main className="flex min-w-0 flex-1 flex-wrap justify-center">
+        {/* The article column wraps under the navigation once the two no longer fit side by side, as in the deck. */}
+        <main className="flex min-w-0 grow basis-80 flex-wrap justify-center">
           <article
             className="flex min-w-[320px] flex-1 flex-col gap-6 px-6 pt-10 pb-20 md:px-14"
             style={{ maxWidth: 800 }}

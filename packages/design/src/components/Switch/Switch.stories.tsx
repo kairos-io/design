@@ -20,7 +20,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+function Controlled(props: React.ComponentProps<typeof Switch>) {
+  const [checked, setChecked] = useState(props.checked);
+  return <Switch {...props} checked={checked} onCheckedChange={setChecked} />;
+}
+
+export const Default: Story = {
+  render: (args) => <Controlled {...args} />,
+};
 
 function Group() {
   const [s, setS] = useState({ trusted: true, fips: false, insecure: false });

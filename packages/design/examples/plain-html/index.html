@@ -8,6 +8,23 @@
          From a CDN: https://cdn.jsdelivr.net/npm/@kairos-io/design/dist/tokens.css
          Here: the local build, so this page works from a checkout. -->
     <link rel="stylesheet" href="../../dist/tokens.css" />
+    <!-- The two latin font files, preloaded so the page paints in Urbanist and Martian
+         Mono instead of painting in the system face and swapping once fonts.css has
+         discovered them. From npm: node_modules/@kairos-io/design/dist/assets/fonts/ -->
+    <link
+      rel="preload"
+      href="../../dist/assets/fonts/Urbanist-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../../dist/assets/fonts/MartianMono-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <link rel="stylesheet" href="../../dist/fonts.css" />
     <link rel="stylesheet" href="../../dist/components.css" />
     <script>

@@ -140,11 +140,13 @@ The decks pick the new value up through `tokens.css`; nothing in a deck is edite
 ```sh
 cd packages/design
 npm ci
-npm run storybook        # Storybook on http://localhost:6006
+npm run storybook        # Storybook on http://localhost:6006, reachable from other devices by IP
 npm test                 # vitest: tokens, contrast, no hard-coded colours, every component
 npm run build            # tokens, logos and patterns, then dist/ (JS, types, CSS, assets)
 npm run build-storybook  # storybook-static/
 ```
+
+The dev server listens on every interface, so another device on the LAN or the tailnet opens it by IP (`http://192.168.1.10:6006`). A hostname has to be allowed as well: `.ts.net`, `.local`, `.lan`, `.home.arpa` and `.internal` names are, `STORYBOOK_ALLOWED_HOSTS=studio.example.com npm run storybook` adds one (comma-separated for several), and `npm run storybook -- --host 0.0.0.0` allows any. Over plain http the copy chips use the legacy clipboard path, since `navigator.clipboard` only exists on https and localhost.
 
 Components follow [docs/CONVENTIONS.md](docs/CONVENTIONS.md). See [CONTRIBUTING.md](CONTRIBUTING.md). The decisions are in [docs/adr/](docs/adr/).
 

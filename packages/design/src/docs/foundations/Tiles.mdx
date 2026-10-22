@@ -1,6 +1,15 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 import { DoDont } from "../../../.storybook/blocks/index.ts";
-import { Tile, TileBar, TileField, TileMarker, TileUnit } from "../../components/Tiles/index.ts";
+import {
+  Tile,
+  TileBackground,
+  TileBar,
+  TileField,
+  TileLoader,
+  TileMarker,
+  TileRing,
+  TileUnit,
+} from "../../components/Tiles/index.ts";
 import { Button } from "../../components/Button/index.ts";
 
 <Meta title="Foundations/Tiles" />
@@ -197,18 +206,70 @@ The ink follows the tone, not the palette: navy on the oranges and on Sky (7.0:1
 ## Motion
 
 <div className="relative h-50 overflow-hidden rounded-base border bg-bg">
-  <TileField fade="right" seed={5} radius={38} animate="in" />
+  <TileField fade="right" seed={5} radius={38} enter="drop" />
 </div>
 
-A field can arrive instead of being there. `animate="in"` drops the filled tiles into place once, dense edge first, over about a second; each tile's delay comes from its bias weight plus a little jitter (`tileEnterDelay` in `src/lib/tiles.ts`), so the field builds from where it is densest. `animate="live"` is the same entrance, after which a few tiles keep breathing on long uneven cycles of 6 to 11 seconds. Both are CSS only, the `.tile-in` and `.tile-live` classes with their keyframes in `base.css`, so they ship in `styles.css` and need no JavaScript after the first render. Under `prefers-reduced-motion` nothing moves: the field is simply there.
+A field can arrive instead of being there, and it can leave. Three props keep the three moments apart: `enter` is the entrance, `idle` what the field does at rest, `folded` whether it is there at all. (`animate="in" | "live" | "cursor"` is the deprecated shorthand for `enter="drop"` with the matching `idle`, kept until 1.0.)
 
-- Use `"in"` on a hero or an empty state that appears once.
-- Use `"live"` only on a screen a person leaves open: a dashboard header, a waiting state.
+`enter="drop"` drops the filled tiles into place once, dense edge first, over about a second; each tile's delay comes from its bias weight plus a little jitter (`tileEnterDelay` in `src/lib/tiles.ts`), so the field builds from where it is densest. `idle="live"` then keeps a few tiles breathing on long uneven cycles of 6 to 11 seconds. Both are CSS only, the `.tile-in` and `.tile-live` classes with their keyframes in `base.css`, so they ship in `styles.css` and need no JavaScript after the first render. Under `prefers-reduced-motion` nothing moves: the field is simply there.
+
+- Use `enter="drop"` on a hero or an empty state that appears once.
+- Use `idle="live"` only on a screen a person leaves open: a dashboard header, a waiting state.
 - Never two live fields on one page, and never on content that reflows, because the tiles are positioned by the SVG and a reflow would restart them.
 
 The stories [Tiles into place](?path=/story/components-tiles--animated) and [Live field](?path=/story/components-tiles--live) under Components/Tiles show both.
 
-`animate="cursor"` is a proposal on top of the deck, not part of it, and nothing turns it on by default. The tiles enter as with `"in"`, then follow the pointer over the field's parent (or a `target` element, which `Hero` sets to the whole hero): the cubes around it light up, an empty cell with a faint fill of its tone and a filled cube a shade brighter, falling off with distance and settling back over the slow duration once the pointer leaves. It is opacity only, on a glow layer that shares the grid's points and rests at zero, so the resting field is the static one, no face scales, and a lit cube is still exactly its outline. The field itself stays `pointer-events-none`; the parent is listened to, one animation frame per move, with no React re-render. It only runs on a device that can hover with a fine pointer: touch gets the static field, and so does `prefers-reduced-motion`. See [Follows the cursor](?path=/story/components-tiles--cursor).
+<div className="relative h-50 overflow-hidden rounded-base border bg-bg">
+  <TileField fade="right" seed={5} radius={38} enter="fall" />
+</div>
+
+Three more entrances are proposals on top of the deck, for one to be picked; the story [Entrances, side by side](?path=/story/components-tiles--entrances) shows all four on one field with a Replay button. Each staggers the cubes from the dense edge like the drop, moves them by transform and opacity only, never scales a face beyond its cell, lands every face exactly on its outline over a grid that is complete throughout, and comes off the markup once the last cube has landed, so the resting field is the static one. They take the slow duration stretched by a half (`--tile-enter-duration`, `calc(var(--duration-slow) * 1.5)`).
+
+- `enter="fall"`: each cube falls from one hexagon height above (`--tile-fall`, set from the radius) under gravity, the curve sampled into the keyframes, and settles with a 1.5px overshoot and return, fading in over the first part of the fall. The three faces fall together as one cube. See [Falls into place](?path=/story/components-tiles--fall).
+- `enter="assemble"`: the three faces arrive from their own sides, the top from above, the left from the lower left, the right from the lower right (`tileFaceMotion` in `src/lib/tiles.ts`), forty milliseconds apart in tone order, and snap together at the centre vertex.
+- `enter="unfold"`: each face hinges open from the hexagon's centre vertex, the one point its three faces share: the top face first, then the left, then the right. The transform is a scale toward that vertex in the face's own edge frame (`rotate` onto the first edge, `skewX(-30deg)` onto the second, the scale, then both undone; `.tile-unfold` in `base.css`, with the per-tone origin and angle from `tileFaceMotion`), so a half-open face is still a parallelogram inside its cell and at full scale it is the static face to the point. See [Unfolds into place](?path=/story/components-tiles--unfold).
+
+`folded` runs the chosen entrance in reverse, as a controlled prop: flip it on and the cubes leave the way they came, sparse edge first and dense edge last (a drop falls out, a fall falls through, an assembled cube pulls apart, an unfolded one folds into its centre), until only the outline grid stands; flip it off and they enter again. A field that mounts folded is its grid alone, and with no entrance the cubes simply come and go. Under `prefers-reduced-motion` no motion class is attached at all: the cubes appear and disappear with no motion. See [Folds away](?path=/story/components-tiles--fold).
+
+`idle="cursor"` is a proposal on top of the deck as well, and nothing turns it on by default. Once the tiles have entered they follow the pointer over the field's parent (or a `target` element, which `Hero` sets to the whole hero): the cubes around it light up, an empty cell with a faint fill of its tone and a filled cube a shade brighter, falling off with distance and settling back over the slow duration once the pointer leaves. It is opacity only, on a glow layer that shares the grid's points and rests at zero, so the resting field is the static one, no face scales, and a lit cube is still exactly its outline. The field itself stays `pointer-events-none`; the parent is listened to, one animation frame per move, with no React re-render. It only runs on a device that can hover with a fine pointer: touch gets the static field, and so does `prefers-reduced-motion`. See [Follows the cursor](?path=/story/components-tiles--cursor).
+
+`idle="wave"`, the third proposal, is the whole field moving together: one slow band rolls from the dense edge to the sparse one along the fade (`tileWaveAxis` in `src/lib/tiles.ts`: right to left on the default hero, outward from a centred field, and for a custom bias from whichever side is denser), each cube lifting 1.5px and dimming for a moment as it passes, then a gap of a couple of seconds before it comes round again. Where `"live"` is a few cubes breathing at random, for a screen merely left open, the wave is for a screen that is working: a build running, an install under way. It is CSS only (`.tile-wave` in `base.css`), opacity and translate and never a scale, so a cube is always on its outline; the period is the slow token times twenty (`--tile-wave-period`, `calc(var(--duration-slow) * 20)`), each cube's delay a share of it from its place along the axis plus a small per-row spread (`tileWavePhase`), so the front is a ragged band and the same field always gives the same wave. It runs only once the entrance has landed, never while folded, and not under `prefers-reduced-motion`, where no class is attached at all. See [Wave across the field](?path=/story/components-tiles--wave) and [Working state](?path=/story/components-tiles--working).
+
+## Loading
+
+<div className="flex flex-wrap items-center gap-10">
+  <div className="flex items-center gap-3 text-sm">
+    <TileLoader />
+    <span className="text-muted">Pulling image</span>
+  </div>
+  <Button loading>Download ISO</Button>
+  <TileBar total={8} done={3} current size={20} aria-label="Install progress" />
+  <TileRing size={64} />
+</div>
+
+Loading is the same motion, where a fold is a face coming into place: it assembles onto its outline, rests, and comes apart again. Three loaders are built from it, all proposals on top of the deck, all opt-in, and all over an outline that never leaves, so there is never a blank cell. Each cycle lays the entrance and its reversal end to end (`.tile-loop-*`, `.tile-chase-*`, `.tile-build-*` and `.tile-step-*` in `base.css`, assemble and unfold each), every duration a multiple of `--tile-enter-duration` from the slow token. `enter="assemble"` is the default, each face arriving along the line from the cube's centre vertex through its own middle; `enter="unfold"` is the alternative, each face hinging open from that vertex along its own two edges, scaled in the frame of those edges (`quadMotion` in `src/lib/mark.ts`) so a half-open face is still a parallelogram inside its outline whatever the rhombus's angles. Every face and its outline are drawn from one point string, and each face keeps a stroke in its own fill while it moves, so nothing shows between neighbours. Under `prefers-reduced-motion` nothing moves and the static result stands: the complete cube, the done tiles with the running one at half strength (an indeterminate bar is its rest tiles alone), the whole mark.
+
+- `TileLoader` is the inline one: a single cube at 16, 20 or 24px whose three faces come in one at a time in tone order an eighth of a turn apart, rest as the complete cube, leave the same way and come again, the last face still leaving as the first returns. `tone="mono"` paints the faces in `currentColor` at three strengths for an accent or ink fill. It is an image named "Loading" unless `decorative`. Its box is padded by the stroke's mitre plus the reach a face comes from, taken back as margin, so nothing is clipped and its footprint is the cube. `Button loading` shows it at 16px over the label, which goes transparent in place, so the button keeps its width: mono on the filled variants, the palette on the outline, ghost and link ones.
+- `TileBar` takes `current`: `true` runs the loop on the tile at index `done`, the step in progress, and a number runs it on that tile. From then on a tile that becomes done comes into place once, left to right when several land together, while the tiles already done stay still. With `current` and no `done` the bar is indeterminate, the loop travelling it as a wave that repeats every eight tiles, and the progressbar carries no value. `enter` picks the motion.
+- `TileRing` is the showpiece: the Kairos mark itself. Its eighteen rhombi are the icon's own rects through their matrices (`kairosMarkTiles`), grouped into six cubes by the vertex they share and kept turned as the mark turns them, so it is the logo to the point; `tileRingFrame` places the real mark under it. `mode="build"` (default) brings the cubes in one by one clockwise from the top, rests as the complete mark for a beat, takes them away in the same order and starts again; `mode="chase"` builds the ring once and then sends one cube at a time round it. 48 to 120px, either palette, one per surface, for an empty state or a first screen that waits on a build.
+
+Each loader takes `status`: `"loading"` (default) loops; `"success"` lets the loop reach its next quiet moment, so the cube that is coming in lands and nothing is cut mid-motion, then the faces come into place once more in the three success greens (`--tile-success-light`, `-mid`, `-deep`, from the healthy green; `tilePalettes.success`) over the brand ones, opacity and transform only, and the loader rests green; `"error"` is the same in the recovery reds (`tilePalettes.error`). The bar crossfades its done tiles left to right (`.tile-settle`, opacity only) and brings the current one in; the ring builds a final lap cube by cube. `onSettled(status)` fires once the last face has landed, the accessible name turns to "Done" or "Failed" and a polite live region announces it. Under `prefers-reduced-motion` the tiles simply turn.
+
+The stories under [Components/Tiles/Loaders](?path=/docs/components-tiles-loaders--docs) show every size and both motions with a Replay button, the mono rendition on fills, the loading button, the stepping and indeterminate bars, the ring in both modes and palettes, the ring over the real mark, and a build queue of nine cards.
+
+## Backgrounds
+
+<div className="relative h-60 overflow-hidden rounded-base border bg-bg">
+  <TileBackground radius={40} seed={5} cursor="lines" />
+  <div className="relative flex h-full max-w-sm flex-col justify-center gap-2 p-8">
+    <h2 className="m-0 text-2xl font-bold tracking-tight">Copy sits over the plane</h2>
+    <p className="m-0 text-sm text-muted">Move the pointer: the outlines near it brighten.</p>
+  </div>
+</div>
+
+`TileBackground` is the field with nothing filled: the same hexagons, every cell drawn as its three-rhombus outline, so a whole surface reads as cubes stacked edge to edge. It is the one tile that may go under copy, because it is only hairlines in the line token on the canvas, and it fills its positioned parent at any size (a viewport viewBox by default, cropped rather than stretched). A soft radial `vignette` (0.6 by default; a number, a custom bias over `(u, v)`, or `false` for a flat grid) lets the corners fade so the grid never stops in a line, the `seed` sets a little grain, and `depth` steps the outlines by row, the lower rows nearer, for the stacked look. Nothing is ever filled at rest, whatever the seed. A proposal on top of the deck: use it on one surface, a landing or a section, not as wallpaper.
+
+The cursor modes are a further proposal, off by default and opt-in through `cursor`, to be compared: `"lines"` brightens the outlines near the pointer in the accent (or the ink, with `highlight="ink"`), falling off over four radii and easing back over the slow duration once it leaves; `"fill"` adds, under those lines, a faint fill of the three tones on the cube under the pointer that trails behind it like a wake (up over the base duration, out over twice the slow one); `"ripple"` is quiet until a press anywhere on the parent, then one ring of brightness runs out across the outlines from that point over four times the slow duration and dies away. Each is a second set of the grid's own points resting at opacity 0, so the resting plane is the static one and a lit cube is exactly its outline; the plumbing is `useCursorField` (Pointer Events on the parent or a `target`, one animation frame per move, no re-render), which the field's own cursor mode is to share. Only on a device that can hover with a fine pointer; touch and `prefers-reduced-motion` get the static plane. The stories under [Components/Tiles/Backgrounds](?path=/docs/components-tiles-backgrounds--docs) put each mode under a headline and a button, and compose the real hero over the plane.
 
 ## In a hero
 

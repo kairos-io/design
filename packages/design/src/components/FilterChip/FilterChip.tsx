@@ -2,6 +2,7 @@ import * as React from "react";
 import { cn } from "../../lib/cn.ts";
 import { phaseLook, type Tone } from "../../lib/tone.ts";
 import { StatusDot } from "../StatusDot/StatusDot.tsx";
+import { focusRingOffset } from "../../lib/focus.ts";
 
 export interface FilterChipProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onSelect"> {
   selected?: boolean;
@@ -39,7 +40,7 @@ export const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
           onSelect?.();
         }}
         className={cn(
-          "inline-flex cursor-pointer items-center gap-[7px] rounded-sm px-3 py-[7px] text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2",
+          `inline-flex cursor-pointer items-center gap-[7px] rounded-sm px-3 py-[7px] text-sm font-semibold transition-colors ${focusRingOffset}`,
           selected ? "bg-ink text-bg" : "bg-surface text-ink hover:bg-hover",
           className,
         )}

@@ -1,20 +1,9 @@
 // Shared pieces of the site pages: the theme-following logos and the data
 // the decks carry, copied from their renderVals() so the pages say what the
 // decks say.
-import * as React from "react";
 import { HadronLogo, KairosLogo } from "../../components/Logo/Logo.tsx";
-
-/** The theme on <html>, as the Storybook toolbar (or a host) sets data-theme. */
-export function useDocumentTheme(): "light" | "dark" {
-  const read = () => (document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light");
-  const [theme, setTheme] = React.useState<"light" | "dark">(read);
-  React.useEffect(() => {
-    const observer = new MutationObserver(() => setTheme(read()));
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-    return () => observer.disconnect();
-  }, []);
-  return theme;
-}
+import { DIAMOND_POINTS, DIAMOND_VIEWBOX } from "../../lib/diamond.ts";
+import { useDocumentTheme } from "../../hooks/useDocumentTheme.ts";
 
 /** The Kairos lockup in the rendition for the current theme: colour on light, white wordmark on dark. */
 export function ThemedKairosLogo({ height, label }: { height: number; label?: string }) {
@@ -31,8 +20,14 @@ export function ThemedHadronLogo({ height, label }: { height: number; label?: st
 /** The status diamond the decks use as a bullet; `className` sets its fill (fill-accent, fill-hadron-sky). */
 export function Diamond({ className, size = 12 }: { className?: string; size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 12 12" aria-hidden="true" className="mt-[5px] shrink-0">
-      <polygon points="6,0.8 11.2,6 6,11.2 0.8,6" className={className} />
+    <svg
+      width={size}
+      height={size}
+      viewBox={DIAMOND_VIEWBOX}
+      aria-hidden="true"
+      className="mt-[5px] shrink-0"
+    >
+      <polygon points={DIAMOND_POINTS} className={className} />
     </svg>
   );
 }

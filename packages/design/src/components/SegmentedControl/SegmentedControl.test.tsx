@@ -37,6 +37,19 @@ describe("SegmentedControl", () => {
     expect(amd).toHaveAccessibleDescription("x86-64 servers");
   });
 
+  it("keeps every option the width of its bold label so the choice can move without a shift", async () => {
+    render(<Example />);
+    const arm = screen.getByRole("radio", { name: "arm64" });
+    const twin = arm.querySelector('[aria-hidden="true"]')!;
+    expect(twin).toHaveTextContent("arm64");
+    expect(twin).toHaveClass("invisible", "font-bold", "col-start-1", "row-start-1");
+    const label = twin.previousElementSibling!;
+    expect(label).toHaveClass("font-semibold", "col-start-1", "row-start-1");
+    await userEvent.click(arm);
+    expect(label).toHaveClass("font-bold");
+    expect(arm.querySelector('[aria-hidden="true"]')).toHaveClass("invisible", "font-bold");
+  });
+
   it("shows the code over the label and reads the hint as the description", () => {
     render(
       <SegmentedControl

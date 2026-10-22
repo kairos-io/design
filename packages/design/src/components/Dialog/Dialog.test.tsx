@@ -24,6 +24,22 @@ describe("Dialog", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
+  it("enters and leaves through data-state animations so Radix keeps the node for the exit", () => {
+    render(
+      <Dialog defaultOpen>
+        <DialogContent>
+          <DialogTitle>Title</DialogTitle>
+          <DialogDescription>Body</DialogDescription>
+        </DialogContent>
+      </Dialog>,
+    );
+    const content = screen.getByRole("dialog");
+    expect(content).toHaveClass("data-[state=open]:animate-fade-up", "data-[state=closed]:animate-fade-down");
+    expect(content).not.toHaveClass("animate-fade-up");
+    const overlay = document.querySelector(".bg-overlay");
+    expect(overlay).toHaveClass("data-[state=open]:animate-fade-in", "data-[state=closed]:animate-fade-out");
+  });
+
   it("has an accessible close button", async () => {
     render(
       <Dialog defaultOpen>

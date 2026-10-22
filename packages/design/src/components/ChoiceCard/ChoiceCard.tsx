@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cn } from "../../lib/cn.ts";
 import { StatusDot } from "../StatusDot/StatusDot.tsx";
+import { focusRingOffset } from "../../lib/focus.ts";
 
 export interface ChoiceCardProps extends Omit<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -49,7 +50,7 @@ export const ChoiceCard = React.forwardRef<HTMLButtonElement, ChoiceCardProps>(
         onSelect?.();
       }}
       className={cn(
-        "flex w-full cursor-pointer flex-col gap-1 rounded-base border-[1.5px] p-3.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2",
+        `flex w-full cursor-pointer flex-col gap-1 rounded-base border-[1.5px] p-3.5 text-left transition-colors ${focusRingOffset}`,
         selected ? "border-ink bg-hover" : "border-line bg-transparent hover:bg-hover",
         className,
       )}

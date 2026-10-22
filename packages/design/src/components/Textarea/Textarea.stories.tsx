@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Field } from "../Field/Field.tsx";
 import { Label } from "../Label/Label.tsx";
 import { Textarea } from "./Textarea.tsx";
 
@@ -44,4 +45,34 @@ export const CloudConfig: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true, defaultValue: "Read only" },
+};
+
+export const LineNumbers: Story = {
+  name: "Line numbers",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "`lineNumbers` adds a gutter that counts the value's lines and follows the control's scroll, for a config file an operator edits by line. It implies `mono`. A line-numbered textarea does not soft-wrap: a long line scrolls sideways so every number sits beside exactly one line. The gutter is decorative and not part of the value; the control keeps its label, description and invalid state, here through Field.",
+      },
+    },
+  },
+  render: () => (
+    <Field
+      id="cloud-config-numbered"
+      label="Cloud config"
+      help="Applied on first boot."
+      error="Line 5: a mapping value is not allowed here."
+    >
+      <Textarea
+        lineNumbers
+        className="min-h-[240px]"
+        defaultValue={`${cloudConfig}
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl operator@edge-store-0142.fleet.example.internal
+k3s:
+  enabled: true`}
+      />
+    </Field>
+  ),
 };

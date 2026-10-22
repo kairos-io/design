@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useSyncExternalStore } from "react";
 import {
   DARK_MEDIA_QUERY,
   DEFAULT_THEME_KEY,
@@ -67,8 +67,17 @@ export function useTheme({ storageKey = DEFAULT_THEME_KEY }: UseThemeOptions = {
   const prefersDark = useSyncExternalStore(subscribeSystem, systemPrefersDark, serverPrefersDark);
   const resolved: "light" | "dark" = mode === "system" ? (prefersDark ? "dark" : "light") : mode;
 
+  // On mount the mode is applied the way the inline <head> script applies it:
+  // an explicit choice sets the attribute, and "system" leaves the document as
+  // it is. Removing the attribute on mount would undo a theme the page already
+  // carries (the Storybook toolbar's, a host's own default) the moment a
+  // ThemeToggle appears, which painted the OS theme over a dark page for a
+  // frame or for good. A change after mount, here or in another tab, applies
+  // "system" in full by removing the attribute.
+  const applied = useRef(mode);
   useEffect(() => {
-    applyTheme(mode);
+    if (mode !== "system" || applied.current !== mode) applyTheme(mode);
+    applied.current = mode;
   }, [mode]);
 
   const setMode = useCallback(

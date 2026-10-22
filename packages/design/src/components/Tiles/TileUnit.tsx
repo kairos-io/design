@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn.ts";
-import { tileHexagon, tilePalettes } from "../../lib/tiles.ts";
+import { tileFaceOrder, tileFaceStroke, tileHexagon, tilePalettes } from "../../lib/tiles.ts";
 import type { PaletteProp } from "./shared.ts";
 
 export interface TileUnitProps extends React.SVGAttributes<SVGSVGElement>, PaletteProp {
@@ -26,9 +26,22 @@ export const TileUnit = React.forwardRef<SVGSVGElement, TileUnitProps>(
         className={cn("shrink-0", className)}
         {...props}
       >
-        {faces.map((p) => (
-          <polygon key={p.tone} points={p.points} fill={tones[p.tone]} />
-        ))}
+        {/* The face stroke, as the field draws a cube: a thin bevelled stroke
+            in the face's own tone under its fill hides the seam between the
+            three, with no pin at any corner; the top face last. */}
+        {tileFaceOrder
+          .map((tone) => faces[tone])
+          .map((p) => (
+            <polygon
+              key={p.tone}
+              points={p.points}
+              fill={tones[p.tone]}
+              stroke={tones[p.tone]}
+              strokeWidth={tileFaceStroke.width}
+              strokeLinejoin={tileFaceStroke.join}
+              paintOrder={tileFaceStroke.order}
+            />
+          ))}
       </svg>
     );
   },

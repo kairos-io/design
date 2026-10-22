@@ -50,8 +50,16 @@ export function resolveTheme(mode: ThemeMode): "light" | "dark" {
 
 export const THEME_ATTRIBUTE = "data-theme";
 
+// The root defaults to <html>; on a server there is none, and the helpers
+// that write to it do nothing rather than throw, so a host can call
+// createTheme().set() from code that also runs during server rendering.
+function documentRoot(): HTMLElement | undefined {
+  return typeof document === "undefined" ? undefined : document.documentElement;
+}
+
 /** Sets data-theme="light" or "dark" on <html> for an explicit mode, and removes it for "system". */
-export function applyTheme(mode: ThemeMode, root: HTMLElement = document.documentElement): void {
+export function applyTheme(mode: ThemeMode, root: HTMLElement | undefined = documentRoot()): void {
+  if (!root) return;
   if (mode === "system") root.removeAttribute(THEME_ATTRIBUTE);
   else root.setAttribute(THEME_ATTRIBUTE, mode);
 }
@@ -85,14 +93,15 @@ export function isBrand(v: unknown): v is Brand {
 }
 
 /** Sets data-variant="hadron" on the root for Hadron, and removes it for Kairos. */
-export function applyBrand(brand: Brand, root: HTMLElement = document.documentElement): void {
+export function applyBrand(brand: Brand, root: HTMLElement | undefined = documentRoot()): void {
+  if (!root) return;
   if (brand === "hadron") root.setAttribute(BRAND_ATTRIBUTE, "hadron");
   else if (root.getAttribute(BRAND_ATTRIBUTE) === "hadron") root.removeAttribute(BRAND_ATTRIBUTE);
 }
 
 /** The brand the root carries: "hadron" under data-variant="hadron", otherwise "kairos". */
-export function getBrand(root: HTMLElement = document.documentElement): Brand {
-  return root.getAttribute(BRAND_ATTRIBUTE) === "hadron" ? "hadron" : "kairos";
+export function getBrand(root: HTMLElement | undefined = documentRoot()): Brand {
+  return root?.getAttribute(BRAND_ATTRIBUTE) === "hadron" ? "hadron" : "kairos";
 }
 
 export interface Theme {

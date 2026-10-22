@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cn } from "../../lib/cn.ts";
 import { Tile } from "../Tiles/Tile.tsx";
+import { focusRing } from "../../lib/focus.ts";
 
 export interface DocsNavItem {
   label: React.ReactNode;
@@ -53,7 +54,7 @@ export const DocsNav = React.forwardRef<HTMLElement, DocsNavProps>(
                       : undefined
                   }
                   className={cn(
-                    "flex items-center gap-2 rounded-base py-[7px] text-[15px] no-underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
+                    `flex items-center gap-2 rounded-base py-[7px] text-[15px] no-underline transition-colors ${focusRing}`,
                     it.current
                       ? "bg-surface px-2.5 font-bold text-ink"
                       : "pr-2.5 pl-[30px] text-sub hover:text-ink",
@@ -96,7 +97,7 @@ export const DocsToc = React.forwardRef<HTMLElement, DocsTocProps>(
           href={it.href}
           aria-current={it.current ? "location" : undefined}
           className={cn(
-            "no-underline hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
+            `no-underline hover:text-ink ${focusRing}`,
             it.current ? "font-bold text-ink" : "text-muted",
           )}
         >

@@ -4,12 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kairos design example</title>
+    <!-- fonts.css is linked here rather than imported from main.jsx so the faces are
+         known before the bundle runs, and the two latin files are preloaded so the
+         first paint is already in Urbanist and Martian Mono. Vite resolves these
+         node_modules paths and hashes the files into the build. -->
+    <link
+      rel="preload"
+      href="/node_modules/@kairos-io/design/dist/assets/fonts/Urbanist-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/node_modules/@kairos-io/design/dist/assets/fonts/MartianMono-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="/node_modules/@kairos-io/design/dist/fonts.css" />
     <script>
       // Apply the stored theme before React renders so the page does not flash.
+      // tokens.css reads data-theme on <html>; with no stored choice the
+      // attribute stays off and the page follows the OS setting.
       try {
         var m = localStorage.getItem("kairos-theme");
-        var dark = m === "dark" || (m !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
-        document.documentElement.classList.add(dark ? "dark" : "light");
+        if (m === "light" || m === "dark") document.documentElement.setAttribute("data-theme", m);
       } catch (e) {}
     </script>
   </head>

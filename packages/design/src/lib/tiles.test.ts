@@ -1,4 +1,14 @@
-import { fadeFrom, tileField, tileFieldSvg, tileFades, tileOutlineOpacity, tilePoints } from "./tiles.ts";
+import {
+  fadeFrom,
+  tileField,
+  tileFieldSvg,
+  tileFades,
+  tileOutlineOpacity,
+  tilePoints,
+  tileWaveAxes,
+  tileWaveAxis,
+  tileWavePhase,
+} from "./tiles.ts";
 
 describe("tile geometry", () => {
   it("is deterministic for a seed", () => {
@@ -87,20 +97,34 @@ describe("tile geometry", () => {
     expect(svg).toContain('stroke-linejoin="miter"');
     expect(svg.indexOf('fill="none"')).toBeLessThan(svg.indexOf("var(--kairos-light"));
     expect(svg.lastIndexOf('fill="none"')).toBeLessThan(svg.indexOf("var(--kairos-light"));
+    // The grid is unique lattice edges in a path per opacity, with round caps; solid is one path at full strength.
+    const grid = Array.from(svg.matchAll(/<path d="([^"]*)" fill="none"[^>]*>/g));
+    expect(grid).toHaveLength(1);
+    expect(grid[0][0]).toContain('stroke-linecap="round"');
     const faces = (svg.match(/var\(--kairos-(?:light|mid|orange), #/g) ?? []).length / 2;
-    const grid = (svg.match(/fill="none"/g) ?? []).length;
-    expect(faces).toBe(grid);
+    const edges = (grid[0][1].match(/M/g) ?? []).length;
+    // Every face has four edges, each shared by two faces at most: fewer edges than four per face, more than one.
+    expect(edges).toBeGreaterThan(faces);
+    expect(edges).toBeLessThan(4 * faces);
     // Solid: every outline is full, so none carries an opacity.
     expect(svg).not.toContain("stroke-opacity");
   });
 
   it("serialises the outline opacity so the shipped files fade like the component", () => {
     const svg = tileFieldSvg({ width: 600, height: 200, radius: 20, seed: 9, bias: tileFades.ramp });
-    // A filled face keeps a full outline wherever it is, so only the empty cells show the fade.
-    const filled = new Set(Array.from(svg.matchAll(/<polygon points="([^"]*)" fill="var/g)).map((m) => m[1]));
-    const outlines = Array.from(svg.matchAll(/<polygon points="(-?[\d.]+),[^"]*" fill="none"[^>]*\/>/g))
-      .filter((m) => !filled.has(/points="([^"]*)"/.exec(m[0])![1]))
-      .map((m) => ({ x: Number(m[1]), opacity: Number(/stroke-opacity="([\d.]+)"/.exec(m[0])?.[1] ?? 1) }));
+    // The grid is batched by opacity; an edge's strength is the stronger of its two cells', so a
+    // filled face's edges are always full, and only the empty cells show the fade.
+    const filledEdges = new Set<string>();
+    for (const m of svg.matchAll(/<polygon points="([^"]*)" fill="var/g)) {
+      const pts = m[1].split(" ");
+      pts.forEach((a, i) => filledEdges.add([a, pts[(i + 1) % 4]].sort().join("|")));
+    }
+    const outlines = Array.from(svg.matchAll(/<path d="([^"]*)" fill="none"[^>]*\/>/g)).flatMap((m) => {
+      const opacity = Number(/stroke-opacity="([\d.]+)"/.exec(m[0])?.[1] ?? 1);
+      return Array.from(m[1].matchAll(/M(-?[\d.]+) (-?[\d.]+)L(-?[\d.]+) (-?[\d.]+)/g))
+        .filter((e) => !filledEdges.has([`${e[1]},${e[2]}`, `${e[3]},${e[4]}`].sort().join("|")))
+        .map((e) => ({ x: Math.min(Number(e[1]), Number(e[3])), opacity }));
+    });
     expect(outlines.length).toBeGreaterThan(50);
     expect(outlines.filter((o) => o.x < 60).every((o) => o.opacity < 0.2)).toBe(true);
     expect(outlines.filter((o) => o.x > 540).every((o) => o.opacity > 0.85)).toBe(true);
@@ -114,6 +138,30 @@ describe("tile geometry", () => {
     );
     expect(svg).toContain("var(--hadron-deep, #004CCE)");
     expect(svg).not.toContain("orange");
+  });
+
+  it("runs the wave from each fade's dense edge to its sparse one, and a custom bias from its denser side", () => {
+    // Every preset: the axis is 0 where the fade peaks and grows away from it.
+    for (const name of Object.keys(tileFades) as (keyof typeof tileFades)[]) {
+      const bias = tileFades[name];
+      const axis = tileWaveAxes[name];
+      const samples = [0.05, 0.3, 0.5, 0.7, 0.95].flatMap((u) => [0.1, 0.5, 0.9].map((v) => [u, v] as const));
+      const densest = samples.reduce((a, b) => (bias(...b) > bias(...a) ? b : a));
+      expect(axis(...densest)).toBeLessThanOrEqual(0.2);
+      for (const [u, v] of samples) expect(axis(u, v)).toBeGreaterThanOrEqual(axis(...densest) - 1e-9);
+      expect(tileWaveAxis(name)).toBe(axis);
+    }
+    expect(tileWaveAxis((u) => u)(0.9, 0.5)).toBeCloseTo(0.1);
+    expect(tileWaveAxis((u) => 1 - u)(0.9, 0.5)).toBeCloseTo(0.9);
+    // The phase is the place along the axis, 0..1, nudged by less than a tenth per row and pure.
+    const p = { u: 0.3, v: 0.5 };
+    const phase = tileWavePhase(p, tileWaveAxes.right, 4);
+    expect(phase).toBe(tileWavePhase(p, tileWaveAxes.right, 4));
+    expect(Math.abs(phase - 0.7)).toBeLessThan(0.1);
+    expect(tileWavePhase({ u: 1.2, v: 0 }, tileWaveAxes.left, 0)).toBeLessThanOrEqual(1);
+    expect(tileWavePhase({ u: -0.2, v: 0 }, tileWaveAxes.left, -1)).toBeGreaterThanOrEqual(0);
+    const rows = [0, 1, 2, 3, 4, 5, 6].map((row) => tileWavePhase(p, tileWaveAxes.right, row));
+    expect(new Set(rows).size).toBeGreaterThan(3);
   });
 
   it("exposes the parallelogram of a single tile", () => {

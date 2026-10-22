@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useId, useRef, type KeyboardEvent } from "react";
 import { cn } from "../../lib/cn.ts";
+import { focusOutline } from "../../lib/focus.ts";
+import { ReserveWidth } from "../ReserveWidth/ReserveWidth.tsx";
 
 export interface SegmentedOption<T extends string> {
   value: T;
@@ -88,7 +90,7 @@ function SegmentedControlInner<T extends string>(
             onKeyDown={(e) => onKeyDown(e, i)}
             className={cn(
               "flex flex-col items-start rounded-[3px] px-2.5 py-2 text-left transition-colors",
-              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink",
+              focusOutline,
               "disabled:cursor-not-allowed disabled:opacity-50",
               selected ? "bg-surface text-ink" : "text-muted hover:text-ink",
             )}
@@ -98,9 +100,17 @@ function SegmentedControlInner<T extends string>(
                 {o.code}
               </span>
             )}
-            <span className={cn("text-[15px] leading-tight", selected ? "font-bold" : "font-semibold")}>
+            {/* The chosen label is bold and bold glyphs are wider, so the option is
+                held at the width of its bold label and nothing shifts when the
+                choice moves. */}
+            <ReserveWidth
+              className="text-[15px] leading-tight"
+              childClassName={selected ? "font-bold" : "font-semibold"}
+              twinClassName="font-bold"
+              twin={o.label}
+            >
               {o.label}
-            </span>
+            </ReserveWidth>
             {o.hint && (
               <span id={hintId} className="mt-0.5 text-[13px] leading-snug text-muted">
                 {o.hint}

@@ -1,9 +1,51 @@
 <link rel="icon" type="image/svg+xml" href="./logos/kairos-icon-color.svg" />
 <title>Kairos design system</title>
 <script>
-  // Docs-only pages never run the theme decorator; default them to light so the
-  // prose and the token swatches agree. The toolbar replaces this attribute.
-  document.documentElement.setAttribute("data-theme", "light");
+  // The toolbar globals travel on the preview's own URL (?globals=theme:dark;brand:hadron),
+  // but Storybook only applies them from the bundle, after the first paint, so a page
+  // opened dark painted light first and turned dark a few frames later. This reads
+  // the same parameter before anything paints. Light is the default, so docs-only
+  // pages, which run no decorator, agree with the toolbar; the channel listener
+  // in preview.tsx keeps both attributes in step with the toolbar from then on.
+  (function () {
+    var globals = {};
+    (new URLSearchParams(location.search).get("globals") || "").split(";").forEach(function (pair) {
+      var i = pair.indexOf(":");
+      if (i > 0) globals[pair.slice(0, i)] = pair.slice(i + 1);
+    });
+    var root = document.documentElement;
+    root.setAttribute("data-theme", globals.theme === "dark" ? "dark" : "light");
+    if (globals.brand === "hadron") root.setAttribute("data-variant", "hadron");
+  })();
 </script>
-<!-- Urbanist and Martian Mono, self-hosted from src/assets/fonts. No third-party request. -->
+<style>
+  /* The canvas before the stylesheet arrives (the dev server ships it with the
+     bundle; the build links it after this head), and Storybook's white
+     "preparing" overlay, which preview.css paints in the canvas colour once it
+     has loaded: each theme's bg token from tokens.json, so no frame is white in
+     between. */
+  html {
+    background: #f2f1f5;
+    color-scheme: light;
+  }
+  html[data-theme="dark"] {
+    background: #15141c;
+    color-scheme: dark;
+  }
+  .sb-preparing-story,
+  .sb-preparing-docs {
+    background-color: #f2f1f5;
+  }
+  [data-theme="dark"] :is(.sb-preparing-story, .sb-preparing-docs) {
+    background-color: #15141c;
+  }
+</style>
+<!-- Urbanist and Martian Mono, self-hosted from src/assets/fonts (staticDirs serves
+     it at ./fonts, under the Pages base path too). No third-party request. The two
+     latin files are preloaded: left to the stylesheet, a face is fetched only when
+     the first text that uses it is laid out, a few hundred ms after the story has
+     rendered, and the page paints in the fallback face and swaps. The latin-ext
+     files are rarely hit, so they load on demand. -->
+<link rel="preload" href="./fonts/Urbanist-latin.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="./fonts/MartianMono-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="stylesheet" href="./fonts/fonts.css" />

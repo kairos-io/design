@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn.ts";
+import { focusRingOffset } from "../../lib/focus.ts";
 
 export interface SiteLink {
   label: React.ReactNode;
@@ -42,7 +43,7 @@ export const SiteHeader = React.forwardRef<HTMLElement, SiteHeaderProps>(
                       href={l.href}
                       aria-current={l.current ? "page" : undefined}
                       className={cn(
-                        "inline-block rounded-sm py-1 text-ink no-underline transition-colors hover:text-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2",
+                        `inline-block rounded-sm py-1 text-ink no-underline transition-colors hover:text-link ${focusRingOffset}`,
                         l.current && "shadow-[inset_0_-2px_0_var(--accent-line)]",
                       )}
                     >

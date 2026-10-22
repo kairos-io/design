@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn.ts";
+import { focusRing } from "../../lib/focus.ts";
 
 export interface WizardStep {
   id: string;
@@ -30,7 +31,9 @@ export const WizardSteps = React.forwardRef<HTMLElement, WizardStepsProps>(
       <nav
         ref={ref}
         aria-label={label}
-        className={cn("flex gap-1 overflow-x-auto pb-0.5", className)}
+        // The scroll container clips at its padding edge, so the 2px of padding
+        // (taken back by the negative margin) is the room the steps' focus ring needs.
+        className={cn("-m-0.5 flex gap-1 overflow-x-auto p-0.5", className)}
         {...props}
       >
         {steps.map((step, i) => {
@@ -43,7 +46,10 @@ export const WizardSteps = React.forwardRef<HTMLElement, WizardStepsProps>(
               aria-current={isCurrent ? "step" : undefined}
               data-state={done ? "done" : isCurrent ? "active" : "pending"}
               onClick={() => onStepChange?.(step.id)}
-              className="flex min-w-[120px] flex-1 cursor-pointer flex-col gap-2 rounded-base px-1 py-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+              // Positioned, so the sr-only state text (absolute, 1px wide) is
+              // placed inside this scroll container: unpositioned, it would sit
+              // in the page's own overflow and give a phone a horizontal scroll.
+              className={`relative flex min-w-[120px] flex-1 cursor-pointer flex-col gap-2 rounded-base px-1 py-2.5 text-left ${focusRing}`}
             >
               <svg viewBox="0 0 220 10" preserveAspectRatio="none" className="h-2 w-full" aria-hidden="true">
                 <polygon

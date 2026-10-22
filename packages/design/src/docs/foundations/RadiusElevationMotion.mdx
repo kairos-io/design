@@ -19,7 +19,7 @@ No drop shadows anywhere. Elevation is a tone step: the canvas (`--bg`), a surfa
 
 ## Motion
 
-One easing and three durations. Hover changes use `fast`; anything that opens uses `base`; the one entrance animation, `fade-up`, uses `slow`, as does a tile landing. All of it is transform and opacity only, and `prefers-reduced-motion: reduce` sets every duration to zero and turns the animations off. The one thing that follows the pointer, the opt-in cursor mode of the [tile field](?path=/docs/foundations-tiles--docs#motion), is opacity alone over `slow` as well, only on a device that can hover, and off under reduced motion.
+One easing and three durations. Hover changes use `fast`; anything that opens uses `base`; the one entrance animation, `fade-up`, uses `slow`, as does a tile dropping into place. All of it is transform and opacity only, and `prefers-reduced-motion: reduce` sets every duration to zero and turns the animations off. The [tile field](?path=/docs/foundations-tiles--docs#motion) adds proposals on top of the deck, all opt-in: three more entrances (a fall under gravity, faces assembling, faces unfolding from the cube's centre), each transform and opacity only over `slow` stretched by a half (`calc(var(--duration-slow) * 1.5)`, never a literal) and reversible through `folded`, and the cursor mode, which lights the cubes near the pointer with opacity alone over `slow`, only on a device that can hover. The fall's gravity is its keyframes sampled with linear segments, not a second easing. All are off under reduced motion, and the resting field is always the static one.
 
 <MotionTable />
 

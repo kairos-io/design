@@ -29,6 +29,8 @@ describe("Sidebar", () => {
     expect(nodes.className).toContain("bg-raised");
     expect(screen.getByRole("link", { name: "Groups" })).not.toHaveAttribute("aria-current");
     expect(screen.getByRole("navigation", { name: "Main" })).toBeInTheDocument();
+    // Focus scrolls an item into the nav with its ring's 2px kept inside the scrollport.
+    expect(nodes).toHaveClass("scroll-my-0.5");
   });
 
   it("shows a count after the label and marks the active item with a tile", () => {
@@ -112,6 +114,7 @@ describe("Sidebar", () => {
       />,
     );
     expect(screen.getByRole("button", { name: /Network/ })).toHaveAttribute("aria-current", "step");
+    expect(screen.getByRole("button", { name: /Network/ })).toHaveClass("scroll-my-0.5");
     expect(screen.getByRole("button", { name: /Review/ })).toBeDisabled();
     await userEvent.click(screen.getByRole("button", { name: /Device/ }));
     expect(onStepChange).toHaveBeenCalledWith("a");

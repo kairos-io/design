@@ -1,6 +1,7 @@
 import * as React from "react";
 import { toneFill, toneStroke, type Tone } from "../../lib/tone.ts";
 import { cn } from "../../lib/cn.ts";
+import { DIAMOND_POINTS, DIAMOND_VIEWBOX } from "../../lib/diamond.ts";
 
 export interface StatusDotProps extends React.SVGAttributes<SVGSVGElement> {
   tone: Tone;
@@ -23,11 +24,11 @@ export const StatusDot = React.forwardRef<SVGSVGElement, StatusDotProps>(
       focusable="false"
       width={size}
       height={size}
-      viewBox="0 0 12 12"
+      viewBox={DIAMOND_VIEWBOX}
       className={cn("inline-block shrink-0", outline ? toneStroke[tone] : toneFill[tone], className)}
       {...props}
     >
-      <polygon points="6,0.8 11.2,6 6,11.2 0.8,6" strokeWidth="1.5" />
+      <polygon points={DIAMOND_POINTS} strokeWidth="1.5" />
     </svg>
   ),
 );

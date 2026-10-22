@@ -3,6 +3,7 @@ import { Monitor, Moon, Sun, type LucideIcon } from "lucide-react";
 import { useTheme } from "../../hooks/useTheme.ts";
 import { cn } from "../../lib/cn.ts";
 import type { ThemeMode } from "../../lib/theme.ts";
+import { focusRing } from "../../lib/focus.ts";
 
 const options: { mode: ThemeMode; icon: LucideIcon; label: string }[] = [
   { mode: "system", icon: Monitor, label: "System theme" },
@@ -45,7 +46,7 @@ export const ThemeToggle = React.forwardRef<HTMLElement, ThemeToggleProps>(funct
         title={`Theme: ${mode}`}
         onClick={() => setMode(nextMode[mode])}
         className={cn(
-          "inline-flex h-8 w-8 items-center justify-center rounded-base text-ink opacity-70 transition-colors hover:bg-raised hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
+          `inline-flex h-8 w-8 items-center justify-center rounded-base text-ink opacity-70 transition-colors hover:bg-raised hover:opacity-100 ${focusRing}`,
           className,
         )}
         {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
@@ -72,7 +73,7 @@ export const ThemeToggle = React.forwardRef<HTMLElement, ThemeToggleProps>(funct
           title={label}
           onClick={() => setMode(m)}
           className={cn(
-            "inline-flex h-7 flex-1 items-center justify-center rounded-base text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
+            `inline-flex h-7 flex-1 items-center justify-center rounded-base text-ink transition-colors ${focusRing}`,
             mode === m ? "bg-accent text-on-accent" : "opacity-70 hover:opacity-100",
           )}
         >

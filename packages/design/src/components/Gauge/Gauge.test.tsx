@@ -42,4 +42,12 @@ describe("TileMeter", () => {
     expect(meter).toHaveAttribute("aria-valuetext", "182 GB of 420 GB");
     expect(container.querySelectorAll("svg")).toHaveLength(24);
   });
+
+  it("gives every tile a zero width basis so the row has no intrinsic width and fits a phone", () => {
+    const { container } = render(<TileMeter value={43} aria-label="Persistent" />);
+    container.querySelectorAll("svg").forEach((svg) => {
+      expect(svg).toHaveClass("w-0", "flex-1");
+      expect(svg).not.toHaveClass("min-w-0");
+    });
+  });
 });

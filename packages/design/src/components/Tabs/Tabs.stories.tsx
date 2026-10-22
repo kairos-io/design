@@ -34,7 +34,7 @@ export const Default: Story = {
           <dt className="text-muted">Hostname</dt>
           <dd className="font-mono text-[13px]">edge-store-0142</dd>
           <dt className="text-muted">Image</dt>
-          <dd className="font-mono text-[13px]">quay.io/kairos/hadron:v0.5.1</dd>
+          <dd className="font-mono text-[13px] wrap-anywhere">quay.io/kairos/hadron:v0.5.1</dd>
           <dt className="text-muted">State</dt>
           <dd>Healthy</dd>
         </dl>

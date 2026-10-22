@@ -3,6 +3,7 @@ import { cn } from "../../lib/cn.ts";
 import { HadronLogo, KairosLogo, KairosMark } from "../Logo/Logo.tsx";
 import { TileField } from "../Tiles/TileField.tsx";
 import { tilePalettes, type TilePalette, type TileTone } from "../../lib/tiles.ts";
+import { useMergedRef } from "../../hooks/useMergedRef.ts";
 
 // The conference slide template, from the talk deck in this repository
 // ("Kairos - Talk Deck.dc.html"): 1920 by 1080, light mode only, Urbanist
@@ -36,6 +37,7 @@ export const Slide = React.forwardRef<HTMLDivElement, SlideProps>(function Slide
   ref,
 ) {
   const outer = React.useRef<HTMLDivElement | null>(null);
+  const setRefs = useMergedRef(outer, ref);
   const [scale, setScale] = React.useState(1);
 
   React.useLayoutEffect(() => {
@@ -52,11 +54,7 @@ export const Slide = React.forwardRef<HTMLDivElement, SlideProps>(function Slide
 
   return (
     <div
-      ref={(node) => {
-        outer.current = node;
-        if (typeof ref === "function") ref(node);
-        else if (ref) ref.current = node;
-      }}
+      ref={setRefs}
       data-theme="light"
       data-variant={brand === "hadron" ? "hadron" : undefined}
       className={cn("relative w-full overflow-hidden rounded-base bg-bg text-ink", className)}

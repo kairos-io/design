@@ -53,6 +53,43 @@ describe("InfoTooltip", () => {
     }
   });
 
+  it("draws the keyboard focus ring without a focus:outline-none that would hide it", () => {
+    render(<InfoTooltip>x</InfoTooltip>);
+    const button = screen.getByRole("button");
+    expect(button.className).not.toContain("outline-none");
+    expect(button.className).toContain("focus-visible:outline-2");
+  });
+
+  it("shifts the open panel back inside the viewport and keeps the arrow under the button", () => {
+    const width = vi.spyOn(document.documentElement, "clientWidth", "get").mockReturnValue(390);
+    const rect = vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (
+      this: HTMLElement,
+    ) {
+      const panel = this.getAttribute("role") === "group";
+      return {
+        left: panel ? 93 : 0,
+        right: panel ? 451 : 0,
+        top: 0,
+        bottom: 0,
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+        toJSON() {},
+      } as DOMRect;
+    });
+    try {
+      render(<InfoTooltip defaultOpen>Long help text that would run off a phone</InfoTooltip>);
+      const panel = screen.getByRole("group");
+      expect(panel.className).toContain("max-w-[min(24rem,calc(100vw-2rem))]");
+      expect(panel.style.left).toBe("-77px");
+      expect((panel.querySelector('[aria-hidden="true"]') as HTMLElement).style.left).toBe("89px");
+    } finally {
+      rect.mockRestore();
+      width.mockRestore();
+    }
+  });
+
   it("merges className onto the wrapper", () => {
     render(
       <InfoTooltip className="ml-2" data-testid="tip">

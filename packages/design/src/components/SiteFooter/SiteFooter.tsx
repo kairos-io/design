@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn.ts";
+import { focusRing } from "../../lib/focus.ts";
 
 export interface SiteFooterColumn {
   title: React.ReactNode;
@@ -47,7 +48,7 @@ export const SiteFooter = React.forwardRef<HTMLElement, SiteFooterProps>(
                   <a
                     key={it.href}
                     href={it.href}
-                    className="text-sub no-underline hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+                    className={`text-sub no-underline hover:text-ink ${focusRing}`}
                   >
                     {it.label}
                   </a>

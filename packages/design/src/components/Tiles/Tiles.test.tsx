@@ -1,6 +1,36 @@
 import * as React from "react";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { Tile, TileBar, TileField, TileMarker, TileUnit } from "./Tiles.tsx";
+import { tileFaceMotion, tileFades, tileField } from "../../lib/tiles.ts";
+
+// The grid is unique lattice edges in a path per opacity step. These read
+// it back as edges: endpoint pairs with the strength of their batch.
+type GridEdge = { a: string; b: string; x: number; opacity: number };
+function gridEdges(root: ParentNode): GridEdge[] {
+  return Array.from(root.querySelectorAll(':scope > path[fill="none"], svg > path[fill="none"]')).flatMap(
+    (p) => {
+      const opacity = Number(p.getAttribute("stroke-opacity") ?? 1);
+      return Array.from(p.getAttribute("d")!.matchAll(/M(-?[\d.]+) (-?[\d.]+)L(-?[\d.]+) (-?[\d.]+)/g)).map(
+        (m) => ({
+          a: `${m[1]},${m[2]}`,
+          b: `${m[3]},${m[4]}`,
+          x: Math.min(Number(m[1]), Number(m[3])),
+          opacity,
+        }),
+      );
+    },
+  );
+}
+const edgeKey = (a: string, b: string) => (a < b ? `${a}|${b}` : `${b}|${a}`);
+/** The edges of every face polygon under `root`, as keys. */
+function faceEdges(root: ParentNode): Set<string> {
+  const keys = new Set<string>();
+  for (const p of Array.from(root.querySelectorAll("g polygon"))) {
+    const pts = p.getAttribute("points")!.split(" ");
+    pts.forEach((a, i) => keys.add(edgeKey(a, pts[(i + 1) % 4])));
+  }
+  return keys;
+}
 
 // jsdom has no matchMedia and no layout, so the cursor tests pretend to be a
 // browser: a hovering fine pointer, reduced motion off unless asked, a frame
@@ -31,7 +61,7 @@ function stubFrames() {
 function renderCursorField() {
   const result = render(
     <div className="relative">
-      <TileField animate="cursor" fade="ramp" width={400} height={200} radius={25} seed={4} />
+      <TileField idle="cursor" fade="ramp" width={400} height={200} radius={25} seed={4} />
     </div>,
   );
   const svg = result.container.querySelector("svg")!;
@@ -55,7 +85,8 @@ describe("Tiles", () => {
     const first = svg.innerHTML;
     rerender(<TileField seed={3} width={200} height={100} />);
     expect(svg.innerHTML).toBe(first);
-    expect(svg.querySelectorAll("polygon").length).toBeGreaterThan(10);
+    expect(svg.querySelectorAll("polygon").length).toBeGreaterThan(5);
+    expect(svg.querySelectorAll("path").length).toBeGreaterThan(0);
   });
 
   it("groups the three faces of a cube so they animate as one", () => {
@@ -70,37 +101,38 @@ describe("Tiles", () => {
     const fills = Array.from(container.querySelectorAll("g polygon")).map((p) => p.getAttribute("fill"));
     expect(fills).toContain("var(--kairos-orange)");
     expect(fills).not.toContain("none");
-    // The grid is complete underneath, one outline per cell, filled or not.
-    expect(container.querySelectorAll('polygon[fill="none"]')).toHaveLength(
-      container.querySelectorAll("g polygon").length,
-    );
+    // The grid is complete underneath: every edge of every face is in it, each edge once.
+    const edges = gridEdges(container);
+    const keys = edges.map((e) => edgeKey(e.a, e.b));
+    expect(new Set(keys).size).toBe(keys.length);
+    for (const key of faceEdges(container)) expect(keys).toContain(key);
+    expect(container.querySelector('path[fill="none"]')).toHaveAttribute("stroke", "var(--line)");
+    expect(container.querySelector('path[fill="none"]')).toHaveAttribute("stroke-linecap", "round");
     const { container: faded } = render(<TileField fade={() => 0} width={100} height={60} radius={30} />);
-    expect(faded.querySelector("polygon")).toHaveAttribute("stroke", "var(--line)");
+    expect(faded.querySelector("path")).toHaveAttribute("stroke", "var(--line)");
   });
 
   it("fades the outlines with the field so the sparse edge dissolves", () => {
     const { container } = render(<TileField fade="ramp" width={600} height={200} radius={20} seed={9} />);
-    // A filled face keeps a full outline wherever it is, so only the empty cells show the fade.
-    const filled = new Set(
-      Array.from(container.querySelectorAll("g polygon")).map((p) => p.getAttribute("points")),
-    );
-    const outlines = Array.from(container.querySelectorAll('polygon[fill="none"]')).filter(
-      (p) => !filled.has(p.getAttribute("points")),
-    );
-    const x = (p: Element) => Number(p.getAttribute("points")!.split(" ")[0].split(",")[0]);
-    const opacity = (p: Element) => Number(p.getAttribute("stroke-opacity") ?? 1);
-    const sparse = outlines.filter((p) => x(p) < 60).map(opacity);
-    const dense = outlines.filter((p) => x(p) > 540).map(opacity);
+    // A filled face's edges are always full (an edge takes the stronger of its two cells), so only
+    // the edges between empty cells show the fade.
+    const filled = faceEdges(container);
+    const outlines = gridEdges(container).filter((e) => !filled.has(edgeKey(e.a, e.b)));
+    const sparse = outlines.filter((e) => e.x < 60).map((e) => e.opacity);
+    const dense = outlines.filter((e) => e.x > 540).map((e) => e.opacity);
     expect(sparse.length).toBeGreaterThan(0);
     expect(Math.max(...sparse)).toBeLessThan(0.2);
     expect(Math.min(...dense)).toBeGreaterThan(0.85);
-    // A full outline omits the attribute rather than writing 1.
-    expect(container.querySelector('polygon[stroke-opacity="1"]')).toBeNull();
+    for (const e of gridEdges(container).filter((e) => filled.has(edgeKey(e.a, e.b))))
+      expect(e.opacity).toBe(1);
+    // A full batch omits the attribute rather than writing 1.
+    expect(container.querySelector('path[stroke-opacity="1"]')).toBeNull();
     // The filled faces themselves never fade; only the hairlines beneath do.
     expect(container.querySelectorAll("g polygon[stroke-opacity]")).toHaveLength(0);
-    // A solid field has no sparse edge, so its grid is complete and full.
+    // A solid field has no sparse edge, so its grid is one complete path at full strength.
     const { container: solid } = render(<TileField solid width={100} height={60} radius={30} />);
-    expect(solid.querySelectorAll("polygon[stroke-opacity]")).toHaveLength(0);
+    expect(solid.querySelectorAll("path[stroke-opacity]")).toHaveLength(0);
+    expect(solid.querySelectorAll("path")).toHaveLength(1);
   });
 
   it("animates filled tiles only, dense edge first, then settles back to plain paint", () => {
@@ -110,7 +142,7 @@ describe("Tiles", () => {
         <TileField animate="in" fade="ramp" width={400} height={100} radius={25} seed={2} />,
       );
       const filled = Array.from(container.querySelectorAll("g.tile-in"));
-      const outlines = Array.from(container.querySelectorAll('polygon[fill="none"]'));
+      const outlines = Array.from(container.querySelectorAll('path[fill="none"]'));
       expect(filled.length).toBeGreaterThan(5);
       expect(outlines.some((p) => p.parentElement?.classList.contains("tile-in"))).toBe(false);
       expect(filled.every((g) => g.querySelectorAll("polygon").length >= 1)).toBe(true);
@@ -152,6 +184,330 @@ describe("Tiles", () => {
     }
   });
 
+  describe("motion API", () => {
+    const originalMedia = window.matchMedia;
+    afterEach(() => {
+      window.matchMedia = originalMedia;
+      vi.useRealTimers();
+    });
+    const small = { width: 400, height: 100, radius: 25, seed: 2, fade: "ramp" as const };
+    const x = (el: Element) =>
+      Number(
+        (el.tagName === "polygon" ? el : el.querySelector("polygon")!)
+          .getAttribute("points")!
+          .split(" ")[0]
+          .split(",")[0],
+      );
+    const delay = (el: Element) => parseInt((el as HTMLElement).style.getPropertyValue("--tile-delay"), 10);
+    const mean = (a: number[]) => a.reduce((s, n) => s + n, 0) / a.length;
+    const faces = (root: Element) => Array.from(root.querySelectorAll("svg > g > polygon"));
+    const cubes = (root: Element) => Array.from(root.querySelectorAll("svg > g"));
+    const staticMarkup = () => render(<TileField {...small} />).container.querySelector("svg")!.innerHTML;
+    const settle = () =>
+      act(() => {
+        vi.advanceTimersByTime(2000);
+      });
+
+    it("maps enter, idle and folded onto the field, with no motion class at rest", () => {
+      const { container, rerender } = render(<TileField {...small} enter="drop" idle="live" />);
+      const svg = container.querySelector("svg")!;
+      expect(svg).toHaveAttribute("data-enter", "drop");
+      expect(svg).toHaveAttribute("data-idle", "live");
+      expect(svg).not.toHaveAttribute("data-folded");
+      expect(container.querySelectorAll("g.tile-in").length).toBeGreaterThan(0);
+      rerender(<TileField {...small} enter="unfold" idle={false} folded />);
+      expect(svg).toHaveAttribute("data-enter", "unfold");
+      expect(svg).not.toHaveAttribute("data-idle");
+      expect(svg).toHaveAttribute("data-folded", "");
+      // Nothing is set: the static field, without a single class or style.
+      const { container: plain } = render(<TileField {...small} />);
+      expect(plain.querySelectorAll("[class], [style]")).toHaveLength(1);
+      expect(plain.querySelector("svg")!.hasAttribute("data-enter")).toBe(false);
+    });
+
+    it("maps the deprecated animate shorthand onto enter and idle, and lets an explicit prop win", () => {
+      const attrs = (el: Element) => [el.getAttribute("data-enter"), el.getAttribute("data-idle")];
+      const svg = (ui: React.ReactElement) => render(ui).container.querySelector("svg")!;
+      expect(attrs(svg(<TileField {...small} animate="in" />))).toEqual(["drop", null]);
+      expect(attrs(svg(<TileField {...small} animate="live" />))).toEqual(["drop", "live"]);
+      expect(attrs(svg(<TileField {...small} animate="cursor" />))).toEqual(["drop", "cursor"]);
+      expect(attrs(svg(<TileField {...small} animate={false} />))).toEqual([null, null]);
+      expect(attrs(svg(<TileField {...small} animate="live" enter="unfold" />))).toEqual(["unfold", "live"]);
+      expect(attrs(svg(<TileField {...small} animate="live" idle={false} />))).toEqual(["drop", null]);
+      const { container } = render(<TileField {...small} animate="in" />);
+      expect(container.querySelectorAll("g.tile-in").length).toBeGreaterThan(5);
+    });
+
+    // Every entrance: the class on the right element, the stagger from the
+    // dense edge (the right, with the ramp fade), the static field once it
+    // has landed, then its reverse when folded flips on, sparse edge first,
+    // down to the grid alone, and the entrance again when it flips off.
+    const entrances = [
+      { enter: "drop", enterClass: "tile-in", exitClass: "tile-out", perFace: false },
+      { enter: "fall", enterClass: "tile-fall", exitClass: "tile-fall-out", perFace: false },
+      { enter: "assemble", enterClass: "tile-assemble", exitClass: "tile-disassemble", perFace: true },
+      { enter: "unfold", enterClass: "tile-unfold", exitClass: "tile-fold", perFace: true },
+    ] as const;
+    it.each(entrances)("$enter enters dense edge first, rests clean, and reverses when folded", (spec) => {
+      vi.useFakeTimers();
+      const { container, rerender } = render(<TileField {...small} enter={spec.enter} />);
+      const svg = container.querySelector("svg")!;
+      const outlines = svg.querySelectorAll(':scope > path[fill="none"]').length;
+      const moving = (cls: string) =>
+        (spec.perFace ? faces(container) : cubes(container)).filter((el) => el.classList.contains(cls));
+      const still = (cls: string) =>
+        (spec.perFace ? cubes(container) : faces(container)).filter((el) => el.classList.contains(cls));
+      const denseFirst = (els: Element[]) =>
+        expect(mean(els.filter((p) => x(p) > 300).map(delay))).toBeLessThan(
+          mean(els.filter((p) => x(p) < 120).map(delay)),
+        );
+      const sparseFirst = (els: Element[]) =>
+        expect(mean(els.filter((p) => x(p) < 120).map(delay))).toBeLessThan(
+          mean(els.filter((p) => x(p) > 300).map(delay)),
+        );
+
+      // Entering: every cube (or every face) carries the class and a delay; the other level nothing.
+      let inFlight = moving(spec.enterClass);
+      expect(inFlight.length).toBeGreaterThan(5);
+      expect(inFlight).toHaveLength(spec.perFace ? faces(container).length : cubes(container).length);
+      expect(still(spec.enterClass)).toHaveLength(0);
+      expect(container.querySelectorAll("[class]")).toHaveLength(inFlight.length + 1);
+      expect(inFlight.map(delay).every((d) => d >= 0)).toBe(true);
+      denseFirst(inFlight);
+      // The fall height follows the radius, so the keyframes scale with the tiles.
+      expect((inFlight[0] as HTMLElement).style.getPropertyValue("--tile-fall")).toBe("50px");
+      // The grid is complete and untouched underneath.
+      expect(svg.querySelectorAll(':scope > path[fill="none"]')).toHaveLength(outlines);
+      expect(svg.querySelectorAll(":scope > path[class], :scope > path[style]")).toHaveLength(0);
+      if (spec.perFace) {
+        // Inside a cube the faces arrive in tone order, a few tens of milliseconds apart
+        // (the markup draws the two sides first and the top last).
+        const cube = cubes(container).find((g) => g.children.length === 3)!;
+        const [left, right, top] = Array.from(cube.children).map(delay);
+        expect(left - top).toBeGreaterThan(10);
+        expect(left - top).toBeLessThan(100);
+        expect(right - left).toBe(left - top);
+      }
+      // Landed: nothing but the static field remains.
+      settle();
+      expect(svg.innerHTML).toBe(staticMarkup());
+
+      // Leaving: the reverse class, sparse edge first, the dense edge last.
+      rerender(<TileField {...small} enter={spec.enter} folded />);
+      inFlight = moving(spec.exitClass);
+      expect(inFlight.length).toBeGreaterThan(5);
+      expect(container.querySelectorAll(`.${spec.enterClass}`)).toHaveLength(0);
+      sparseFirst(inFlight);
+      if (spec.perFace) {
+        // The faces leave in reverse tone order: the right face first.
+        const cube = cubes(container).find((g) => g.children.length === 3)!;
+        const [left, right, top] = Array.from(cube.children).map(delay);
+        expect(right).toBeLessThan(left);
+        expect(left).toBeLessThan(top);
+      }
+      // Folded: the grid alone, complete, and not one face.
+      settle();
+      expect(faces(container)).toHaveLength(0);
+      expect(svg.querySelectorAll(':scope > path[fill="none"]')).toHaveLength(outlines);
+      expect(svg).toHaveAttribute("data-folded", "");
+      // Back: the entrance again, dense edge first, onto the static field.
+      rerender(<TileField {...small} enter={spec.enter} folded={false} />);
+      inFlight = moving(spec.enterClass);
+      expect(inFlight.length).toBeGreaterThan(5);
+      denseFirst(inFlight);
+      settle();
+      expect(svg.innerHTML).toBe(staticMarkup());
+    });
+
+    it("hinges each unfolding face on the hexagon's centre vertex, and assembles each face from its own side", () => {
+      const { container, rerender } = render(<TileField {...small} enter="unfold" />);
+      const cube = () => cubes(container).find((g) => g.children.length === 3)!;
+      // The faces in tone order; the markup draws the top last, so sort by fill.
+      const inToneOrder = () =>
+        Array.from(cube().children).sort(
+          (a, b) => toneOf(a.getAttribute("fill")!) - toneOf(b.getAttribute("fill")!),
+        );
+      const toneOf = (fill: string) =>
+        ["var(--kairos-light)", "var(--kairos-mid)", "var(--kairos-orange)"].indexOf(fill);
+      // The corner of each face's own box that the point order puts the centre at, per tone.
+      const centreIndex = [3, 1, 0];
+      inToneOrder().forEach((p, tone) => {
+        const style = (p as SVGPolygonElement).style;
+        const pts = p
+          .getAttribute("points")!
+          .split(" ")
+          .map((s) => s.split(",").map(Number));
+        const xs = pts.map(([px]) => px);
+        const ys = pts.map(([, py]) => py);
+        const [cx, cy] = pts[centreIndex[tone]];
+        const u = ((cx - Math.min(...xs)) / (Math.max(...xs) - Math.min(...xs))) * 100;
+        const v = ((cy - Math.min(...ys)) / (Math.max(...ys) - Math.min(...ys))) * 100;
+        const geometry = tileFaceMotion[tone as 0 | 1 | 2];
+        const [ou, ov] = geometry.origin.split(" ").map(parseFloat);
+        expect(Math.abs(u - ou)).toBeLessThan(0.5);
+        expect(Math.abs(v - ov)).toBeLessThan(0.5);
+        expect(style.transformOrigin).toBe(geometry.origin);
+        expect(style.getPropertyValue("--tile-face")).toBe(`${geometry.angle}deg`);
+        expect(style.getPropertyValue("--tile-dx")).toBe("");
+      });
+      rerender(<TileField {...small} enter="assemble" />);
+      const from = inToneOrder().map((p) => [
+        Number((p as SVGPolygonElement).style.getPropertyValue("--tile-dx")),
+        Number((p as SVGPolygonElement).style.getPropertyValue("--tile-dy")),
+      ]);
+      // Top from above, left from the lower left, right from the lower right; no hinge set.
+      expect(from[0]).toEqual([0, -1]);
+      expect(from[1][0]).toBeLessThan(0);
+      expect(from[1][1]).toBeGreaterThan(0);
+      expect(from[2][0]).toBeGreaterThan(0);
+      expect(from[2][1]).toBeGreaterThan(0);
+      expect((cube().children[0] as SVGPolygonElement).style.transformOrigin).toBe("");
+    });
+
+    it("mounts folded as the grid alone, and with no entrance the cubes come and go with no motion", () => {
+      const { container, rerender } = render(<TileField {...small} enter="unfold" folded />);
+      expect(faces(container)).toHaveLength(0);
+      expect(container.querySelectorAll("[class]")).toHaveLength(1);
+      rerender(<TileField {...small} enter="unfold" folded={false} />);
+      expect(container.querySelectorAll("polygon.tile-unfold").length).toBeGreaterThan(10);
+      const { container: plain, rerender: rerenderPlain } = render(<TileField {...small} />);
+      rerenderPlain(<TileField {...small} folded />);
+      expect(faces(plain)).toHaveLength(0);
+      expect(plain.querySelectorAll("[class]")).toHaveLength(1);
+      rerenderPlain(<TileField {...small} folded={false} />);
+      expect(plain.querySelector("svg")!.innerHTML).toBe(staticMarkup());
+    });
+
+    it("attaches no motion class under reduced motion: the cubes are simply there, or simply gone", () => {
+      stubMedia({ reduced: true });
+      const { container, rerender } = render(<TileField {...small} enter="fall" idle="live" />);
+      const svg = container.querySelector("svg")!;
+      expect(container.querySelectorAll(".tile-fall, .tile-in")).toHaveLength(0);
+      expect(faces(container).length).toBeGreaterThan(10);
+      // The idle breathing is CSS, pinned off by the media query; the static field is otherwise intact.
+      expect(container.querySelectorAll("g.tile-live").length).toBeGreaterThan(0);
+      for (const { enter } of entrances) {
+        rerender(<TileField {...small} enter={enter} folded />);
+        expect(container.querySelectorAll("[class]")).toHaveLength(1);
+        expect(faces(container)).toHaveLength(0);
+        rerender(<TileField {...small} enter={enter} />);
+        expect(svg.innerHTML).toBe(staticMarkup());
+      }
+    });
+
+    describe("wave", () => {
+      // The delay is written as a share of the period the CSS owns, never a
+      // literal duration; this reads the share back.
+      const share = (el: Element) => {
+        const m = (el as HTMLElement).style
+          .getPropertyValue("--tile-wave-delay")
+          .match(/^calc\(var\(--tile-wave-period\) \* (\d+(?:\.\d+)?)\)$/);
+        expect(m).not.toBeNull();
+        return Number(m![1]);
+      };
+      const y = (el: Element) =>
+        Number(el.querySelector("polygon")!.getAttribute("points")!.split(" ")[0].split(",")[1]);
+      const waving = (root: Element) => cubes(root).filter((g) => g.classList.contains("tile-wave"));
+
+      it("rolls across every cube at rest, dense edge first and in order along each row, after the entrance", () => {
+        vi.useFakeTimers();
+        const { container, rerender } = render(<TileField {...small} enter="drop" idle="wave" />);
+        const svg = container.querySelector("svg")!;
+        expect(svg).toHaveAttribute("data-idle", "wave");
+        // While the entrance is in flight the drop owns the cubes.
+        expect(waving(container)).toHaveLength(0);
+        expect(container.querySelectorAll("g.tile-in").length).toBeGreaterThan(5);
+        settle();
+        const all = waving(container);
+        expect(all).toHaveLength(cubes(container).length);
+        expect(all.length).toBeGreaterThan(5);
+        expect(container.querySelectorAll(".tile-in, .tile-live")).toHaveLength(0);
+        expect(container.querySelectorAll("polygon[class], polygon[style]")).toHaveLength(0);
+        // Shares of the period, within the sweep, all of them.
+        const shares = all.map(share);
+        expect(Math.min(...shares)).toBeGreaterThanOrEqual(0);
+        expect(Math.max(...shares)).toBeLessThan(0.8);
+        expect(new Set(shares).size).toBeGreaterThan(5);
+        // The ramp is dense on the right, so the band sets out there and
+        // runs left: along any one row the delay grows as x falls, with no
+        // exception, and across the field the right edge goes well before
+        // the left.
+        const rows = new Map<number, Element[]>();
+        for (const g of all) rows.set(y(g), [...(rows.get(y(g)) ?? []), g]);
+        let checked = 0;
+        for (const row of rows.values()) {
+          if (row.length < 3) continue;
+          const ordered = row.sort((a, b) => x(b) - x(a)).map(share);
+          for (let i = 1; i < ordered.length; i++) expect(ordered[i]).toBeGreaterThanOrEqual(ordered[i - 1]);
+          checked++;
+        }
+        expect(checked).toBeGreaterThan(1);
+        expect(mean(all.filter((g) => x(g) > 300).map(share))).toBeLessThan(
+          mean(all.filter((g) => x(g) < 120).map(share)) - 0.2,
+        );
+        // The rows do not march in one line: cubes in the same column, in
+        // different rows, take different turns, every one of them.
+        const columns = new Map<number, number[]>();
+        for (const g of all) columns.set(x(g), [...(columns.get(x(g)) ?? []), share(g)]);
+        const stacked = Array.from(columns.values()).filter((c) => c.length > 1);
+        expect(stacked.length).toBeGreaterThan(3);
+        for (const column of stacked) expect(new Set(column).size).toBe(column.length);
+        // Same field, same wave.
+        const { container: again } = render(<TileField {...small} idle="wave" />);
+        expect(waving(again).map(share)).toEqual(shares);
+        // Folded: the grid alone, not one cube and not one class.
+        rerender(<TileField {...small} enter="drop" idle="wave" folded />);
+        settle();
+        expect(faces(container)).toHaveLength(0);
+        expect(container.querySelectorAll("[class]")).toHaveLength(1);
+        // Back, and the wave resumes once the cubes have landed.
+        rerender(<TileField {...small} enter="drop" idle="wave" folded={false} />);
+        expect(waving(container)).toHaveLength(0);
+        settle();
+        expect(waving(container).length).toBe(all.length);
+      });
+
+      it("follows the fade axis: left to right for a left fade, outward from the centre, and a custom bias by its denser side", () => {
+        // Solid, so both edges have cubes to compare whichever way the field fades.
+        const leftward = (ui: React.ReactElement) => {
+          const all = waving(render(ui).container);
+          const left = all.filter((g) => x(g) < 120).map(share);
+          const right = all.filter((g) => x(g) > 300).map(share);
+          expect(left.length).toBeGreaterThan(3);
+          expect(right.length).toBeGreaterThan(3);
+          return mean(left) < mean(right);
+        };
+        expect(leftward(<TileField {...small} idle="wave" solid fade="left" />)).toBe(true);
+        expect(leftward(<TileField {...small} idle="wave" solid fade="right" />)).toBe(false);
+        expect(leftward(<TileField {...small} idle="wave" solid fade={(u) => 0.9 - u * 0.8} />)).toBe(true);
+        expect(leftward(<TileField {...small} idle="wave" solid fade={(u) => u * 0.9} />)).toBe(false);
+        const centred = waving(render(<TileField {...small} idle="wave" fade="center" solid />).container);
+        const middle = centred.filter((g) => Math.abs(x(g) - 200) < 40 && Math.abs(y(g) - 50) < 30);
+        const edge = centred.filter((g) => x(g) < 60 || x(g) > 340);
+        expect(middle.length).toBeGreaterThan(0);
+        expect(mean(middle.map(share))).toBeLessThan(mean(edge.map(share)));
+      });
+
+      it("attaches nothing under reduced motion, and leaves the deprecated animate shorthand alone", () => {
+        stubMedia({ reduced: true });
+        const { container } = render(<TileField {...small} idle="wave" />);
+        const svg = container.querySelector("svg")!;
+        expect(svg).toHaveAttribute("data-idle", "wave");
+        expect(container.querySelectorAll(".tile-wave")).toHaveLength(0);
+        expect(svg.innerHTML).toBe(staticMarkup());
+        stubMedia({ reduced: false });
+        const attrs = (el: Element) => [el.getAttribute("data-enter"), el.getAttribute("data-idle")];
+        for (const animate of ["in", "live", "cursor", false] as const) {
+          const { container: c } = render(<TileField {...small} animate={animate} />);
+          expect(c.querySelectorAll(".tile-wave")).toHaveLength(0);
+          expect(attrs(c.querySelector("svg")!)[1]).not.toBe("wave");
+        }
+        const { container: both } = render(<TileField {...small} animate="live" idle="wave" />);
+        expect(attrs(both.querySelector("svg")!)).toEqual(["drop", "wave"]);
+      });
+    });
+  });
+
   describe("cursor mode", () => {
     const originalMedia = window.matchMedia;
     const originalRaf = window.requestAnimationFrame;
@@ -165,26 +521,31 @@ describe("Tiles", () => {
     it("renders the same polygons at rest as the static field, with the glow layer unlit", () => {
       stubMedia();
       stubFrames();
-      const field = (animate: "cursor" | false) =>
-        render(<TileField animate={animate} fade="ramp" width={400} height={200} radius={25} seed={4} />);
       const { svg, glows } = renderCursorField();
-      const plain = field(false).container.querySelector("svg")!;
+      const plain = render(
+        <TileField fade="ramp" width={400} height={200} radius={25} seed={4} />,
+      ).container.querySelector("svg")!;
       const markup = (root: Element) =>
-        Array.from(root.querySelectorAll(":scope > polygon, :scope > g:not(.tile-glow) > polygon")).map(
+        Array.from(root.querySelectorAll(":scope > path, :scope > g:not(.tile-glow) > polygon")).map(
           (p) => p.outerHTML,
         );
       expect(markup(svg)).toEqual(markup(plain));
       expect(markup(svg).length).toBeGreaterThan(50);
-      expect(svg).toHaveAttribute("data-animate", "cursor");
+      expect(svg).toHaveAttribute("data-idle", "cursor");
+      expect(svg).not.toHaveAttribute("data-enter");
       // One glow per hexagon, on the cell's own points, resting with no intensity written.
-      expect(glows.length).toBe(svg.querySelectorAll(":scope > polygon").length / 3);
+      expect(glows.length).toBe(tileField({ width: 400, height: 200, radius: 25, seed: 4 }).length / 3);
       expect(glows.every((g) => g.style.getPropertyValue("--tile-lit") === "")).toBe(true);
       const glowPoints = glows.flatMap((g) =>
         Array.from(g.querySelectorAll("polygon")).map((p) => p.getAttribute("points")),
       );
-      const gridPoints = Array.from(svg.querySelectorAll(":scope > polygon")).map((p) =>
-        p.getAttribute("points"),
-      );
+      const gridPoints = tileField({
+        width: 400,
+        height: 200,
+        radius: 25,
+        seed: 4,
+        bias: tileFades.ramp,
+      }).map((p) => p.points);
       expect(glowPoints).toEqual(gridPoints);
       // A filled cell's glow is the white highlight; an empty cell's is its own tone.
       const fills = new Set(
@@ -275,7 +636,7 @@ describe("Tiles", () => {
         <>
           <div ref={target} />
           <div className="relative">
-            <TileField animate="cursor" target={target} width={400} height={200} radius={25} />
+            <TileField idle="cursor" target={target} width={400} height={200} radius={25} />
           </div>
         </>,
       );
@@ -291,10 +652,13 @@ describe("Tiles", () => {
     });
   });
 
-  it("TileUnit has the three tones in the logo's order", () => {
+  it("TileUnit has the three tones in the logo's order, the top drawn last", () => {
     const { container } = render(<TileUnit />);
     const fills = Array.from(container.querySelectorAll("polygon")).map((p) => p.getAttribute("fill"));
-    expect(fills).toEqual(["var(--kairos-light)", "var(--kairos-mid)", "var(--kairos-orange)"]);
+    expect(fills).toEqual(["var(--kairos-mid)", "var(--kairos-orange)", "var(--kairos-light)"]);
+    // The top face is the first of tileHexagon's three: the one whose last point is the centre.
+    const top = container.querySelector('polygon[fill="var(--kairos-light)"]')!;
+    expect(top.getAttribute("points")!.split(" ").at(-1)).toBe("43.3,50");
   });
 
   it("Tile keeps the 22:14 box", () => {
@@ -322,7 +686,7 @@ describe("Tiles", () => {
   it("paints the Hadron palette with the blue custom properties and the right ink", () => {
     const { container } = render(<TileUnit palette="hadron" />);
     const fills = Array.from(container.querySelectorAll("polygon")).map((p) => p.getAttribute("fill"));
-    expect(fills).toEqual(["var(--hadron-sky)", "var(--hadron-blue)", "var(--hadron-deep)"]);
+    expect(fills).toEqual(["var(--hadron-blue)", "var(--hadron-deep)", "var(--hadron-sky)"]);
     render(
       <>
         <TileMarker palette="hadron" tone={0}>

@@ -75,7 +75,18 @@ uses `tokens.css` custom properties.
 
 The tile geometry is hard-edged: mitre joins, square caps, no rounded-base
 corners anywhere on a rhombus. Filled faces and grid outlines share the
-exact same points so they coincide at every zoom. Motion never leaves a
+exact same points so they coincide at every zoom. The grid is unique
+edges: every lattice edge is drawn once (`tileGridPaths` in
+`src/lib/tiles.ts`), at the stronger of its two cells' strengths, batched
+by opacity, with round caps and joins that close the corners and cannot
+overshoot at hairline width, so no shared edge is darker than another and
+no vertex is a knot. The mitre is the filled face's hard corner. A filled
+face is stroked in its own fill to hide the
+anti-aliased seam against its neighbour, and that stroke is thin (0.6
+units), painted under the fill and bevelled (`tileFaceStroke` in
+`src/lib/tiles.ts`), because a mitre at a rhombus's 60 degree corner
+reaches two stroke widths past the vertex and grows a pin; the top face of
+a cube is drawn last. Motion never leaves a
 blank cell: the grid is always complete underneath, and an animated cube
 must land exactly on its outline. The outlines fade with the field: a cell's
 hairline is as opaque as its bias weight relative to the densest cell, so the

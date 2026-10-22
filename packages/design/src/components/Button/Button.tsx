@@ -1,11 +1,12 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Loader2 } from "lucide-react";
 import { cn } from "../../lib/cn.ts";
+import { TileLoader } from "../Tiles/TileLoader.tsx";
+import { focusOutline } from "../../lib/focus.ts";
 
 export const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-base leading-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  `relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-base leading-none transition-colors ${focusOutline} disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg:not(.tile-loader)]:size-4 [&_svg]:shrink-0`,
   {
     variants: {
       variant: {
@@ -53,11 +54,14 @@ export const buttonVariants = cva(
   },
 );
 
+/** The variants with a fill behind their ink, where the mono loader goes. */
+const FILLED = { default: true, dark: true, secondary: true, destructive: true } as const;
+
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   /** Render the child element (a link, say) with the button's classes instead of a <button>. */
   asChild?: boolean;
-  /** Disables the button and shows a spinner before its children. */
+  /** Disables the button and shows the tile loader over its children, which keep their place so the width holds. */
   loading?: boolean;
 }
 
@@ -82,6 +86,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     }, [unlabeled]);
 
     const classes = cn(buttonVariants({ variant, size, className }));
+    // The loader is a three-tone cube, so it cannot simply take currentColor:
+    // on a filled button it is the mono rendition in the button's own ink,
+    // on the outline, ghost and link buttons the brand palette. It is
+    // decorative here, since the button is already busy. It sits over the
+    // label, which goes transparent but keeps its place and its name, so a
+    // button is exactly as wide loading as it is idle and nothing beside it
+    // moves.
+    const filled = variant == null || variant in FILLED;
 
     if (asChild) {
       return (
@@ -100,8 +112,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={props.disabled || loading}
         aria-busy={loading ? true : props["aria-busy"]}
       >
-        {loading && <Loader2 className="animate-spin" aria-hidden="true" />}
-        {children}
+        {loading && (
+          <span aria-hidden="true" className="absolute inset-0 flex items-center justify-center">
+            <TileLoader size={16} tone={filled ? "mono" : "palette"} decorative />
+          </span>
+        )}
+        <span className={cn("inline-flex items-center gap-2", loading && "opacity-0")}>{children}</span>
       </button>
     );
   },

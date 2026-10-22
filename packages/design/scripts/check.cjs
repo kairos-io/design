@@ -23,6 +23,7 @@ const known = new Set();
 const addHex = h => known.add(norm(h));
 Object.values(t.color.base).forEach(addHex);
 Object.values(t.color.brand).forEach(addHex);
+Object.values(t.color.tile ?? {}).forEach(addHex);
 Object.values(t.color.status).forEach(addHex);
 Object.keys(t.untokenised.colors).forEach(addHex);
 for (const mode of ['light', 'dark']) {

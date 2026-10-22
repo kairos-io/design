@@ -21,6 +21,28 @@ body,
   font-family: var(--font-sans);
 }
 
+/* Storybook covers the canvas with a white "preparing" overlay for the hundred
+   or so milliseconds between selecting a story and rendering it, on every
+   navigation, which in the dark theme is a white flash. The overlay takes the
+   canvas colour instead, so only its spinner shows. */
+.sb-preparing-story,
+.sb-preparing-docs {
+  background-color: var(--bg);
+}
+/* The docs overlay also sketches a white canvas and a white args table. */
+.sb-preparing-docs .sb-previewBlock,
+.sb-preparing-docs .sb-argstableBlock-body td {
+  background: var(--surface);
+  border-color: var(--line);
+}
+.sb-preparing-docs .sb-argstableBlock-body tr:not(:first-child) {
+  border-top-color: var(--line);
+}
+.sb-preparing-docs .sb-previewBlock_icon,
+.sb-preparing-docs .sb-argstableBlock :is(th, td) span {
+  background-color: var(--inner);
+}
+
 .sb-show-main.sb-main-padded {
   padding: 1.5rem;
 }
@@ -102,6 +124,49 @@ body,
 [data-theme="dark"] .sbdocs.sbdocs-preview-actions .docblock-code-toggle {
   color: var(--muted);
 }
+/* The toolbar above an inline canvas (reload, zoom) is a white strip on the
+   dark canvas, its bottom hairline a blue-tinted inset shadow. */
+[data-theme="dark"] .sbdocs.sbdocs-preview [role="toolbar"] {
+  background: var(--inner);
+  color: var(--muted);
+  box-shadow: inset 0 -1px 0 0 var(--line);
+}
+[data-theme="dark"] .sbdocs.sbdocs-preview [role="toolbar"] button {
+  color: var(--muted);
+}
+
+/* The controls' own inputs in the ArgsTable: the select, the text area and the
+   number field are white fields with dark text; the boolean toggle is a light
+   blue strip with a white pill on the chosen side. */
+[data-theme="dark"]
+  .sbdocs
+  .docblock-argstable
+  :is(select, textarea, input:not([type="checkbox"], [type="radio"], [type="range"])) {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line);
+}
+[data-theme="dark"] .sbdocs .docblock-argstable label:has(> input[type="checkbox"]) {
+  background: var(--inner);
+  border-color: var(--line);
+}
+[data-theme="dark"] .sbdocs .docblock-argstable label:has(> input[type="checkbox"]) > span {
+  background: transparent;
+  color: var(--muted);
+}
+[data-theme="dark"]
+  .sbdocs
+  .docblock-argstable
+  label:has(> input[type="checkbox"]:checked)
+  > span:last-of-type,
+[data-theme="dark"]
+  .sbdocs
+  .docblock-argstable
+  label:has(> input[type="checkbox"]:not(:checked))
+  > span:first-of-type {
+  background: var(--surface);
+  color: var(--ink);
+}
 
 /* The TOC is a sibling of .sbdocs-content inside the wrapper, so it scopes
    there. tocbot names: .toc-list rail, .toc-list-item, .is-active-li. */
@@ -147,5 +212,16 @@ body,
 @media (max-width: 600px) {
   .sbdocs.sbdocs-wrapper {
     padding: 1.5rem 16px;
+  }
+}
+/* The ArgsTable is as wide as its name column plus its control column (about
+   660px) and sits in no scroll wrapper, so on a phone the whole page scrolled
+   sideways. As a block it keeps its rows and columns (they form one anonymous
+   table inside it) and scrolls on its own. */
+@media (max-width: 768px) {
+  .sbdocs .docblock-argstable {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
   }
 }

@@ -1237,6 +1237,83 @@ input[type="checkbox"].toggle:checked::after {
   overflow-x: auto;
 }
 
+/* A numbered terminal: the body holds an <ol> with one <li> per line and the
+   editor's gutter counts them, decorative and unselectable so a copy takes
+   the text alone. --first-line on the list numbers a snippet from mid-file,
+   --gutter is the widest number ("3ch"); .hl marks a row. */
+.terminal.numbered ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: line var(--first-line, 1);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.terminal.numbered li {
+  display: flex;
+  counter-increment: line;
+}
+.terminal.numbered li:first-child {
+  counter-increment: none;
+}
+.terminal.numbered li::before {
+  content: counter(line);
+  flex: none;
+  box-sizing: border-box;
+  width: calc(var(--gutter, 2ch) + 12px);
+  margin-right: 10px;
+  padding-right: 10px;
+  white-space: nowrap;
+  border-right: 1px solid color-mix(in srgb, var(--code-muted) 30%, transparent);
+  text-align: right;
+  color: var(--code-muted);
+  user-select: none;
+}
+.terminal.numbered li.hl {
+  margin: 0 -14px;
+  padding: 0 14px;
+  background: var(--code-bar);
+}
+.terminal.numbered li.hl::before {
+  color: var(--code-key);
+}
+
+/* A numbered textarea: a wrapper with a .gutter the page fills with one line
+   per number (a <div> each), beside a <textarea wrap="off">. The page keeps
+   the two in step with a line of script on the control's scroll event:
+   gutter.firstElementChild.style.transform = `translateY(-${area.scrollTop}px)`,
+   and may set the gutter's height to area.clientHeight so it stops above a
+   horizontal scrollbar. A numbered textarea does not soft-wrap; a long line
+   scrolls sideways under the gutter. */
+.textarea.numbered {
+  position: relative;
+  display: grid;
+}
+.textarea.numbered textarea {
+  padding-left: calc(var(--gutter, 2ch) + 30px);
+  white-space: pre;
+  overflow-x: auto;
+}
+.textarea.numbered .gutter {
+  position: absolute;
+  inset: 1px auto 1px 1px;
+  width: calc(var(--gutter, 2ch) + 20px);
+  padding: 10px 8px 10px 0;
+  border-right: 1px solid var(--line);
+  background: var(--surface);
+  overflow: hidden;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--muted);
+  user-select: none;
+  pointer-events: none;
+}
+.textarea.numbered:has(textarea:disabled) .gutter {
+  background: var(--inner);
+}
+
 /* The disk layout: one bar, a segment per partition, in the tile order. */
 .disk-layout {
   display: flex;

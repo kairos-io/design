@@ -1,9 +1,10 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../../lib/cn.ts";
+import { focusOutline } from "../../lib/focus.ts";
 
 export const badgeVariants = cva(
-  "inline-flex items-center whitespace-nowrap rounded-sm font-mono text-xs leading-4 transition-colors focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink",
+  `inline-flex items-center whitespace-nowrap rounded-sm font-mono text-xs leading-4 transition-colors focus:outline-none ${focusOutline}`,
   {
     variants: {
       variant: {

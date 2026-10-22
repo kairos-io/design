@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn.ts";
+import { focusRingOffset } from "../../lib/focus.ts";
 
 export interface SwitchProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
   checked: boolean;
@@ -34,12 +35,20 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
             onCheckedChange?.(!checked);
           }}
           className={cn(
-            "flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-sm p-0.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-            checked ? "justify-end bg-accent" : "justify-start bg-raised",
+            `flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-sm p-0.5 transition-colors duration-[var(--duration-fast)] ease-out ${focusRingOffset} disabled:cursor-not-allowed disabled:opacity-50`,
+            checked ? "bg-accent" : "bg-raised",
           )}
           {...props}
         >
-          <span aria-hidden="true" className="block h-4 w-4 rounded-sm bg-status-ink" />
+          {/* The thumb slides the 16px of free track on a transform, over the same
+              fast duration the track's colour takes, so both move as one. */}
+          <span
+            aria-hidden="true"
+            className={cn(
+              "block h-4 w-4 rounded-sm bg-status-ink transition-transform duration-[var(--duration-fast)] ease-out",
+              checked && "translate-x-4",
+            )}
+          />
         </button>
         {label && (
           <label id={`${id}-label`} htmlFor={id} className="cursor-pointer font-semibold text-ink">

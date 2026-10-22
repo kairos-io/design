@@ -5,6 +5,7 @@ import { Check, ExternalLink, Menu, PanelLeftClose, PanelLeftOpen, X, type Lucid
 import { cn } from "../../lib/cn.ts";
 import { tilePoints } from "../../lib/tiles.ts";
 import { Button } from "../Button/Button.tsx";
+import { focusRing } from "../../lib/focus.ts";
 
 // The application shell of the Kairos console decks: a column on the side
 // surface with mono section labels, the active item on the raised tone with
@@ -268,7 +269,7 @@ export const SidebarItem = React.forwardRef<HTMLAnchorElement, SidebarItemProps>
   ) => {
     const { mode, onNavigate } = useSidebar();
     const classes = cn(
-      "flex items-center gap-2.5 rounded-base py-[9px] text-[15px] no-underline transition-colors hover:no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink",
+      `flex items-center gap-2.5 rounded-base py-[9px] text-[15px] no-underline transition-colors scroll-my-0.5 hover:no-underline ${focusRing}`,
       sidebarModeClasses.linkLayout[mode],
       active ? "bg-raised font-bold text-ink" : "text-sub hover:bg-hover hover:text-ink",
       className,
@@ -399,7 +400,7 @@ export const SidebarSteps = React.forwardRef<HTMLElement, SidebarStepsProps>(fun
             aria-current={isCurrent ? "step" : undefined}
             onClick={() => onStepChange?.(step.id)}
             className={cn(
-              "flex w-full items-center gap-2.5 rounded-base px-2.5 py-[9px] text-left text-[15px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink disabled:cursor-not-allowed",
+              `flex w-full items-center gap-2.5 rounded-base px-2.5 py-[9px] text-left text-[15px] transition-colors scroll-my-0.5 ${focusRing} disabled:cursor-not-allowed`,
               isCurrent
                 ? "bg-raised font-bold text-ink"
                 : done

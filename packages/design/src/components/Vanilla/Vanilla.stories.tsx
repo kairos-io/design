@@ -204,3 +204,59 @@ export const WizardShellVanilla: Story = {
   name: "Wizard shell",
   render: () => <VanillaFrame body={wizard} height={620} variant="installer" />,
 };
+
+// The numbered terminal and textarea: CSS counters on an <ol> for the output,
+// and a gutter beside a <textarea wrap="off"> that one line of script keeps
+// in step with the control's scroll.
+const numbered = `
+<div class="page">
+  <main class="container narrow">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Components</p>
+        <div class="title-row"><h1>Line numbers</h1></div>
+        <p class="description"><code>.terminal.numbered</code> counts its lines; <code>.textarea.numbered</code> wraps a control with a gutter.</p>
+      </div>
+    </header>
+
+    <div class="terminal numbered" style="--gutter:2ch">
+      <div class="terminal-head"><span>cloud-config.yaml</span><span>copy</span></div>
+      <div class="terminal-body"><ol><li><span class="muted">#cloud-config</span></li><li class="hl">hostname: edge-store-0142</li><li>users:</li><li>  - name: kairos</li><li>    ssh_authorized_keys:</li><li>      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl operator@edge-store-0142.fleet.example.internal</li><li>k3s:</li><li>  enabled: true</li><li>install:</li><li>  reboot: true</li></ol></div>
+    </div>
+
+    <div class="terminal numbered" style="--gutter:3ch">
+      <div class="terminal-head"><span>upgrade.log · from line 118</span></div>
+      <div class="terminal-body"><ol style="--first-line:118"><li><span class="prompt">$</span> kairos upgrade --source oci:quay.io/kairos/hadron:v0.5.2</li><li>INFO Pulling quay.io/kairos/hadron:v0.5.2</li><li class="error">[ERROR] bootloader: efibootmgr: EFI variables are not supported on this system</li></ol></div>
+    </div>
+
+    <div class="field">
+      <label for="cc">Cloud config</label>
+      <div class="textarea numbered" style="--gutter:2ch">
+        <div class="gutter" aria-hidden="true"><div>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div></div>
+        <textarea id="cc" wrap="off" rows="6" aria-describedby="cc-err" aria-invalid="true">#cloud-config
+hostname: edge-store-0142
+users:
+  - name: kairos
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl operator@edge-store-0142.fleet.example.internal
+k3s:
+  enabled: true
+install:
+  reboot: true</textarea>
+      </div>
+      <p id="cc-err" class="err">Line 5: a mapping value is not allowed here.</p>
+    </div>
+  </main>
+</div>
+<script>
+  const area = document.getElementById("cc");
+  const gutter = area.previousElementSibling;
+  const sync = () => { gutter.style.height = area.clientHeight + "px"; gutter.firstElementChild.style.transform = "translateY(-" + area.scrollTop + "px)"; };
+  area.addEventListener("scroll", sync);
+  sync();
+</script>`;
+
+export const NumberedVanilla: Story = {
+  name: "Line numbers",
+  render: () => <VanillaFrame body={numbered} height={1000} />,
+};

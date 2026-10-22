@@ -47,7 +47,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: (args) => (
-    <div className="flex min-h-[480px] border border-line">
+    <div className="flex min-h-[480px] overflow-x-auto border border-line">
       <DocsNav {...args} />
       <div className="flex-1 p-8 text-sm text-sub">The article.</div>
       <DocsToc

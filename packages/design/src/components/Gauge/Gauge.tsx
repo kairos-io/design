@@ -204,12 +204,15 @@ export const TileMeter = React.forwardRef<HTMLDivElement, TileMeterProps>(
         className={cn("flex gap-0.5", className)}
         {...props}
       >
+        {/* Each tile is a zero-width flex item that grows, so the meter's min-content
+            is zero and it fits any column; the viewBox alone would give the row an
+            intrinsic width wider than a phone. */}
         {Array.from({ length: count }, (_, i) => (
           <svg
             key={i}
             viewBox="0 0 22 14"
             preserveAspectRatio="none"
-            className="h-2.5 min-w-0 flex-1"
+            className="h-2.5 w-0 flex-1"
             aria-hidden="true"
           >
             <polygon

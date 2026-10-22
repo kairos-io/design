@@ -12,6 +12,7 @@ import {
   type Variant,
 } from "../../src/tokens/index.ts";
 import { contrastOn, formatRatio, type ContrastResult } from "./contrast.ts";
+import { DIAMOND_POINTS, DIAMOND_VIEWBOX } from "../../src/lib/diamond.ts";
 
 /** One token: a live swatch that follows the page theme, its name, and both values. */
 export function ColorSwatch({ name, light, dark }: { name: string; light: string; dark: string }) {
@@ -301,8 +302,8 @@ export function ToneRow({ children }: { children?: ReactNode }) {
       {tones.map((t) => (
         <div key={t} className="rounded-base border border-line bg-surface p-3">
           <div className="flex items-center gap-2 text-sm font-semibold">
-            <svg width="11" height="11" viewBox="0 0 12 12" aria-hidden="true">
-              <polygon points="6,0.8 11.2,6 6,11.2 0.8,6" style={{ fill: `var(--${toneTokens[t].fill})` }} />
+            <svg width="11" height="11" viewBox={DIAMOND_VIEWBOX} aria-hidden="true">
+              <polygon points={DIAMOND_POINTS} style={{ fill: `var(--${toneTokens[t].fill})` }} />
             </svg>
             {t}
           </div>

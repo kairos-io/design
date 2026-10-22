@@ -1,22 +1,30 @@
 import * as React from "react";
+import { Check, Copy } from "lucide-react";
 import { cn } from "../../lib/cn.ts";
+import { copyText, selectText } from "../../lib/clipboard.ts";
+import { focusRing } from "../../lib/focus.ts";
+import { useTransient } from "../../hooks/useTransient.ts";
+import { ReserveWidth } from "../ReserveWidth/ReserveWidth.tsx";
 
-function useCopy(text: string) {
-  const [copied, setCopied] = React.useState(false);
-  React.useEffect(() => {
-    if (!copied) return;
-    const t = window.setTimeout(() => setCopied(false), 1500);
-    return () => window.clearTimeout(t);
-  }, [copied]);
+type CopyState = "idle" | "copied" | "selected";
+
+/**
+ * Copies the command and reports what happened: "copied" when the clipboard
+ * took it, "selected" when no clipboard is reachable (a plain http page with
+ * no legacy copy either), in which case the command's text is selected so
+ * the person can copy it by hand. Either state clears after a moment.
+ */
+function useCopy(text: string, target: React.RefObject<HTMLElement | null>) {
+  const [state, setState] = useTransient<CopyState>("idle");
   const copy = React.useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-    } catch {
-      // No clipboard (an insecure context, a denied permission): the text is still selectable.
+    if (await copyText(text)) {
+      setState("copied");
+    } else {
+      selectText(target.current);
+      setState("selected");
     }
-  }, [text]);
-  return { copied, copy };
+  }, [text, target, setState]);
+  return { state, copy };
 }
 
 export interface CommandSampleProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
@@ -32,7 +40,9 @@ export interface CommandSampleProps extends Omit<React.HTMLAttributes<HTMLDivEle
  */
 export const CommandSample = React.forwardRef<HTMLDivElement, CommandSampleProps>(
   ({ command, copyLabel = "Copy", className, ...props }, ref) => {
-    const { copied, copy } = useCopy(command);
+    const code = React.useRef<HTMLElement | null>(null);
+    const { state, copy } = useCopy(command, code);
+    const copied = state === "copied";
     return (
       <div
         ref={ref}
@@ -45,15 +55,42 @@ export const CommandSample = React.forwardRef<HTMLDivElement, CommandSampleProps
         <span className="text-muted" aria-hidden="true">
           $
         </span>
-        <code className="min-w-0 flex-1 [overflow-wrap:anywhere]">{command}</code>
+        <code ref={code} className="min-w-0 flex-1 [overflow-wrap:anywhere]">
+          {command}
+        </code>
         <button
           type="button"
           onClick={copy}
           aria-label={`${copyLabel} ${command}`}
           aria-live="polite"
-          className="rounded-sm bg-raised px-2.5 py-1.5 font-sans text-[13px] font-semibold text-ink hover:bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+          data-copied={copied || undefined}
+          data-selected={state === "selected" || undefined}
+          className={cn(
+            "rounded-sm bg-raised px-2.5 py-1.5 font-sans text-[13px] font-semibold text-ink hover:bg-hover",
+            focusRing,
+          )}
         >
-          {copied ? "Copied" : copyLabel}
+          {/* A status is a coloured mark beside ink text, as the decks draw it: the
+              check turns green for a moment, the label stays ink. The chip is held
+              at the width of its "Copied" state so the row does not shift when the
+              label changes. */}
+          <ReserveWidth
+            childClassName="inline-flex items-center gap-1.5"
+            twinClassName="inline-flex items-center gap-1.5"
+            twin={
+              <>
+                <Check className="h-3.5 w-3.5" aria-hidden="true" />
+                Copied
+              </>
+            }
+          >
+            {copied ? (
+              <Check className="h-3.5 w-3.5 text-ok" aria-hidden="true" />
+            ) : (
+              <Copy className="h-3.5 w-3.5 text-muted" aria-hidden="true" />
+            )}
+            {copied ? "Copied" : state === "selected" ? "Selected" : copyLabel}
+          </ReserveWidth>
         </button>
       </div>
     );

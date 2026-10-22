@@ -12,6 +12,14 @@
       "hadron-blue": "#0275E7",
       "hadron-deep": "#004CCE"
     },
+    "tile": {
+      "success-light": "#8ED1A6",
+      "success-mid": "#3FAF6E",
+      "success-deep": "#2F8F57",
+      "error-light": "#F0A3A3",
+      "error-mid": "#E05A5A",
+      "error-deep": "#C62B2B"
+    },
     "status": {
       "healthy": "#2F8F57",
       "recovery": "#C62B2B",
@@ -121,8 +129,8 @@
   },
   "font": {
     "family": {
-      "sans": "Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif",
-      "mono": "'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace"
+      "sans": "Urbanist,'Urbanist Fallback',system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif",
+      "mono": "'Martian Mono','Martian Mono Fallback',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace"
     },
     "weight": {
       "regular": 400,

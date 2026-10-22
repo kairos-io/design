@@ -4,7 +4,12 @@ import { X } from "lucide-react";
 import { cn } from "../../lib/cn.ts";
 
 // A modal on the surface tone with the 8px corner the Foundations deck
-// gives dialogs, scrimmed by the overlay token, entering with fade-up.
+// gives dialogs, scrimmed by the overlay token, entering with fade-up and
+// leaving with fade-down over the fast duration. Radix keeps the node
+// mounted until the closed-state animation ends, so the exit is seen. Both
+// states are data-state variants: base.css also defines .animate-fade-up
+// outside any layer, and an unlayered rule beats a layered variant however
+// specific, so a plain animate-fade-up could never be overridden on close.
 
 export const Dialog = DialogPrimitive.Root;
 export const DialogTrigger = DialogPrimitive.Trigger;
@@ -17,7 +22,10 @@ export const DialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
-    className={cn("fixed inset-0 z-50 bg-overlay animate-fade-in", className)}
+    className={cn(
+      "fixed inset-0 z-50 bg-overlay data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-out",
+      className,
+    )}
     {...props}
   />
 ));
@@ -32,7 +40,7 @@ export const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-[50%] top-[50%] z-50 grid w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border border-line bg-surface p-6 text-ink animate-fade-up sm:max-w-lg",
+        "fixed left-[50%] top-[50%] z-50 grid w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border border-line bg-surface p-6 text-ink data-[state=open]:animate-fade-up data-[state=closed]:animate-fade-down sm:max-w-lg",
         className,
       )}
       {...props}
