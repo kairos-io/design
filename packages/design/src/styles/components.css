@@ -1277,41 +1277,92 @@ input[type="checkbox"].toggle:checked::after {
 .terminal.numbered li.hl::before {
   color: var(--code-key);
 }
+/* The row the page marks as current (a line the reader has picked): the
+   same wash, the number in the ink. The page toggles .current itself. */
+.terminal.numbered li.current {
+  margin: 0 -14px;
+  padding: 0 14px;
+  background: var(--code-bar);
+}
+.terminal.numbered li.current::before {
+  color: var(--code-ink);
+}
 
-/* A numbered textarea: a wrapper with a .gutter the page fills with one line
-   per number (a <div> each), beside a <textarea wrap="off">. The page keeps
-   the two in step with a line of script on the control's scroll event:
+/* A numbered textarea: a wrapper that draws the control's border, radius,
+   focus and invalid state around a .gutter and a borderless
+   <textarea wrap="off">. The page fills the gutter's inner <div> with one
+   line per number and keeps it in step with the control's scroll event:
    gutter.firstElementChild.style.transform = `translateY(-${area.scrollTop}px)`,
    and may set the gutter's height to area.clientHeight so it stops above a
    horizontal scrollbar. A numbered textarea does not soft-wrap; a long line
-   scrolls sideways under the gutter. */
+   scrolls sideways. */
 .textarea.numbered {
   position: relative;
   display: grid;
+  grid-template-columns: calc(var(--gutter, 2ch) + 21px) minmax(0, 1fr);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-base);
+  background: var(--surface);
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  transition: border-color var(--duration-fast);
+}
+.textarea.numbered:focus-within {
+  border-color: var(--ink);
+}
+.textarea.numbered:has(textarea[aria-invalid="true"]) {
+  border-color: var(--status-recovery);
+}
+.textarea.numbered:has(textarea:disabled) {
+  background: var(--inner);
 }
 .textarea.numbered textarea {
-  padding-left: calc(var(--gutter, 2ch) + 30px);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding-left: 10px;
   white-space: pre;
   overflow-x: auto;
 }
 .textarea.numbered .gutter {
-  position: absolute;
-  inset: 1px auto 1px 1px;
-  width: calc(var(--gutter, 2ch) + 20px);
-  padding: 10px 8px 10px 0;
-  border-right: 1px solid var(--line);
-  background: var(--surface);
   overflow: hidden;
+  border-right: 1px solid var(--line);
+}
+.textarea.numbered .gutter > div {
+  position: absolute;
+  inset: 0 0 auto 0;
+  padding: 10px;
   text-align: right;
-  font-family: var(--font-mono);
-  font-size: 13px;
   line-height: 1.85;
   color: var(--muted);
   user-select: none;
   pointer-events: none;
 }
-.textarea.numbered:has(textarea:disabled) .gutter {
-  background: var(--inner);
+/* The page may mark the caret's line: .current on a number sets it in the
+   ink, and a .band it positions (top = 10px + line * line height, relative
+   to the wrapper, moved with the scroll like the gutter) draws the wash
+   across the row behind the control; .band.error is a validator's line. */
+.textarea.numbered .gutter .current {
+  color: var(--ink);
+}
+.textarea.numbered .band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: calc(13px * 1.85);
+  background: color-mix(in srgb, var(--raised) 60%, transparent);
+  pointer-events: none;
+}
+.textarea.numbered .band.error {
+  background: color-mix(in srgb, var(--status-recovery) 10%, transparent);
+}
+.textarea.numbered .gutter .error {
+  color: var(--status-recovery);
+}
+.textarea.numbered .gutter,
+.textarea.numbered textarea {
+  position: relative;
 }
 
 /* The disk layout: one bar, a segment per partition, in the tile order. */

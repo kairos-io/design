@@ -113,13 +113,18 @@ export const Terminal = React.forwardRef<HTMLDivElement, TerminalProps>(
               <button
                 type="button"
                 onClick={handleCopy}
-                className="rounded-sm font-mono text-xs text-code-muted transition-colors hover:text-code-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-code-ink"
+                className={cn(
+                  "-mx-1.5 -my-0.5 rounded-sm px-1.5 py-0.5 font-mono text-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-code-ink",
+                  copied ? "bg-status-healthy text-status-ink" : "text-code-muted hover:text-code-ink",
+                )}
               >
                 {/* The chip is held at the width of its "copied" state so it does
-                    not jump left and back when the label changes. The check stays
-                    in the bar's muted ink rather than CommandSample's green: the ok
-                    token reaches 2.8:1 on the light theme's code bar, short of the
-                    3:1 a 12px mark needs, so the icon swap alone says it. */}
+                    not jump left and back when the label changes. Once copied it
+                    takes the filled success look (healthy green, status ink), the
+                    one green pairing that reads on the code bar in both themes: the
+                    ok tone as text reaches only 2.8:1 there. The padding is always
+                    present and pulled back with negative margins, so the fill
+                    appears without moving anything. */}
                 <ReserveWidth
                   childClassName="inline-flex items-center gap-1.5"
                   twinClassName="inline-flex items-center gap-1.5"

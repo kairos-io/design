@@ -221,7 +221,7 @@ const numbered = `
 
     <div class="terminal numbered" style="--gutter:2ch">
       <div class="terminal-head"><span>cloud-config.yaml</span><span>copy</span></div>
-      <div class="terminal-body"><ol><li><span class="muted">#cloud-config</span></li><li class="hl">hostname: edge-store-0142</li><li>users:</li><li>  - name: kairos</li><li>    ssh_authorized_keys:</li><li>      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl operator@edge-store-0142.fleet.example.internal</li><li>k3s:</li><li>  enabled: true</li><li>install:</li><li>  reboot: true</li></ol></div>
+      <div class="terminal-body"><ol><li><span class="muted">#cloud-config</span></li><li class="hl">hostname: edge-store-0142</li><li class="current">users:</li><li>  - name: kairos</li><li>    ssh_authorized_keys:</li><li>      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl operator@edge-store-0142.fleet.example.internal</li><li>k3s:</li><li>  enabled: true</li><li>install:</li><li>  reboot: true</li></ol></div>
     </div>
 
     <div class="terminal numbered" style="--gutter:3ch">
@@ -232,7 +232,8 @@ const numbered = `
     <div class="field">
       <label for="cc">Cloud config</label>
       <div class="textarea numbered" style="--gutter:2ch">
-        <div class="gutter" aria-hidden="true"><div>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div></div>
+        <div class="band error" style="top:${10 + 4 * 13 * 1.85}px"></div>
+        <div class="gutter" aria-hidden="true"><div>1<br>2<br>3<br>4<br><span class="error">5</span><br>6<br>7<br>8<br>9<br>10</div></div>
         <textarea id="cc" wrap="off" rows="6" aria-describedby="cc-err" aria-invalid="true">#cloud-config
 hostname: edge-store-0142
 users:
@@ -250,7 +251,7 @@ install:
 </div>
 <script>
   const area = document.getElementById("cc");
-  const gutter = area.previousElementSibling;
+  const gutter = area.previousElementSibling.firstElementChild;
   const sync = () => { gutter.style.height = area.clientHeight + "px"; gutter.firstElementChild.style.transform = "translateY(-" + area.scrollTop + "px)"; };
   area.addEventListener("scroll", sync);
   sync();

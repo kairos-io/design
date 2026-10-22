@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "../../lib/cn.ts";
+import { focusRing } from "../../lib/focus.ts";
 
 // The node table of the console decks: a surface with 4px corners, the
 // header row on the head tone in 13px bold muted, 15px rows parted by
@@ -39,12 +40,17 @@ export const TableFooter = React.forwardRef<
 ));
 TableFooter.displayName = "TableFooter";
 
+// The selected row's accent bar and the focus ring are both box shadows on
+// the row, so each is set through its Tailwind layer (inset-shadow, ring) and
+// the two compose instead of the later one replacing the other. The ring is
+// inset: a row has no room outside itself in a table, and a focusable row (a
+// host that selects nodes from the keyboard) keeps the deck's hairlines.
 export const TableRow = React.forwardRef<HTMLTableRowElement, React.HTMLAttributes<HTMLTableRowElement>>(
   ({ className, ...props }, ref) => (
     <tr
       ref={ref}
       className={cn(
-        "border-line transition-colors hover:bg-hover data-[state=selected]:bg-hover data-[state=selected]:[box-shadow:inset_3px_0_0_var(--accent)]",
+        `border-line transition-colors hover:bg-hover data-[state=selected]:bg-hover data-[state=selected]:inset-shadow-[3px_0_0_var(--accent)] ${focusRing} focus-visible:ring-inset`,
         className,
       )}
       {...props}

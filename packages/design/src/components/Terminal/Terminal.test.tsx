@@ -35,6 +35,15 @@ describe("Terminal", () => {
     expect(screen.queryByText("terminal")).not.toBeInTheDocument();
   });
 
+  it("says copied once the Clipboard API has taken the text", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", { value: { writeText }, configurable: true });
+    render(<Terminal aria-label="Command" copy lines={["kairos upgrade"]} />);
+    await userEvent.click(screen.getByRole("button", { name: "copy" }));
+    expect(writeText).toHaveBeenCalledWith("kairos upgrade");
+    expect(await screen.findByRole("button", { name: "copied" })).toHaveClass("bg-status-healthy");
+  });
+
   it("does not claim a copy that did not happen", async () => {
     Object.defineProperty(navigator, "clipboard", { value: undefined, configurable: true });
     (document as { execCommand?: unknown }).execCommand = vi.fn().mockReturnValue(false);
@@ -59,7 +68,7 @@ describe("Terminal", () => {
     expect(screen.getByRole("button", { name: "copied" })).toBeInTheDocument();
   });
 
-  it("holds the copy chip at the width of its copied state, with the check in the bar's ink", async () => {
+  it("holds the copy chip at the width of its copied state, and fills it green once copied", async () => {
     render(<Terminal aria-label="Command" copy onCopy={() => {}} lines={["kairos upgrade"]} />);
     const button = screen.getByRole("button", { name: "copy" });
     const twin = button.querySelector('[aria-hidden="true"].invisible');
@@ -72,6 +81,10 @@ describe("Terminal", () => {
       .getByRole("button", { name: "copied" })
       .querySelector(".col-start-1:not(.invisible) svg");
     expect(check?.getAttribute("class")).not.toContain("text-ok");
+    expect(screen.getByRole("button", { name: "copied" })).toHaveClass(
+      "bg-status-healthy",
+      "text-status-ink",
+    );
   });
 });
 

@@ -17,7 +17,9 @@ describe("CommandSample", () => {
     expect(writeText).toHaveBeenCalledWith("docker pull quay.io/kairos/hadron:v0.5.1");
     expect(button).toHaveTextContent("Copied");
     expect(button).toHaveAttribute("data-copied", "true");
-    expect(button.querySelector("svg.lucide-check")).toHaveClass("text-ok");
+    expect(button).toHaveClass("bg-status-healthy", "text-status-ink");
+    expect(button).not.toHaveClass("bg-raised");
+    expect(button.querySelector("svg.lucide-check")).toBeInTheDocument();
     expect(button.querySelector("svg.lucide-copy")).toBeNull();
   });
 

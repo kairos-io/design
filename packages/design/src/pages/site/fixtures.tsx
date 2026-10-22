@@ -155,32 +155,6 @@ export const kairosHome = {
   })),
 };
 
-export const hadronHome = {
-  principles: [
-    { t: "Upstream first", tone: 0, d: "Minimal changes, maximum compatibility with upstream projects." },
-    {
-      t: "Built from scratch",
-      tone: 1,
-      d: "Independent. No package manager, so nothing drifts after build.",
-    },
-    { t: "Core components", tone: 2, d: "musl, systemd and vanilla kernels, versioned together." },
-  ] as const,
-  withKairos: [
-    "A/B atomic upgrades for zero-downtime operations",
-    "Immutable root and recovery partition",
-    "Trusted boot with UKI and TPM-sealed encryption",
-    "Same image from edge devices to cloud VMs",
-  ],
-  components: [
-    ["kernel", "6.12.41"],
-    ["libc", "musl 1.2.5"],
-    ["init", "systemd 257"],
-    ["openssl", "3.5.2"],
-    ["busybox", "1.37.0"],
-    ["package manager", "none"],
-  ],
-};
-
 export type DocsProduct = "Factory" | "Console" | "Installer" | "Operator" | "Lab";
 
 export const docsProducts: Record<DocsProduct, { stage: string; repo: string; was: string; lede: string }> = {

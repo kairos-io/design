@@ -391,6 +391,17 @@ export function tileGridPaths(polygons: Pick<TilePolygon, "points" | "outline">[
 export const tilePoints = "7,0 22,0 15,14 0,14";
 
 /**
+ * The same tile drawn as an outline with a 2-unit stroke: the polygon inset
+ * by one unit (half the stroke), so the stroke paints exactly inside the
+ * 22x14 box and its mitred tips land on the box's corners instead of being
+ * clipped by the viewBox. The acute corners need a mitre ratio of 1.9, under
+ * the default limit of 4, so the joins stay hard. Drawn with `stroke-width`
+ * 2 and no fill.
+ */
+export const tileOutlinePoints = "7.62,1 20.38,1 14.38,13 1.62,13";
+export const tileOutlineStrokeWidth = 2;
+
+/**
  * Serialises a field as a standalone SVG, for pages with no build step.
  * Tones are the brand custom properties with the hex values as fallbacks,
  * so the file works on its own and follows tokens.css where it is present.

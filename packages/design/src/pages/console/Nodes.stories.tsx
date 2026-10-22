@@ -16,8 +16,6 @@ import {
   TableRow,
 } from "../../components/Table/Table.tsx";
 import { Tile } from "../../components/Tiles/Tile.tsx";
-import { focusRing } from "../../lib/focus.ts";
-import { tilePoints } from "../../lib/tiles.ts";
 import { phaseLook } from "../../lib/tone.ts";
 import { ConsoleShell } from "./ConsoleShell.tsx";
 import { fleetStats, nodeStateOrder, nodes, type Node, type NodeState } from "./data.ts";
@@ -61,16 +59,7 @@ function RolloutBar({ total, done, inProgress }: { total: number; done: number; 
         i < done ? (
           <Tile key={i} size={15} tone={(i % 3) as 0 | 1 | 2} />
         ) : i < done + inProgress ? (
-          <svg
-            key={i}
-            width={15}
-            height={(15 * 14) / 22}
-            viewBox="0 0 22 14"
-            aria-hidden="true"
-            className="shrink-0"
-          >
-            <polygon points={tilePoints} className="fill-none stroke-accent" strokeWidth={2} />
-          </svg>
+          <Tile key={i} size={15} tone="outline" />
         ) : (
           <Tile key={i} size={15} tone="rest" className="[&_polygon]:fill-raised" />
         ),
@@ -86,9 +75,7 @@ function Legend() {
         <Tile size={14} tone={2} /> upgraded
       </span>
       <span className="flex items-center gap-1.5">
-        <svg width={14} height={9} viewBox="0 0 22 14" aria-hidden="true">
-          <polygon points={tilePoints} className="fill-none stroke-accent" strokeWidth={2} />
-        </svg>
+        <Tile size={14} tone="outline" />
         in progress
       </span>
       <span className="flex items-center gap-1.5">
@@ -141,7 +128,10 @@ function NodePanel({ node }: { node: Node }) {
         { text: "Heartbeat", at: node.seen, status: node.status },
       ];
   return (
-    <aside className="flex w-full flex-col gap-5 border-t border-line bg-side px-5.5 py-6 lg:w-[340px] lg:shrink-0 lg:border-l lg:border-t-0">
+    <aside
+      aria-label="Selected node"
+      className="flex w-full flex-col gap-5 border-t border-line bg-side px-5.5 py-6 lg:w-[340px] lg:shrink-0 lg:border-l lg:border-t-0"
+    >
       <div className="flex flex-col gap-1.5">
         <span className="font-mono text-xs text-muted">selected node</span>
         <span className="font-mono text-[17px]">{node.name}</span>
@@ -225,7 +215,8 @@ function NodesPage() {
           </PageHeader>
         </div>
         <div className="flex flex-1 flex-col lg:flex-row">
-          <main className="flex min-w-0 flex-1 flex-col gap-[18px] px-7 py-6">
+          {/* AppShell is the page's main landmark; this is its content column. */}
+          <div className="flex min-w-0 flex-1 flex-col gap-[18px] px-7 py-6">
             <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2">
               {fleetStats.map((s) => (
                 <StatTile key={s.label} label={s.label} value={s.value} />
@@ -267,21 +258,26 @@ function NodesPage() {
               </TableHeader>
               <TableBody>
                 {shown.map((n) => (
+                  // The control is the node's name, a button in the first cell: it is
+                  // what Tab reaches and Enter activates, and its activation bubbles
+                  // to the row's click, which is the pointer's larger target. The row
+                  // draws the inset ring while the name has keyboard focus, so the
+                  // whole row reads as the thing being picked.
                   <TableRow
                     key={n.name}
                     data-state={n.name === selected ? "selected" : undefined}
-                    tabIndex={0}
-                    aria-selected={n.name === selected}
                     onClick={() => setSelected(n.name)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        setSelected(n.name);
-                      }
-                    }}
-                    className={`cursor-pointer ${focusRing} focus-visible:ring-inset`}
+                    className="cursor-pointer has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ink has-[:focus-visible]:ring-inset"
                   >
-                    <TableCell className="font-mono text-xs whitespace-nowrap">{n.name}</TableCell>
+                    <TableCell className="font-mono text-xs whitespace-nowrap">
+                      <button
+                        type="button"
+                        aria-current={n.name === selected ? "true" : undefined}
+                        className="cursor-pointer focus-visible:outline-none"
+                      >
+                        {n.name}
+                      </button>
+                    </TableCell>
                     <TableCell className="whitespace-nowrap">
                       <StatusBadge bare status={n.status} className="text-[15px] font-medium" />
                     </TableCell>
@@ -294,7 +290,7 @@ function NodesPage() {
                 ))}
               </TableBody>
             </Table>
-          </main>
+          </div>
           <NodePanel node={node} />
         </div>
       </div>

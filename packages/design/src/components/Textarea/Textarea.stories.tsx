@@ -53,7 +53,7 @@ export const LineNumbers: Story = {
     docs: {
       description: {
         story:
-          "`lineNumbers` adds a gutter that counts the value's lines and follows the control's scroll, for a config file an operator edits by line. It implies `mono`. A line-numbered textarea does not soft-wrap: a long line scrolls sideways so every number sits beside exactly one line. The gutter is decorative and not part of the value; the control keeps its label, description and invalid state, here through Field.",
+          "`lineNumbers` adds a gutter that counts the value's lines and follows the control's scroll, for a config file an operator edits by line. It implies `mono`. A line-numbered textarea does not soft-wrap: a long line scrolls sideways so every number sits beside exactly one line. While the control has focus the caret's line (or every line a selection spans) shows its number in ink on a faint band, as an editor does; `highlight` marks a validator's lines in the danger tone, here line 5 to match the error text. The gutter and the bands are decorative and not part of the value; the control keeps its label, description and invalid state, here through Field.",
       },
     },
   },
@@ -66,7 +66,8 @@ export const LineNumbers: Story = {
     >
       <Textarea
         lineNumbers
-        className="min-h-[240px]"
+        highlight={[5]}
+        rows={14}
         defaultValue={`${cloudConfig}
     ssh_authorized_keys:
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl operator@edge-store-0142.fleet.example.internal
@@ -74,5 +75,15 @@ k3s:
   enabled: true`}
       />
     </Field>
+  ),
+};
+
+export const LineNumbersDisabled: Story = {
+  name: "Line numbers, disabled",
+  render: () => (
+    <div className="grid max-w-xl gap-1.5">
+      <Label htmlFor="cloud-config-ro">Cloud config</Label>
+      <Textarea id="cloud-config-ro" lineNumbers disabled rows={9} defaultValue={cloudConfig} />
+    </div>
   ),
 };

@@ -75,5 +75,11 @@ export const Wizard: Story = {
       },
     },
   },
-  render: () => <WizardDemo />,
+  // The canvas is a flex container that would size the rail to its six steps;
+  // a block wrapper gives the rail the viewport's width to scroll within.
+  render: () => (
+    <div className="w-full min-w-0">
+      <WizardDemo />
+    </div>
+  ),
 };

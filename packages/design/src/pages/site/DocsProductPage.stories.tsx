@@ -64,8 +64,10 @@ function ProductPage() {
         }
       />
 
-      <div className="flex flex-1 flex-wrap">
+      {/* On a phone the navigation sits full-width above the article, as the deck collapses it; from md up it is the 256px column beside it. */}
+      <div className="flex flex-1 flex-col md:flex-row">
         <DocsNav
+          className="w-full border-r-0 border-b md:w-64 md:border-r md:border-b-0"
           groups={docsSidebar.map((g) => ({
             title: g.title,
             items: g.items.map((x) => ({ label: x, href: `#${x}`, current: x === product })),
@@ -79,10 +81,10 @@ function ProductPage() {
           }}
         />
 
-        {/* The article column wraps under the navigation once the two no longer fit side by side, as in the deck. */}
-        <main className="flex min-w-0 grow basis-80 flex-wrap justify-center">
+        {/* The "On this page" column wraps under the article once the two no longer fit side by side. */}
+        <main className="flex min-w-0 flex-1 flex-wrap justify-center">
           <article
-            className="flex min-w-[320px] flex-1 flex-col gap-6 px-6 pt-10 pb-20 md:px-14"
+            className="flex min-w-0 grow basis-80 flex-col gap-6 px-6 pt-10 pb-20 md:px-14"
             style={{ maxWidth: 800 }}
           >
             <span className="font-mono text-xs text-muted">Products / {product}</span>

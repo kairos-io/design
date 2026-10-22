@@ -66,14 +66,16 @@ export const CommandSample = React.forwardRef<HTMLDivElement, CommandSampleProps
           data-copied={copied || undefined}
           data-selected={state === "selected" || undefined}
           className={cn(
-            "rounded-sm bg-raised px-2.5 py-1.5 font-sans text-[13px] font-semibold text-ink hover:bg-hover",
+            "rounded-sm px-2.5 py-1.5 font-sans text-[13px] font-semibold transition-colors",
+            copied ? "bg-status-healthy text-status-ink" : "bg-raised text-ink hover:bg-hover",
             focusRing,
           )}
         >
-          {/* A status is a coloured mark beside ink text, as the decks draw it: the
-              check turns green for a moment, the label stays ink. The chip is held
-              at the width of its "Copied" state so the row does not shift when the
-              label changes. */}
+          {/* Once copied the whole chip takes the filled success look of a status
+              badge (healthy green, status ink), so the result is unmistakable at a
+              glance; the ok tone on the raised chip alone would be too faint. The
+              chip is held at the width of its "Copied" state so the row does not
+              shift when the label changes. */}
           <ReserveWidth
             childClassName="inline-flex items-center gap-1.5"
             twinClassName="inline-flex items-center gap-1.5"
@@ -85,7 +87,7 @@ export const CommandSample = React.forwardRef<HTMLDivElement, CommandSampleProps
             }
           >
             {copied ? (
-              <Check className="h-3.5 w-3.5 text-ok" aria-hidden="true" />
+              <Check className="h-3.5 w-3.5" aria-hidden="true" />
             ) : (
               <Copy className="h-3.5 w-3.5 text-muted" aria-hidden="true" />
             )}
