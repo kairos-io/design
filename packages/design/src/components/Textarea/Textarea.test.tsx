@@ -75,6 +75,7 @@ describe("Textarea", () => {
         <Textarea aria-label="Cloud config" lineNumbers defaultValue={Array(40).fill("x").join("\n")} />,
       );
       const area = screen.getByRole("textbox");
+      metrics(area, { lines: 40 });
       Object.defineProperty(area, "scrollTop", { value: 57, configurable: true });
       fireEvent.scroll(area);
       const list = gutterOf(area).firstElementChild as HTMLElement;
@@ -200,6 +201,86 @@ describe("Textarea", () => {
       expect(band.className).toContain("bg-status-recovery/10");
       expect(band.style.top).toBe(`${10 + 4 * 19.5}px`);
       expect(box.querySelectorAll("[data-band]")).toHaveLength(1);
+    });
+
+    it("clamps the gutter to the control's scroll range during elastic overscroll and settles exactly", async () => {
+      lineHeightOf(20);
+      const value = Array.from({ length: 60 }, (_, i) => `line ${i + 1}`).join("\n");
+      render(<Textarea aria-label="Cloud config" lineNumbers rows={10} defaultValue={value} />);
+      const area = screen.getByRole("textbox");
+      metrics(area);
+      const max = area.scrollHeight - area.clientHeight;
+      const list = gutterOf(area).firstElementChild as HTMLElement;
+      const scrollTo = (top: number) => {
+        Object.defineProperty(area, "scrollTop", { value: top, configurable: true });
+        fireEvent.scroll(area);
+      };
+      // A touchpad reports past the top and past the bottom for a moment.
+      scrollTo(-30);
+      expect(list.style.transform).toBe("translateY(0px)");
+      scrollTo(max + 50);
+      expect(list.style.transform).toBe(`translateY(-${max}px)`);
+      scrollTo(123.5);
+      expect(list.style.transform).toBe("translateY(-123.5px)");
+      const bandsLayer = area
+        .closest("[data-numbered]")
+        ?.querySelector("[aria-hidden] > .relative") as HTMLElement;
+      expect(bandsLayer.style.transform).toBe("translateY(-123.5px)");
+      // The control comes to rest at a position no scroll event announced: scrollend puts it right.
+      Object.defineProperty(area, "scrollTop", { value: 100, configurable: true });
+      fireEvent(area, new Event("scrollend"));
+      expect(list.style.transform).toBe("translateY(-100px)");
+      // Without scrollend, a frame after the last scroll event does the same.
+      Object.defineProperty(area, "scrollTop", { value: 80, configurable: true });
+      fireEvent.scroll(area);
+      Object.defineProperty(area, "scrollTop", { value: 90, configurable: true });
+      await waitFor(() => expect(list.style.transform).toBe("translateY(-90px)"));
+    });
+
+    it("follows a drag-selection's auto-scroll frame by frame until the pointer is released", async () => {
+      lineHeightOf(20);
+      const value = Array.from({ length: 60 }, (_, i) => `line ${i + 1}`).join("\n");
+      render(<Textarea aria-label="Cloud config" lineNumbers rows={10} defaultValue={value} />);
+      const area = screen.getByRole("textbox") as HTMLTextAreaElement;
+      metrics(area);
+      const box = area.closest("[data-numbered]") as HTMLElement;
+      const list = gutterOf(area).firstElementChild as HTMLElement;
+      const current = () =>
+        Array.from(box.querySelectorAll("[data-gutter] [data-current]")).map((n) => n.textContent);
+      // Fake frames: the loop queues one callback per frame, which the test runs by hand.
+      const frames: FrameRequestCallback[] = [];
+      vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => frames.push(cb));
+      vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => {});
+      const runFrame = () => act(() => frames.splice(0).forEach((cb) => cb(0)));
+      act(() => area.focus());
+      area.setSelectionRange(value.indexOf("line 2"), value.indexOf("line 2"));
+      fireEvent.pointerDown(area, { pointerId: 1, button: 0 });
+      expect(frames.length).toBeGreaterThan(0);
+      // The browser scrolls the control and grows the selection with no scroll event.
+      Object.defineProperty(area, "scrollTop", { value: 400, configurable: true });
+      area.setSelectionRange(value.indexOf("line 2"), value.indexOf("line 30") + 3);
+      runFrame();
+      expect(list.style.transform).toBe("translateY(-400px)");
+      expect(current()[0]).toBe("2");
+      expect(current().at(-1)).toBe("30");
+      expect(current()).toHaveLength(29);
+      // Another step of the auto-scroll, another frame.
+      Object.defineProperty(area, "scrollTop", { value: 700, configurable: true });
+      area.setSelectionRange(value.indexOf("line 2"), value.indexOf("line 45") + 3);
+      runFrame();
+      expect(list.style.transform).toBe("translateY(-700px)");
+      expect(current().at(-1)).toBe("45");
+      // Release: one exact sync, and the loop stops queueing frames.
+      Object.defineProperty(area, "scrollTop", { value: 710, configurable: true });
+      await act(async () => {
+        fireEvent.pointerUp(document, { pointerId: 1, button: 0 });
+      });
+      expect(list.style.transform).toBe("translateY(-710px)");
+      frames.splice(0);
+      Object.defineProperty(area, "scrollTop", { value: 900, configurable: true });
+      runFrame();
+      expect(frames).toHaveLength(0);
+      expect(list.style.transform).toBe("translateY(-710px)");
     });
   });
 });

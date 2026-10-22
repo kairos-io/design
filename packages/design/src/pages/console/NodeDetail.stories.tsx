@@ -96,7 +96,7 @@ function NodeDetailPage() {
   );
   return (
     <ConsoleShell active="Nodes">
-      <main className="flex flex-col gap-5 px-7 pt-[22px] pb-12">
+      <div className="flex flex-col gap-5 px-7 pt-[22px] pb-12">
         <PageHeader
           mono
           title="edge-store-0143"
@@ -321,7 +321,7 @@ function NodeDetailPage() {
             </Panel>
           </div>
         </div>
-      </main>
+      </div>
     </ConsoleShell>
   );
 }

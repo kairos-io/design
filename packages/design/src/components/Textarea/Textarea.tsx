@@ -78,17 +78,26 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     // null while the control is not focused.
     const [caret, setCaret] = React.useState<[number, number] | null>(null);
 
+    const settleFrame = React.useRef(0);
+    const dragFrame = React.useRef(0);
+    const dragging = React.useRef(false);
+
     // The gutter and the bands are siblings of the control that follow its
-    // scroll by translating their contents; both are kept to the control's
-    // client height so they stop above a horizontal scrollbar, and the
-    // number list reaches the control's scroll height so the two never run
-    // out of step at the bottom. The list takes the control's own line
-    // height in pixels, since a textarea and a div can resolve the same
-    // `line-height` keyword differently.
+    // scroll by translating their contents by the same offset, so the two
+    // cannot disagree. The offset is the scroll position clamped to the
+    // control's range: a touchpad's elastic overscroll reports a position
+    // past either end for a moment, and the rest position is exact again
+    // on scrollend. Both are kept to the control's client height so they
+    // stop above a horizontal scrollbar, and the number list reaches the
+    // control's scroll height so the two never run out of step at the
+    // bottom. The list takes the control's own line height in pixels, since
+    // a textarea and a div can resolve the same `line-height` keyword
+    // differently.
     const follow = React.useCallback(() => {
       const area = inner.current;
       if (!area) return;
-      const shift = `translateY(-${area.scrollTop}px)`;
+      const top = Math.min(Math.max(0, area.scrollTop), Math.max(0, area.scrollHeight - area.clientHeight));
+      const shift = `translateY(${top ? -top : 0}px)`;
       const list = gutter.current?.firstElementChild as HTMLElement | null | undefined;
       if (list) list.style.transform = shift;
       const layer = bands.current?.firstElementChild as HTMLElement | null | undefined;
@@ -111,32 +120,97 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       follow();
     }, [follow]);
 
-    // The caret is read on the next frame, after the browser has moved it,
-    // from whichever event announced the move: select, selectionchange,
-    // keys, clicks, input and scroll.
+    // The caret's line, or the span of a selection, read from the control;
+    // the gutter is re-read at the same time, since a selection that the
+    // browser scrolls to may not announce the scroll. A selection that ends
+    // on a trailing newline re-measures, as the empty last line may have
+    // just appeared.
+    const applyCaret = React.useCallback(() => {
+      const area = inner.current;
+      if (!area) return;
+      follow();
+      if (document.activeElement !== area) return;
+      const value = area.value;
+      const from = lineAt(value, area.selectionStart);
+      const to = area.selectionEnd === area.selectionStart ? from : lineAt(value, area.selectionEnd);
+      if (area.selectionEnd > 0 && value.charCodeAt(area.selectionEnd - 1) === 10) measure();
+      setCaret((prev) => (prev && prev[0] === from && prev[1] === to ? prev : [from, to]));
+    }, [follow, measure]);
+
+    // Read on the next frame, after the browser has moved the caret, from
+    // whichever event announced it: select, selectionchange, keys, clicks,
+    // input and scroll.
     const readCaret = React.useCallback(() => {
       cancelRaf(frame.current);
-      frame.current = raf(() => {
-        const area = inner.current;
-        if (!area || document.activeElement !== area) return;
-        const value = area.value;
-        const from = lineAt(value, area.selectionStart);
-        const to = area.selectionEnd === area.selectionStart ? from : lineAt(value, area.selectionEnd);
-        setCaret((prev) => (prev && prev[0] === from && prev[1] === to ? prev : [from, to]));
+      frame.current = raf(applyCaret);
+    }, [applyCaret]);
+
+    // Where there is no scrollend, the rest position is taken two frames
+    // after the last scroll event.
+    const settleLater = React.useCallback(() => {
+      cancelRaf(settleFrame.current);
+      settleFrame.current = raf(() => {
+        settleFrame.current = raf(measure);
       });
-    }, []);
+    }, [measure]);
+
+    // While the pointer drags a selection past the control's edge, the
+    // browser scrolls the control in its own loop and some engines do not
+    // dispatch a scroll event for every step; a frame loop re-reads the
+    // scroll position and the selection until the pointer is released,
+    // then takes one exact measurement.
+    const stopDrag = React.useCallback(() => {
+      if (!dragging.current) return;
+      dragging.current = false;
+      cancelRaf(dragFrame.current);
+      document.removeEventListener("pointerup", stopDrag);
+      document.removeEventListener("pointercancel", stopDrag);
+      measure();
+      applyCaret();
+    }, [measure, applyCaret]);
+
+    const startDrag = React.useCallback(() => {
+      if (dragging.current) return;
+      dragging.current = true;
+      document.addEventListener("pointerup", stopDrag);
+      document.addEventListener("pointercancel", stopDrag);
+      const tick = () => {
+        if (!dragging.current) return;
+        applyCaret();
+        dragFrame.current = raf(tick);
+      };
+      dragFrame.current = raf(tick);
+    }, [stopDrag, applyCaret]);
 
     React.useEffect(() => {
       if (!lineNumbers) return;
       measure();
       const area = inner.current;
-      if (!area || typeof ResizeObserver === "undefined") return;
-      const observer = new ResizeObserver(measure);
-      observer.observe(area);
-      return () => observer.disconnect();
+      if (!area) return;
+      area.addEventListener("scrollend", measure);
+      let observer: ResizeObserver | undefined;
+      if (typeof ResizeObserver !== "undefined") {
+        observer = new ResizeObserver(measure);
+        observer.observe(area);
+      }
+      return () => {
+        area.removeEventListener("scrollend", measure);
+        observer?.disconnect();
+      };
     }, [lineNumbers, count, measure]);
 
-    React.useEffect(() => () => cancelRaf(frame.current), []);
+    React.useEffect(
+      () => () => {
+        cancelRaf(frame.current);
+        cancelRaf(settleFrame.current);
+        cancelRaf(dragFrame.current);
+        dragging.current = false;
+        document.removeEventListener("pointerup", stopDrag);
+        document.removeEventListener("pointercancel", stopDrag);
+        document.removeEventListener("selectionchange", readCaret);
+      },
+      [stopDrag, readCaret],
+    );
 
     if (!lineNumbers) {
       return (
@@ -153,7 +227,8 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       );
     }
 
-    const { onInput, onScroll, onSelect, onKeyUp, onClick, onFocus, onBlur, style, ...rest } = props;
+    const { onInput, onScroll, onSelect, onKeyUp, onClick, onFocus, onBlur, onPointerDown, style, ...rest } =
+      props;
     const marked = highlight && highlight.length > 0 ? new Set(highlight) : undefined;
     const isCurrent = (n: number) => caret !== null && n - 1 >= caret[0] && n - 1 <= caret[1];
 
@@ -236,8 +311,13 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           }}
           onScroll={(e) => {
             follow();
+            settleLater();
             readCaret();
             onScroll?.(e);
+          }}
+          onPointerDown={(e) => {
+            startDrag();
+            onPointerDown?.(e);
           }}
           onSelect={(e) => {
             readCaret();
@@ -259,6 +339,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           onBlur={(e) => {
             document.removeEventListener("selectionchange", readCaret);
             cancelRaf(frame.current);
+            stopDrag();
             setCaret(null);
             onBlur?.(e);
           }}

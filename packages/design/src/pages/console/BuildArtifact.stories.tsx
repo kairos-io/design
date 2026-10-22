@@ -318,7 +318,7 @@ function BuildArtifactPage() {
         </header>
 
         <div className="flex flex-wrap items-start gap-5 px-7 pt-3 pb-8">
-          <main className="flex min-w-[320px] flex-1 flex-col gap-3.5 lg:min-w-[480px]">
+          <div className="flex min-w-[320px] flex-1 flex-col gap-3.5 lg:min-w-[480px]">
             {b.step === "base" && (
               <Panel title="Image source" className="gap-4 p-[22px]">
                 <ChoiceGroup
@@ -585,7 +585,7 @@ function BuildArtifactPage() {
                 {at === 5 ? "Start build" : at === 4 ? "Review" : `Next: ${STEPS[at + 1].label}`}
               </Button>
             </div>
-          </main>
+          </div>
 
           {at < 5 && (
             <aside className="sticky top-4 flex w-full flex-col gap-3.5 rounded-base bg-surface p-[18px] lg:w-[320px]">
