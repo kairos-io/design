@@ -107,7 +107,7 @@ The package follows semantic versioning. This mapping is a proposal for the main
 
 ## Who may publish
 
-The npm page "Organization roles and permissions" (https://docs.npmjs.com/organization-roles-and-permissions) lists "Create and publish packages in the organization scope" for all three roles: Owner, Admin and Member. Team access to a package is described on "Managing team access to organization packages" (https://docs.npmjs.com/managing-team-access-to-organization-packages). Whether a team's package access narrows that for an existing package is not stated on that page, and we have not checked it. Treat every member of the organisation as able to publish, and keep the member list short. Owners manage the members and teams on the organisation's page on npmjs.com. Through the workflow, anyone who can push a `v*` tag to this repository can start a release, so see the hardening below.
+The npm page "Organization roles and permissions" (https://docs.npmjs.com/organization-roles-and-permissions) lists "Create and publish packages in the organization scope" for all three roles: Owner, Admin and Member. Team access to a package is described on "Managing team access to organization packages" (https://docs.npmjs.com/managing-team-access-to-organization-packages). A team's package access may narrow that for an existing package. Treat every member of the organisation as able to publish, and keep the member list short. Owners manage the members and teams on the organisation's page on npmjs.com. Through the workflow, anyone who can push a `v*` tag to this repository can start a release, so see the hardening below.
 
 ## Make a release
 

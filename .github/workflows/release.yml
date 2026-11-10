@@ -71,8 +71,8 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-      - name: npm version
-        run: npm --version
+      - name: Check the npm version
+        run: npx --yes semver -r '>=11.5.1' "$(npm --version)"
       - name: Publish
         working-directory: packages/design
         run: npm publish --provenance --access public
