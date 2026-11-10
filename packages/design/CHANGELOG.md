@@ -4,6 +4,8 @@ All notable changes to `@kairos-io/design`. The format is [Keep a Changelog](htt
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-10
+
 ### Added
 
 - One scale retimes every piece of motion. The duration tokens are their value times a new `--duration-scale` (`calc(150ms * var(--duration-scale))`, the scale 1 by default, `motion.scale` in `tokens.json`), so setting that one property on `<html>` slows or speeds the whole system together — components, the tile field's entrances and idles, the loaders — instead of a speed prop per component. `setMotionScale(scale)` and `getMotionScale()` in `src/lib/motion.ts` write and read it on the root (`null` restores the token's 1, `0` stops motion), and the Storybook toolbar has a **Motion** switch (0.25x, 0.5x, 1x, 2x, off) that applies it to stories and docs pages alike, for reviewing an animation slowly. `prefers-reduced-motion: reduce` still sets each duration to a literal `0ms`, so it wins at any scale. `motionDuration()` now resolves a scaled token through a probe element rather than parsing the custom property's text, which a `calc()` is, and keeps the stylesheet's number where the token is absent and the synchronous zero that `Toaster` relies on.
@@ -68,12 +70,12 @@ All notable changes to `@kairos-io/design`. The format is [Keep a Changelog](htt
 - A skeleton loader and a Radix `Tooltip`. Radio cards, the fleet gauge and the sparkline have landed, as `ChoiceCard`, `Gauge` and `Sparkline`.
 - Web Components over the same tokens, for non-React surfaces that need behaviour and not only styles.
 
-## [0.1.0] - unreleased
+## [0.1.0] - 2026-11-10
 
-> Never published. There is no `v0.1.0` tag, no GitHub release and no npm
-> version: this is the first cut as it was written in October 2026, and these
-> notes ship with the first publish together with everything under Unreleased
-> above. `package.json` is still at 0.1.0, so that publish will be this version.
+> Published to npm by hand on 2026-11-10 with the token files only (`tokens.css`,
+> `tailwind.css`, `tokens.json`). There is no `v0.1.0` tag and no GitHub release.
+> The components, styles and Storybook below were not part of that publish; they
+> ship in 0.2.0, together with everything under 0.2.0 above.
 
 The first cut: the design the Kairos web projects already ship, as one package.
 
@@ -112,5 +114,6 @@ The first cut: the design the Kairos web projects already ship, as one package.
 - Every control uses the same 2px focus ring; the vanilla layer's `--shadow-focus` matches.
 - The shipped `styles.css` no longer includes utilities used only by stories and tests.
 
-[Unreleased]: https://github.com/kairos-io/design/commits/main/packages/design
+[Unreleased]: https://github.com/kairos-io/design/compare/v0.2.0...main
+[0.2.0]: https://github.com/kairos-io/design/commits/main/packages/design
 [0.1.0]: https://github.com/kairos-io/design/commits/main/packages/design

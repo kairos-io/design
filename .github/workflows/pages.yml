@@ -9,8 +9,10 @@ name: Publish to GitHub Pages
 # environment (Settings > Environments) and run this workflow on it.
 
 # A push to main publishes only once its "Design package" run is green, so a
-# red main never reaches the site. A run started by hand publishes the ref it
-# is run on as it is.
+# red main never reaches the site. Only a push run of this repository counts:
+# the branches filter below matches the head branch's name, so without the
+# event and repository check a pull request from a fork's `main` would deploy
+# its own code. A run started by hand publishes the ref it is run on as it is.
 on:
   workflow_run:
     workflows: ["Design package"]
@@ -29,7 +31,11 @@ concurrency:
 
 jobs:
   deploy:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: >-
+      ${{ github.event_name == 'workflow_dispatch' || (
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository) }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -37,14 +43,13 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
+          persist-credentials: false
           # workflow_run runs against the default branch, so take the commit
           # that CI actually checked.
           ref: ${{ github.event.workflow_run.head_sha || github.ref }}
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: packages/design/package-lock.json
       - name: Build the design package and its Storybook
         working-directory: packages/design
         run: |
