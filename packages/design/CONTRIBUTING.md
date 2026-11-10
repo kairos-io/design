@@ -47,4 +47,4 @@ A screen from a deck becomes a story under `src/pages/`, title `Pages/<Product>/
 
 ## Releasing
 
-Maintainers: bump `version` in `package.json`, move the Unreleased section in `CHANGELOG.md` under the new version with the date, tag `vX.Y.Z`, push the tag. The Release workflow publishes to npm with trusted publishing and creates the GitHub release with the tarball attached. The README of this package says what has to be set up on npm once.
+Maintainers: bump `version` in `package.json`, move the Unreleased section in `CHANGELOG.md` under the new version with the date, tag `vX.Y.Z` (annotated: `git tag -a vX.Y.Z -m "vX.Y.Z"`), push the tag. The Release workflow publishes to npm with trusted publishing and creates the GitHub release with the tarball attached. The README of this package says what has to be set up on npm once.

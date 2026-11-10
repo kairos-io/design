@@ -6,22 +6,22 @@ The Kairos design system as code: the design tokens, React components, framework
 
 ## Install
 
-From the npm registry, once the maintainers publish it (see Releasing):
+From the npm registry:
 
 ```sh
 npm install @kairos-io/design
 ```
 
-Until then, or to try a branch, every Pages build of this repository serves the packed package next to the Storybook. A fork serves its own at the same path.
+To try a branch, or the state of `main`, every Pages build of this repository serves the packed package next to the Storybook. A fork serves its own at the same path.
 
 ```sh
 npm install https://kairos-io.github.io/design/packages/design/kairos-io-design.tgz
 ```
 
-Each GitHub release of a `vX.Y.Z` tag also carries the tarball as an asset, pinned to that version. There are no releases yet, so this is the shape, not a URL that resolves today:
+Each GitHub release of a `vX.Y.Z` tag also carries the tarball as an asset, pinned to that version. For example, 0.2.0:
 
 ```sh
-npm install https://github.com/kairos-io/design/releases/download/vX.Y.Z/kairos-io-design-X.Y.Z.tgz
+npm install https://github.com/kairos-io/design/releases/download/v0.2.0/kairos-io-design-0.2.0.tgz
 ```
 
 ESM only. React 18 or 19 is a peer dependency for the components. The stylesheets have no dependencies. From a checkout of this repository, the CSS files can be used by relative path (`./packages/design/tokens.css`) with no install at all.
@@ -174,17 +174,29 @@ docs/adr/              decisions
 
 ## Releasing
 
-1. Open a pull request that bumps `version` in `package.json` and moves the Unreleased entries in `CHANGELOG.md` under the version. Merge it.
-2. Tag the merge commit and push the tag: `git tag vX.Y.Z && git push origin vX.Y.Z`.
-3. `.github/workflows/release.yml` runs the checks, fails if the tag does not match the version, creates the GitHub release with the tarball attached, and publishes to npm with provenance.
+A release is a version bump, a merge and a tag. Nobody publishes from a terminal any more: the Release workflow does it, with provenance, and nothing about it needs a secret.
 
-npm uses trusted publishing (OIDC), so the workflow stores no token. A maintainer who can publish does this once:
+1. Open a pull request that bumps `version` in `package.json` and moves the Unreleased entries in `CHANGELOG.md` under the new version, with the date and the compare link at the bottom. Merge it.
+2. Wait for the "Design package" run on the merge commit to be green.
+3. Tag the merge commit with an annotated tag and push it (the GitHub release takes its notes from the tag message): `git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin vX.Y.Z`.
+4. `.github/workflows/release.yml` runs `verify` (checks, lint, tests, build, pack; it fails if the tag does not match `version`, or if that version is already on npm), then `publish` (publishes the tarball `verify` packed, with `--provenance`, through npm trusted publishing), then `github-release` (the release with the tarball attached). A failed publish means no release.
+5. Check it: `npm view @kairos-io/design versions dist-tags --prefer-online`. npm can take a few minutes to list a new version, and its package page may say it is "taking too long to fetch the source commit"; the signature and the source commit in the Provenance box are what to look at. `latest` moves to the new version on its own.
 
-1. Publish the first version from a terminal, since a trusted publisher can only be set for a package that exists (the terminal cannot produce provenance, so turn it off for this one command): `cd packages/design && npm login && npm publish --access public --provenance=false`.
-2. On the package's settings page on npmjs.com, add a trusted publisher: GitHub Actions, organisation `kairos-io`, repository `design`, workflow file `release.yml`, and allow `npm publish` under Allowed actions. Do this when a release tag is ready to push, because a new trusted publisher must complete its first publish within two days.
-3. After the first successful publish by the workflow, set the package's publishing access to require two-factor authentication and disallow tokens.
+A published version cannot be replaced. Fix a bad release with a new version, and `npm deprecate` the bad one.
 
-A run of the Release workflow started by hand is a dry run: it builds, checks and packs, and never publishes. The first version, 0.1.0 (the tokens only), was published by hand ([kairos-io/kairos#5516](https://github.com/kairos-io/kairos/issues/5516)); the `"private"` flag is gone, so a release tag now publishes.
+A run of the Release workflow started by hand is a dry run: it builds, checks and packs, and never publishes.
+
+### What is set up on npm
+
+This is not in the repository and cannot be changed from it. It was done once, on 2026-11-10, by a maintainer in the `@kairos-io` organisation:
+
+- 0.1.0 (the tokens only) was published by hand, because a trusted publisher can only be added to a package that exists ([kairos-io/kairos#5516](https://github.com/kairos-io/kairos/issues/5516)).
+- A trusted publisher on the package's settings page: GitHub Actions, organisation `kairos-io`, repository `design`, workflow file `release.yml`, no environment, and `npm publish` ticked under Allowed actions. It validated itself on the first workflow publish (0.2.0) and stays; it is not created again for each release. If it is deleted, a new one must complete a publish within 2 days.
+- The package's publishing access is set to require two-factor authentication and disallow tokens. Do not add an npm token to the repository.
+
+### Hardening still open (optional)
+
+Anyone with write access can push a `v*` tag, and a tag starts a release. A tag ruleset for `v*` (repository Settings, Rules, Rulesets) or an environment with required reviewers would narrow that. An environment must also be named in the `publish` job and in the npm trusted publisher, which then has to be created again.
 
 ## Roadmap
 
