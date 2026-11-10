@@ -192,7 +192,7 @@ This is not in the repository and cannot be changed from it. It was done once, o
 
 - 0.1.0 (the tokens only) was published by hand, because a trusted publisher can only be added to a package that exists ([kairos-io/kairos#5516](https://github.com/kairos-io/kairos/issues/5516)).
 - A trusted publisher on the package's settings page: GitHub Actions, organisation `kairos-io`, repository `design`, workflow file `release.yml`, no environment, and `npm publish` ticked under Allowed actions. It validated itself on the first workflow publish (0.2.0) and stays; it is not created again for each release. If it is deleted, a new one must complete a publish within 2 days.
-- The package's publishing access is set to require two-factor authentication and disallow tokens. Do not add an npm token to the repository.
+- The package's publishing access must be set to require two-factor authentication and disallow tokens (check it on the settings page after a release). Do not add an npm token to the repository.
 
 ### Hardening still open (optional)
 
