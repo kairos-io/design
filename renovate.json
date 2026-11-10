@@ -13,6 +13,12 @@
       "matchManagers": ["npm"],
       "matchPackageNames": ["/^@storybook//", "storybook", "eslint-plugin-storybook"],
       "groupName": "storybook"
+    },
+    {
+      "description": "typescript-eslint supports TypeScript below 6.1 (typescript-eslint/typescript-eslint#10940); lift this when it supports 7.",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<6.1.0"
     }
   ]
 }
