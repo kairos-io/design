@@ -59,7 +59,9 @@ describe("TileBar with a current step", () => {
     // The face and the rest tile are the one parallelogram, in a box padded by the reach and pulled back by margin.
     expect(face(all[3])).toHaveAttribute("points", tilePoints);
     expect(all[3]).toHaveAttribute("viewBox", "-4.2 -4.2 30.4 22.4");
-    expect(all[3].style.margin).toBe(`${-(4.2 * (16 / 22))}px`);
+    // jsdom 31 rounds a serialised length to five decimals, so compare the number.
+    expect(all[3].style.margin).toMatch(/px$/);
+    expect(parseFloat(all[3].style.margin)).toBeCloseTo(-(4.2 * (16 / 22)), 4);
     expect(all[3]).toHaveClass("overflow-visible");
     // The faces cycle the tones from the left, the running one included.
     expect(all.slice(0, 4).map((t) => face(t)!.getAttribute("fill"))).toEqual([
