@@ -1,7 +1,6 @@
 {
   "name": "@kairos-io/design",
   "version": "0.1.0",
-  "private": true,
   "description": "The Kairos design system: design tokens, React components, framework-free styles and a Storybook, shared by the Kairos web projects.",
   "license": "Apache-2.0",
   "keywords": [
@@ -22,7 +21,7 @@
   },
   "homepage": "https://kairos-io.github.io/design/",
   "bugs": {
-    "url": "https://github.com/kairos-io/kairos/issues"
+    "url": "https://github.com/kairos-io/design/issues"
   },
   "type": "module",
   "sideEffects": [

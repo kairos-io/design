@@ -184,7 +184,7 @@ npm uses trusted publishing (OIDC), so the workflow stores no token. A maintaine
 2. On the package's settings page on npmjs.com, add a trusted publisher: GitHub Actions, organisation `kairos-io`, repository `design`, workflow file `release.yml`, and allow `npm publish` under Allowed actions. Do this when a release tag is ready to push, because a new trusted publisher must complete its first publish within two days.
 3. After the first successful publish by the workflow, set the package's publishing access to require two-factor authentication and disallow tokens.
 
-A run of the Release workflow started by hand is a dry run: it builds, checks and packs, and never publishes. The package stays `"private": true` until the maintainers remove the flag for the first publish ([kairos-io/kairos#5516](https://github.com/kairos-io/kairos/issues/5516)).
+A run of the Release workflow started by hand is a dry run: it builds, checks and packs, and never publishes. The first version, 0.1.0 (the tokens only), was published by hand ([kairos-io/kairos#5516](https://github.com/kairos-io/kairos/issues/5516)); the `"private"` flag is gone, so a release tag now publishes.
 
 ## Roadmap
 

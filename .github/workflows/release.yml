@@ -43,7 +43,7 @@ jobs:
     outputs:
       private: ${{ steps.manifest.outputs.private }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - uses: actions/setup-node@v7
@@ -93,7 +93,7 @@ jobs:
       contents: read
       id-token: write # npm trusted publishing and provenance
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       # Trusted publishing needs npm 11.5.1 or newer. Node 24 ships it.
@@ -119,7 +119,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - uses: actions/download-artifact@v7
