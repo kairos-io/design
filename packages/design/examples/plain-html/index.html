@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kairos design, no build step</title>
+    <!-- From npm: node_modules/@kairos-io/design/tokens.css and dist/components.css
+         From a CDN: https://cdn.jsdelivr.net/npm/@kairos-io/design/dist/tokens.css
+         Here: the local build, so this page works from a checkout. -->
+    <link rel="stylesheet" href="../../dist/tokens.css" />
+    <!-- The two latin font files, preloaded so the page paints in Urbanist and Martian
+         Mono instead of painting in the system face and swapping once fonts.css has
+         discovered them. From npm: node_modules/@kairos-io/design/dist/assets/fonts/ -->
+    <link
+      rel="preload"
+      href="../../dist/assets/fonts/Urbanist-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="../../dist/assets/fonts/MartianMono-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="../../dist/fonts.css" />
+    <link rel="stylesheet" href="../../dist/components.css" />
+    <script>
+      // Optional. With no data-theme on <html> the page follows the OS theme.
+      try {
+        var m = localStorage.getItem("kairos-theme");
+        if (m === "light" || m === "dark") document.documentElement.setAttribute("data-theme", m);
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <a class="brand" href="#"
+          ><img src="../../dist/assets/logos/kairos-icon-color.svg" alt="" /><span
+            >Kairos <b>Packages</b></span
+          ></a
+        >
+        <div class="meta">
+          <span class="tag surface">packages.kairos.io</span>
+          <span class="tag surface">v2.21.1</span>
+        </div>
+      </header>
+      <main class="container narrow">
+        <header class="page-header">
+          <div>
+            <p class="eyebrow">system</p>
+            <div class="title-row">
+              <h1>kairos-agent</h1>
+              <span class="badge tone-success">Published</span>
+            </div>
+            <p class="description">Built from quay.io/kairos/packages, 2026-10-09.</p>
+          </div>
+        </header>
+        <section class="card form-card">
+          <div class="field">
+            <label for="ver">Version</label>
+            <input id="ver" type="text" value="v2.21.1" />
+            <p class="fhelp">The OCI tag the package was built from.</p>
+          </div>
+          <div class="row">
+            <span class="tag">amd64</span>
+            <span class="tag">arm64</span>
+            <span class="tag outline">base distro: Hadron</span>
+          </div>
+          <div class="card-actions">
+            <a class="btn" href="#">Download</a>
+            <button class="btn outline" type="button">Copy pull command</button>
+          </div>
+        </section>
+        <div class="callout">
+          <span>Packages are rebuilt on every release of <code>kairos-io/packages</code>.</span>
+        </div>
+        <div class="terminal">
+          <div class="terminal-head"><span>terminal</span><span>copy</span></div>
+          <div class="terminal-body">
+            <pre><span class="prompt">$</span> docker pull quay.io/kairos/packages/system/kairos-agent:v2.21.1</pre>
+          </div>
+        </div>
+      </main>
+      <footer class="footer"><p>Copyright &copy; Kairos authors 2022-2026</p></footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Changelog" />
+
+# Changelog
+
+The full history is `CHANGELOG.md` in the repository, in [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format. Versions follow [Semantic Versioning](https://semver.org/): a token value change or a component prop removal is a major, a new component or token is a minor, a fix is a patch.
+
+## 0.1.0
+
+The first cut. It records the design the Kairos web projects already ship and makes it one package.
+
+**Tokens.** Brand palette, semantic colours for light and dark, the five status tones, Noto Sans and the mono stack, a type scale, the 4px spacing scale, breakpoints, layout measures, radius, shadows and motion. Generated into `tokens.css` and a Tailwind v4 `theme.css` from one TypeScript source, with a test that both themes and the OS-preference block agree.
+
+**React components.** Alert, Badge, Button, Card, Checkbox, Chip, Dialog and ConfirmDialog, EmptyState, Field, InfoTooltip, Input, Label, Logo, PageHeader, SegmentedControl, Select, Separator, Sidebar and AppShell, StatTile, StatusBadge, StatusDot, Steps, Table, Tabs, Terminal, Textarea, ThemeToggle, Toast; the `useTheme` hook; `cn()`, `phaseTone()` and the tone class maps.
+
+**Vanilla CSS.** `components.css`, the installer's classes over the tokens, for pages with no build step.
+
+**Storybook.** Every component in both themes with accessibility checks, and these foundation pages.
+
+**Not yet.** Radio cards (the installer's `.choice`), a skeleton loader, charts, the fleet `Gauge` and `Sparkline`, a `Tooltip` on Radix, and the `kairos-io/design-system` direction as a second theme.

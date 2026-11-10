@@ -1,0 +1,17 @@
+/* The distributable stylesheet: dist/styles.css.
+   Tailwind's theme, preflight and utilities (only the classes the components
+   use), the Kairos tokens, the Tailwind theme mapping and a small base. All
+   of it sits in cascade layers, so a host page's own unlayered CSS (Infima
+   in Docusaurus, say) still wins where it applies. Import once, e.g.
+   `import "@kairos-io/design/styles.css"`. */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "../../tailwind.css";
+@import "./base.css";
+
+@source "../components";
+@source "../lib";
+/* Stories and tests are not shipped, so their utilities must not be either. */
+@source not "../components/**/*.stories.tsx";
+@source not "../components/**/*.test.tsx";

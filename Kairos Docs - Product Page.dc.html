@@ -8,33 +8,34 @@
 <body>
 <x-dc>
 <helmet>
+<link href="packages/design/tokens.css" rel="stylesheet">
 <link href="assets/fonts/fonts.css" rel="stylesheet">
-<style>body{margin:0;background:#F2F1F5;font-family:Urbanist,system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',Ubuntu,Cantarell,'DejaVu Sans',sans-serif;color:#1C1B24;-webkit-font-smoothing:antialiased}a{color:#A33600;text-decoration:none}a:hover{color:#EE5007}*{box-sizing:border-box}</style>
+<style>body{margin:0;background:var(--bg);font-family:var(--font-sans);color:var(--ink);-webkit-font-smoothing:antialiased}a{color:var(--link);text-decoration:none}a:hover{color:var(--accent)}*{box-sizing:border-box}</style>
 </helmet>
-<div style="{{ vars }}">
-<div style="background:var(--bg,#F2F1F5);color:var(--ink,#1C1B24);min-height:100vh;display:flex;flex-direction:column">
-  <div style="border-bottom:1px solid var(--line,#D8D5E0);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+<div data-theme="{{ theme }}">
+<div style="background:var(--bg);color:var(--ink);min-height:100vh;display:flex;flex-direction:column">
+  <div style="border-bottom:1px solid var(--line);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
     <div style="display:flex;align-items:center;gap:32px;flex-wrap:wrap">
       <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><img src="assets/kairos-horizontal-light.svg" style="height:30px"></sc-if>
       <sc-if value="{{ isDark }}"><img src="assets/kairos-horizontal-dark.svg" style="height:30px"></sc-if>
-      <div style="display:flex;gap:22px;font-size:15px;font-weight:600"><span style="box-shadow:inset 0 -2px 0 var(--accent,#EE5007);padding:4px 0">Docs</span><span style="padding:4px 0;color:var(--sub,#494656)">Start here</span><span style="padding:4px 0;color:var(--sub,#494656)">Reference</span><span style="padding:4px 0;color:var(--sub,#494656)">Blog</span></div>
+      <div style="display:flex;gap:22px;font-size:15px;font-weight:600"><span style="box-shadow:inset 0 -2px 0 var(--accent);padding:4px 0">Docs</span><span style="padding:4px 0;color:var(--sub)">Start here</span><span style="padding:4px 0;color:var(--sub)">Reference</span><span style="padding:4px 0;color:var(--sub)">Blog</span></div>
     </div>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;border:1px solid var(--line,#D8D5E0);padding:7px 10px;border-radius:4px;white-space:nowrap">v4.3.0 ▾</span>
-      <span style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;border:1px solid var(--line,#D8D5E0);padding:6px 10px;border-radius:4px;white-space:nowrap"><img src="assets/hadron-mark.svg" style="height:16px">Hadron ▾</span>
-      <div style="width:240px;background:var(--surface,#fff);border:1.5px solid var(--line,#D8D5E0);border-radius:4px;padding:7px 12px;font-size:14px;color:var(--muted,#5C596A);display:flex;justify-content:space-between">Search docs<span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px">⌘K</span></div>
+      <span style="font-family:var(--font-mono);font-size:12px;border:1px solid var(--line);padding:7px 10px;border-radius:4px;white-space:nowrap">v4.3.0 ▾</span>
+      <span style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;border:1px solid var(--line);padding:6px 10px;border-radius:4px;white-space:nowrap"><img src="assets/hadron-mark.svg" style="height:16px">Hadron ▾</span>
+      <div style="width:240px;background:var(--surface);border:1.5px solid var(--line);border-radius:4px;padding:7px 12px;font-size:14px;color:var(--muted);display:flex;justify-content:space-between">Search docs<span style="font-family:var(--font-mono);font-size:12px">⌘K</span></div>
     </div>
   </div>
 
   <div style="display:flex;flex:1;flex-wrap:wrap">
-    <nav style="width:256px;flex:none;padding:24px 14px;display:flex;flex-direction:column;gap:22px;border-right:1px solid var(--line,#D8D5E0);background:var(--side,#ECEBF0)">
+    <nav style="width:256px;flex:none;padding:24px 14px;display:flex;flex-direction:column;gap:22px;border-right:1px solid var(--line);background:var(--side)">
       <sc-for list="{{ sidebar }}" as="g" hint-placeholder-count="3">
         <div style="display:flex;flex-direction:column;gap:1px">
-          <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#5C596A);padding:0 10px 8px">{{ g.title }}</span>
+          <span style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding:0 10px 8px">{{ g.title }}</span>
           <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="3">
             <div onClick="{{ it.pick }}" style="cursor:pointer">
-              <sc-if value="{{ it.active }}"><div style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;padding:7px 10px;border-radius:4px;background:var(--surface,#fff)"><svg width="12" height="8" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="var(--accent,#EE5007)"></polygon></svg>{{ it.label }}</div></sc-if>
-              <sc-if value="{{ it.idle }}"><div style="font-size:15px;padding:7px 10px 7px 30px;color:var(--sub,#494656)" style-hover="color:var(--ink,#1C1B24)">{{ it.label }}</div></sc-if>
+              <sc-if value="{{ it.active }}"><div style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;padding:7px 10px;border-radius:4px;background:var(--surface)"><svg width="12" height="8" viewBox="0 0 22 14"><polygon points="7,0 22,0 15,14 0,14" fill="var(--accent)"></polygon></svg>{{ it.label }}</div></sc-if>
+              <sc-if value="{{ it.idle }}"><div style="font-size:15px;padding:7px 10px 7px 30px;color:var(--sub)" style-hover="color:var(--ink)">{{ it.label }}</div></sc-if>
             </div>
           </sc-for>
         </div>
@@ -43,41 +44,41 @@
 
     <main style="flex:1;min-width:0;display:flex;flex-wrap:wrap;justify-content:center">
       <article style="flex:1;min-width:320px;max-width:800px;padding:40px clamp(24px,4vw,56px) 80px;display:flex;flex-direction:column;gap:24px">
-        <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#5C596A)">Products / {{ prod.name }}</span>
+        <span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">Products / {{ prod.name }}</span>
         <div style="display:flex;align-items:center;gap:16px"><img src="assets/kairos-mark.svg" style="height:48px"><h1 style="margin:0;font-size:clamp(38px,5vw,52px);font-weight:400;letter-spacing:-.035em;line-height:1">Kairos <b style="font-weight:700">{{ prod.name }}</b></h1></div>
-        <p style="margin:0;font-size:19px;line-height:1.6;color:var(--sub,#494656);text-wrap:pretty">{{ prod.lede }}</p>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px"><span style="background:var(--raised,#E6E4EC);padding:4px 8px;border-radius:2px">repo: {{ prod.repo }}</span><span style="background:var(--raised,#E6E4EC);padding:4px 8px;border-radius:2px">formerly: {{ prod.was }}</span></div>
+        <p style="margin:0;font-size:19px;line-height:1.6;color:var(--sub);text-wrap:pretty">{{ prod.lede }}</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;font-family:var(--font-mono);font-size:12px"><span style="background:var(--raised);padding:4px 8px;border-radius:2px">repo: {{ prod.repo }}</span><span style="background:var(--raised);padding:4px 8px;border-radius:2px">formerly: {{ prod.was }}</span></div>
 
-        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;background:var(--raised,#E6E4EC);padding:4px;border-radius:4px;margin-top:8px">
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;background:var(--raised);padding:4px;border-radius:4px;margin-top:8px">
           <sc-for list="{{ levels }}" as="l" hint-placeholder-count="3">
             <div onClick="{{ l.pick }}" style="cursor:pointer">
-              <sc-if value="{{ l.on }}"><div style="background:var(--surface,#fff);border-radius:3px;padding:10px 14px;display:flex;flex-direction:column;gap:2px"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--link,#A33600)">{{ l.k }}</span><span style="font-size:17px;font-weight:700">{{ l.t }}</span><span style="font-size:13px;color:var(--muted,#5C596A)">{{ l.who }}</span></div></sc-if>
-              <sc-if value="{{ l.off }}"><div style="border-radius:3px;padding:10px 14px;display:flex;flex-direction:column;gap:2px;color:var(--muted,#5C596A)"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px">{{ l.k }}</span><span style="font-size:17px;font-weight:600">{{ l.t }}</span><span style="font-size:13px">{{ l.who }}</span></div></sc-if>
+              <sc-if value="{{ l.on }}"><div style="background:var(--surface);border-radius:3px;padding:10px 14px;display:flex;flex-direction:column;gap:2px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">{{ l.k }}</span><span style="font-size:17px;font-weight:700">{{ l.t }}</span><span style="font-size:13px;color:var(--muted)">{{ l.who }}</span></div></sc-if>
+              <sc-if value="{{ l.off }}"><div style="border-radius:3px;padding:10px 14px;display:flex;flex-direction:column;gap:2px;color:var(--muted)"><span style="font-family:var(--font-mono);font-size:12px">{{ l.k }}</span><span style="font-size:17px;font-weight:600">{{ l.t }}</span><span style="font-size:13px">{{ l.who }}</span></div></sc-if>
             </div>
           </sc-for>
         </div>
 
         <h2 style="margin:16px 0 0;font-size:28px;font-weight:600;letter-spacing:-.02em">{{ lvl.h }}</h2>
         <p style="margin:0;font-size:17px;line-height:1.7;text-wrap:pretty">{{ lvl.body }}</p>
-        <div style="background:var(--code,#1C1B24);border-radius:4px;overflow:hidden">
-          <div style="display:flex;justify-content:space-between;padding:9px 16px;background:var(--codeBar,#272632);font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:#A9A6B8"><span>{{ lvl.file }}</span><span>copy</span></div>
-          <pre style="margin:0;padding:18px 16px;font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:13px;line-height:1.85;color:#F2F1F5;white-space:pre-wrap">{{ lvl.code }}</pre>
+        <div style="background:var(--code);border-radius:4px;overflow:hidden">
+          <div style="display:flex;justify-content:space-between;padding:9px 16px;background:var(--code-bar);font-family:var(--font-mono);font-size:12px;color:var(--code-muted)"><span>{{ lvl.file }}</span><span>copy</span></div>
+          <pre style="margin:0;padding:18px 16px;font-family:var(--font-mono);font-size:13px;line-height:1.85;color:var(--code-ink);white-space:pre-wrap">{{ lvl.code }}</pre>
         </div>
         <ol style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px">
           <sc-for list="{{ lvl.steps }}" as="s" hint-placeholder-count="3">
-            <li style="display:grid;grid-template-columns:32px 1fr;gap:12px;font-size:16px;line-height:1.6"><span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;width:26px;height:26px;border-radius:2px;background:var(--raised,#E6E4EC);display:flex;align-items:center;justify-content:center">{{ s.n }}</span><span>{{ s.t }}</span></li>
+            <li style="display:grid;grid-template-columns:32px 1fr;gap:12px;font-size:16px;line-height:1.6"><span style="font-family:var(--font-mono);font-size:12px;width:26px;height:26px;border-radius:2px;background:var(--raised);display:flex;align-items:center;justify-content:center">{{ s.n }}</span><span>{{ s.t }}</span></li>
           </sc-for>
         </ol>
-        <div style="background:var(--surface,#fff);border-radius:4px;padding:16px 18px;display:grid;grid-template-columns:18px 1fr;gap:12px;font-size:16px;line-height:1.55"><svg width="14" height="14" viewBox="0 0 12 12" style="margin-top:5px"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="var(--accent,#EE5007)"></polygon></svg><span><b>{{ lvl.bridgeT }}</b> {{ lvl.bridge }} <span onClick="{{ nextLevel }}" style="cursor:pointer;color:var(--link,#A33600);font-weight:700">{{ lvl.cta }} →</span></span></div>
+        <div style="background:var(--surface);border-radius:4px;padding:16px 18px;display:grid;grid-template-columns:18px 1fr;gap:12px;font-size:16px;line-height:1.55"><svg width="14" height="14" viewBox="0 0 12 12" style="margin-top:5px"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="var(--accent)"></polygon></svg><span><b>{{ lvl.bridgeT }}</b> {{ lvl.bridge }} <span onClick="{{ nextLevel }}" style="cursor:pointer;color:var(--link);font-weight:700">{{ lvl.cta }} →</span></span></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px">
-          <div style="border:1px solid var(--line,#D8D5E0);border-radius:4px;padding:14px 16px;display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:var(--muted,#5C596A)">Previous</span><span style="font-size:17px;font-weight:700">Kairos Installer</span></div>
-          <div style="border:1px solid var(--line,#D8D5E0);border-radius:4px;padding:14px 16px;display:flex;flex-direction:column;gap:2px;text-align:right"><span style="font-size:13px;color:var(--muted,#5C596A)">Next</span><span style="font-size:17px;font-weight:700">Kairos Operator</span></div>
+          <div style="border:1px solid var(--line);border-radius:4px;padding:14px 16px;display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:var(--muted)">Previous</span><span style="font-size:17px;font-weight:700">Kairos Installer</span></div>
+          <div style="border:1px solid var(--line);border-radius:4px;padding:14px 16px;display:flex;flex-direction:column;gap:2px;text-align:right"><span style="font-size:13px;color:var(--muted)">Next</span><span style="font-size:17px;font-weight:700">Kairos Operator</span></div>
         </div>
       </article>
       <aside style="width:220px;flex:none;padding:40px 20px;display:flex;flex-direction:column;gap:10px;font-size:14px">
-        <span style="font-family:'Martian Mono',ui-monospace,'SF Mono',Menlo,'Cascadia Mono',Consolas,'DejaVu Sans Mono','Liberation Mono','Noto Sans Mono',monospace;font-size:12px;color:var(--muted,#5C596A);padding-bottom:4px">On this page</span>
+        <span style="font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-bottom:4px">On this page</span>
         <sc-for list="{{ toc }}" as="t" hint-placeholder-count="5"><span style="color:{{ t.c }};font-weight:{{ t.w }}">{{ t.l }}</span></sc-for>
-        <span style="margin-top:18px;font-size:14px;font-weight:700;color:var(--link,#A33600)">Edit this page</span>
+        <span style="margin-top:18px;font-size:14px;font-weight:700;color:var(--link)">Edit this page</span>
       </aside>
     </main>
   </div>
@@ -88,10 +89,8 @@
 class Component extends DCLogic {
   state = { lvl: 0, prod: 'Console' };
   renderVals() {
-    const dark = (this.props.theme ?? 'light') === 'dark';
-    const vars = dark
-      ? { '--bg': '#15141C', '--side': '#1A1922', '--surface': '#1F1E28', '--raised': '#33313F', '--line': '#33313F', '--ink': '#F2F1F5', '--sub': '#CBC8D6', '--muted': '#A9A6B8', '--accent': '#FF7442', '--link': '#FF7442', '--code': '#0F0E15', '--codeBar': '#1F1E28' }
-      : { '--bg': '#F2F1F5', '--side': '#ECEBF0', '--surface': '#FFFFFF', '--raised': '#E6E4EC', '--line': '#D8D5E0', '--ink': '#1C1B24', '--sub': '#494656', '--muted': '#5C596A', '--accent': '#EE5007', '--link': '#A33600', '--code': '#1C1B24', '--codeBar': '#272632' };
+    // The colours come from packages/design/tokens.css (linked in the helmet); data-theme on the root picks light or dark.
+    const theme = this.props.theme ?? 'light', dark = theme === 'dark';
     const P = {
       Factory: { stage: 'Build', repo: 'kairos-io/kairos-init', was: 'kairos-init', lede: 'Kairosify any container image: add kairos-init to your Dockerfile and build with Docker or Podman. The Factory section in the Kairos console does the same for you, then produces boot artifacts.' },
       Console: { stage: 'All stages', repo: 'kairos-io/kairos', was: 'AuroraBoot', lede: 'The console you run to kairosify images, deploy machines and manage your fleet. Formerly AuroraBoot, it now ships in the kairos CLI with three sections: Factory, Deploy and Fleet.' },
@@ -107,9 +106,9 @@ class Component extends DCLogic {
       { k: 'L3', t: 'Extend', who: 'Contributors, OEMs', h: 'Keys, hooks and internals', body: 'The console keeps Secure Boot keys for UKI artifacts and runs hooks when nodes register, so you can attest custom hardware.', file: 'fleet.yaml', code: 'keystore:\n  secureboot:\n    pk: /keys/PK.auth\nhooks:\n  register: ./hooks/attest.sh', steps: ['Generate keys with kairos keys generate.', 'Enroll them on first boot.', 'Reject nodes that fail attestation in your hook.'], bridgeT: 'Back to basics?', bridge: 'The guided path stays one click away.', cta: 'Go to L1' }
     ];
     const lv = this.state.lvl, cur = this.state.prod;
-    const ink = dark ? '#F2F1F5' : '#1C1B24', muted = dark ? '#A9A6B8' : '#5C596A';
+    const ink = 'var(--ink)', muted = 'var(--muted)';
     return {
-      vars, isLight: !dark, isDark: dark,
+      theme, isLight: !dark, isDark: dark,
       prod: { name: cur, ...P[cur] },
       levels: L.map((l, i) => ({ ...l, on: i === lv, off: i !== lv, pick: () => this.setState({ lvl: i }) })),
       lvl: { ...L[lv], steps: L[lv].steps.map((t, i) => ({ n: i + 1, t })) },

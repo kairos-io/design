@@ -1,0 +1,55 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Adoption" />
+
+# Adoption
+
+<div className="[&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:my-4 [&_li]:my-1">
+
+What each Kairos web project does to take the package, in the order [kairos-io/kairos#5083](https://github.com/kairos-io/kairos/issues/5083) set: the tokens first, then the components, then each surface. The screens under **Pages** in this Storybook are the targets, built from the decks.
+
+## The Kairos Installer ([#5513](https://github.com/kairos-io/kairos/issues/5513))
+
+No build step and no network, so it takes the plain stylesheets.
+
+1. Vendor `tokens.css` and `dist/components.css` into the installer's web root, and `fonts.css` with `assets/fonts` if the ISO should carry the brand faces (a `go:generate` or Makefile target that copies them from the npm package keeps them current).
+2. Replace the token blocks and the component classes at the top of its `style.css` with `@import "tokens.css"; @import "components.css";`. The class names are the installer's own, so the pages and the wizard script do not change.
+3. Keep the page-specific layout in `style.css`: the shell, the review grid, the editor, the breakpoints.
+4. Set `data-theme` on `<html>` from the stored choice; the package's `inlineThemeScript()` is the same five lines.
+
+Gains: the installer can never drift from the console again, and the Kairos Installer deck is what it looks like.
+
+What changed in `components.css` compared with the installer's own stylesheet, for the review: `.badge` and `.status` are surface chips with a tone diamond (`.tone-*` colours the diamond, `.outline` draws it hollow), never a tinted fill; `.banner`, `.alert` and `.confirm` are surfaces with a diamond; `.btn.secondary` is the ink button and `.btn.outline` a 1.5px ink hairline, both at the deck's 15px; `.card` has no border; `.sidebar` and `.topbar` are the canvas with a hairline; inputs are mono on a surface with a 1.5px line that turns to ink on focus; `.choice` is a surface card with an ink border when selected. New: `.tag`, `.segmented`, `.toggle`, `.kv`, `.callout`, `.tilebar`, `.terminal`, `.code.editor`, `.disk-layout`, `.stat-label` and `.stat-value`. The Pages/Kairos Installer stories render each step from these two files alone.
+
+## The Kairos console ([#5514](https://github.com/kairos-io/kairos/issues/5514))
+
+AuroraBoot's UI becomes the Kairos console. It is React 19 on Tailwind v4 already, so the move is a rename plus deletion.
+
+1. `npm install @kairos-io/design`.
+2. In the app's `index.css`, replace the `:root`, `.dark` and `@theme inline` blocks with `@import "@kairos-io/design/tailwind.css";` and add `@source "../node_modules/@kairos-io/design/dist";`.
+3. Rename the utilities: `bg-background` is `bg-bg`, `text-foreground` is `text-ink`, `text-muted-foreground` is `text-muted`, `bg-card` is `bg-surface`, `border-border` is `border-line`, `bg-primary text-primary-foreground` is `bg-accent text-on-accent`. The compiler reports every `rounded-md` and `shadow-sm` that is left, because the theme removes them.
+4. Replace the theme helper with the package's `applyTheme` and `inlineThemeScript("auroraboot_theme")`, so the stored key stays the same for existing users.
+5. Replace `components/ui/*` imports with imports from `@kairos-io/design`, one file at a time, running the tests after each.
+
+Gains: the component tree shrinks, and a token change lands in the installer, the docs and the console in the same release.
+
+## The docs site and kairos.io ([#5515](https://github.com/kairos-io/kairos/issues/5515))
+
+Docusaurus keeps Infima and takes the values.
+
+1. `npm install @kairos-io/design`.
+2. At the top of `src/css/custom.css`, `@import "@kairos-io/design/tokens.css"; @import "@kairos-io/design/fonts.css";` and delete the palette block and the Google Fonts import.
+3. Map Infima onto the tokens: `--ifm-color-primary: var(--accent)`, `--ifm-background-color: var(--bg)`, `--ifm-background-surface-color: var(--surface)`, `--ifm-font-family-base: var(--font-sans)`, and the same under `[data-theme="dark"]`, which is the attribute both systems already use.
+4. The homepage and the product page are React, so they can use the components and the tiles directly; the **Pages** stories show both screens.
+
+## hadron-linux.io
+
+The same package with `data-variant="hadron"` on `<html>`. Nothing else changes; the [Hadron](?path=/docs/foundations-hadron--docs) page has the rules.
+
+## Checking an adoption
+
+- Open the app in both themes and compare against the Storybook of the same version, and against the deck.
+- Run the a11y addon's rules on the adopted screens; the package's stories already pass them.
+- Grep the app for `#[0-9a-f]{6}` and Tailwind palette classes. Each hit is either a token to add to `tokens.json` or a bug.
+
+</div>

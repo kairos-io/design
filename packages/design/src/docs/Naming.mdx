@@ -1,0 +1,136 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Foundations/Naming" />
+
+# Naming
+
+One source of truth for names: what stays a product, what became functionality, and what changed. This page carries the deck [Kairos - Naming](https://kairos-io.github.io/design/Kairos%20-%20Naming.dc.html) in this repository; when the two differ, the deck wins and this page is wrong.
+
+## AuroraBoot is now part of Kairos
+
+AuroraBoot is merged into the kairos repo (`kairos-io/kairos`). It no longer has its own name. You download the `kairos` CLI. The web UI is "the Kairos console", started with `kairos ui`. "Console" is a lowercase description, not a product name: write "the Kairos console", never "Kairos Console" as a brand, and not "Kairos Platform".
+
+## Before → after
+
+If you used the old name, use the new one. Everything AuroraBoot did now lives in the Kairos console.
+
+| Before                               | After                                                 |
+| ------------------------------------ | ----------------------------------------------------- |
+| AuroraBoot                           | Kairos (the `kairos` CLI)                             |
+| AuroraBoot web UI                    | the Kairos console (`kairos ui`)                      |
+| `auroraboot build-*` · artifacts     | console › Factory                                     |
+| `auroraboot netboot` · BMC           | console › Deploy                                      |
+| `auroraboot nodes` · groups          | console › Fleet                                       |
+| `kairos-agent` web UI on `:8080`     | Kairos Installer (unchanged name, on-node install UI) |
+| `kairos-agent`                       | Kairos Agent (named in docs at Level 3 only)          |
+| flavors (`ubuntu`, `alpine`, …)      | base distros: "Kairos on Ubuntu" (proposed)           |
+| "Kairos Platform" (earlier proposal) | Not adopted for now. Don't use it.                    |
+
+## Products and functionality
+
+A product has its own name, repo and binary. In UI chrome it shows the mark plus its bold name. Functionality is part of Kairos and has no product name.
+
+### Products
+
+| Lockup               | Job                                                                                                 | Stage · repo · binary                                      |
+| -------------------- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| **Kairos**           | The project, the suite and the kairos CLI. Describe it as "an immutable Linux platform", lowercase. | all stages · kairos-io/kairos · `kairos`                   |
+| Kairos **Factory**   | Turns any container image into a Kairos image.                                                      | Build · kairos-io/kairos-init · binary stays `kairos-init` |
+| Kairos **Installer** | On-node install UI.                                                                                 | Deploy · kairos-io/kairos-agent · `:8080`                  |
+| Kairos **Operator**  | Day-2 operations on Kubernetes.                                                                     | Operate · kairos-io/kairos-operator                        |
+| Kairos **Lab**       | Local VMs for demos and proofs of concept.                                                          | Learn · kairos-io/kairos-lab                               |
+| **Hadron**           | A separate Linux distribution. Ships with every Kairos release, never alone.                        | hadron-linux.io                                            |
+
+### Functionality
+
+**Kairos console**: the web UI, started with `kairos ui`. Write "the Kairos console", then "the console". Its sections are page titles, not names in the chrome:
+
+| Section | Holds                 |
+| ------- | --------------------- |
+| Factory | artifacts, extensions |
+| Deploy  | BMC, netboot, import  |
+| Fleet   | nodes, groups         |
+
+**Factory ≠ Kairos Factory.** Factory, the console section, and Kairos Factory (`kairos-init`) are related but not the same. The section uses `kairos-init` under the hood.
+
+**In-product chrome.** Products: mark, regular "Kairos", bold product name (Kairos **Installer**). The console shows the mark and a bold "Kairos" alone; its sections are page titles, not names in the chrome.
+
+## Hadron
+
+Hadron is a separate Linux distribution. It keeps its own name and its own logo, in Hadron blue. It ships with every Kairos release.
+
+| Rule    | Form                            | Why                                                                                           |
+| ------- | ------------------------------- | --------------------------------------------------------------------------------------------- |
+| ✓ write | Hadron by Kairos                | The short pairing, for lockups and titles.                                                    |
+| ✓ write | Ships with every Kairos release | The sentence form, for body copy.                                                             |
+| ✕ never | Kairos Hadron                   | Hadron is not a Kairos sub-product. Never prefix it, never swap its logo for the Kairos mark. |
+
+## Base distros (proposal)
+
+Kairos runs on more than one Linux. The docs call these "flavors", but nobody says that when they talk about it. We propose **base distro**, a word the console and the docs already lean on ("Base image", "Bring your own base").
+
+| Term        | Meaning                                                                                                                                                | Examples                                        |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------- |
+| base distro | The Linux distribution Kairos runs on. Say "Kairos on Ubuntu"; in lists, "base distro: Ubuntu 24.04".                                                  | Hadron · Ubuntu · Fedora · Alpine · Rocky       |
+| base image  | The exact container image you start from. Factory turns it into a Kairos image with `kairos-init`. The console already labels this field "Base image". | `ubuntu:24.04` · `quay.io/kairos/hadron:v0.5.1` |
+
+| Name             | Image                          |
+| ---------------- | ------------------------------ |
+| Hadron by Kairos | `quay.io/kairos/hadron:v0.5.1` |
+| Kairos on Ubuntu | `ubuntu:24.04`                 |
+| Kairos on Fedora | `fedora:42`                    |
+| Kairos on Alpine | `alpine:3.22`                  |
+| Kairos on Rocky  | `rockylinux:9`                 |
+
+## Names by docs level
+
+The docs teach Kairos in three levels. Each level brings in only the names that reader needs.
+
+| Level         | Who                           | Names                                                               | Note                                                                                   |
+| ------------- | ----------------------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| L1 · Guided   | First touch, proof of concept | the Kairos console · Kairos Installer · Hadron                      | No CLI, no internals. Click through the console and install a node.                    |
+| L2 · Automate | Platform engineers            | the `kairos` CLI · Kairos Factory (`kairos-init`) · Kairos Operator | Every console action as a command, in CI and on Kubernetes.                            |
+| L3 · Extend   | Contributors, OEMs            | Kairos Agent (`kairos-agent`) · keys and hooks                      | The only level that names Kairos Agent. Before L3, the on-node UI is Kairos Installer. |
+
+## CLI · git-style
+
+Every tool keeps its own binary. `kairos <command>` is the entry point.
+
+```sh
+# start the Kairos console
+$ kairos ui
+# build an ISO (console › Factory)
+$ kairos artifacts create --iso --image quay.io/kairos/hadron:v0.5.1
+# roll out to a group (console › Fleet)
+$ kairos fleet rollout --group retail-eu
+# Kairos Factory keeps its own binary
+$ kairos-init
+```
+
+| Binary         | Does                                                               |
+| -------------- | ------------------------------------------------------------------ |
+| `kairos`       | The Kairos CLI. Entry point for everything, including the console. |
+| `kairos-init`  | Kairos Factory. Run it in your Dockerfile.                         |
+| `kairos-agent` | Runs on the node. Serves Kairos Installer on :8080.                |
+
+## Do and don't
+
+Name the thing people use. Show commands in mono.
+
+| ✓ Write                                       | ✕ Not                    |
+| --------------------------------------------- | ------------------------ |
+| Start the Kairos console with `kairos ui`     | Launch Kairos Console    |
+| Open Fleet in the Kairos console              | Open Kairos Fleet        |
+| Build an ISO in the console's Factory section | Use AuroraBoot to build  |
+| Hadron by Kairos                              | Kairos Hadron            |
+| Kairos on Ubuntu                              | the Ubuntu flavor        |
+| Kairos Installer                              | the AuroraBoot installer |
+
+## What doesn't change
+
+- Logos
+- Colors
+- Hadron: name and logo
+- The `kairos-init` binary name
+- The Kairos Installer name
+- Repo URLs, except AuroraBoot (now `kairos-io/kairos`)

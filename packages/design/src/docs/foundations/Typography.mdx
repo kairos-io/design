@@ -1,0 +1,35 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import { FontStacks, TypeScale, Weights } from "../../../.storybook/blocks/index.ts";
+
+<Meta title="Foundations/Typography" />
+
+# Typography
+
+## Faces
+
+Urbanist, a geometric sans, for everything people read. Martian Mono, set at its normal width, for commands, versions, hostnames and metadata. Both are self-hosted in the package under `assets/fonts` and loaded by `fonts.css`, so a page renders the same offline, behind font blockers and without a third-party request. Sentence case everywhere.
+
+The stacks carry full system fallbacks for Linux, macOS, Windows and Android, because the installer runs on machines that have never seen a web font.
+
+<FontStacks />
+
+## Weights
+
+<Weights />
+
+Regular for body, semibold for titles, labels and buttons, bold for emphasis inside a line. There is no light weight.
+
+## Scale
+
+Eight steps, from the one display line on a homepage to the mono metadata. Nothing goes below 12px; the render check fails a page that does.
+
+<TypeScale />
+
+## Rules
+
+- Headlines are semibold with negative tracking that tightens as the size grows: display at -4.5%, h1 at -3.5%, h2 at -3%, h3 at -2%.
+- Body and body-large set 1.6 line height. Titles set about 1.1.
+- Labels (form labels, table headers) are 14px semibold; buttons and tabs are 15px, bold on the accent button and semibold elsewhere; the small button is 13px.
+- Anything an operator might copy (a command, a version, a hostname, a disk path) is mono at 13px: `Input`, `Textarea` and `SelectTrigger` take `mono` for it, and tags are mono at 12px.
+- Text never goes below 12px, and 12px is only ever mono metadata.
+- Lines stay under about 70 characters for descriptions (`max-w-[70ch]`); `text-wrap: pretty` on paragraphs, `balance` on titles.
