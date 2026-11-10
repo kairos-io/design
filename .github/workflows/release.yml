@@ -9,12 +9,8 @@ name: Release
 # page (organisation kairos-io, repository design, workflow file release.yml,
 # with `npm publish` allowed).
 #
-# While packages/design/package.json carries `"private": true` the package
-# cannot go to the registry at all, so the publish job is skipped rather than
-# left to fail at `npm publish` with EPRIVATE. The GitHub release with the
-# tarball is still made, so the version can be installed from it in the
-# meantime; once the private flag is dropped, a failed publish holds the
-# release back, because github-release waits for publish.
+# The GitHub release is made only after the publish succeeded, so there is no
+# release for a version that npm rejected.
 #
 # What verify checks is what gets published: the publish job takes the tarball
 # verify packed and uploaded, instead of building the tree a second time.
@@ -40,8 +36,6 @@ jobs:
     defaults:
       run:
         working-directory: packages/design
-    outputs:
-      private: ${{ steps.manifest.outputs.private }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -51,7 +45,7 @@ jobs:
           node-version: 24
           cache: npm
           cache-dependency-path: packages/design/package-lock.json
-      - run: npm ci --no-audit --no-fund
+      - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npm run check:tokens
       - run: npm run lint
       - run: npm run typecheck
@@ -67,13 +61,13 @@ jobs:
             echo "Tag $TAG does not match packages/design/package.json version $version" >&2
             exit 1
           fi
-      - name: Can the package go to the registry?
-        id: manifest
+      - name: The version is not on npm yet
+        if: github.ref_type == 'tag'
         run: |
-          private=$(node -p "require('./package.json').private === true")
-          echo "private=$private" >> "$GITHUB_OUTPUT"
-          if [ "$private" = "true" ]; then
-            echo "::notice::packages/design/package.json is private; the publish job will be skipped."
+          version=$(node -p "require('./package.json').version")
+          if npm view "@kairos-io/design@$version" version >/dev/null 2>&1; then
+            echo "@kairos-io/design@$version is already on npm; bump the version and tag again" >&2
+            exit 1
           fi
       - name: Pack
         run: npm pack
@@ -87,7 +81,7 @@ jobs:
     name: Publish to npm
     needs: verify
     # A manual run can pick a tag as its ref, so check the event, not only the ref.
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') && needs.verify.outputs.private != 'true'
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -112,9 +106,7 @@ jobs:
   github-release:
     name: GitHub release with the tarball
     needs: [verify, publish]
-    # Runs when publish succeeded or was skipped because the package is private,
-    # never when it failed: no release for a version that npm rejected.
-    if: ${{ !cancelled() && !failure() && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -128,4 +120,7 @@ jobs:
       - name: Create the release and attach the package
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-from-tag --verify-tag kairos-io-design-*.tgz
+        run: |
+          # A re-run of this job finds the release already made.
+          gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1 ||
+            gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-from-tag --verify-tag kairos-io-design-*.tgz

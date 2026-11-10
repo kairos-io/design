@@ -8,7 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@kairos-io/design": "file:../../kairos-io-design-0.1.0.tgz",
+    "@kairos-io/design": "file:../../kairos-io-design-0.2.0.tgz",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },
