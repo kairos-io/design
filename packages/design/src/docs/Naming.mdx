@@ -24,6 +24,7 @@ If you used the old name, use the new one. Everything AuroraBoot did now lives i
 | `kairos-agent` web UI on `:8080`     | Kairos Installer (unchanged name, on-node install UI) |
 | `kairos-agent`                       | Kairos Agent (named in docs at Level 3 only)          |
 | flavors (`ubuntu`, `alpine`, …)      | base distros: "Kairos on Ubuntu" (proposed)           |
+| Hadron Desktop                       | Isotope, built on Hadron                              |
 | "Kairos Platform" (earlier proposal) | Not adopted for now. Don't use it.                    |
 
 ## Products and functionality
@@ -40,6 +41,7 @@ A product has its own name, repo and binary. In UI chrome it shows the mark plus
 | Kairos **Operator**  | Day-2 operations on Kubernetes.                                                                     | Operate · kairos-io/kairos-operator                        |
 | Kairos **Lab**       | Local VMs for demos and proofs of concept.                                                          | Learn · kairos-io/kairos-lab                               |
 | **Hadron**           | A separate Linux distribution. Ships with every Kairos release, never alone.                        | hadron-linux.io                                            |
+| **Isotope**          | A distribution built on Hadron, for desktops, servers and AI agents. One base, many editions.       | kairos-community/hadron-desktop · rename planned           |
 
 ### Functionality
 
@@ -64,6 +66,28 @@ Hadron is a separate Linux distribution. It keeps its own name and its own logo,
 | ✓ write | Hadron by Kairos                | The short pairing, for lockups and titles.                                                    |
 | ✓ write | Ships with every Kairos release | The sentence form, for body copy.                                                             |
 | ✕ never | Kairos Hadron                   | Hadron is not a Kairos sub-product. Never prefix it, never swap its logo for the Kairos mark. |
+
+## Isotope
+
+Isotope is a Linux distribution built on Hadron, with the Kairos lifecycle: A/B upgrades, encrypted disks, extensions. It was called Hadron Desktop until it grew a server and an agent edition. Like an isotope, every edition is the same element with a different make-up. It has its own name; its logo is not designed yet.
+
+| Rule    | Form                                             | Why                                                                                |
+| ------- | ------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| ✓ write | Isotope, built on Hadron                         | The short pairing, for lockups and titles.                                         |
+| ✓ write | Built on Hadron, by Kairos                       | The sentence form, for body copy.                                                  |
+| ✓ write | Isotope Server                                   | Editions are a plain suffix: Isotope plus the edition name.                        |
+| ✕ never | Hadron Desktop · Kairos Isotope · Hadron Isotope | Isotope is not an edition of Hadron and not a Kairos sub-product. Never prefix it. |
+
+| Edition        | What it is                              |
+| -------------- | --------------------------------------- |
+| Isotope Sway   | tiling, Wayland                         |
+| Isotope COSMIC | full desktop, Wayland                   |
+| Isotope Niri   | scrolling tiling, Wayland               |
+| Isotope i3     | tiling, X11                             |
+| Isotope Server | no desktop: SSH, Docker, NetworkManager |
+| Isotope Agent  | a sandbox for AI agents                 |
+
+Open: the logo and an accent colour. Orange is Kairos and blue is Hadron, so Isotope needs a third, kept away from the immutable-OS looks in the landscape exploration. Until then, write the name in Urbanist bold with no mark. Binaries, D-Bus names and image paths still say `hadron-*`; the rename there comes with a compatibility period.
 
 ## Base distros (proposal)
 
@@ -123,6 +147,7 @@ Name the thing people use. Show commands in mono.
 | Open Fleet in the Kairos console              | Open Kairos Fleet        |
 | Build an ISO in the console's Factory section | Use AuroraBoot to build  |
 | Hadron by Kairos                              | Kairos Hadron            |
+| Isotope, built on Hadron                      | Hadron Desktop           |
 | Kairos on Ubuntu                              | the Ubuntu flavor        |
 | Kairos Installer                              | the AuroraBoot installer |
 
