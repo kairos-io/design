@@ -4,6 +4,10 @@ All notable changes to `@kairos-io/design`. The format is [Keep a Changelog](htt
 
 ## [Unreleased]
 
+### Added
+
+- `IsotopeMark` and `IsotopeLogo`, the Isotope artwork under `assets/logos/isotope-*`, and `isotopeLogoAssets`. Isotope is the distribution built on Hadron (formerly Hadron Desktop). The mark is six triangles of the Tessellate hexagon in three limes, one pushed out; the gaps between them are part of the shapes, so the mark works on any surface. The horizontal lockup sets the wordmark in Urbanist Bold, outlined, in the Hadron lockup's ink on light surfaces and white on dark ones. The three limes are new brand tokens: `isotope-light`, `isotope-lime` and `isotope-deep`. The root `assets/` has the deck copies: `isotope-mark.svg`, `isotope-mark-white.svg`, `isotope-horizontal-light.svg` and `isotope-horizontal-dark.svg`.
+
 ## [0.2.0] - 2026-11-10
 
 ### Added

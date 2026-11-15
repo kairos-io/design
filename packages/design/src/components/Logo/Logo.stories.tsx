@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { HadronLogo, HadronMark, KairosLogo, KairosMark } from "./Logo.tsx";
+import { HadronLogo, HadronMark, IsotopeLogo, IsotopeMark, KairosLogo, KairosMark } from "./Logo.tsx";
 
 const meta = {
   title: "Components/Logo",
@@ -9,7 +9,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The Kairos and Hadron marks and lockups, inlined with the shapes and fills unchanged. The marks do not change: pick the rendition by the surface (colour on light surfaces, the dark lockup on dark surfaces, white on a flat fill or photography, black for one-colour print), never recolour, and never place a mark on an orange or blue fill or over a tile field. Keep one mark-height of clear space around the horizontal logo and 24px as the minimum height on screen. Kairos is a CNCF project and its name and logos are trademarks of The Linux Foundation; Hadron is a separate Linux distribution with its own name and logo, maintained by the Kairos team.",
+          "The Kairos, Hadron and Isotope marks and lockups, inlined with the shapes and fills unchanged. The marks do not change: pick the rendition by the surface (colour on light surfaces, the dark lockup on dark surfaces, white on a flat fill or photography, black for one-colour print), never recolour, and never place a mark on an orange, blue or lime fill or over a tile field. Keep one mark-height of clear space around the horizontal logo and 24px as the minimum height on screen. Kairos is a CNCF project and its name and logos are trademarks of The Linux Foundation; Hadron is a separate Linux distribution with its own name and logo, maintained by the Kairos team; Isotope is a distribution built on Hadron, with its own name and logo.",
       },
     },
   },
@@ -85,8 +85,34 @@ export const Hadron: Story = {
   ),
 };
 
+export const Isotope: Story = {
+  name: "Isotope: every rendition",
+  render: () => (
+    <div className="grid gap-4">
+      <div className="grid items-center gap-6 rounded-base border bg-surface p-6 text-ink sm:grid-cols-[auto_1fr]">
+        <IsotopeMark height={64} label="Isotope mark, colour" />
+        <IsotopeLogo height={64} label="Isotope horizontal logo, light surface" />
+      </div>
+      <div
+        className="grid items-center gap-6 rounded-base p-6 sm:grid-cols-[auto_1fr]"
+        data-theme="dark"
+        style={{ background: "var(--bg)", color: "var(--ink)" }}
+      >
+        <IsotopeMark height={64} label="Isotope mark on a dark surface" />
+        <IsotopeLogo variant="dark" height={64} label="Isotope horizontal logo, dark surface" />
+      </div>
+      <div className="grid items-center gap-6 rounded-base bg-ink p-6 text-bg sm:grid-cols-[auto_1fr]">
+        <IsotopeMark variant="white" height={64} label="Isotope mark, white" />
+        <span className="text-sm opacity-70">
+          The lockup has no one-colour rendition; use the mark alone.
+        </span>
+      </div>
+    </div>
+  ),
+};
+
 export const Together: Story = {
-  name: "Kairos and Hadron together",
+  name: "Kairos, Hadron and Isotope together",
   render: () => (
     <div className="grid gap-4">
       <div className="flex flex-wrap items-center gap-8 rounded-base border bg-surface p-6 text-ink">
@@ -95,6 +121,10 @@ export const Together: Story = {
           ·
         </span>
         <HadronLogo height={36} />
+        <span className="text-muted" aria-hidden="true">
+          ·
+        </span>
+        <IsotopeLogo height={36} />
       </div>
       <div className="flex flex-wrap items-center gap-6 rounded-base border bg-surface p-6 text-ink">
         <span className="inline-flex items-center gap-2 text-lg">
@@ -108,6 +138,10 @@ export const Together: Story = {
         <span className="inline-flex items-center gap-2 text-lg">
           <HadronMark height={20} decorative />
           <b className="font-bold">Hadron</b>
+        </span>
+        <span className="inline-flex items-center gap-2 text-lg">
+          <IsotopeMark height={20} decorative />
+          <b className="font-bold">Isotope</b>
         </span>
       </div>
     </div>
@@ -124,6 +158,8 @@ export const Sizes: Story = {
       <KairosLogo height={36} label="Kairos, top bar size" />
       <HadronMark height={24} label="Hadron, 24px minimum" />
       <HadronLogo height={36} label="Hadron, top bar size" />
+      <IsotopeMark height={24} label="Isotope, 24px minimum" />
+      <IsotopeLogo height={36} label="Isotope, top bar size" />
     </div>
   ),
 };

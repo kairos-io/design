@@ -3,12 +3,15 @@
 // `node scripts/build-logos.ts` after changing an asset. The shapes and fills
 // are copied unchanged: the artwork is the brand.
 //
-// Two brands, one scheme: <brand>-<layout>-<rendition>.svg. The Kairos files
+// Three brands, one scheme: <brand>-<layout>-<rendition>.svg. The Kairos files
 // are the CNCF artwork (icon, horizontal, stacked; color, white, black) plus
 // the dark-surface lockup from the decks (horizontal-dark: colour mark, white
 // wordmark). The Hadron files are the decks' (icon color and white; the
-// horizontal lockup for light and for dark surfaces). Kairos keys stay
-// unprefixed ("icon-color"); Hadron keys carry the brand ("hadron-icon-color").
+// horizontal lockup for light and for dark surfaces). The Isotope files follow
+// the Hadron set: the mark (color, white) and the horizontal lockup (color for
+// light surfaces, dark for dark ones), the wordmark outlined from Urbanist
+// Bold. Kairos keys stay unprefixed ("icon-color"); the others carry the brand
+// ("hadron-icon-color", "isotope-icon-color").
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -58,7 +61,7 @@ function parse(file: string, svg: string): Logo {
 
 const out: Record<string, Logo> = {};
 for (const file of readdirSync(assets).sort()) {
-  const m = file.match(/^(kairos|hadron)-(icon|horizontal|stacked)-(color|dark|white|black)\.svg$/);
+  const m = file.match(/^(kairos|hadron|isotope)-(icon|horizontal|stacked)-(color|dark|white|black)\.svg$/);
   if (!m) continue;
   const key = m[1] === "kairos" ? `${m[2]}-${m[3]}` : `${m[1]}-${m[2]}-${m[3]}`;
   out[key] = parse(file, readFileSync(resolve(assets, file), "utf8"));

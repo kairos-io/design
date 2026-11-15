@@ -1,5 +1,15 @@
 import { render, screen } from "@testing-library/react";
-import { HadronLogo, HadronMark, KairosLogo, KairosMark, hadronLogoAssets, logoAssets } from "./Logo.tsx";
+import {
+  HadronLogo,
+  HadronMark,
+  IsotopeLogo,
+  IsotopeMark,
+  KairosLogo,
+  KairosMark,
+  hadronLogoAssets,
+  isotopeLogoAssets,
+  logoAssets,
+} from "./Logo.tsx";
 import { logos } from "./logos.generated.ts";
 
 describe("Logo", () => {
@@ -68,6 +78,33 @@ describe("Logo", () => {
     expect(white).toEqual(new Set(["#FFFFFF"]));
   });
 
+  it("renders the Isotope mark as six triangles in the three limes, named Isotope", () => {
+    render(<IsotopeMark />);
+    const svg = screen.getByRole("img", { name: "Isotope" });
+    expect(svg).toHaveAttribute("viewBox", logos["isotope-icon-color"].viewBox);
+    const polygons = Array.from(svg.querySelectorAll("polygon"));
+    expect(polygons).toHaveLength(6);
+    expect(new Set(polygons.map((p) => p.getAttribute("fill")?.toUpperCase()))).toEqual(
+      new Set(["#C6F36B", "#8FD12E", "#4E9A06"]),
+    );
+  });
+
+  it("renders the Isotope lockup for light and dark surfaces with the mark unchanged", () => {
+    const { container, rerender } = render(<IsotopeLogo />);
+    const fills = () =>
+      Array.from(container.querySelectorAll("polygon, path")).map((p) =>
+        p.getAttribute("fill")?.toUpperCase(),
+      );
+    expect(fills()).toContain("#8FD12E");
+    expect(fills()).toContain("#03153A");
+    rerender(<IsotopeLogo variant="dark" />);
+    expect(fills()).toContain("#8FD12E");
+    expect(fills()).toContain("#FFFFFF");
+    expect(fills()).not.toContain("#03153A");
+    rerender(<IsotopeMark variant="white" />);
+    expect(new Set(fills())).toEqual(new Set(["#FFFFFF"]));
+  });
+
   it("is hidden from assistive technology when decorative", () => {
     const { container, rerender } = render(<KairosMark decorative />);
     let svg = container.querySelector("svg")!;
@@ -102,11 +139,19 @@ describe("Logo", () => {
     expect(hadronLogoAssets.icon.white).toBe("assets/logos/hadron-icon-white.svg");
     expect(hadronLogoAssets.horizontal.color).toBe("assets/logos/hadron-horizontal-color.svg");
     expect(hadronLogoAssets.horizontal.dark).toBe("assets/logos/hadron-horizontal-dark.svg");
+    expect(isotopeLogoAssets.icon.color).toBe("assets/logos/isotope-icon-color.svg");
+    expect(isotopeLogoAssets.icon.white).toBe("assets/logos/isotope-icon-white.svg");
+    expect(isotopeLogoAssets.horizontal.color).toBe("assets/logos/isotope-horizontal-color.svg");
+    expect(isotopeLogoAssets.horizontal.dark).toBe("assets/logos/isotope-horizontal-dark.svg");
     for (const key of [
       "hadron-icon-color",
       "hadron-icon-white",
       "hadron-horizontal-color",
       "hadron-horizontal-dark",
+      "isotope-icon-color",
+      "isotope-icon-white",
+      "isotope-horizontal-color",
+      "isotope-horizontal-dark",
     ]) {
       expect(logos[key]).toBeDefined();
     }
