@@ -16,6 +16,11 @@ export type HadronMarkVariant = "color" | "white";
 /** The renditions the Hadron lockup ships in: by the surface it sits on. */
 export type HadronLogoVariant = "color" | "dark";
 
+/** The renditions the Isotope mark ships in. The mark is the same on light and dark surfaces. */
+export type IsotopeMarkVariant = "color" | "white";
+/** The renditions the Isotope lockup ships in: by the surface it sits on. */
+export type IsotopeLogoVariant = "color" | "dark";
+
 /**
  * The SVG files as shipped in dist/assets, for hosts that would rather link
  * the artwork than inline it (a favicon, an <img>, a Go template).
@@ -48,6 +53,18 @@ export const hadronLogoAssets = {
   horizontal: {
     color: "assets/logos/hadron-horizontal-color.svg",
     dark: "assets/logos/hadron-horizontal-dark.svg",
+  },
+} as const;
+
+/** The Isotope files as shipped in dist/assets. */
+export const isotopeLogoAssets = {
+  icon: {
+    color: "assets/logos/isotope-icon-color.svg",
+    white: "assets/logos/isotope-icon-white.svg",
+  },
+  horizontal: {
+    color: "assets/logos/isotope-horizontal-color.svg",
+    dark: "assets/logos/isotope-horizontal-dark.svg",
   },
 } as const;
 
@@ -140,4 +157,27 @@ export interface HadronLogoProps extends LogoSvgProps {
 /** The Hadron logo with the wordmark, from the decks. Horizontal only. */
 export function HadronLogo({ variant = "color", label = "Hadron", ...props }: HadronLogoProps) {
   return <LogoSvg data={logos[`hadron-horizontal-${variant}`]} label={label} {...props} />;
+}
+
+export interface IsotopeMarkProps extends LogoSvgProps {
+  /** `color` on any plain surface, light or dark; `white` for a flat fill or photography. */
+  variant?: IsotopeMarkVariant;
+}
+
+/**
+ * The Isotope mark: six triangles of the Tessellate hexagon in the three limes,
+ * one pushed out. The same on light and dark surfaces.
+ */
+export function IsotopeMark({ variant = "color", label = "Isotope", ...props }: IsotopeMarkProps) {
+  return <LogoSvg data={logos[`isotope-icon-${variant}`]} label={label} {...props} />;
+}
+
+export interface IsotopeLogoProps extends LogoSvgProps {
+  /** `color` on light surfaces (ink wordmark), `dark` on dark surfaces (white wordmark). The mark stays lime. */
+  variant?: IsotopeLogoVariant;
+}
+
+/** The Isotope logo with the wordmark in Urbanist Bold. Horizontal only. */
+export function IsotopeLogo({ variant = "color", label = "Isotope", ...props }: IsotopeLogoProps) {
+  return <LogoSvg data={logos[`isotope-horizontal-${variant}`]} label={label} {...props} />;
 }
