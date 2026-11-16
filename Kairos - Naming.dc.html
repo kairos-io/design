@@ -17,7 +17,7 @@
   <div style="position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)">
     <div style="max-width:1240px;margin:0 auto;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
       <div style="display:flex;align-items:center;gap:16px"><sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><img src="assets/kairos-horizontal-light.svg" style="height:30px"></sc-if><sc-if value="{{ isDark }}"><img src="assets/kairos-horizontal-dark.svg" style="height:30px"></sc-if><span style="font-family:var(--font-mono);font-size:12px;color:var(--muted)">Design system · Naming</span></div>
-      <div style="display:flex;gap:20px;font-size:15px;font-weight:600;flex-wrap:wrap"><a href="#changed" style="color:var(--ink)">What changed</a><a href="#products" style="color:var(--ink)">Products</a><a href="#hadron" style="color:var(--ink)">Hadron</a><a href="#bases" style="color:var(--ink)">Base distros</a><a href="#levels" style="color:var(--ink)">Levels</a><a href="#cli" style="color:var(--ink)">CLI</a><a href="#writing" style="color:var(--ink)">Writing</a><a href="#unchanged" style="color:var(--ink)">Unchanged</a></div>
+      <div style="display:flex;gap:20px;font-size:15px;font-weight:600;flex-wrap:wrap"><a href="#changed" style="color:var(--ink)">What changed</a><a href="#products" style="color:var(--ink)">Products</a><a href="#hadron" style="color:var(--ink)">Hadron</a><a href="#isotope" style="color:var(--ink)">Isotope</a><a href="#bases" style="color:var(--ink)">Base distros</a><a href="#levels" style="color:var(--ink)">Levels</a><a href="#cli" style="color:var(--ink)">CLI</a><a href="#writing" style="color:var(--ink)">Writing</a><a href="#unchanged" style="color:var(--ink)">Unchanged</a></div>
     </div>
   </div>
 
@@ -84,9 +84,21 @@
       </div>
     </section>
 
+    <!-- ISOTOPE -->
+    <section id="isotope" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line)">
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">05</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Isotope</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:680px;text-wrap:pretty">{{ isotopeLede }}</p></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px">
+        <sc-for list="{{ isotopeRules }}" as="r" hint-placeholder-count="4"><div style="background:var(--surface);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:{{ r.c }}">{{ r.mark }}</span><span style="font-size:19px;font-weight:700">{{ r.t }}</span><span style="font-size:15px;line-height:1.5;color:var(--sub)">{{ r.d }}</span></div></sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:8px">
+        <sc-for list="{{ isotopeEditions }}" as="b" hint-placeholder-count="6"><div style="background:var(--surface);border-radius:4px;padding:16px 18px;display:flex;flex-direction:column;gap:4px"><span style="font-size:17px;font-weight:700">{{ b.name }}</span><span style="font-size:13px;line-height:1.4;color:var(--muted)">{{ b.d }}</span></div></sc-for>
+      </div>
+      <p style="margin:0;font-size:15px;line-height:1.6;color:var(--sub);max-width:680px;text-wrap:pretty">{{ isotopeOpen }}</p>
+    </section>
+
     <!-- BASE DISTROS -->
     <section id="bases" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line)">
-      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">05</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em;display:flex;align-items:center;gap:14px;flex-wrap:wrap">Base distros<span style="font-size:13px;font-weight:700;letter-spacing:0;background:var(--raised);color:var(--ink);padding:5px 9px;border-radius:2px">Proposal</span></h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:680px;text-wrap:pretty">{{ basesLede }}</p></div>
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">06</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em;display:flex;align-items:center;gap:14px;flex-wrap:wrap">Base distros<span style="font-size:13px;font-weight:700;letter-spacing:0;background:var(--raised);color:var(--ink);padding:5px 9px;border-radius:2px">Proposal</span></h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:680px;text-wrap:pretty">{{ basesLede }}</p></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:12px">
         <sc-for list="{{ baseTerms }}" as="t" hint-placeholder-count="2"><div style="background:var(--surface);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:8px"><span style="font-size:19px;font-weight:700">{{ t.t }}</span><span style="font-size:15px;line-height:1.5;color:var(--sub)">{{ t.d }}</span><span style="font-family:var(--font-mono);font-size:12px;color:var(--muted);overflow-wrap:anywhere">{{ t.eg }}</span></div></sc-for>
       </div>
@@ -97,7 +109,7 @@
 
     <!-- LEVELS -->
     <section id="levels" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line)">
-      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">06</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em;display:flex;align-items:center;gap:14px;flex-wrap:wrap">Names by docs level</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:680px;text-wrap:pretty">The docs teach Kairos in three levels. Each level brings in only the names that reader needs.</p></div>
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">07</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em;display:flex;align-items:center;gap:14px;flex-wrap:wrap">Names by docs level</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:680px;text-wrap:pretty">The docs teach Kairos in three levels. Each level brings in only the names that reader needs.</p></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px">
         <sc-for list="{{ levels }}" as="l" hint-placeholder-count="3">
           <div style="background:var(--surface);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:14px">
@@ -111,7 +123,7 @@
 
     <!-- CLI -->
     <section id="cli" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line)">
-      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">07</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">CLI · git-style</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:640px;text-wrap:pretty">{{ cliLede }}</p></div>
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">08</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">CLI · git-style</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:640px;text-wrap:pretty">{{ cliLede }}</p></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:12px;align-items:start">
         <div style="background:var(--code);border-radius:4px;overflow:hidden">
           <div style="display:flex;justify-content:space-between;padding:8px 14px;font-family:var(--font-mono);font-size:12px;color:var(--code-muted);background:var(--code-bar)"><span>terminal</span><span>copy</span></div>
@@ -127,7 +139,7 @@
 
     <!-- WRITING -->
     <section id="writing" style="padding:80px 0;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line)">
-      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">08</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Do and don’t</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:640px;text-wrap:pretty">Name the thing people use. Show commands in mono.</p></div>
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">09</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">Do and don’t</h2><p style="margin:0;font-size:17px;line-height:1.6;color:var(--sub);max-width:640px;text-wrap:pretty">Name the thing people use. Show commands in mono.</p></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px">
         <sc-for list="{{ writing }}" as="w" hint-placeholder-count="6">
           <div style="background:var(--surface);border-radius:4px;padding:20px;display:flex;flex-direction:column;gap:12px">
@@ -140,7 +152,7 @@
 
     <!-- UNCHANGED -->
     <section id="unchanged" style="padding:80px 0 120px;display:flex;flex-direction:column;gap:28px;border-top:1px solid var(--line)">
-      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">09</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">What doesn’t change</h2></div>
+      <div style="display:flex;flex-direction:column;gap:8px"><span style="font-family:var(--font-mono);font-size:12px;color:var(--link)">10</span><h2 style="margin:0;font-size:44px;font-weight:600;letter-spacing:-.03em">What doesn’t change</h2></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:8px">
         <sc-for list="{{ unchanged }}" as="u" hint-placeholder-count="6"><div style="background:var(--surface);border-radius:4px;padding:16px 18px;display:grid;grid-template-columns:16px 1fr;gap:10px;font-size:15px;line-height:1.5"><svg width="14" height="14" viewBox="0 0 12 12" style="margin-top:4px"><polygon points="6,0.8 11.2,6 6,11.2 0.8,6" fill="var(--accent)"></polygon></svg><span>{{ u.t }}</span></div></sc-for>
       </div>
@@ -193,6 +205,7 @@ class Component extends DCLogic {
         ['`kairos-agent` web UI on `:8080`', 'Kairos Installer (unchanged name, on-node install UI)'],
         ['`kairos-agent`', 'Kairos Agent (named in docs at Level 3 only)'],
         ['flavors (`ubuntu`, `alpine`, …)', 'base distros: “Kairos on Ubuntu” (proposed)'],
+        ['Hadron Desktop (`kairos-community/hadron-desktop`)', 'Isotope, built on Hadron'],
         ['“Kairos Platform” (earlier proposal)', 'Not adopted for now. Don’t use it.']
       ].map(([b, a]) => ({ before: this.rich(b), after: this.rich(a) })),
       products: [
@@ -201,7 +214,8 @@ class Component extends DCLogic {
         { lockup: lockup(null, 'Installer'), job: 'On-node install UI.', meta: 'Deploy · kairos-io/kairos-agent · :8080' },
         { lockup: lockup(null, 'Operator'), job: 'Day-2 operations on Kubernetes.', meta: 'Operate · kairos-io/kairos-operator' },
         { lockup: lockup(null, 'Lab'), job: 'Local VMs for demos and proofs of concept.', meta: 'Learn · kairos-io/kairos-lab' },
-        { lockup: lockup('Hadron', null, 'assets/hadron-mark.svg'), job: 'A separate Linux distribution. Ships with every Kairos release, never alone.', meta: 'hadron-linux.io' }
+        { lockup: lockup('Hadron', null, 'assets/hadron-mark.svg'), job: 'A separate Linux distribution. Ships with every Kairos release, never alone.', meta: 'hadron-linux.io' },
+        { lockup: [e('b', { key: 'n', style: { fontWeight: 700 } }, 'Isotope')], job: 'A distribution built on Hadron, for desktops, servers and AI agents. One base, many editions.', meta: 'kairos-community/hadron-desktop · rename planned' }
       ],
       sections: [{ t: 'Factory', d: 'artifacts, extensions', c: 'var(--kairos-light)' }, { t: 'Deploy', d: 'BMC, netboot, import', c: 'var(--kairos-mid)' }, { t: 'Fleet', d: 'nodes, groups', c: 'var(--kairos-orange)' }],
       factoryNote: this.rich('Factory, the console section, and Kairos Factory (`kairos-init`) are related but not the same. The section uses `kairos-init` under the hood.'),
@@ -210,6 +224,15 @@ class Component extends DCLogic {
         { mark: '✓ write', c: 'var(--ok)', t: 'Ships with every Kairos release', d: 'The sentence form, for body copy.' },
         { mark: '✕ never', c: 'var(--link)', t: 'Kairos Hadron', d: 'Hadron is not a Kairos sub-product. Never prefix it, never swap its logo for the Kairos mark.' }
       ],
+      isotopeLede: this.rich('Isotope is a Linux distribution built on Hadron, with the Kairos lifecycle: A/B upgrades, encrypted disks, extensions. It was called Hadron Desktop until it grew a server and an agent edition. Like an isotope, every edition is the same element with a different make-up. It has its own name; its logo is not designed yet.'),
+      isotopeRules: [
+        { mark: '✓ write', c: 'var(--ok)', t: 'Isotope, built on Hadron', d: 'The short pairing, for lockups and titles.' },
+        { mark: '✓ write', c: 'var(--ok)', t: 'Built on Hadron, by Kairos', d: 'The sentence form, for body copy.' },
+        { mark: '✓ write', c: 'var(--ok)', t: 'Isotope Server', d: this.rich('Editions are a plain suffix: Isotope plus the edition name.') },
+        { mark: '✕ never', c: 'var(--link)', t: 'Hadron Desktop · Kairos Isotope · Hadron Isotope', d: 'Isotope is not an edition of Hadron and not a Kairos sub-product. Never prefix it.' }
+      ],
+      isotopeEditions: [['Isotope Sway', 'tiling, Wayland'], ['Isotope COSMIC', 'full desktop, Wayland'], ['Isotope Niri', 'scrolling tiling, Wayland'], ['Isotope i3', 'tiling, X11'], ['Isotope Server', 'no desktop: SSH, Docker, NetworkManager'], ['Isotope Agent', 'a sandbox for AI agents']].map(([name, d]) => ({ name, d })),
+      isotopeOpen: this.rich('Open: the logo and an accent colour. Orange is Kairos and blue is Hadron, so Isotope needs a third, kept away from the immutable-OS looks in the landscape exploration. Until then, write the name in Urbanist bold with no mark. Binaries, D-Bus names and image paths still say `hadron-*`; the rename there comes with a compatibility period.'),
       basesLede: this.rich('Kairos runs on more than one Linux. The docs call these “flavors”, but nobody says that when they talk about it. We propose base distro, a word the console and the docs already lean on (“Base image”, “Bring your own base”).'),
       baseTerms: [
         { t: 'base distro', d: this.rich('The Linux distribution Kairos runs on. Say “Kairos on Ubuntu”; in lists, “base distro: Ubuntu 24.04”.'), eg: 'Hadron · Ubuntu · Fedora · Alpine · Rocky' },
@@ -238,6 +261,7 @@ class Component extends DCLogic {
         ['Open Fleet in the Kairos console', 'Open Kairos Fleet'],
         ['Build an ISO in the console’s Factory section', 'Use AuroraBoot to build'],
         ['Hadron by Kairos', 'Kairos Hadron'],
+        ['Isotope, built on Hadron', 'Hadron Desktop'],
         ['Kairos on Ubuntu', 'the Ubuntu flavor'],
         ['Kairos Installer', 'the AuroraBoot installer']
       ].map(([y, n]) => ({ yes: this.rich(y), no: this.rich(n) })),
