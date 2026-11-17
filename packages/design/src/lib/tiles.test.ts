@@ -1,5 +1,7 @@
 import {
   fadeFrom,
+  tileFaceBearings,
+  tileFaceSequence,
   tileField,
   tileFieldSvg,
   tileFades,
@@ -166,5 +168,40 @@ describe("tile geometry", () => {
 
   it("exposes the parallelogram of a single tile", () => {
     expect(tilePoints.split(" ")).toHaveLength(4);
+  });
+
+  it("takes a cube's faces in turn clockwise, from the top on its own and from a given bearing in a ring", () => {
+    // Where each face sits in a plain hexagon: the top face up, the orange
+    // face to the lower right, the mid face to the lower left.
+    expect(tileFaceBearings).toEqual({ 0: -90, 1: 150, 2: 30 });
+    // On its own a cube starts at the top and goes clockwise: top, lower right, lower left.
+    expect(tileFaceSequence()).toEqual([0, 2, 1]);
+    // Leaving, the same face leads and the turn runs the other way: the top
+    // face, then the lower left, then the lower right.
+    expect(tileFaceSequence({ turning: "anticlockwise" })).toEqual([0, 1, 2]);
+    // From any bearing: the nearest face first, then clockwise, whichever side it is on.
+    expect(tileFaceSequence({ from: 30 })).toEqual([2, 1, 0]);
+    expect(tileFaceSequence({ from: 60 })).toEqual([2, 1, 0]);
+    expect(tileFaceSequence({ from: 0 })).toEqual([2, 1, 0]);
+    expect(tileFaceSequence({ from: -120 })).toEqual([0, 2, 1]);
+    expect(tileFaceSequence({ from: 120 })).toEqual([1, 0, 2]);
+    // A flipped cube reads from its own orientation, not from the tones: with
+    // no face straight up it starts on the one clockwise of up, its upper right.
+    expect(tileFaceSequence({ orientation: { 0: 90, 1: -30, 2: -150 } })).toEqual([1, 0, 2]);
+    // Every sequence is the three faces once, in the cube's own clockwise
+    // turn, and the two turns are mirrors that lead with the same face.
+    for (const from of [-180, -90, -30, 0, 45, 90, 150, 180]) {
+      const sequence = tileFaceSequence({ from });
+      expect(new Set(sequence).size).toBe(3);
+      const turns = sequence.map(
+        (tone) => (tileFaceBearings[tone] - tileFaceBearings[sequence[0]] + 360) % 360,
+      );
+      expect(turns).toEqual([0, 120, 240]);
+      expect(tileFaceSequence({ from, turning: "anticlockwise" })).toEqual([
+        sequence[0],
+        sequence[2],
+        sequence[1],
+      ]);
+    }
   });
 });

@@ -30,6 +30,13 @@ export interface MarkCube {
    * mid at 150, orange at 30; a flipped cube reads differently.
    */
   orientation: Record<TileTone, number>;
+  /**
+   * Degrees from this cube's centre to the centre of the cube before it
+   * round the ring, the last cube for the first, so a loader can start a
+   * cube on the face that touches the one that landed before it
+   * (`tileFaceSequence`). Filled in once the cubes are in order.
+   */
+  toPrevious: number;
 }
 
 export interface KairosMarkTiles {
@@ -148,7 +155,7 @@ export function groupCubes(faces: Omit<MarkFace, "vertex">[], tolerance = 0.1): 
       members.forEach((m) => used.add(faces.indexOf(faces.find((f) => f.points === m.points)!)));
       const orientation = { 0: 0, 1: 0, 2: 0 } as Record<TileTone, number>;
       for (const m of members) orientation[m.tone] = bearing(centre, centroid(m.points));
-      cubes.push({ centre, faces: members, bearing: 0, orientation });
+      cubes.push({ centre, faces: members, bearing: 0, orientation, toPrevious: 0 });
       break;
     }
   });
@@ -178,6 +185,10 @@ export function kairosMarkTiles(): KairosMarkTiles {
   // Clockwise from twelve o'clock: the bearing turned a quarter so that
   // straight up is zero and the order round the ring is ascending.
   cubes.sort((p, q) => ((p.bearing + 450) % 360) - ((q.bearing + 450) % 360));
+  // Where the cube before it lies, now that there is an order to be before in.
+  cubes.forEach((cube, i) => {
+    cube.toPrevious = bearing(cube.centre, cubes[(i + cubes.length - 1) % cubes.length].centre);
+  });
   cached = { viewBox: { width: vw, height: vh }, bbox, cubes };
   return cached;
 }

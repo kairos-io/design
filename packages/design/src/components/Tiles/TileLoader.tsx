@@ -4,6 +4,7 @@ import { parsePoints } from "../../lib/mark.ts";
 import { useMergedRef } from "../../hooks/useMergedRef.ts";
 import {
   tileFaceOrder,
+  tileFaceSequence,
   tileFaceStroke,
   tileGridPaths,
   tileHexagon,
@@ -24,6 +25,7 @@ import {
   useReducedMotion,
   useSettle,
   type TileExit,
+  type TileLean,
   type TileLoop,
   type TileStatus,
 } from "./loop.ts";
@@ -41,21 +43,32 @@ const MONO_LINE = 0.3;
 // right [c, p1, p2, p3].
 const CENTRE_INDEX: Record<TileTone, number> = { 0: 3, 1: 1, 2: 0 };
 
-// The faces start an eighth of a loop apart in tone order, so a whole cube
-// comes in over one entrance plus two steps. The status faces stagger in
-// the same order.
-const FACE_DELAYS = [0, 1, 2].map((tone) => Math.round(tone * LOOP_FACE_STEP));
-const FACE_KEYS = ["0", "1", "2"];
+// The faces take their turn clockwise from the top — the top face, then the
+// lower right, then the lower left — an eighth of a loop apart, so a whole
+// cube comes in over one entrance plus two steps. They leave on the same
+// turn read the other way round, from the top again: top, lower left, lower
+// right, so the cube unfolds away the way it did not come. Two of the three
+// faces therefore rest a step longer or shorter than the standard, which is
+// the cycle's lean. The status faces stagger in the entrance's order.
+const FACE_SEQUENCE = tileFaceSequence();
+const FACE_LEAVING = tileFaceSequence({ turning: "anticlockwise" });
+const FACE_KEYS = FACE_SEQUENCE.map(String);
+/** A face's place in the cube's turn, 0 to 2, when it starts, in ms, and how its exit leans. */
+const faceTurn = (tone: TileTone) => FACE_SEQUENCE.indexOf(tone);
+const faceDelay = (tone: TileTone) => Math.round(faceTurn(tone) * LOOP_FACE_STEP);
+const faceLean = (tone: TileTone) => (FACE_LEAVING.indexOf(tone) - faceTurn(tone)) as TileLean;
 
 export interface TileLoaderProps
   extends Omit<React.SVGAttributes<SVGSVGElement>, "width" | "height">, PaletteProp {
   /** Height of the cube in px, the icon sizes: 16, 20 (default) or 24. */
   size?: 16 | 20 | 24;
   /**
-   * The motion that loops: the three faces come into place one at a time in
-   * tone order, rest as a complete cube, leave the same way and come again,
-   * with the last face still leaving as the first returns, so a face is
-   * always showing over the outline. "unfold" (default, the system's
+   * The motion that loops: the three faces come into place one at a time,
+   * clockwise from the top (the top face, then the lower right, then the
+   * lower left), rest as a complete cube, leave from the top again the other
+   * way round (top, lower left, lower right) and come once more, with the
+   * last face still leaving as the first returns, so a face is always
+   * showing over the outline. "unfold" (default, the system's
    * motion): each face hinges open from the cube's centre vertex along its
    * own two edges. "assemble", the alternative: each face arrives along its
    * own line and the three meet at that vertex. The same motion as the
@@ -64,7 +77,8 @@ export interface TileLoaderProps
   enter?: TileLoop;
   /**
    * How the cube leaves between cycles. "disassemble" (default): the faces
-   * leave the way they came, the last still leaving as the first returns.
+   * fold away from the top face again, the other way round the cube, the
+   * last still leaving as the first returns.
    * "vanish": the cube rests one entrance complete, then is gone in one
    * frame, no motion and no fade, the outline still there, and comes in
    * again after one entrance. Under prefers-reduced-motion both are the
@@ -82,8 +96,8 @@ export interface TileLoaderProps
    * a face already on its outline crossfades to the success greens over
    * the fast token, a face on its way or away completes to its outline
    * from wherever it is over the base token (a transition, nothing jumps
-   * back) and turns green as it lands, the three a step apart in tone
-   * order, so the cube is green and still within about a third of a
+   * back) and turns green as it lands, the three a step apart in the same
+   * turn order, so the cube is green and still within about a third of a
    * second; "error" the same in the recovery reds. `onSettled` fires once
    * the last face has turned. Under prefers-reduced-motion the cube simply
    * turns. Back to "loading" and the loop starts again from empty.
@@ -152,9 +166,9 @@ export const TileLoader = React.forwardRef<SVGSVGElement, TileLoaderProps>(
     // keyframes read from the face's own points. Nothing under reduced
     // motion: the faces are simply there.
     const motion = (p: (typeof faces)[number]) => ({
-      className: cycleClass("loop", enter, exit),
+      className: cycleClass("loop", enter, exit, faceLean(p.tone)),
       style: {
-        "--tile-delay": `${FACE_DELAYS[p.tone]}ms`,
+        "--tile-delay": `${faceDelay(p.tone)}ms`,
         ...faceVars(enter, parsePoints(p.points), CENTRE_INDEX[p.tone], reach),
       } as React.CSSProperties,
     });
@@ -232,13 +246,13 @@ export const TileLoader = React.forwardRef<SVGSVGElement, TileLoaderProps>(
               .map((t) => faces[t])
               .map((p) =>
                 React.cloneElement(face(p, paint(p.tone), mono ? MONO_FACE[p.tone] : undefined), {
-                  "data-face": FACE_KEYS[p.tone],
+                  "data-face": String(p.tone),
                   ...(looping && !reduced ? motion(p) : landing ? { className: RESOLVE_CLASS } : {}),
                 }),
               )}
           </g>
           {/* The status faces, over the brand ones: each fades in once its
-              brand face is on the outline, in tone order, and stays. */}
+              brand face is on the outline, in the cube's turn order, and stays. */}
           {landed &&
             tileFaceOrder
               .map((t) => faces[t])
@@ -248,7 +262,9 @@ export const TileLoader = React.forwardRef<SVGSVGElement, TileLoaderProps>(
                   ...(landing
                     ? {
                         className: "tile-settle",
-                        style: { "--tile-delay": `${settle.delays[p.tone]}ms` } as React.CSSProperties,
+                        style: {
+                          "--tile-delay": `${settle.delays[faceTurn(p.tone)]}ms`,
+                        } as React.CSSProperties,
                       }
                     : {}),
                 }),

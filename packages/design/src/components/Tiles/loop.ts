@@ -25,7 +25,8 @@ export const WAVE_TILES = 8;
 
 /**
  * The motions a loader can run, and the entrance a bar's tile makes: the
- * field's entrance of the same name, its reversal, and again. "assemble":
+ * field's entrance of the same name, its reversal the other way round the
+ * cube, and again. "assemble":
  * each face arrives along the line from the cube's centre vertex through
  * its own middle and the faces meet at that vertex. "unfold": each face
  * hinges open from that vertex along its own two edges.
@@ -42,9 +43,35 @@ export type TileExit = "disassemble" | "vanish";
 /** The cycles in base.css: the loader's loop, the ring's two laps, and the bar's one-shot step. */
 export type TileCycle = "loop" | "chase" | "build" | "step";
 
-/** The class that runs a cycle on a face; the vanish exit has its own keyframes, except the one-shot step. */
-export function cycleClass(cycle: TileCycle, loop: TileLoop, exit: TileExit = "disassemble"): string {
-  return exit === "vanish" && cycle !== "step" ? `tile-${cycle}-${loop}-vanish` : `tile-${cycle}-${loop}`;
+/**
+ * How far a face's exit sits from its entrance, in eighths of a loop. A cube
+ * comes in one way round and leaves the other, from the same face
+ * (`tileFaceSequence`), so the face that leads both rests the standard time
+ * (0) while of the other two one rests a step longer (1) and one a step
+ * shorter (-1). Everything else about the cycle is the same, so the three
+ * faces still arrive an eighth apart and leave an eighth apart; a lean is
+ * just which shape of the cycle a face runs.
+ */
+export type TileLean = -1 | 0 | 1;
+
+/**
+ * The class that runs a cycle on a face: the cycle, the motion, and the
+ * shape its lean asks for. The vanish exit has its own keyframes and no
+ * exit to lean, and so has the one-shot step.
+ */
+export function cycleClass(
+  cycle: TileCycle,
+  loop: TileLoop,
+  exit: TileExit = "disassemble",
+  lean: TileLean = 0,
+): string {
+  if (exit === "vanish" && cycle !== "step") return `tile-${cycle}-${loop}-vanish`;
+  const name = `tile-${cycle}-${loop}`;
+  if (lean === 0 || cycle === "step") return name;
+  // The lean comes as a second class beside the cycle's own, which carries
+  // the duration, the frame and the states; the pair's rule in base.css
+  // names the other keyframes and takes both classes to do it.
+  return `${name} ${name}-${lean < 0 ? "early" : "late"}`;
 }
 
 /**
@@ -118,6 +145,32 @@ export const CYCLES: Record<TileExit, Record<TileCycle, CycleTiming>> = {
   },
 };
 
+// What a lean moves a face's exit by, in entrances: an eighth of a loop.
+const LEAN_STEP = LOOP_FACE_STEP / ENTER_DURATION;
+
+/**
+ * One cycle's timing for a face of a given lean: the exit window and the
+ * away point move with it, the entrance and the period stay where they are,
+ * so a leaning face rests longer or less and nothing else changes. The
+ * keyframes in base.css hold the same numbers, one shape per lean.
+ */
+export function cycleTiming(
+  cycle: TileCycle,
+  exit: TileExit = "disassemble",
+  lean: TileLean = 0,
+): CycleTiming {
+  const timing = CYCLES[exit][cycle];
+  // A vanish has no exit window to move, and the step never leaves.
+  if (lean === 0 || timing.moving.length < 2) return timing;
+  const shift = lean * LEAN_STEP;
+  const [enter, leave] = timing.moving;
+  return {
+    ...timing,
+    moving: [enter, [leave[0] + shift, leave[1] + shift]],
+    away: timing.away + shift,
+  };
+}
+
 /**
  * Where a face is `elapsed` ms into its cycle, by its own keyframes: on its
  * way (in or out), landed on its outline, or away from it. The timing table
@@ -129,8 +182,9 @@ export function faceState(
   delay: number,
   cycle: TileCycle,
   exit: TileExit = "disassemble",
+  lean: TileLean = 0,
 ): "away" | "moving" | "landed" {
-  const { period, moving, away, once } = CYCLES[exit][cycle];
+  const { period, moving, away, once } = cycleTiming(cycle, exit, lean);
   if (elapsed < delay) return "away";
   const t = (elapsed - delay) / ENTER_DURATION;
   if (once && t >= period) return "landed";

@@ -2,7 +2,14 @@ import * as React from "react";
 import { cn } from "../../lib/cn.ts";
 import { useMergedRef } from "../../hooks/useMergedRef.ts";
 import { kairosMarkTiles, type Point } from "../../lib/mark.ts";
-import { tileFaceOrder, tileFaceStroke, tileGridPaths, tilePalettes } from "../../lib/tiles.ts";
+import {
+  tileFaceOrder,
+  tileFaceSequence,
+  tileFaceStroke,
+  tileGridPaths,
+  tilePalettes,
+  type TileTone,
+} from "../../lib/tiles.ts";
 import type { PaletteProp } from "./shared.ts";
 import {
   CUBE_DURATION,
@@ -18,6 +25,7 @@ import {
   useReducedMotion,
   useSettle,
   type TileExit,
+  type TileLean,
   type TileLoop,
   type TileStatus,
 } from "./loop.ts";
@@ -108,12 +116,21 @@ export function tileRingFrame(size: number): {
 }
 
 // Each cube a whole cube's time after the last, its faces an eighth of a
-// loop apart in tone order as the inline loader's are; a cube's gate
-// starts with its first face. The status faces stagger in the same order.
+// loop apart as the inline loader's are; a cube's gate starts with its first
+// face. Where the inline loader begins at the top, a cube in the ring begins
+// on the face touching the cube that has just landed and goes clockwise from
+// there, so it ends on the face touching the cube that comes next and the
+// mark builds along its own contacts (`tileFaceSequence`). It leaves from
+// that same face the other way round, so two of its three faces rest a step
+// longer or shorter: the cycle's lean. The status faces stagger in the
+// entrance's order.
 const cubeDelay = (cube: number) => Math.round(cube * CUBE_DURATION);
-const faceDelay = (cube: number, tone: number) => Math.round(cube * CUBE_DURATION + tone * LOOP_FACE_STEP);
+const faceDelay = (cube: number, turn: number) => Math.round(cube * CUBE_DURATION + turn * LOOP_FACE_STEP);
 const faceKey = (cube: number, tone: number) => `${cube}.${tone}`;
-const FACE_KEYS = [0, 1, 2, 3, 4, 5].flatMap((cube) => [0, 1, 2].map((tone) => faceKey(cube, tone)));
+/** Where a face comes in the cube's turn, and how far off it its exit sits. */
+const faceTurn = (cube: { sequence: TileTone[] }, tone: TileTone) => cube.sequence.indexOf(tone);
+const faceLean = (cube: { sequence: TileTone[]; leaving: TileTone[] }, tone: TileTone) =>
+  (cube.leaving.indexOf(tone) - cube.sequence.indexOf(tone)) as TileLean;
 
 /**
  * The showpiece loader: the Kairos mark itself, its six cubes on the icon's
@@ -150,6 +167,15 @@ export const TileRing = React.forwardRef<SVGSVGElement, TileRingProps>(
     const cubes = React.useMemo(() => {
       const { scale, offset, reach } = frame;
       return kairosMarkTiles().cubes.map((cube) => ({
+        // The turn this cube's faces take: clockwise from the face that
+        // touches the cube before it round the ring, and, leaving, the same
+        // face first and the other way round.
+        sequence: tileFaceSequence({ orientation: cube.orientation, from: cube.toPrevious }),
+        leaving: tileFaceSequence({
+          orientation: cube.orientation,
+          from: cube.toPrevious,
+          turning: "anticlockwise",
+        }),
         faces: cube.faces.map((face) => {
           const points = face.points.map(([x, y]): Point => [
             round(x * scale + offset[0]),
@@ -169,7 +195,14 @@ export const TileRing = React.forwardRef<SVGSVGElement, TileRingProps>(
       () => tileGridPaths(cubes.flatMap((cube) => cube.faces.map((f) => ({ points: f.string, outline: 1 })))),
       [cubes],
     );
-    const settle = useSettle({ status, reduced, root, keys: FACE_KEYS, onSettled });
+    // The keys in the order the faces take their turn, which is the order the
+    // status faces stagger in: each cube in the lap's order, its own faces in
+    // its own turn.
+    const faceKeys = React.useMemo(
+      () => cubes.flatMap((cube, i) => cube.sequence.map((tone) => faceKey(i, tone))),
+      [cubes],
+    );
+    const settle = useSettle({ status, reduced, root, keys: faceKeys, onSettled });
     const looping = status === "loading" || settle.phase === "looping";
     const landing = settle.phase === "landing";
     const landed = status !== "loading" && settle.phase !== "looping";
@@ -178,9 +211,9 @@ export const TileRing = React.forwardRef<SVGSVGElement, TileRingProps>(
 
     type Face = (typeof cubes)[number]["faces"][number];
     const motion = (i: number, face: Face) => ({
-      className: cycleClass(mode, enter, exit),
+      className: cycleClass(mode, enter, exit, faceLean(cubes[i], face.tone)),
       style: {
-        "--tile-delay": `${faceDelay(i, face.tone)}ms`,
+        "--tile-delay": `${faceDelay(i, faceTurn(cubes[i], face.tone))}ms`,
         ...faceVars(enter, face.points, face.vertex, cubes[i].reach),
       } as React.CSSProperties,
     });
@@ -234,8 +267,10 @@ export const TileRing = React.forwardRef<SVGSVGElement, TileRingProps>(
             />
           ))}
           {/* The cubes clockwise from the top, each a whole cube's time after
-              the last, its faces in tone order an eighth of a loop apart as the
-              inline loader's are, each face moving about the cube's centre
+              the last, its faces an eighth of a loop apart as the inline
+              loader's are, starting on the face that touches the cube before
+              it and leaving from that face the other way round, each face
+              moving about the cube's centre
               vertex along its own geometry; drawn sides first and top last,
               with the face stroke. Each group is its cube's gate for the vanish
               exit. Nothing under reduced motion: the mark is simply there.
@@ -265,7 +300,8 @@ export const TileRing = React.forwardRef<SVGSVGElement, TileRingProps>(
             </g>
           ))}
           {/* The status mark, over the brand cubes: each face fades in once its
-              brand face is on the outline, clockwise from the top, and stays. */}
+              brand face is on the outline, in the lap's order and each cube's
+              own turn, and stays. */}
           {landed &&
             cubes.map((cube, i) => (
               <g key={i} data-status-cube={i}>
@@ -280,7 +316,7 @@ export const TileRing = React.forwardRef<SVGSVGElement, TileRingProps>(
                           ? {
                               className: "tile-settle",
                               style: {
-                                "--tile-delay": `${settle.delays[i * 3 + face.tone]}ms`,
+                                "--tile-delay": `${settle.delays[i * 3 + faceTurn(cube, face.tone)]}ms`,
                               } as React.CSSProperties,
                             }
                           : {}),

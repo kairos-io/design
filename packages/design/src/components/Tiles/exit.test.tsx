@@ -2,7 +2,18 @@ import { act, render, screen } from "@testing-library/react";
 import { TileBar } from "./TileBar.tsx";
 import { TileLoader } from "./TileLoader.tsx";
 import { TileRing } from "./TileRing.tsx";
-import { CUBE_DURATION, CYCLES, ENTER_DURATION, LOOP_FACE_STEP, faceState, gateClass } from "./loop.ts";
+import {
+  CUBE_DURATION,
+  CYCLES,
+  ENTER_DURATION,
+  LOOP_FACE_STEP,
+  cycleTiming,
+  faceState,
+  gateClass,
+  type TileLean,
+} from "./loop.ts";
+import { kairosMarkTiles } from "../../lib/mark.ts";
+import { tileFaceSequence } from "../../lib/tiles.ts";
 
 function stubReducedMotion(reduced: boolean) {
   window.matchMedia = vi.fn((query: string) => ({
@@ -21,6 +32,16 @@ const faces = (root: Element) => Array.from(root.querySelectorAll("polygon[data-
 const cubes = (root: Element) => Array.from(root.querySelectorAll("g[data-cube]"));
 const outlines = (root: Element) => Array.from(root.querySelectorAll('path[fill="none"]'));
 const delay = (el: Element) => parseInt((el as HTMLElement).style.getPropertyValue("--tile-delay"), 10);
+/** The shape of the cycle a face runs, from its lean class: a cube leaves the way it did not come. */
+const lean = (el: Element): TileLean => {
+  const classes = Array.from(el.classList);
+  if (classes.some((name) => name.endsWith("-late"))) return 1;
+  if (classes.some((name) => name.endsWith("-early"))) return -1;
+  return 0;
+};
+/** When a face starts its exit: its own delay plus its shape's exit point. */
+const leaves = (el: Element, cycle: "build" | "chase", exit: "disassemble" | "vanish") =>
+  delay(el) + cycleTiming(cycle, exit, lean(el)).moving[1][0] * ENTER_DURATION;
 
 /** Walks a lap in small steps and returns the most cubes with a face mid-motion in any one step. */
 function mostMoving(root: Element, cycle: "build" | "chase", exit: "disassemble" | "vanish"): number {
@@ -31,7 +52,8 @@ function mostMoving(root: Element, cycle: "build" | "chase", exit: "disassemble"
     const moving = new Set<string>();
     for (const g of cubes(root)) {
       for (const p of Array.from(g.querySelectorAll("polygon[data-face]"))) {
-        if (faceState(t, delay(p), cycle, exit) === "moving") moving.add(g.getAttribute("data-cube")!);
+        if (faceState(t, delay(p), cycle, exit, lean(p)) === "moving")
+          moving.add(g.getAttribute("data-cube")!);
       }
     }
     most = Math.max(most, moving.size);
@@ -49,16 +71,33 @@ describe("the ring's sequence", () => {
     expect(starts).toEqual([0, 1, 2, 3, 4, 5].map((i) => i * CUBE_DURATION));
     expect(CUBE_DURATION).toBe(ENTER_DURATION + 2 * LOOP_FACE_STEP);
     starts.slice(1).forEach((s, i) => expect(s - starts[i]).toBe(CUBE_DURATION));
-    // Within a cube the faces go in tone order at the inline loader's spacing, and the cube is whole
-    // (its last face landed) exactly when the next starts: overlap zero.
-    for (const g of cubes(container)) {
-      const byTone = Array.from(g.querySelectorAll("polygon")).sort(
-        (a, b) => Number(a.getAttribute("data-tone")) - Number(b.getAttribute("data-tone")),
-      );
-      const first = delay(byTone[0]);
-      expect(byTone.map((p) => delay(p) - first)).toEqual([0, LOOP_FACE_STEP, 2 * LOOP_FACE_STEP]);
+    // Within a cube the faces go at the inline loader's spacing, in the cube's
+    // own turn (from the face touching the cube before it, clockwise), and the
+    // cube is whole (its last face landed) exactly when the next starts: overlap zero.
+    const mark = kairosMarkTiles();
+    cubes(container).forEach((g, i) => {
+      const sequence = tileFaceSequence({
+        orientation: mark.cubes[i].orientation,
+        from: mark.cubes[i].toPrevious,
+      });
+      const byTurn = sequence.map((tone) => g.querySelector(`polygon[data-tone="${tone}"]`) as HTMLElement);
+      const first = delay(byTurn[0]);
+      expect(byTurn.map((p) => delay(p) - first)).toEqual([0, LOOP_FACE_STEP, 2 * LOOP_FACE_STEP]);
       expect(2 * LOOP_FACE_STEP + ENTER_DURATION).toBe(CUBE_DURATION);
-    }
+      // It leaves on that same face and the other way round, an eighth apart
+      // again: the exit times put the faces in the anticlockwise turn.
+      const leaving = tileFaceSequence({
+        orientation: mark.cubes[i].orientation,
+        from: mark.cubes[i].toPrevious,
+        turning: "anticlockwise",
+      });
+      const byExit = Array.from(g.querySelectorAll("polygon")).sort(
+        (a, b) => leaves(a, "build", "disassemble") - leaves(b, "build", "disassemble"),
+      );
+      expect(byExit.map((p) => Number(p.getAttribute("data-tone")))).toEqual(leaving);
+      const out = byExit.map((p) => leaves(p, "build", "disassemble"));
+      expect(out.map((t) => t - out[0])).toEqual([0, LOOP_FACE_STEP, 2 * LOOP_FACE_STEP]);
+    });
     expect(mostMoving(container, "build", "disassemble")).toBe(1);
     rerender(<TileRing mode="chase" />);
     expect(mostMoving(container, "chase", "disassemble")).toBe(2);

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { TileRing, tileRingFrame } from "./TileRing.tsx";
 import { kairosMarkTiles, parsePoints } from "../../lib/mark.ts";
-import { tilePalettes } from "../../lib/tiles.ts";
+import { tileFaceSequence, tilePalettes } from "../../lib/tiles.ts";
 
 function stubReducedMotion(reduced: boolean) {
   window.matchMedia = vi.fn((query: string) => ({
@@ -131,11 +131,17 @@ describe("TileRing", () => {
     const all = faces(container);
     expect(all.every((p) => p.classList.contains("tile-build-unfold"))).toBe(true);
     // A cube takes 1080ms (its last face starts 540ms in and takes 540ms); the next starts exactly then.
-    // Within a cube the faces go in tone order 270ms apart, as the inline loader's do.
+    // Within a cube the faces go 270ms apart as the inline loader's do, in the
+    // cube's own turn: from the face touching the cube before it, clockwise.
     const CUBE = 1080;
+    const mark = kairosMarkTiles();
     cubes(container).forEach((g, i) => {
-      const byTone = Array.from(g.children).sort((a, b) => tone(a) - tone(b));
-      expect(byTone.map(delay)).toEqual([0, 270, 540].map((d) => i * CUBE + d));
+      const sequence = tileFaceSequence({
+        orientation: mark.cubes[i].orientation,
+        from: mark.cubes[i].toPrevious,
+      });
+      const byTurn = sequence.map((t) => Array.from(g.children).find((p) => tone(p) === t)!);
+      expect(byTurn.map(delay)).toEqual([0, 270, 540].map((d) => i * CUBE + d));
     });
     // The cube starts are monotonic in whole cube steps round the ring, so one cube moves at a time.
     const starts = cubes(container).map((g) => Math.min(...Array.from(g.children).map(delay)));

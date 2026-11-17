@@ -3,6 +3,8 @@ import { TileBar } from "./TileBar.tsx";
 import { TileLoader } from "./TileLoader.tsx";
 import { TileRing } from "./TileRing.tsx";
 import { RESOLVE_FADE, RESOLVE_LAND, RESOLVE_STEP, resolveDelay } from "./loop.ts";
+import { kairosMarkTiles } from "../../lib/mark.ts";
+import { tileFaceSequence } from "../../lib/tiles.ts";
 
 function stubReducedMotion(reduced: boolean) {
   window.matchMedia = vi.fn((query: string) => ({
@@ -84,7 +86,7 @@ describe("a loader's status", () => {
       "var(--tile-success-light)",
       "var(--tile-success-mid)",
     ]);
-    // Landed faces (jsdom animates nothing) stagger in tone order from zero.
+    // Landed faces (jsdom animates nothing) stagger in the cube's turn order from zero.
     expect(green.map(delay).sort((a, b) => a - b)).toEqual([0, 15, 30]);
     expect(screen.getByRole("img", { name: "Done" })).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent("Done");
@@ -137,11 +139,13 @@ describe("a loader's status", () => {
     expect(face2.style.opacity).toBe("");
     expect(face2).toHaveClass("tile-resolve");
     expect(face2.classList.contains("tile-loop-assemble")).toBe(false);
-    // Its status face waits for the landing; the landed ones go at once.
+    // Its status face waits for the landing; the landed ones go at once, a
+    // step apart in the cube's turn (top, lower right, lower left), so the
+    // lower left face, third in the turn, carries two steps.
     const delays = Object.fromEntries(
       statusFaces(container).map((p) => [p.getAttribute("data-tone"), delay(p)]),
     );
-    expect(delays).toEqual({ "0": 0, "1": 15, "2": RESOLVE_LAND });
+    expect(delays).toEqual({ "0": 0, "1": 2 * RESOLVE_STEP, "2": RESOLVE_LAND });
     advance(RESOLVE_LAND + RESOLVE_FADE);
     expect(container.querySelectorAll("polygon[class]")).toHaveLength(0);
   });
@@ -169,12 +173,18 @@ describe("a loader's status", () => {
     const green = statusFaces(container);
     expect(green).toHaveLength(18);
     expect(green.every((p) => p.classList.contains("tile-settle"))).toBe(true);
-    // In cube then tone order, a step apart, the whole mark within the base token.
-    const delays = Array.from(container.querySelectorAll("g[data-status-cube]")).flatMap((g) =>
-      Array.from(g.children)
-        .sort((a, b) => Number(a.getAttribute("data-tone")) - Number(b.getAttribute("data-tone")))
-        .map(delay),
-    );
+    // In the lap's order and each cube's own turn, a step apart, the whole
+    // mark within the base token.
+    const mark = kairosMarkTiles();
+    const delays = Array.from(container.querySelectorAll("g[data-status-cube]")).flatMap((g, i) => {
+      const sequence = tileFaceSequence({
+        orientation: mark.cubes[i].orientation,
+        from: mark.cubes[i].toPrevious,
+      });
+      return sequence.map((t) =>
+        delay(Array.from(g.children).find((p) => Number(p.getAttribute("data-tone")) === t)!),
+      );
+    });
     expect(delays).toEqual([...Array(18)].map((_, i) => Math.round((i * RESOLVE_LAND) / 17)));
     expect(Math.max(...delays)).toBe(RESOLVE_LAND);
     expect(screen.getByRole("img", { name: "Done" })).toBeInTheDocument();
