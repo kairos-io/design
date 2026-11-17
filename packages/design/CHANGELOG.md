@@ -8,6 +8,11 @@ All notable changes to `@kairos-io/design`. The format is [Keep a Changelog](htt
 
 - `IsotopeMark` and `IsotopeLogo`, the Isotope artwork under `assets/logos/isotope-*`, and `isotopeLogoAssets`. Isotope is the distribution built on Hadron (formerly Hadron Desktop). The mark is six triangles of the Tessellate hexagon in three limes, one pushed out; the gaps between them are part of the shapes, so the mark works on any surface. The horizontal lockup sets the wordmark in Urbanist Bold, outlined, in the Hadron lockup's ink on light surfaces and white on dark ones. The three limes are new brand tokens: `isotope-light`, `isotope-lime` and `isotope-deep`. The root `assets/` has the deck copies: `isotope-mark.svg`, `isotope-mark-white.svg`, `isotope-horizontal-light.svg` and `isotope-horizontal-dark.svg`.
 
+### Changed
+
+- A loader's cube takes its faces in the order they sit in it, not in tone order: `TileLoader` comes in clockwise from the top (the top face, then the lower right, then the lower left) and each `TileRing` cube clockwise from the face touching the cube that has just landed, so the mark builds along its own contacts. Both fold away from the face they came in on, the other way round. The timing is unchanged — an eighth of a turn between faces, the cube complete for half an entrance — and `TileField`'s own stagger is untouched. `tileFaceSequence` in `src/lib/tiles.ts` is the rule both loaders read.
+- Each cycle in `base.css` now has three shapes, because a face's exit no longer follows its entrance: a face that leaves a turn later or earlier than it arrived carries a second class beside the cycle's own (`.tile-loop-unfold .tile-loop-unfold-late`, `-early`).
+
 ## [0.2.0] - 2026-11-10
 
 ### Added

@@ -1,5 +1,5 @@
 import { groupCubes, kairosMarkTiles, parseMarkFaces, parsePoints, quadMotion } from "./mark.ts";
-import { tileFaceMotion, tileHexagon } from "./tiles.ts";
+import { tileFaceMotion, tileFaceSequence, tileHexagon } from "./tiles.ts";
 import { logos } from "../components/Logo/logos.generated.ts";
 
 const close = (a: number, b: number, tol = 0.05) => Math.abs(a - b) <= tol;
@@ -67,6 +67,39 @@ describe("the Kairos mark as tiles", () => {
       expect(gaps.every((g) => g === 120) || gaps.every((g) => g === 240)).toBe(true);
     }
     expect(new Set(orientations.map((o) => o.join("/"))).size).toBeGreaterThan(1);
+  });
+
+  it("points each cube at the one before it, so a loader starts on the face they share", () => {
+    const mark = kairosMarkTiles();
+    // Six cubes round a hexagonal ring: each has the last one at its side,
+    // the first the sixth, so the lap comes round.
+    expect(mark.cubes.map((c) => c.toPrevious)).toEqual([180, -120, -60, 0, 60, 120]);
+    const toward = (from: [number, number], to: [number, number]) =>
+      Math.round((Math.atan2(to[1] - from[1], to[0] - from[0]) * 180) / Math.PI);
+    const apart = (a: number, b: number) => Math.abs(((a - b + 540) % 360) - 180);
+    const corners = (points: [number, number][]) => points.map((point) => point.join(","));
+    mark.cubes.forEach((cube, i) => {
+      const previous = mark.cubes[(i + 5) % 6];
+      const next = mark.cubes[(i + 1) % 6];
+      expect(apart(cube.toPrevious, toward(cube.centre, previous.centre))).toBe(0);
+      const sequence = tileFaceSequence({ orientation: cube.orientation, from: cube.toPrevious });
+      // A neighbour lies 30 degrees off the middle of the face it meets, and
+      // the three faces are 120 apart, so the turn starts on the face touching
+      // the cube before, ends on the one touching the cube after, and the face
+      // in the middle looks away from both.
+      expect(apart(cube.orientation[sequence[0]], cube.toPrevious)).toBe(30);
+      expect(apart(cube.orientation[sequence[1]], cube.toPrevious)).toBe(150);
+      expect(apart(cube.orientation[sequence[2]], toward(cube.centre, next.centre))).toBe(30);
+      // Touching is literal: that first face shares an edge, two snapped
+      // corners, with a face of the cube before it.
+      const start = corners(cube.faces.find((f) => f.tone === sequence[0])!.points);
+      const before = new Set(previous.faces.flatMap((f) => corners(f.points)));
+      expect(start.filter((corner) => before.has(corner))).toHaveLength(2);
+      // And the last face does the same with the cube after it.
+      const end = corners(cube.faces.find((f) => f.tone === sequence[2])!.points);
+      const after = new Set(next.faces.flatMap((f) => corners(f.points)));
+      expect(end.filter((corner) => after.has(corner))).toHaveLength(2);
+    });
   });
 
   it("derives a face's own line and hinge frame from its points", () => {

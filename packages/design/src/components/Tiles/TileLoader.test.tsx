@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { TileLoader } from "./TileLoader.tsx";
 import { parsePoints } from "../../lib/mark.ts";
+import { tileFaceSequence } from "../../lib/tiles.ts";
+import { ENTER_DURATION, cycleTiming, type TileLean } from "./loop.ts";
 
 function stubReducedMotion(reduced: boolean) {
   window.matchMedia = vi.fn((query: string) => ({
@@ -21,6 +23,9 @@ const faces = (root: Element) =>
     (a, b) => Number(a.getAttribute("data-tone")) - Number(b.getAttribute("data-tone")),
   );
 const drawn = (root: Element) => Array.from(root.querySelectorAll('polygon:not([fill="none"])'));
+// The faces in the order they take their turn: clockwise from the top.
+const turns = (root: Element) =>
+  tileFaceSequence().map((tone) => root.querySelector(`polygon[data-tone="${tone}"]`)!);
 const outlines = (root: Element) => Array.from(root.querySelectorAll('path[fill="none"]'));
 /** The edges of the grid path(s), as sorted endpoint keys. */
 const gridEdges = (root: Element) =>
@@ -34,6 +39,15 @@ const polygonEdges = (p: Element) => {
   return pts.map((a, i) => [a, pts[(i + 1) % 4]].sort().join("|"));
 };
 const delay = (el: Element) => parseInt((el as HTMLElement).style.getPropertyValue("--tile-delay"), 10);
+/** The shape of the cycle a face runs, from its lean class, and when its exit starts. */
+const lean = (el: Element): TileLean =>
+  el.classList.contains("tile-loop-unfold-late")
+    ? 1
+    : el.classList.contains("tile-loop-unfold-early")
+      ? -1
+      : 0;
+const leaves = (el: Element) =>
+  delay(el) + cycleTiming("loop", "disassemble", lean(el)).moving[1][0] * ENTER_DURATION;
 const prop = (el: Element, name: string) => (el as HTMLElement).style.getPropertyValue(name);
 
 /** The box round every polygon of an svg, in its viewBox units. */
@@ -128,13 +142,17 @@ describe("TileLoader", () => {
     },
   );
 
-  it("loops the assemble on each face in tone order, an eighth of a turn apart, along each face's own line", () => {
+  it("loops the assemble on each face in turn, an eighth of a turn apart, along each face's own line", () => {
     const { container } = render(<TileLoader enter="assemble" />);
     const cube = faces(container);
     expect(cube.every((p) => p.classList.contains("tile-loop-assemble"))).toBe(true);
     expect(outlines(container).some((p) => p.hasAttribute("class"))).toBe(false);
-    // One turn is four entrances of 540ms; an eighth is 270ms.
-    expect(cube.map(delay)).toEqual([0, 270, 540]);
+    // One turn is four entrances of 540ms; an eighth is 270ms. The faces go
+    // clockwise from the top: the top face, then the lower right (tone 2),
+    // then the lower left (tone 1).
+    expect(turns(container).map((p) => p.getAttribute("data-tone"))).toEqual(["0", "2", "1"]);
+    expect(turns(container).map(delay)).toEqual([0, 270, 540]);
+    expect(cube.map(delay)).toEqual([0, 540, 270]);
     expect(container.querySelector("svg")).toHaveAttribute("data-enter", "assemble");
     // Top from above, left from the lower left, right from the lower right: the field's directions.
     const from = cube.map((p) => [Number(prop(p, "--tile-dx")), Number(prop(p, "--tile-dy"))]);
@@ -163,7 +181,28 @@ describe("TileLoader", () => {
       expect((p as HTMLElement).style.transformOrigin).toBe("");
       expect(prop(p, "--tile-dx")).toBe("");
     }
-    expect(cube.map(delay)).toEqual([0, 270, 540]);
+    expect(turns(container).map(delay)).toEqual([0, 270, 540]);
+  });
+
+  it("leaves from the top face again, the other way round the cube", () => {
+    const { container } = render(<TileLoader />);
+    // Every face runs the loop's unfold; two of the three carry a lean as
+    // well, because a face that leaves a turn later than it arrived rests a
+    // step longer and a turn earlier a step less. In tone order (top, lower
+    // left, lower right) that is none, early, late.
+    expect(faces(container).every((p) => p.classList.contains("tile-loop-unfold"))).toBe(true);
+    expect(faces(container).map(lean)).toEqual([0, -1, 1]);
+    // When a face starts its exit: its own delay plus the cycle's exit point,
+    // which its lean moves. The top goes first, then the lower left, then the
+    // lower right: the entrance's turn read back from the same face.
+    const order = faces(container).sort((a, b) => leaves(a) - leaves(b));
+    expect(order.map((p) => p.getAttribute("data-tone"))).toEqual(["0", "1", "2"]);
+    expect(order.map(leaves)).toEqual([1350, 1620, 1890]);
+    // The cube still stands complete between the last arrival and the first
+    // exit, and the last face is still leaving as the first comes again.
+    expect(Math.max(...faces(container).map(delay)) + ENTER_DURATION).toBe(2 * ENTER_DURATION);
+    expect(Math.min(...faces(container).map(leaves))).toBe(2.5 * ENTER_DURATION);
+    expect(Math.max(...faces(container).map(leaves)) + ENTER_DURATION).toBe(4.5 * ENTER_DURATION);
   });
 
   it("paints the mono rendition in currentColor at three strengths, stroked alike, with the outline fainter", () => {
