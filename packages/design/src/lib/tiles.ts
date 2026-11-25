@@ -334,6 +334,85 @@ export const tileFaceStroke = { width: 0.6, join: "bevel", order: "stroke" } as 
 /** The order faces of one cube are drawn in: the two sides, then the top last. */
 export const tileFaceOrder: readonly TileTone[] = [1, 2, 0];
 
+/** The signed turn from `b` to `a`, -180 to 180 degrees; y down, so clockwise is positive. */
+function turn(a: number, b: number): number {
+  return ((a - b + 540) % 360) - 180;
+}
+
+/** The clockwise turn from `b` to `a`, 0 to 360 degrees. */
+function clockwise(a: number, b: number): number {
+  return (a - b + 360) % 360;
+}
+
+// Straight up, y down: where a cube with nothing beside it starts its turn.
+const UP = -90;
+
+/**
+ * Which way round a cube a turn runs. A cube comes in "clockwise" and
+ * leaves "anticlockwise", both from the same face, so the face that leads
+ * the entrance leads the exit and the two orders are mirrors.
+ */
+export type TileTurn = "clockwise" | "anticlockwise";
+
+/**
+ * Degrees from a cube's centre to each face's middle in a plain hexagon, y
+ * down: the top face straight up, the mid face to the lower left, the orange
+ * face to the lower right. Read off `tileFaceMotion`'s own directions, so
+ * where a face sits is said once.
+ */
+export const tileFaceBearings: Record<TileTone, number> = {
+  0: faceBearing(0),
+  1: faceBearing(1),
+  2: faceBearing(2),
+};
+
+function faceBearing(tone: TileTone): number {
+  const [x, y] = tileFaceMotion[tone].from;
+  return Math.round((Math.atan2(y, x) * 180) / Math.PI);
+}
+
+export interface TileFaceSequenceOptions {
+  /** Where the cube's faces sit, by tone; a plain hexagon's by default. */
+  orientation?: Record<TileTone, number>;
+  /** The bearing the turn starts nearest to; straight up by default. */
+  from?: number;
+  /** Which way round the turn runs; clockwise by default. */
+  turning?: TileTurn;
+}
+
+/**
+ * The order a cube's three faces take their turn in a loader, by where each
+ * face sits in the cube and not by its tone: the face nearest `from` first,
+ * then the other two the way `turning` runs. A cube on its own starts at the
+ * top, so it comes in top, lower right, lower left, the way the mark reads,
+ * and leaves top, lower left, lower right — the same face first, the other
+ * way round. A cube in the ring is given the bearing of the cube before it,
+ * so it starts on the face that touches the one that has just landed; the
+ * three faces being 120 degrees apart and a neighbour lying 30 degrees off a
+ * face's middle, the clockwise turn then ends on the face touching the cube
+ * that comes next, and the mark builds without a break. A flipped cube reads
+ * from its own orientation, so nothing here assumes the hexagon's layout.
+ */
+export function tileFaceSequence({
+  orientation = tileFaceBearings,
+  from = UP,
+  turning = "clockwise",
+}: TileFaceSequenceOptions = {}): TileTone[] {
+  const tones: TileTone[] = [0, 1, 2];
+  const start = tones.reduce((best, tone) => {
+    const a = turn(orientation[tone], from);
+    const b = turn(orientation[best], from);
+    // The nearest face to `from`; on a tie, which only a flipped cube with
+    // nothing straight up can give, the one clockwise of it.
+    return Math.abs(a) < Math.abs(b) || (Math.abs(a) === Math.abs(b) && a > b) ? tone : best;
+  });
+  const round = (tone: TileTone) =>
+    turning === "clockwise"
+      ? clockwise(orientation[tone], orientation[start])
+      : clockwise(orientation[start], orientation[tone]);
+  return tones.sort((a, b) => round(a) - round(b));
+}
+
 /** One batch of the hairline grid: the path of every lattice edge at one opacity. */
 export interface TileGridPath {
   d: string;

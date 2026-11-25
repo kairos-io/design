@@ -88,7 +88,7 @@ export const Sizes: Story = {
     docs: {
       description: {
         story:
-          'The three icon sizes down the columns and the two motions down the rows: `"unfold"` hinges each face open from the cube\'s centre vertex along its own edges, `"assemble"` brings each in along the line from that vertex through its middle. The faces go in tone order an eighth of a turn apart, rest as the complete cube, leave the same way, and the last is still leaving as the first returns. Unfold is the default, the system\'s motion; assemble is the alternative. The `exit` control switches both rows to the vanish.',
+          'The three icon sizes down the columns and the two motions down the rows: `"unfold"` hinges each face open from the cube\'s centre vertex along its own edges, `"assemble"` brings each in along the line from that vertex through its middle. The faces come in clockwise from the top — the top face, then the lower right, then the lower left — an eighth of a turn apart, rest as the complete cube, then fold away from the top face again the other way round (top, lower left, lower right), and the last is still leaving as the first returns. Unfold is the default, the system\'s motion; assemble is the alternative. The `exit` control switches both rows to the vanish.',
       },
     },
   },
@@ -279,7 +279,7 @@ export const Ring: Story = {
     docs: {
       description: {
         story:
-          '`TileRing` is the Kairos mark: its six cubes on the icon\'s own geometry (the mark turns some of them, so the same tone meets itself across a few neighbours, and the ring does too), 48 to 120px; the Kairos oranges here, `palette="hadron"` in the control for the blues. `mode="build"` (default) brings the cubes in one by one clockwise from the top, rests as the complete mark for a beat, takes them away in the same order and starts again, the first returning while the last is still going. `mode="chase"` builds the ring once and from then on one cube at a time goes and comes straight back, chasing round. Each cube assembles fully, its three faces at the inline loader\'s timing, before the next starts, so one cube moves at a time (two in the chase, one going as one returns). `enter` picks unfold or assemble, `exit` whether a cube comes apart or vanishes. For an empty state or a first screen that waits on something, one per surface.',
+          '`TileRing` is the Kairos mark: its six cubes on the icon\'s own geometry (the mark turns some of them, so the same tone meets itself across a few neighbours, and the ring does too), 48 to 120px; the Kairos oranges here, `palette="hadron"` in the control for the blues. `mode="build"` (default) brings the cubes in one by one clockwise from the top, rests as the complete mark for a beat, takes them away in the same order and starts again, the first returning while the last is still going. `mode="chase"` builds the ring once and from then on one cube at a time goes and comes straight back, chasing round. Each cube assembles fully, its three faces at the inline loader\'s timing, before the next starts, so one cube moves at a time (two in the chase, one going as one returns). A cube starts on the face that touches the cube that has just landed and goes clockwise from there, ending on the face touching the next one, so the mark builds along its own contacts. `enter` picks unfold or assemble, `exit` whether a cube comes apart or vanishes. For an empty state or a first screen that waits on something, one per surface.',
       },
     },
   },

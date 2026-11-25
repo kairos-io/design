@@ -385,8 +385,8 @@
 /* Tile loaders (TileLoader, TileBar current, TileRing): the assemble and
    the unfold of the field as cycles, each face moving about its own cube's
    centre vertex. Four cycles: the loader's loop (four entrances: a quarter
-   in, three eighths at rest, a quarter out, an eighth away, so a face an
-   eighth behind another is still showing as it leaves and a cell is never
+   in, a rest, a quarter out, the remainder away, so a face an eighth
+   behind another is still showing as it leaves and a cell is never
    blank), the ring's two laps, in which one cube moves at a time, each a
    whole cube's time (two entrances: three faces an eighth of a loop apart)
    after the last: "chase" (fourteen entrances: six cubes in, then each
@@ -400,15 +400,32 @@
    reduced motion turns every cycle off below so the complete cube, tile or
    mark stands.
 
+   Each cycle comes in three shapes, because a cube's faces come in one way
+   round and leave the other (tileFaceSequence in src/lib/tiles.ts): a face
+   that leaves on the same turn it arrived on rests the standard time, one
+   that leaves a turn later rests an eighth of the loop longer and one that
+   leaves a turn earlier an eighth less. Nothing else differs: the entrance,
+   the exit and the period are the same three numbers in every shape, so a
+   cube's three faces still arrive an eighth apart, leave an eighth apart
+   and come round together. The lean is a second class on the face beside
+   the cycle's own (.tile-loop-unfold .tile-loop-unfold-late), which still
+   carries the duration, the frame and the states; the pair's rule names the
+   other keyframes and takes two classes to do it, so it wins over the plain
+   one wherever the two sit in this file. CYCLES in
+   src/components/Tiles/loop.ts holds the same numbers; keep them together.
+
    Assembling translates the face along its own line, --tile-dx and
-   --tile-dy, from --tile-reach away. Unfolding scales the face toward its
+   --tile-dy, from --tile-reach away: --tile-off is that offset, and the
+   landed state is translate(0, 0). Unfolding scales the face toward its
    corner in the frame of its own two edges: --tile-vx/vy is the corner in
    viewBox units, --tile-ma..md the matrix that puts the two edges on the
    axes and --tile-ia..id its inverse (quadMotion in src/lib/mark.ts, set
    inline per face from the polygon's actual points), with transform-box
    view-box and the origin at 0 0 so nothing depends on the face's bounding
-   box. scale(0, 0) is the corner, scale(1, 0.08) the first edge alone, and
-   scale(1, 1) exactly the outline again, whatever the rhombus's angles. */
+   box. The three states it passes through are named once, below, and the
+   keyframes are then a list of times: --tile-shut is the corner (scale 0),
+   --tile-edge the first edge alone (scale(1, 0.08)) and --tile-whole
+   exactly the outline again (scale(1, 1)), whatever the rhombus's angles. */
 .tile-loop-assemble,
 .tile-loop-unfold,
 .tile-chase-assemble,
@@ -416,310 +433,7 @@
 .tile-build-assemble,
 .tile-build-unfold,
 .tile-step-assemble,
-.tile-step-unfold {
-  --tile-enter-duration: calc(var(--duration-slow) * 1.5);
-  animation-timing-function: var(--ease-out);
-  animation-fill-mode: both;
-  animation-iteration-count: infinite;
-  animation-delay: var(--tile-delay, 0ms);
-}
-.tile-loop-unfold,
-.tile-chase-unfold,
-.tile-build-unfold,
-.tile-step-unfold {
-  transform-box: view-box;
-  transform-origin: 0 0;
-}
-.tile-loop-assemble {
-  animation-name: tile-loop-assemble;
-  animation-duration: calc(var(--tile-enter-duration) * 4);
-}
-.tile-loop-unfold {
-  animation-name: tile-loop-unfold;
-  animation-duration: calc(var(--tile-enter-duration) * 4);
-}
-.tile-chase-assemble {
-  animation-name: tile-chase-assemble;
-  animation-duration: calc(var(--tile-enter-duration) * 14);
-}
-.tile-chase-unfold {
-  animation-name: tile-chase-unfold;
-  animation-duration: calc(var(--tile-enter-duration) * 14);
-}
-.tile-build-assemble {
-  animation-name: tile-build-assemble;
-  animation-duration: calc(var(--tile-enter-duration) * 26);
-}
-.tile-build-unfold {
-  animation-name: tile-build-unfold;
-  animation-duration: calc(var(--tile-enter-duration) * 26);
-}
-.tile-step-assemble {
-  animation-name: tile-step-assemble;
-  animation-duration: calc(var(--tile-enter-duration) * 1);
-  animation-iteration-count: 1;
-}
-.tile-step-unfold {
-  animation-name: tile-step-unfold;
-  animation-duration: calc(var(--tile-enter-duration) * 1);
-  animation-iteration-count: 1;
-}
-@keyframes tile-loop-assemble {
-  0% {
-    opacity: 0;
-    transform: translate(
-      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
-      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
-    );
-  }
-  7.5% {
-    opacity: 1;
-  }
-  25%,
-  62.5% {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-  80% {
-    opacity: 1;
-  }
-  87.5%,
-  100% {
-    opacity: 0;
-    transform: translate(
-      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
-      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
-    );
-  }
-}
-@keyframes tile-loop-unfold {
-  0% {
-    opacity: 0;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  7.5% {
-    opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  25%,
-  62.5% {
-    opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 1)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  80% {
-    opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  87.5%,
-  100% {
-    opacity: 0;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-}
-@keyframes tile-chase-assemble {
-  0% {
-    opacity: 0;
-    transform: translate(
-      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
-      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
-    );
-  }
-  2.1429% {
-    opacity: 1;
-  }
-  7.1429%,
-  85.7143% {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-  90.7143% {
-    opacity: 1;
-  }
-  92.8571%,
-  100% {
-    opacity: 0;
-    transform: translate(
-      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
-      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
-    );
-  }
-}
-@keyframes tile-chase-unfold {
-  0% {
-    opacity: 0;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  2.1429% {
-    opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  7.1429%,
-  85.7143% {
-    opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 1)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  90.7143% {
-    opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  92.8571%,
-  100% {
-    opacity: 0;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-}
-@keyframes tile-build-assemble {
-  0% {
-    opacity: 0;
-    transform: translate(
-      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
-      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
-    );
-  }
-  1.1538% {
-    opacity: 1;
-  }
-  3.8462%,
-  53.8462% {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-  56.5385% {
-    opacity: 1;
-  }
-  57.6923%,
-  100% {
-    opacity: 0;
-    transform: translate(
-      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
-      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
-    );
-  }
-}
-@keyframes tile-build-unfold {
-  0% {
-    opacity: 0;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  1.1538% {
-    opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  3.8462%,
-  53.8462% {
-    opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 1)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  56.5385% {
-    opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  57.6923%,
-  100% {
-    opacity: 0;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-}
-@keyframes tile-step-assemble {
-  0% {
-    opacity: 0;
-    transform: translate(
-      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
-      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
-    );
-  }
-  30% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-}
-@keyframes tile-step-unfold {
-  0% {
-    opacity: 0;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  30% {
-    opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-  100% {
-    opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 1)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
-  }
-}
-/* The vanish exit (exit="vanish" on the loaders): the same entrances, and
-   no exit at all. A face comes in as above, rests on its outline, and from
-   its away point is simply not there (the hold ends in a step, so there is
-   no frame between), until the cycle comes round and it comes in again;
-   the outline beneath never goes. The three faces of a cube come in an
-   eighth of a loop apart, so to be gone together each cube's group carries
-   a gate, a step on its opacity: open for the cube's rest, closed from the
-   vanish moment to the end of the period, when the first face is coming in
-   again and the others are already away by their own keyframes. The loop
-   is four entrances (two in, one as the cube, one gone); the chase twelve
-   (each cube in over two and gone as the next begins, one cube at a time
-   round the ring, no mark standing); the build sixteen (six cubes in over
-   twelve, two as the mark, two gone together). The build's six gates close
-   at the same moment of the lap, so each cube's closes earlier in its own
-   time by the cubes before it: tile-build-gate-0 at 14/16, -1 at 12/16,
-   and so on to -5 at 4/16. CYCLES in loop.ts holds the same numbers. */
+.tile-step-unfold,
 .tile-loop-assemble-vanish,
 .tile-loop-unfold-vanish,
 .tile-chase-assemble-vanish,
@@ -740,77 +454,648 @@
   animation-iteration-count: infinite;
   animation-delay: var(--tile-delay, 0ms);
 }
+.tile-loop-unfold,
+.tile-chase-unfold,
+.tile-build-unfold,
+.tile-step-unfold,
 .tile-loop-unfold-vanish,
 .tile-chase-unfold-vanish,
 .tile-build-unfold-vanish {
   transform-box: view-box;
   transform-origin: 0 0;
+  --tile-shut: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+    matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
+    matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+    translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+  --tile-edge: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+    matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
+    matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+    translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+  --tile-whole: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
+    matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 1)
+    matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
+    translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+}
+.tile-loop-assemble,
+.tile-chase-assemble,
+.tile-build-assemble,
+.tile-step-assemble,
+.tile-loop-assemble-vanish,
+.tile-chase-assemble-vanish,
+.tile-build-assemble-vanish {
+  --tile-off: translate(
+    calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
+    calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
+  );
+}
+.tile-loop-assemble,
+.tile-loop-unfold {
+  animation-duration: calc(var(--tile-enter-duration) * 4);
+}
+.tile-loop-assemble {
+  animation-name: tile-loop-assemble;
+}
+.tile-loop-assemble.tile-loop-assemble-early {
+  animation-name: tile-loop-assemble-early;
+}
+.tile-loop-assemble.tile-loop-assemble-late {
+  animation-name: tile-loop-assemble-late;
+}
+.tile-loop-unfold {
+  animation-name: tile-loop-unfold;
+}
+.tile-loop-unfold.tile-loop-unfold-early {
+  animation-name: tile-loop-unfold-early;
+}
+.tile-loop-unfold.tile-loop-unfold-late {
+  animation-name: tile-loop-unfold-late;
+}
+.tile-chase-assemble,
+.tile-chase-unfold {
+  animation-duration: calc(var(--tile-enter-duration) * 14);
+}
+.tile-chase-assemble {
+  animation-name: tile-chase-assemble;
+}
+.tile-chase-assemble.tile-chase-assemble-early {
+  animation-name: tile-chase-assemble-early;
+}
+.tile-chase-assemble.tile-chase-assemble-late {
+  animation-name: tile-chase-assemble-late;
+}
+.tile-chase-unfold {
+  animation-name: tile-chase-unfold;
+}
+.tile-chase-unfold.tile-chase-unfold-early {
+  animation-name: tile-chase-unfold-early;
+}
+.tile-chase-unfold.tile-chase-unfold-late {
+  animation-name: tile-chase-unfold-late;
+}
+.tile-build-assemble,
+.tile-build-unfold {
+  animation-duration: calc(var(--tile-enter-duration) * 26);
+}
+.tile-build-assemble {
+  animation-name: tile-build-assemble;
+}
+.tile-build-assemble.tile-build-assemble-early {
+  animation-name: tile-build-assemble-early;
+}
+.tile-build-assemble.tile-build-assemble-late {
+  animation-name: tile-build-assemble-late;
+}
+.tile-build-unfold {
+  animation-name: tile-build-unfold;
+}
+.tile-build-unfold.tile-build-unfold-early {
+  animation-name: tile-build-unfold-early;
+}
+.tile-build-unfold.tile-build-unfold-late {
+  animation-name: tile-build-unfold-late;
+}
+.tile-step-assemble {
+  animation-name: tile-step-assemble;
+  animation-duration: calc(var(--tile-enter-duration) * 1);
+  animation-iteration-count: 1;
+}
+.tile-step-unfold {
+  animation-name: tile-step-unfold;
+  animation-duration: calc(var(--tile-enter-duration) * 1);
+  animation-iteration-count: 1;
+}
+@keyframes tile-loop-assemble {
+  0% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+  7.5% {
+    opacity: 1;
+  }
+  25%,
+  62.5% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  80% {
+    opacity: 1;
+  }
+  87.5%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+}
+@keyframes tile-loop-assemble-early {
+  0% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+  7.5% {
+    opacity: 1;
+  }
+  25%,
+  50% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  67.5% {
+    opacity: 1;
+  }
+  75%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+}
+@keyframes tile-loop-assemble-late {
+  0% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+  7.5% {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  92.5% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+}
+@keyframes tile-loop-unfold {
+  0% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+  7.5% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  25%,
+  62.5% {
+    opacity: 1;
+    transform: var(--tile-whole);
+  }
+  80% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  87.5%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+}
+@keyframes tile-loop-unfold-early {
+  0% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+  7.5% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  25%,
+  50% {
+    opacity: 1;
+    transform: var(--tile-whole);
+  }
+  67.5% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  75%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+}
+@keyframes tile-loop-unfold-late {
+  0% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+  7.5% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  25%,
+  75% {
+    opacity: 1;
+    transform: var(--tile-whole);
+  }
+  92.5% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  100% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+}
+@keyframes tile-chase-assemble {
+  0% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+  2.1429% {
+    opacity: 1;
+  }
+  7.1429%,
+  85.7143% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  90.7143% {
+    opacity: 1;
+  }
+  92.8571%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+}
+@keyframes tile-chase-assemble-early {
+  0% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+  2.1429% {
+    opacity: 1;
+  }
+  7.1429%,
+  82.1429% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  87.1429% {
+    opacity: 1;
+  }
+  89.2857%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+}
+@keyframes tile-chase-assemble-late {
+  0% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+  2.1429% {
+    opacity: 1;
+  }
+  7.1429%,
+  89.2857% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  94.2857% {
+    opacity: 1;
+  }
+  96.4286%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+}
+@keyframes tile-chase-unfold {
+  0% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+  2.1429% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  7.1429%,
+  85.7143% {
+    opacity: 1;
+    transform: var(--tile-whole);
+  }
+  90.7143% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  92.8571%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+}
+@keyframes tile-chase-unfold-early {
+  0% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+  2.1429% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  7.1429%,
+  82.1429% {
+    opacity: 1;
+    transform: var(--tile-whole);
+  }
+  87.1429% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  89.2857%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+}
+@keyframes tile-chase-unfold-late {
+  0% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+  2.1429% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  7.1429%,
+  89.2857% {
+    opacity: 1;
+    transform: var(--tile-whole);
+  }
+  94.2857% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  96.4286%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+}
+@keyframes tile-build-assemble {
+  0% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+  1.1538% {
+    opacity: 1;
+  }
+  3.8462%,
+  53.8462% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  56.5385% {
+    opacity: 1;
+  }
+  57.6923%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+}
+@keyframes tile-build-assemble-early {
+  0% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+  1.1538% {
+    opacity: 1;
+  }
+  3.8462%,
+  51.9231% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  54.6154% {
+    opacity: 1;
+  }
+  55.7692%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+}
+@keyframes tile-build-assemble-late {
+  0% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+  1.1538% {
+    opacity: 1;
+  }
+  3.8462%,
+  55.7692% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+  58.4615% {
+    opacity: 1;
+  }
+  59.6154%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+}
+@keyframes tile-build-unfold {
+  0% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+  1.1538% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  3.8462%,
+  53.8462% {
+    opacity: 1;
+    transform: var(--tile-whole);
+  }
+  56.5385% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  57.6923%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+}
+@keyframes tile-build-unfold-early {
+  0% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+  1.1538% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  3.8462%,
+  51.9231% {
+    opacity: 1;
+    transform: var(--tile-whole);
+  }
+  54.6154% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  55.7692%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+}
+@keyframes tile-build-unfold-late {
+  0% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+  1.1538% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  3.8462%,
+  55.7692% {
+    opacity: 1;
+    transform: var(--tile-whole);
+  }
+  58.4615% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  59.6154%,
+  100% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+}
+@keyframes tile-step-assemble {
+  0% {
+    opacity: 0;
+    transform: var(--tile-off);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+@keyframes tile-step-unfold {
+  0% {
+    opacity: 0;
+    transform: var(--tile-shut);
+  }
+  30% {
+    opacity: 1;
+    transform: var(--tile-edge);
+  }
+  100% {
+    opacity: 1;
+    transform: var(--tile-whole);
+  }
+}
+/* The vanish exit (exit="vanish" on the loaders): the same entrances, and
+   no exit at all. A face comes in as above, rests on its outline, and from
+   its away point is simply not there (the hold ends in a step, so there is
+   no frame between), until the cycle comes round and it comes in again;
+   the outline beneath never goes. There is no turn to leave on, so these
+   have one shape and not three. The three faces of a cube come in an
+   eighth of a loop apart, so to be gone together each cube's group carries
+   a gate, a step on its opacity: open for the cube's rest, closed from the
+   vanish moment to the end of the period, when the first face is coming in
+   again and the others are already away by their own keyframes. The loop
+   is four entrances (two in, one as the cube, one gone); the chase twelve
+   (each cube in over two and gone as the next begins, one cube at a time
+   round the ring, no mark standing); the build sixteen (six cubes in over
+   twelve, two as the mark, two gone together). The build's six gates close
+   at the same moment of the lap, so each cube's closes earlier in its own
+   time by the cubes before it: tile-build-gate-0 at 14/16, -1 at 12/16,
+   and so on to -5 at 4/16. CYCLES in loop.ts holds the same numbers. */
+.tile-loop-assemble-vanish,
+.tile-loop-unfold-vanish {
+  animation-duration: calc(var(--tile-enter-duration) * 4);
 }
 .tile-loop-assemble-vanish {
   animation-name: tile-loop-assemble-vanish;
-  animation-duration: calc(var(--tile-enter-duration) * 4);
 }
 .tile-loop-unfold-vanish {
   animation-name: tile-loop-unfold-vanish;
-  animation-duration: calc(var(--tile-enter-duration) * 4);
+}
+.tile-chase-assemble-vanish,
+.tile-chase-unfold-vanish {
+  animation-duration: calc(var(--tile-enter-duration) * 12);
 }
 .tile-chase-assemble-vanish {
   animation-name: tile-chase-assemble-vanish;
-  animation-duration: calc(var(--tile-enter-duration) * 12);
 }
 .tile-chase-unfold-vanish {
   animation-name: tile-chase-unfold-vanish;
-  animation-duration: calc(var(--tile-enter-duration) * 12);
+}
+.tile-build-assemble-vanish,
+.tile-build-unfold-vanish {
+  animation-duration: calc(var(--tile-enter-duration) * 16);
 }
 .tile-build-assemble-vanish {
   animation-name: tile-build-assemble-vanish;
-  animation-duration: calc(var(--tile-enter-duration) * 16);
 }
 .tile-build-unfold-vanish {
   animation-name: tile-build-unfold-vanish;
-  animation-duration: calc(var(--tile-enter-duration) * 16);
 }
-.tile-loop-gate {
-  animation-name: tile-loop-gate;
-  animation-duration: calc(var(--tile-enter-duration) * 4);
-}
-.tile-chase-gate {
-  animation-name: tile-chase-gate;
-  animation-duration: calc(var(--tile-enter-duration) * 12);
-}
+.tile-loop-gate,
+.tile-chase-gate,
 .tile-build-gate-0,
 .tile-build-gate-1,
 .tile-build-gate-2,
 .tile-build-gate-3,
 .tile-build-gate-4,
 .tile-build-gate-5 {
-  animation-duration: calc(var(--tile-enter-duration) * 16);
+  animation-duration: calc(var(--tile-enter-duration) * var(--tile-gate-period));
+}
+.tile-loop-gate {
+  animation-name: tile-loop-gate;
+  --tile-gate-period: 4;
+}
+.tile-chase-gate {
+  animation-name: tile-chase-gate;
+  --tile-gate-period: 12;
 }
 .tile-build-gate-0 {
   animation-name: tile-build-gate-0;
+  --tile-gate-period: 16;
 }
 .tile-build-gate-1 {
   animation-name: tile-build-gate-1;
+  --tile-gate-period: 16;
 }
 .tile-build-gate-2 {
   animation-name: tile-build-gate-2;
+  --tile-gate-period: 16;
 }
 .tile-build-gate-3 {
   animation-name: tile-build-gate-3;
+  --tile-gate-period: 16;
 }
 .tile-build-gate-4 {
   animation-name: tile-build-gate-4;
+  --tile-gate-period: 16;
 }
 .tile-build-gate-5 {
   animation-name: tile-build-gate-5;
+  --tile-gate-period: 16;
 }
 @keyframes tile-loop-assemble-vanish {
   0% {
     opacity: 0;
-    transform: translate(
-      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
-      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
-    );
+    transform: var(--tile-off);
   }
   7.5% {
     opacity: 1;
@@ -823,51 +1108,33 @@
   75%,
   100% {
     opacity: 0;
-    transform: translate(
-      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
-      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
-    );
+    transform: var(--tile-off);
   }
 }
 @keyframes tile-loop-unfold-vanish {
   0% {
     opacity: 0;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    transform: var(--tile-shut);
   }
   7.5% {
     opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    transform: var(--tile-edge);
   }
   25% {
     opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 1)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    transform: var(--tile-whole);
     animation-timing-function: step-end;
   }
   75%,
   100% {
     opacity: 0;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    transform: var(--tile-shut);
   }
 }
 @keyframes tile-chase-assemble-vanish {
   0% {
     opacity: 0;
-    transform: translate(
-      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
-      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
-    );
+    transform: var(--tile-off);
   }
   2.5% {
     opacity: 1;
@@ -880,51 +1147,33 @@
   16.6667%,
   100% {
     opacity: 0;
-    transform: translate(
-      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
-      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
-    );
+    transform: var(--tile-off);
   }
 }
 @keyframes tile-chase-unfold-vanish {
   0% {
     opacity: 0;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    transform: var(--tile-shut);
   }
   2.5% {
     opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    transform: var(--tile-edge);
   }
   8.3333% {
     opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 1)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    transform: var(--tile-whole);
     animation-timing-function: step-end;
   }
   16.6667%,
   100% {
     opacity: 0;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    transform: var(--tile-shut);
   }
 }
 @keyframes tile-build-assemble-vanish {
   0% {
     opacity: 0;
-    transform: translate(
-      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
-      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
-    );
+    transform: var(--tile-off);
   }
   1.875% {
     opacity: 1;
@@ -937,42 +1186,27 @@
   87.5%,
   100% {
     opacity: 0;
-    transform: translate(
-      calc(var(--tile-dx, 0) * var(--tile-reach, 0px)),
-      calc(var(--tile-dy, 0) * var(--tile-reach, 0px))
-    );
+    transform: var(--tile-off);
   }
 }
 @keyframes tile-build-unfold-vanish {
   0% {
     opacity: 0;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    transform: var(--tile-shut);
   }
   1.875% {
     opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 0.08)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    transform: var(--tile-edge);
   }
   6.25% {
     opacity: 1;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(1, 1)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    transform: var(--tile-whole);
     animation-timing-function: step-end;
   }
   87.5%,
   100% {
     opacity: 0;
-    transform: translate(var(--tile-vx, 0px), var(--tile-vy, 0px))
-      matrix(var(--tile-ma, 1), var(--tile-mb, 0), var(--tile-mc, 0), var(--tile-md, 1), 0, 0) scale(0, 0)
-      matrix(var(--tile-ia, 1), var(--tile-ib, 0), var(--tile-ic, 0), var(--tile-id, 1), 0, 0)
-      translate(calc(-1 * var(--tile-vx, 0px)), calc(-1 * var(--tile-vy, 0px)));
+    transform: var(--tile-shut);
   }
 }
 @keyframes tile-loop-gate {
@@ -1089,11 +1323,23 @@
    cube, tile or mark standing still. */
 @media (prefers-reduced-motion: reduce) {
   .tile-loop-assemble,
+  .tile-loop-assemble-early,
+  .tile-loop-assemble-late,
   .tile-loop-unfold,
+  .tile-loop-unfold-early,
+  .tile-loop-unfold-late,
   .tile-chase-assemble,
+  .tile-chase-assemble-early,
+  .tile-chase-assemble-late,
   .tile-chase-unfold,
+  .tile-chase-unfold-early,
+  .tile-chase-unfold-late,
   .tile-build-assemble,
+  .tile-build-assemble-early,
+  .tile-build-assemble-late,
   .tile-build-unfold,
+  .tile-build-unfold-early,
+  .tile-build-unfold-late,
   .tile-step-assemble,
   .tile-step-unfold,
   .tile-loop-assemble-vanish,
@@ -1110,6 +1356,18 @@
   .tile-build-gate-3,
   .tile-build-gate-4,
   .tile-build-gate-5,
+  .tile-loop-assemble.tile-loop-assemble-early,
+  .tile-loop-assemble.tile-loop-assemble-late,
+  .tile-loop-unfold.tile-loop-unfold-early,
+  .tile-loop-unfold.tile-loop-unfold-late,
+  .tile-chase-assemble.tile-chase-assemble-early,
+  .tile-chase-assemble.tile-chase-assemble-late,
+  .tile-chase-unfold.tile-chase-unfold-early,
+  .tile-chase-unfold.tile-chase-unfold-late,
+  .tile-build-assemble.tile-build-assemble-early,
+  .tile-build-assemble.tile-build-assemble-late,
+  .tile-build-unfold.tile-build-unfold-early,
+  .tile-build-unfold.tile-build-unfold-late,
   .tile-settle {
     animation: none;
   }
