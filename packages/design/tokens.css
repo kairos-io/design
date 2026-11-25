@@ -97,6 +97,7 @@
   --code-key: #FB9E70;
   --code-ink: #F2F1F5;
   --code-muted: #A9A6B8;
+  --code-ok: #3FAF6E;
   --overlay: #1C1B2499;
   color-scheme: light;
 }
@@ -154,6 +155,7 @@
   --code-key: #FB9E70;
   --code-ink: #F2F1F5;
   --code-muted: #A9A6B8;
+  --code-ok: #3FAF6E;
   --overlay: #0F0E15B3;
   color-scheme: dark;
 }
@@ -212,6 +214,7 @@
     --code-key: #FB9E70;
     --code-ink: #F2F1F5;
     --code-muted: #A9A6B8;
+    --code-ok: #3FAF6E;
     --overlay: #0F0E15B3;
     color-scheme: dark;
   }

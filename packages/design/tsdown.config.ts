@@ -6,6 +6,9 @@ export default defineConfig({
   entry: {
     index: "src/index.ts",
     tokens: "src/tokens/index.ts",
+    // Its own entry: CodeMirror is ~100 KB gzipped, and only an editor page
+    // should load it. Nothing in index.ts imports it.
+    "code-editor": "src/components/CodeEditor/index.ts",
   },
   format: ["esm"],
   platform: "browser",
