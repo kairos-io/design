@@ -204,4 +204,3 @@ export const WizardShellVanilla: Story = {
   name: "Wizard shell",
   render: () => <VanillaFrame body={wizard} height={620} variant="installer" />,
 };
-

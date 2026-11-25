@@ -219,7 +219,7 @@ export const OnTheFormSurface: Story = {
     docs: {
       description: {
         story:
-          "`variant=\"surface\"` draws the editor on the page's own form surface instead of the code ground, for a config edited inside a form rather than shown as a terminal. It follows the theme, so switch the toolbar to dark and it follows. The syntax colours change with it: the code palette is built for a dark ground and `--code-key` is 2.05:1 on white, so this ground uses `--link` for keys, `--ok` for literals and `--muted` for comments, which pass AA on both. Toggle the theme to compare.",
+          '`variant="surface"` draws the editor on the page\'s own form surface instead of the code ground, for a config edited inside a form rather than shown as a terminal. It follows the theme, so switch the toolbar to dark and it follows. The syntax colours change with it: the code palette is built for a dark ground and `--code-key` is 2.05:1 on white, so this ground uses `--link` for keys, `--ok` for literals and `--muted` for comments, which pass AA on both. Toggle the theme to compare.',
       },
     },
   },

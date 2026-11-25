@@ -14,5 +14,4 @@ describe("Textarea", () => {
     render(<Textarea aria-label="Cloud config" disabled />);
     expect(screen.getByRole("textbox")).toBeDisabled();
   });
-
 });

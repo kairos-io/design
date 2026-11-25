@@ -20,12 +20,7 @@ export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextArea
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, mono, ...props }, ref) => (
     <textarea
-      className={cn(
-        inputClasses,
-        "min-h-[80px] leading-normal",
-        mono && "font-mono text-[13px]",
-        className,
-      )}
+      className={cn(inputClasses, "min-h-[80px] leading-normal", mono && "font-mono text-[13px]", className)}
       ref={ref}
       {...props}
     />
