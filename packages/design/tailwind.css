@@ -27,6 +27,7 @@
   --color-code-key: var(--code-key);
   --color-code-ink: var(--code-ink);
   --color-code-muted: var(--code-muted);
+  --color-code-ok: var(--code-ok);
   --color-overlay: var(--overlay);
 }
 
